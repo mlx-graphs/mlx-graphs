@@ -45,14 +45,14 @@ class GCNConv(MessagePassing):
             norm = mx.ones_like(row)
 
         # Compute messages and aggregate them with sum and norm.
-        x = self.propagate(x=x, edge_index=edge_index, norm=norm)
+        x = self.propagate(x=x, edge_index=edge_index, edge_weight=norm)
 
         return x
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, norm: mx.array, **kwargs: Any
+        self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs: Any
     ) -> mx.array:
-        return norm.reshape(-1, 1) * x_i
+        return x_i if edge_weight is None else edge_weight.view(-1, 1) * x_i
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
         out = mx.zeros((num_edges,))
