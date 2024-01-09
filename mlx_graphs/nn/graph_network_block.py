@@ -40,6 +40,7 @@ class GraphNetworkBlock(Module):
         import mlx.core as mx
         from mlx.nn.layers.linear import Linear
         from mlx.nn.layers.gnn import GraphNetworkBlock
+
         class NodeModel(Module):
             def __init__(
                 self,
