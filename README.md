@@ -6,7 +6,7 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's MLX.
 
 We just started the development of this lib, with the aim to integrate it within [mx-explore](https://github.com/ml-explore).
 
-The lib follows the Message Passing Neural Network ([MPNN](https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf)) architecture to build arbitrary GNNs on top of it, similarly as in [PyG](https://github.com/pyg-team/pytorch_geometric). 
+The lib follows the Message Passing Neural Network ([MPNN](https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf)) architecture to build arbitrary GNNs on top of it, similarly as in [PyG](https://github.com/pyg-team/pytorch_geometric).
 
 #### Installation (build from source)
 To build and install `mlx-graphs` from source start by cloning the github repo
@@ -23,6 +23,16 @@ Install the package
 ```
 poetry install
 ```
+
+#### Contributing
+
+##### Pre-commit hooks (temporary)
+Make sure to run [pre-commit](https://pre-commit.com) hooks to ensure code quality. To do that, simply install them by running
+```
+pre-commit install
+```
+> Note: This aims to be a temporary measure until CI/CD is in place.
+
 
 ### Why running GNNs on my Mac?
 
