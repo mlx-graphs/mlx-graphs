@@ -1,0 +1,17 @@
+[tool.poetry]
+name = "mlx-graphs"
+version = "0.0.1"
+description = "Graph Neural Network library made for Apple Silicons"
+authors = ["mlx-graphs contributors"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+mlx = "^0.0.7"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.4"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
