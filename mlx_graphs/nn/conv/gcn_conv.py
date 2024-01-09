@@ -52,7 +52,7 @@ class GCNConv(MessagePassing):
     def message(
         self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs: Any
     ) -> mx.array:
-        return x_i if edge_weight is None else edge_weight.view(-1, 1) * x_i
+        return x_i if edge_weight is None else edge_weight.reshape(-1, 1) * x_i
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
         out = mx.zeros((num_edges,))
