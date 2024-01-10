@@ -38,22 +38,26 @@ files = [
 
 [[package]]
 name = "mlx"
-version = "0.0.7.dev2024110+1d90a76"
+version = "0.0.7"
 description = "A framework for machine learning on Apple silicon."
 optional = false
 python-versions = ">=3.8"
-files = []
-develop = false
+files = [
+    {file = "mlx-0.0.7-cp310-cp310-macosx_13_0_arm64.whl", hash = "sha256:3d6167192c3c39b37f701e51f2f1460cf19446cf45b1e6a676e3a94338b3ec1f"},
+    {file = "mlx-0.0.7-cp310-cp310-macosx_14_0_arm64.whl", hash = "sha256:e8d06a52cb0962a69f8a9ad49b0626dcfd05b79e014cf829301d8e841e316ee6"},
+    {file = "mlx-0.0.7-cp311-cp311-macosx_13_0_arm64.whl", hash = "sha256:f92fd6d17c5193102bf143fb97b852662c87ea278e690c52968ac33a4b6adf8c"},
+    {file = "mlx-0.0.7-cp311-cp311-macosx_14_0_arm64.whl", hash = "sha256:47968ea47bd4b1947a99a974602e92c936a600332d9b5be2c752bf3dddd031f2"},
+    {file = "mlx-0.0.7-cp312-cp312-macosx_13_0_arm64.whl", hash = "sha256:1b68e1a9c81948991a70c06cd62934a24af6443fc6706553d7bb857d4c78f8f2"},
+    {file = "mlx-0.0.7-cp312-cp312-macosx_14_0_arm64.whl", hash = "sha256:c43aa5195fee2a92ab8e85cc111f935d568d7b8a7586e234f0e3b976b57d908e"},
+    {file = "mlx-0.0.7-cp38-cp38-macosx_13_0_arm64.whl", hash = "sha256:b44e8e5a726c7d41c1ff0c4c26471afddb1bf58e16596829dc356fe592273d40"},
+    {file = "mlx-0.0.7-cp38-cp38-macosx_14_0_arm64.whl", hash = "sha256:ad43fb13ad20e520992b12ad33fefcc26944959d2baf05616a0a143e04dea01f"},
+    {file = "mlx-0.0.7-cp39-cp39-macosx_13_0_arm64.whl", hash = "sha256:445b520f9cd848a5dbe9d3432457c067dfdffcc46bdfdd11b701674cd3558d70"},
+    {file = "mlx-0.0.7-cp39-cp39-macosx_14_0_arm64.whl", hash = "sha256:66d77aec8fc0cedb017267ced91a5ac88a7e921b3c342ee1b06887cbe3626740"},
+]
 
 [package.extras]
 dev = ["pre-commit", "pybind11-stubgen"]
 testing = ["numpy", "torch"]
-
-[package.source]
-type = "git"
-url = "https://github.com/ml-explore/mlx.git"
-reference = "main"
-resolved_reference = "1d90a76d638bb11daf525e4680b38898176706e1"
 
 [[package]]
 name = "packaging"
@@ -117,4 +121,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "bbec0ac244d2031122663157dcd9f80ccb85de70ba65e89224786b3c8a4a8abb"
+content-hash = "d2f05c62864c1059cc83f81f3d3a0c8a8a3467176815bab97b78ad9b4c03a8cb"
