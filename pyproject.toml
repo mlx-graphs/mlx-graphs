@@ -7,7 +7,9 @@ readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.8"
-mlx = "^0.0.7"
+
+# MLX `branch` can be changed here.
+mlx = { git = "https://github.com/ml-explore/mlx.git", branch = "main" }
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^7.4.4"
