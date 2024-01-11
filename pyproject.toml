@@ -13,10 +13,10 @@ mlx = "0.0.7"
 pytest = "^7.4.4"
 
 # MLX `branch` can be changed here.
-mlx = { git = "https://github.com/ml-explore/mlx.git", branch = "main" }
+# mlx = { git = "https://github.com/ml-explore/mlx.git", branch = "main" }
 
 # Or a local mlx package can be installed
-# mlx = {path = "/path/to/mlx/folder"}
+mlx = {path = "/Users/tb/Library/Mobile Documents/com~apple~CloudDocs/Documents/PhD/open_source/mlx"}
 
 [build-system]
 requires = ["poetry-core"]

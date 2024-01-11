@@ -19,14 +19,18 @@ Create a new environment (you can use your desired python version)
 ```
 poetry env use python3.12
 ```
-Install the package
+Install packages and activate the env
 ```
-poetry install
-```
-Activate the env
-```
+poetry install --only prd
 poetry shell
 ```
+
+#### Build for development
+
+```
+poetry install --only dev
+```
+
 (Optional) Install a local version of mlx for development
 ```
 poetry add --editable path/to/mlx_package
