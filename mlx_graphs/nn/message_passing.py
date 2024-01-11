@@ -1,7 +1,10 @@
-from typing import Any
+from typing import Any, Union
 
 import mlx.core as mx
 import mlx.nn as nn
+
+from mlx_graphs.utils import scatter, gather_src_dst
+from mlx_graphs.typing import ArrayTuple
 
 
 class MessagePassing(nn.Module):
@@ -25,27 +28,37 @@ class MessagePassing(nn.Module):
         super().__init__()
 
         self.aggr = aggr
+        self.node_dim = None
 
     def __call__(self, x: mx.array, edge_index: mx.array, **kwargs: Any):
         raise NotImplementedError
 
-    def propagate(self, x: mx.array, edge_index: mx.array, **kwargs: Any) -> mx.array:
+    def propagate(self, x: Union[mx.array, ArrayTuple], edge_index: mx.array, **kwargs: Any) -> mx.array:
         r"""Computes messages from neighbors, aggregates them and updates
         the final node embeddings.
 
         Args:
-            x (mx.array): input node features/embeddings
+            x (Union[mx.array, ArrayTuple]): input node features/embeddings
             edge_index (mx.array): graph representation of shape (2, |E|) in COO format
             **kwargs (Any): arguments to pass to message, aggregate and update
         """
-        src_idx, dst_idx = edge_index
-        x_i = x[src_idx]
-        x_j = x[dst_idx]
+        assert isinstance(edge_index, mx.array) and edge_index.shape[0] == 2, \
+            f"Edge index should be an array with shape (2, |E|)."
+
+        if isinstance(x, tuple):
+            x_i, x_j = x
+            assert isinstance(x_i, mx.array) and isinstance(x_j, mx.array), \
+                "MessagePassing only supports mx.array type for `x`."
+        else:
+            assert isinstance(x, mx.array), \
+                "MessagePassing only supports mx.array type for `x`."
+            x_i, x_j = gather_src_dst(x, edge_index)
+
+        self.node_dim = x_i.shape
+        dst_idx = edge_index[1]
 
         messages = self.message(x_i, x_j, **kwargs)
-
         aggregated = self.aggregate(messages, dst_idx, **kwargs)
-
         output = self.update_(aggregated, **kwargs)
 
         return output
@@ -70,16 +83,7 @@ class MessagePassing(nn.Module):
             indices: (mx.array): indices representing the nodes that receive messages
             **kwargs (Any): optional args to aggregate messages
         """
-        if self.aggr == "add":
-            nb_unique_indices = _unique(indices)
-            empty_tensor = mx.zeros((nb_unique_indices, messages.shape[-1]))
-            update_dim = (messages.shape[0], 1, messages.shape[1])
-
-            return mx.scatter_add(
-                empty_tensor, indices, messages.reshape(update_dim), 0
-            )
-
-        raise NotImplementedError(f"Aggregation {self.aggr} not implemented yet.")
+        return scatter(messages, indices, self.node_dim, self.aggr)
 
     # NOTE: this method can't be named `update()`, or the grads will be always set to 0.
     def update_(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
@@ -90,7 +94,3 @@ class MessagePassing(nn.Module):
             **kwargs (Any): optional args to update messages
         """
         return aggregated
-
-
-def _unique(array: mx.array):
-    return len(set(array.tolist()))
