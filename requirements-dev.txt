@@ -1,0 +1,2 @@
+-e git+https://github.com/ml-explore/mlx.git
+pytest==7.4.4
