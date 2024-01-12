@@ -4,7 +4,7 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's MLX.
 
 ## Work in progress 🚧
 
-We just started the development of this lib, with the aim to integrate it within [mx-explore](https://github.com/ml-explore).
+We just started the development of this lib, with the aim to integrate it within [ml-explore](https://github.com/ml-explore).
 
 The lib follows the Message Passing Neural Network ([MPNN](https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf)) architecture to build arbitrary GNNs on top of it, similarly as in [PyG](https://github.com/pyg-team/pytorch_geometric).
 
@@ -17,7 +17,7 @@ Create a new virtual environment and install the requirements
 ```
 pip install -r requirements.txt
 ```
-For dev, we suggest using a different environment and use the `requirements-dev.txt`
+For dev, install `mlx-graphs` locally and install `requirements-dev.txt`
 ```
 pip install -r requirements-dev.txt
 ```
