@@ -1,0 +1,12 @@
+[build-system]
+requires = ["setuptools >= 61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mlx-graphs"
+version = "0.0.1"
+description = "Graph Neural Network library made for Apple Silicons"
+authors = [{name="mlx-graphs contributors"}]
+readme = "README.md"
+license = {file = "LICENSE"}
+requires-python = ">= 3.8"
