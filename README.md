@@ -17,8 +17,9 @@ Create a new virtual environment and install the requirements
 ```
 pip install -r requirements.txt
 ```
-For dev, we suggest using a different environment and use the `requirements-dev.txt`
+For dev, install `mlx-graphs` locally and install `requirements-dev.txt`
 ```
+poetry install
 pip install -r requirements-dev.txt
 ```
 
