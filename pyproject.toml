@@ -9,5 +9,5 @@ description = "Graph Neural Network library made for Apple Silicons"
 authors = ["mlx-graphs contributors"]
 readme = "README.md"
 packages = [
-  { include = "mlx-graphs" }
+  { include = "mlx_graphs" }
 ]
