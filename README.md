@@ -19,7 +19,6 @@ pip install -r requirements.txt
 ```
 For dev, install `mlx-graphs` locally and install `requirements-dev.txt`
 ```
-poetry install
 pip install -r requirements-dev.txt
 ```
 
