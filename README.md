@@ -13,28 +13,13 @@ To build and install `mlx-graphs` from source start by cloning the github repo
 ```
 git clone git@github.com:TristanBilot/mlx-graphs.git && cd mlx-graphs
 ```
-We're currently using [poetry](https://python-poetry.org) as a package manager. So make sure you have it installed.
-
-Create a new environment (you can use your desired python version)
+Create a new virtual environment and install the requirements
 ```
-poetry env use python3.12
+pip install -r requirements.txt
 ```
-Install packages and activate the env
+For dev, we suggest using a different environment and use the `requirements-dev.txt`
 ```
-poetry install --only prd
-poetry shell
-```
-
-#### Build for development
-
-```
-poetry install --only dev
-```
-
-(Optional) Install a local version of mlx for development
-```
-poetry add --editable path/to/mlx_package
-poetry install
+pip install -r requirements-dev.txt
 ```
 
 ### Contributing

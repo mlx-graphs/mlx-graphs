@@ -1,23 +1,13 @@
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
 [tool.poetry]
 name = "mlx-graphs"
 version = "0.0.1"
 description = "Graph Neural Network library made for Apple Silicons"
 authors = ["mlx-graphs contributors"]
 readme = "README.md"
-
-[tool.poetry.dependencies]
-python = "^3.8"
-mlx = "0.0.7"
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^7.4.4"
-
-# MLX `branch` can be changed here.
-# mlx = { git = "https://github.com/ml-explore/mlx.git", branch = "main" }
-
-# Or a local mlx package can be installed
-mlx = {path = "/Users/tb/Library/Mobile Documents/com~apple~CloudDocs/Documents/PhD/open_source/mlx"}
-
-[build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+packages = [
+  { include = "mlx-graphs" }
+]
