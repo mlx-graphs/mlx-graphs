@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -30,6 +30,7 @@ class GATConv(MessagePassing):
         bias: bool = True,
         negative_slope: float = 0.2,
         dropout: float = 0.0,
+        edge_features_dim: Optional[int] = None,
     ):
         super(GATConv, self).__init__(aggr="add")
 
@@ -51,9 +52,15 @@ class GATConv(MessagePassing):
         if dropout > 0.0:
             self.dropout = nn.Dropout(dropout)
 
+        if edge_features_dim is not None:
+
+            # NOTE: Check to add glorot_init within the Linear layer
+            self.edge_lin_proj = nn.Linear(edge_features_dim, heads * h_dim, bias=False)
+            self.edge_att = glorot_init((1, heads, h_dim))
+
 
     def __call__(
-        self, x: mx.array, edge_index: mx.array, normalize: bool = True, **kwargs: Any
+        self, x: mx.array, edge_index: mx.array, edge_features: Optional[mx.array] = None, **kwargs: Any
     ) -> mx.array:
         H, C = self.heads, self.h_dim
         
@@ -73,6 +80,7 @@ class GATConv(MessagePassing):
                 "alpha_src": alpha_src,
                 "alpha_dst": alpha_dst,
                 "index": dst_idx,
+                "edge_features": edge_features,
             }
         )
 
@@ -87,10 +95,21 @@ class GATConv(MessagePassing):
         return h
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, alpha_src: mx.array=None, alpha_dst: mx.array=None, index: mx.array=None, **kwargs: Any
+        self,
+        x_i: mx.array,
+        x_j: mx.array,
+        alpha_src: mx.array=None,
+        alpha_dst: mx.array=None,
+        index: mx.array=None,
+        edge_features: Optional[mx.array]=None,
     ) -> mx.array:
 
         alpha = alpha_src + alpha_dst
+
+        if edge_features is not None:
+            alpha_edge = self._compute_alpha_edge_features(edge_features)
+            alpha = alpha + alpha_edge
+
         num_nodes = self.node_dim[0]
 
         alpha = nn.leaky_relu(alpha, self.negative_slope)
@@ -100,3 +119,17 @@ class GATConv(MessagePassing):
             alpha = self.dropout(alpha)
 
         return mx.expand_dims(alpha, -1) * x_i
+
+
+    def _compute_alpha_edge_features(self, edge_features: mx.array):
+        assert "edge_lin_proj" in self and "edge_att" in self, \
+            "Using edge features, GATConv layer should be provided argument `edge_features_dim`."
+
+        if edge_features.ndim == 1:
+            edge_features = edge_features.reshape(-1, 1)
+        
+        edge_features = self.edge_lin_proj(edge_features)
+        edge_features = edge_features.reshape(-1, self.heads, self.h_dim)
+        alpha_edge = (edge_features * self.edge_att).sum(axis=-1)
+
+        return alpha_edge
