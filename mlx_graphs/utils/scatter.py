@@ -30,17 +30,21 @@ def scatter_max(src: mx.array, indices: mx.array, values: mx.array, axis: int = 
     return mx.scatter_max(src, indices, values, axis)
 
 
-def scatter_softmax(src: mx.array, index: mx.array, out_size: int) -> mx.array:
-    # TODO: proper broadcast should be added here.
-    # this `out_shape` is a workaround for the moment.
-    out_shape = src.shape
+def scatter_softmax(src: mx.array, index: mx.array, out_size: int = None, axis: int = 0) -> mx.array:
+
+    # index = broadcast(index, src, axis)
     
-    scatt_max = scatter(src, index, out_shape, aggr='max')
+    # Destination size of scatter for axis is by def. the number of nodes in `index`
+    out_shape = src.shape
+    out_shape[axis] = out_size if out_size is not None else max_nodes(indices)
+    
+    scatt_max = scatter(src, index, out_shape, aggr='max', axis=axis)
     scatt_max = scatt_max[index]
     out = (src - scatt_max).exp()
 
-    scatt_sum = scatter(out, index, out_shape, aggr='sum')
+    scatt_sum = scatter(out, index, out_shape, aggr='sum', axis=axis)
     scatt_sum = scatt_sum[index]
 
     eps = 1e-16
     return out / (scatt_sum + eps)
+

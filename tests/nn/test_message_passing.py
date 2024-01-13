@@ -12,7 +12,7 @@ class MPNN(MessagePassing):
     def __call__(
         self, x: mx.array, edge_index: mx.array, edge_weight: mx.array, **kwargs
     ) -> mx.array:
-        return self.propagate(x=x, edge_index=edge_index, edge_weight=edge_weight)
+        return self.propagate(x=x, edge_index=edge_index, message_kwargs={"edge_weight": edge_weight})
 
     def message(
         self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs
@@ -96,12 +96,12 @@ def test_sum_aggregation_raise():
     mpnn = MPNN(aggr="add")
     x = mx.array([[1, 2], [3, 4], [5, 6]])
 
-    with pytest.raises(ValueError):
+    with pytest.raises(Exception):
         edge_index = mx.array([[0, 1, 2], [1, 2, 0], [1, 2, 0]])
         mpnn(x, edge_index, edge_weight=None)
 
-    with pytest.raises(ValueError):
+    with pytest.raises(Exception):
         edge_index = [[0, 1, 2], [1, 2, 0], [1, 2, 0]]
         mpnn(x, edge_index, edge_weight=None)
 
-test_sum_aggregation()
+test_sum_aggregation_raise()

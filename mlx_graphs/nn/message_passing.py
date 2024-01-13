@@ -1,4 +1,4 @@
-from typing import Any, Union
+from typing import Any, Union, Dict
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -33,7 +33,14 @@ class MessagePassing(nn.Module):
     def __call__(self, x: mx.array, edge_index: mx.array, **kwargs: Any):
         raise NotImplementedError
 
-    def propagate(self, x: Union[mx.array, ArrayTuple], edge_index: mx.array, **kwargs: Any) -> mx.array:
+    def propagate(
+        self,
+        x: Union[mx.array, ArrayTuple],
+        edge_index: mx.array,
+        message_kwargs: Dict={},
+        aggregate_kwargs: Dict={},
+        update_kwargs: Dict={},
+    ) -> mx.array:
         r"""Computes messages from neighbors, aggregates them and updates
         the final node embeddings.
 
@@ -44,22 +51,21 @@ class MessagePassing(nn.Module):
         """
         assert isinstance(edge_index, mx.array) and edge_index.shape[0] == 2, \
             f"Edge index should be an array with shape (2, |E|)."
-
         if isinstance(x, tuple):
-            x_i, x_j = x
-            assert isinstance(x_i, mx.array) and isinstance(x_j, mx.array), \
-                "MessagePassing only supports mx.array type for `x`."
+            assert len(x) == 2 and isinstance(x[0], mx.array) and isinstance(x[1], mx.array), \
+                f"Invalid shape for `node_features`, should be a tuple of 2 mx.array."
         else:
             assert isinstance(x, mx.array), \
-                "MessagePassing only supports mx.array type for `x`."
-            x_i, x_j = gather_src_dst(x, edge_index)
+                f"Invalid shape for `node_features`, should be an `mx.array`, found {type(x)}."
+            
+        x_i, x_j = gather_src_dst(x, edge_index)
 
-        self.node_dim = x_i.shape
+        self.node_dim = (x if isinstance(x, mx.array) else x[0]).shape
         dst_idx = edge_index[1]
-
-        messages = self.message(x_i, x_j, **kwargs)
-        aggregated = self.aggregate(messages, dst_idx, **kwargs)
-        output = self.update_(aggregated, **kwargs)
+        
+        messages = self.message(x_i, x_j, **message_kwargs)                 # (|E| -> |E|)
+        aggregated = self.aggregate(messages, dst_idx, **aggregate_kwargs)  # (|E| -> |N|)
+        output = self.update_nodes(aggregated, **update_kwargs)             # (|N| -> |N|)
 
         return output
 
@@ -86,7 +92,7 @@ class MessagePassing(nn.Module):
         return scatter(messages, indices, self.node_dim, self.aggr)
 
     # NOTE: this method can't be named `update()`, or the grads will be always set to 0.
-    def update_(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
+    def update_nodes(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
         r"""Updates the final embeddings given the aggregated messages.
 
         Args:

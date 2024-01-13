@@ -45,7 +45,7 @@ class GATConv(MessagePassing):
         self.att_dst = glorot_init((1, heads, h_dim))
 
         if bias:
-            bias_shape = (heads * h_dim) if concat else (heads)
+            bias_shape = (heads * h_dim) if concat else (h_dim)
             self.bias = mx.zeros(bias_shape)
 
         if dropout > 0.0:
@@ -63,15 +63,23 @@ class GATConv(MessagePassing):
         alpha_dst = (x_dst * self.att_dst).sum(-1)
         alpha = (alpha_src, alpha_dst)
 
+        alpha_src, alpha_dst = gather_src_dst((alpha_src, alpha_dst), edge_index)
         dst_idx = edge_index[1]
-        alpha = self._edge_update(alpha_src, alpha_dst, dst_idx)
 
-        h = self.propagate((x_src, x_dst), edge_index, alpha=alpha)
+        h = self.propagate(
+            x=(x_src, x_dst),
+            edge_index=edge_index,
+            message_kwargs={
+                "alpha_src": alpha_src,
+                "alpha_dst": alpha_dst,
+                "index": dst_idx,
+            }
+        )
 
         if self.concat:
             h = h.reshape(-1, self.heads * self.h_dim)
         else:
-            h = h.mean(dim=1)
+            h = mx.mean(h, axis=1)
 
         if "bias" in self:
             h = h + self.bias
@@ -79,15 +87,11 @@ class GATConv(MessagePassing):
         return h
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, alpha: mx.array=None, **kwargs: Any
+        self, x_i: mx.array, x_j: mx.array, alpha_src: mx.array=None, alpha_dst: mx.array=None, index: mx.array=None, **kwargs: Any
     ) -> mx.array:
-        return alpha.reshape(*alpha.shape, 1) * x_i
 
-    def _edge_update(self, alpha_j: mx.array, alpha_i: mx.array, index: mx.array):
-        # TODO: replace num_nodes by max_nodes, verify it works for GCN
-        # max_nodes = index.max().item() + 1
-        alpha = alpha_j + alpha_i
-        num_nodes = alpha.shape[0]
+        alpha = alpha_src + alpha_dst
+        num_nodes = self.node_dim[0]
 
         alpha = nn.leaky_relu(alpha, self.negative_slope)
         alpha = scatter_softmax(alpha, index, num_nodes)
@@ -95,4 +99,4 @@ class GATConv(MessagePassing):
         if "dropout" in self:
             alpha = self.dropout(alpha)
 
-        return alpha
+        return mx.expand_dims(alpha, -1) * x_i

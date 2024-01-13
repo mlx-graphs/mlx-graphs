@@ -3,15 +3,39 @@ import pytest
 
 from mlx_graphs.nn.conv.gat_conv import GATConv
 
+mx.random.seed(42)
+
 
 def test_gat_conv():
     conv = GATConv(8, 20, heads=1)
 
-    x = mx.random.uniform(0, 1, (4, 8))
+    x = mx.random.uniform(0, 1, (6, 8))
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
+    y_hat1 = conv(x, edge_index)
 
-    y_hat = conv(x, edge_index)
-    assert y_hat.shape == [4, 20], "Simple GATConv failed"
+    x = mx.random.uniform(-1, 1, (6, 8))
+    edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
+    y_hat2 = conv(x, edge_index)
 
-    # TODO: Add test with negative values in x
-    # TODO: Add test with x of shape (n, d) with n != len(ei[0])
+    conv = GATConv(16, 32, heads=1)
+    x = mx.random.uniform(0, 1, (100, 16))
+    edge_index = mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]])
+    y_hat3 = conv(x, edge_index)
+
+    conv = GATConv(16, 32, heads=3, concat=True)
+    x = mx.random.uniform(0, 1, (100, 16))
+    edge_index = mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]])
+    y_hat4 = conv(x, edge_index)
+
+    conv = GATConv(16, 32, heads=3, concat=False)
+    x = mx.random.uniform(0, 1, (100, 16))
+    edge_index = mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]])
+    y_hat5 = conv(x, edge_index)
+
+    assert y_hat1.shape == [6, 20], "Simple GATConv failed"
+    assert y_hat2.shape == [6, 20], "GATConv with negative values failed"
+    assert y_hat3.shape == [100, 32], "GATConv with different shapes failed"
+    assert y_hat4.shape == [100, 32*3], "GATConv with multiple heads concat failed"
+    assert y_hat5.shape == [100, 32], "GATConv with multiple heads without concat failed"
+
+test_gat_conv()

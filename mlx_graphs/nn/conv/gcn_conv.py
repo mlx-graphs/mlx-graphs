@@ -45,7 +45,7 @@ class GCNConv(MessagePassing):
             norm = mx.ones_like(row)
 
         # Compute messages and aggregate them with sum and norm.
-        x = self.propagate(x=x, edge_index=edge_index, edge_weight=norm)
+        x = self.propagate(x=x, edge_index=edge_index, message_kwargs={"edge_weight": norm})
 
         return x
 
