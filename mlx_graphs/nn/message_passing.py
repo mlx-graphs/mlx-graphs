@@ -1,9 +1,9 @@
-from typing import Any, Union, Dict
+from typing import Any, Union, Dict, Optional
 
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils import scatter, gather_src_dst
+from mlx_graphs.utils import scatter, get_src_dst_features
 from mlx_graphs.typing import ArrayTuple
 
 
@@ -14,7 +14,7 @@ class MessagePassing(nn.Module):
     passing paradigm. This implementation is inspired from PyTorch Geometric [2].
 
     Args:
-        aggr (str): the aggregation strategy used to aggregate messages
+        aggr (str): Aggregation strategy used to aggregate messages
 
     References:
         [1] Gilmer et al. Neural Message Passing for Quantum Chemistry.
@@ -28,56 +28,71 @@ class MessagePassing(nn.Module):
         super().__init__()
 
         self.aggr = aggr
-        self.node_dim = None
+        self.num_nodes = None
 
     def __call__(self, x: mx.array, edge_index: mx.array, **kwargs: Any):
         raise NotImplementedError
 
     def propagate(
         self,
-        x: Union[mx.array, ArrayTuple],
+        node_features: Union[mx.array, ArrayTuple],
         edge_index: mx.array,
-        message_kwargs: Dict={},
-        aggregate_kwargs: Dict={},
-        update_kwargs: Dict={},
+        message_kwargs: Optional[Dict] = {},
+        aggregate_kwargs: Optional[Dict] = {},
+        update_kwargs: Optional[Dict] = {},
     ) -> mx.array:
         r"""Computes messages from neighbors, aggregates them and updates
         the final node embeddings.
 
         Args:
-            x (Union[mx.array, ArrayTuple]): input node features/embeddings
-            edge_index (mx.array): graph representation of shape (2, |E|) in COO format
-            **kwargs (Any): arguments to pass to message, aggregate and update
+            node_features (Union[mx.array, ArrayTuple]): Input node features/embeddings
+            edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
+            message_kwargs (optional, Dict): Arguments to pass to the `message` method
+            aggregate_kwargs (optional, Dict): Arguments to pass to the `aggregate` method
+            update_kwargs (optional, Dict): Arguments to pass to the `update_nodes` method
         """
-        assert isinstance(edge_index, mx.array) and edge_index.shape[0] == 2, \
-            f"Edge index should be an array with shape (2, |E|)."
-        if isinstance(x, tuple):
-            assert len(x) == 2 and isinstance(x[0], mx.array) and isinstance(x[1], mx.array), \
-                f"Invalid shape for `node_features`, should be a tuple of 2 mx.array."
+        assert (
+            isinstance(edge_index, mx.array) and edge_index.shape[0] == 2
+        ), "Edge index should be an array with shape (2, |E|)."
+        if isinstance(node_features, tuple):
+            assert (
+                len(node_features) == 2
+                and isinstance(node_features[0], mx.array)
+                and isinstance(node_features[1], mx.array)
+            ), "Invalid shape for `node_features`, should be a tuple of 2 mx.array."
         else:
-            assert isinstance(x, mx.array), \
-                f"Invalid shape for `node_features`, should be an `mx.array`, found {type(x)}."
-            
-        x_i, x_j = gather_src_dst(x, edge_index)
+            assert isinstance(
+                node_features, mx.array
+            ), f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}."
 
-        self.node_dim = (x if isinstance(x, mx.array) else x[0]).shape
+        src_features, dst_features = get_src_dst_features(node_features, edge_index)
+
+        self.num_nodes = (
+            node_features if isinstance(node_features, mx.array) else node_features[0]
+        ).shape[0]
         dst_idx = edge_index[1]
-        
-        messages = self.message(x_i, x_j, **message_kwargs)                 # (|E| -> |E|)
-        aggregated = self.aggregate(messages, dst_idx, **aggregate_kwargs)  # (|E| -> |N|)
-        output = self.update_nodes(aggregated, **update_kwargs)             # (|N| -> |N|)
+
+        messages = self.message(
+            src_features, dst_features, **message_kwargs
+        )  # (|E| -> |E|)
+        aggregated = self.aggregate(
+            messages, dst_idx, **aggregate_kwargs
+        )  # (|E| -> |N|)
+        output = self.update_nodes(aggregated, **update_kwargs)  # (|N| -> |N|)
 
         return output
 
-    def message(self, x_i: mx.array, x_j: mx.array, **kwargs: Any) -> mx.array:
+    def message(
+        self, src_features: mx.array, dst_features: mx.array, **kwargs: Any
+    ) -> mx.array:
         r"""Computes messages between connected nodes.
 
         Args:
-            x_i (mx.array): source node embeddings
-            x_j (mx.array): destination node embeddings
-            **kwargs (Any): optional args to compute messages
+            src_features (mx.array): Source node embeddings
+            dst_features (mx.array): Destination node embeddings
+            **kwargs (Any): Optional args to compute messages
         """
-        return x_i
+        return src_features
 
     def aggregate(
         self, messages: mx.array, indices: mx.array, **kwargs: Any
@@ -85,13 +100,12 @@ class MessagePassing(nn.Module):
         r"""Aggregates the messages using the `self.aggr` strategy.
 
         Args:
-            messages (mx.array): computed messages
-            indices: (mx.array): indices representing the nodes that receive messages
-            **kwargs (Any): optional args to aggregate messages
+            messages (mx.array): Computed messages
+            indices: (mx.array): Indices representing the nodes that receive messages
+            **kwargs (Any): Optional args to aggregate messages
         """
-        return scatter(messages, indices, self.node_dim, self.aggr)
+        return scatter(messages, indices, self.num_nodes, self.aggr)
 
-    # NOTE: this method can't be named `update()`, or the grads will be always set to 0.
     def update_nodes(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
         r"""Updates the final embeddings given the aggregated messages.
 

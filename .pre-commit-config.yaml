@@ -7,10 +7,10 @@ repos:
       args: [--fix]
     # Run the formatter.
     - id: ruff-format
-- repo: https://github.com/RobertCraigie/pyright-python
-  rev: v1.1.341
-  hooks:
-    - id: pyright
+# - repo: https://github.com/RobertCraigie/pyright-python
+#   rev: v1.1.341
+#   hooks:
+#     - id: pyright
 - repo: https://github.com/pre-commit/pre-commit-hooks
   rev: v2.3.0
   hooks:

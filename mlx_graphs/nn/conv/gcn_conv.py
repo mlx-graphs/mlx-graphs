@@ -24,35 +24,53 @@ class GCNConv(MessagePassing):
         self.linear = nn.Linear(x_dim, h_dim, bias)
 
     def __call__(
-        self, x: mx.array, edge_index: mx.array, normalize: bool = True, **kwargs: Any
+        self,
+        node_features: mx.array,
+        edge_index: mx.array,
+        normalize: bool = True,
+        **kwargs: Any,
     ) -> mx.array:
         assert edge_index.shape[0] == 2, "edge_index must have shape (2, num_edges)"
-        assert edge_index[1].size > 0, "'col' component of edge_index should not be empty"
+        assert (
+            edge_index[1].size > 0
+        ), "'col' component of edge_index should not be empty"
 
-        x = self.linear(x)
+        node_features = self.linear(node_features)
 
         row, col = edge_index
 
         # Compute node degree normalization for the mean aggregation.
         norm: mx.array = None
         if normalize:
-            deg = self._degree(col, x.shape[0])
+            deg = self._degree(col, node_features.shape[0])
             deg_inv_sqrt = deg ** (-0.5)
-            # NOTE : need boolean indexing in order to zero out inf values 
+            # NOTE : need boolean indexing in order to zero out inf values
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
 
         else:
             norm = mx.ones_like(row)
 
         # Compute messages and aggregate them with sum and norm.
-        x = self.propagate(x=x, edge_index=edge_index, message_kwargs={"edge_weight": norm})
+        node_features = self.propagate(
+            node_features=node_features,
+            edge_index=edge_index,
+            message_kwargs={"edge_weight": norm},
+        )
 
-        return x
+        return node_features
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs: Any
+        self,
+        src_features: mx.array,
+        dst_features: mx.array,
+        edge_weight: mx.array = None,
+        **kwargs: Any,
     ) -> mx.array:
-        return x_i if edge_weight is None else edge_weight.reshape(-1, 1) * x_i
+        return (
+            src_features
+            if edge_weight is None
+            else edge_weight.reshape(-1, 1) * src_features
+        )
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
         out = mx.zeros((num_edges,))

@@ -1,5 +1,4 @@
 import mlx.core as mx
-import pytest
 
 from mlx_graphs.nn.conv.gat_conv import GATConv
 
@@ -41,8 +40,9 @@ def test_gat_conv():
     assert y_hat1.shape == [6, 20], "Simple GATConv failed"
     assert y_hat2.shape == [6, 20], "GATConv with negative values failed"
     assert y_hat3.shape == [100, 32], "GATConv with different shapes failed"
-    assert y_hat4.shape == [100, 32*3], "GATConv with multiple heads concat failed"
-    assert y_hat5.shape == [100, 32], "GATConv with multiple heads without concat failed"
+    assert y_hat4.shape == [100, 32 * 3], "GATConv with multiple heads concat failed"
+    assert y_hat5.shape == [
+        100,
+        32,
+    ], "GATConv with multiple heads without concat failed"
     assert y_hat6.shape == [100, 32], "GATConv with edge features failed"
-
-test_gat_conv()

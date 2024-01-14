@@ -1,12 +1,7 @@
-
 from .inits import (
-    glorot_init,
+    glorot_init,  # noqa
 )
-from .scatter import (
-    scatter,
-    scatter_softmax,
-)
+from .scatter import scatter  # noqa
 from .utils import (
-    gather_src_dst,
-    max_nodes,
+    get_src_dst_features,  # noqa
 )

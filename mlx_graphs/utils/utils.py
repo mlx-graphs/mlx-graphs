@@ -3,35 +3,44 @@ from typing import Tuple, Union
 import mlx.core as mx
 
 
-def gather_src_dst(
-    array: Union[mx.array, Tuple[mx.array, mx.array]],
+def get_src_dst_features(
+    node_features: Union[mx.array, Tuple[mx.array, mx.array]],
     edge_index: mx.array,
 ) -> Tuple[mx.array, mx.array]:
+    """
+    Extracts source and destination node features based on the given edge indices.
+
+    Args:
+        node_features (mx.array): The input array of node features.
+        edge_index (mx.array): An array of shape (2, number_of_edges), where each columns contains the source
+                and destination nodes of an edge.
+
+    Returns:
+        Tuple[mx.array, mx.array]: A tuple containing source and destination features.
+    """
     src_idx, dst_idx = edge_index
 
-    if isinstance(array, tuple):
-        src_val, dst_val = array
+    if isinstance(node_features, tuple):
+        src_val, dst_val = node_features
         src_val = src_val[src_idx]
         dst_val = dst_val[dst_idx]
 
-    elif isinstance(array, mx.array):
-        src_val = array[src_idx]
-        dst_val = array[dst_idx]
-        
+    elif isinstance(node_features, mx.array):
+        src_val = node_features[src_idx]
+        dst_val = node_features[dst_idx]
+
     else:
-        raise ValueError("Invalid type for argument `array`, should be a `mx.array` or a `tuple`.")
+        raise ValueError(
+            "Invalid type for argument `array`, should be a `mx.array` or a `tuple`."
+        )
 
     return src_val, dst_val
-
-
-def max_nodes(indices: mx.array) -> int:
-    return indices.max().item() + 1
 
 
 def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
     """
     Make the shape broadcastable between arrays src and other.
-    May be required in some situations like index broadcasting. 
+    May be required in some situations like index broadcasting.
 
     Args:
         src (mx.array): source array to broadcast.
@@ -53,20 +62,22 @@ def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
 
 def expand(array: mx.array, new_shape: tuple) -> mx.array:
     """
-    Expand the dimensions of a NumPy array to a new shape.
+    Expand the dimensions of an array to a new shape.
 
     Args:
-    array (mx.array): The array to expand.
-    new_shape (tuple): The new shape desired. The new dimensions must be compatible
+        array (mx.array): The array to expand.
+        new_shape (tuple): The new shape desired. The new dimensions must be compatible
                        with the original shape of the array.
 
     Returns:
-    mx.array: A view of the array with the new shape.
+        mx.array: A view of the array with the new shape.
     """
     orig_shape = array.shape
-    
+
     if not all(new_dim >= orig_dim for new_dim, orig_dim in zip(new_shape, orig_shape)):
         raise ValueError("New shape must be greater than or equal to original shape")
 
-    broadcast_shape = tuple(max(orig_dim, new_dim) for orig_dim, new_dim in zip(orig_shape, new_shape))
+    broadcast_shape = tuple(
+        max(orig_dim, new_dim) for orig_dim, new_dim in zip(orig_shape, new_shape)
+    )
     return mx.broadcast_to(array, broadcast_shape)

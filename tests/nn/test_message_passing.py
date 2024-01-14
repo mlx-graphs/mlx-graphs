@@ -5,19 +5,34 @@ from mlx_graphs.nn.message_passing import MessagePassing
 
 
 class MPNN(MessagePassing):
-
-    def __init__(self, aggr: str="add"):
+    def __init__(self, aggr: str = "add"):
         super().__init__(aggr=aggr)
 
     def __call__(
-        self, x: mx.array, edge_index: mx.array, edge_weight: mx.array, **kwargs
+        self,
+        node_features: mx.array,
+        edge_index: mx.array,
+        edge_weight: mx.array,
+        **kwargs,
     ) -> mx.array:
-        return self.propagate(x=x, edge_index=edge_index, message_kwargs={"edge_weight": edge_weight})
+        return self.propagate(
+            node_features=node_features,
+            edge_index=edge_index,
+            message_kwargs={"edge_weight": edge_weight},
+        )
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs
+        self,
+        src_features: mx.array,
+        dst_features: mx.array,
+        edge_weight: mx.array = None,
+        **kwargs,
     ) -> mx.array:
-        return x_i if edge_weight is None else edge_weight.reshape(-1, 1) * x_i
+        return (
+            src_features
+            if edge_weight is None
+            else edge_weight.reshape(-1, 1) * src_features
+        )
 
 
 def test_sum_aggregation():
@@ -29,7 +44,7 @@ def test_sum_aggregation():
     edge_index = mx.array([[0, 1, 2], [1, 2, 0]])
     y0 = mx.array([3, 1, 2])
     y_hat0 = mpnn(x, edge_index, edge_weight=None)
-    
+
     # shape (3, 2)
     x = mx.array([[1, 2], [3, 4], [5, 6]])
 
@@ -50,21 +65,17 @@ def test_sum_aggregation():
     y_hat4 = mpnn(x, edge_index, edge_weight=None)
 
     # shape (3, 2, 2)
-    x = mx.array([
-        [[1, 2], [3, 4]],
-        [[5, 6], [7, 8]],
-        [[9, 10], [11, 12]]
-    ])
+    x = mx.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]])
     edge_index = mx.array([[0, 1, 0], [1, 1, 1]])
     y_hat5 = mpnn(x, edge_index, edge_weight=None)
     y5 = mx.array([[[0, 0], [0, 0]], [[7, 10], [13, 16]], [[0, 0], [0, 0]]])
 
     # shape (3, 2, 2, 1)
-    edge_index = edge_index.reshape(*edge_index.shape, 1)
+    edge_index = edge_index
     x = x.reshape(*x.shape, 1)
     y_hat6 = mpnn(x, edge_index, edge_weight=None)
     y6 = y5.reshape(*y5.shape, 1)
-    
+
     assert mx.all(y0 == y_hat0), "Simple message passing failed"
     assert mx.all(y1 == y_hat1), "Simple message passing failed"
     assert mx.all(y2 == y_hat2), "Add message passing failed"
@@ -103,5 +114,3 @@ def test_sum_aggregation_raise():
     with pytest.raises(Exception):
         edge_index = [[0, 1, 2], [1, 2, 0], [1, 2, 0]]
         mpnn(x, edge_index, edge_weight=None)
-
-test_sum_aggregation_raise()
