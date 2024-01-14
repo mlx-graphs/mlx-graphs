@@ -1,10 +1,9 @@
-from typing import Any, Union, Dict, Optional
+from typing import Any, Union, Dict, Optional, Tuple
 
 import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.utils import scatter, get_src_dst_features
-from mlx_graphs.typing import ArrayTuple
 
 
 class MessagePassing(nn.Module):
@@ -35,7 +34,7 @@ class MessagePassing(nn.Module):
 
     def propagate(
         self,
-        node_features: Union[mx.array, ArrayTuple],
+        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
         edge_index: mx.array,
         message_kwargs: Optional[Dict] = {},
         aggregate_kwargs: Optional[Dict] = {},
@@ -45,7 +44,7 @@ class MessagePassing(nn.Module):
         the final node embeddings.
 
         Args:
-            node_features (Union[mx.array, ArrayTuple]): Input node features/embeddings
+            node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings
             edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
             message_kwargs (optional, Dict): Arguments to pass to the `message` method
             aggregate_kwargs (optional, Dict): Arguments to pass to the `aggregate` method
