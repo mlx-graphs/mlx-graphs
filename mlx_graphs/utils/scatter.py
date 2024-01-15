@@ -52,7 +52,6 @@ def scatter(
     out_shape[axis] = out_size
 
     empty_tensor = mx.zeros(out_shape, dtype=values.dtype)
-    values = mx.expand_dims(values, 1)
 
     if aggr in ["add", "sum"]:
         return scatter_add(empty_tensor, index, values)
@@ -75,7 +74,7 @@ def scatter_add(src: mx.array, index: mx.array, values: mx.array, axis: int = 0)
         mx.array: The resulting array after applying scatter and sum operations on the values
             at duplicate indices
     """
-    return mx.scatter_add(src, index, values, axis)
+    return src.at[index].add(values)
 
 
 def scatter_max(src: mx.array, index: mx.array, values: mx.array, axis: int = 0):
@@ -93,7 +92,7 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array, axis: int = 0)
         mx.array: The resulting array after applying scatter and max operations on the values
             at duplicate indices
     """
-    return mx.scatter_max(src, index, values, axis)
+    return src.at[index].maximum(values)
 
 
 def scatter_softmax(
