@@ -1,3 +1,6 @@
+# mlx-graphs specific ignores
+data/
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
