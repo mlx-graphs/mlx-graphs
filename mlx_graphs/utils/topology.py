@@ -1,50 +1,59 @@
 from typing import Optional
 import mlx.core as mx
-
-
-def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
-    """
-    Sort the edge index.
-
-    Args:
-        edge_index (mlx.core.array): A [2, num_edges] array representing edge indices,
-            where the first row contains source indices and the second row contains target indices.
-
-    Returns:
-        tuple[mlx.core.array, mlx.core.array]: A tuple containing the sorted edge index and the
-            corresponding sorting indices.
-    """
-    sorted_target_indices = mx.argsort(edge_index[1])
-    target_sorted_index = edge_index[:, sorted_target_indices]
-    sorted_source_indices = mx.argsort(target_sorted_index[0])
-    sorted_edge_index = target_sorted_index[:, sorted_source_indices]
-    sorting_indices = sorted_target_indices[sorted_source_indices]
-    return sorted_edge_index, sorting_indices
-
-
-def sort_edge_index_and_features(edge_index: mx.array, edge_features: mx.array):
-    """
-    Sorts the given edge_index and their corresponding features.
-
-    Args:
-        edge_index (mlx.core.array): A [2, num_edges] array representing edge indices,
-            where the first row contains source indices and the second row contains target indices.
-        edge_features (mlx.core.array): An array representing edge features, where each column
-            corresponds to an edge.
-
-    Returns:
-        tuple[mlx.core.array, mlx.core.array]: A tuple containing the sorted edge index and the
-            corresponding sorted edge features.
-    """
-    sorted_edge_index, sorting_indices = sort_edge_index(edge_index)
-    if edge_features.ndim == 1:
-        sorted_edge_features = edge_features[sorting_indices]
-    else:
-        sorted_edge_features = edge_features[:, sorting_indices]
-    return sorted_edge_index, sorted_edge_features
+from mlx_graphs.utils.sorting import sort_edge_index, sort_edge_index_and_features
 
 
 def is_undirected(
     edge_index: mx.array, edge_features: Optional[mx.array] = None
 ) -> bool:
-    pass
+    """
+    Determines whether a graph is undirected based on the given edge index
+    and optional edge features.
+
+    Args:
+        edge_index (mlx.core.array): The edge index of the graph.
+        edge_features (mlx.core.array, optional): Edge features associated
+            with each edge. If provided, the function considers both edge indices
+            and features for the check.
+
+    Returns:
+        bool: True if the graph is undirected, False otherwise.
+    """
+    # The function checks if the sorted order of source-destination pairs is equal
+    # to the sorted order of destination-source pairs. If edge features are provided,
+    # it also checks for equality in their order.
+    if edge_features is None:
+        src_dst_sort, _ = sort_edge_index(edge_index)
+        dst_src_sort, _ = sort_edge_index(mx.stack([edge_index[1], edge_index[0]]))
+        if mx.array_equal(src_dst_sort, dst_src_sort):
+            return True
+    else:
+        src_dst_sort, src_dst_feat = sort_edge_index_and_features(
+            edge_index, edge_features
+        )
+        dst_src_sort, dst_src_feat = sort_edge_index_and_features(
+            mx.stack([edge_index[1], edge_index[0]]), edge_features
+        )
+        if mx.array_equal(src_dst_sort, dst_src_sort) and mx.array_equal(
+            src_dst_feat, dst_src_feat
+        ):
+            return True
+
+    return False
+
+
+def is_directed(edge_index: mx.array, edge_features: Optional[mx.array] = None) -> bool:
+    """
+    Determines whether a graph is directed based on the given edge index
+    and optional edge features.
+
+    Args:
+        edge_index (mlx.core.array): The edge index of the graph.
+        edge_features (mlx.core.array, optional): Edge features associated
+            with each edge. If provided, the function considers both edge indices
+            and features for the check.
+
+    Returns:
+        bool: True if the graph is directed, False otherwise.
+    """
+    return not is_undirected(edge_index, edge_features)
