@@ -21,12 +21,13 @@ def check_adjacency_matrix(func):
 
 
 @check_adjacency_matrix
-def to_edge_index(adjacency_matrix: mx.array) -> mx.array:
+def to_edge_index(adjacency_matrix: mx.array, dtype: mx.Dtype = mx.uint32) -> mx.array:
     """
     Converts an adjacency matrix to an edge index representation.
 
     Args:
         adjacency_matrix (mlx.core.array): the input adjacency matrix
+        dtype (mlx.core.Dtype): type of the output edge_index. Default to uint32.
 
     Returns:
         mlx.core.array: a [2, num_edges] array representing the source and target nodes of each edge
@@ -42,21 +43,22 @@ def to_edge_index(adjacency_matrix: mx.array) -> mx.array:
         edge_index = to_edge_index(matrix)
         # mx.array([[0, 0, 1, 2, 2, 2], [1, 2, 0, 0, 1, 2]])
     """
-    input_dtype = adjacency_matrix.dtype
     edge_index = mx.stack(
-        [mx.array(x, dtype=input_dtype) for x in np.nonzero(adjacency_matrix)]
+        [mx.array(x, dtype=dtype) for x in np.nonzero(adjacency_matrix)]
     )
     return edge_index
 
 
 @check_adjacency_matrix
-def to_sparse_adjacency_matrix(adjacency_matrix: mx.array) -> tuple[mx.array, mx.array]:
+def to_sparse_adjacency_matrix(
+    adjacency_matrix: mx.array, dtype: mx.Dtype = mx.uint32
+) -> tuple[mx.array, mx.array]:
     """
-    Converts a dense adjacency matrix to a sparse one, represented as an tuple of and
-    edge index and edge features.
+    Converts an adjacency matrix to a sparse representation as a tuple of edge index and edge features.
 
     Args:
         adjacency_matrix (mlx.core.array): the input adjacency matrix
+        dtype (mlx.core.Dtype): type of the output edge_index. Default to uint32.
 
     Returns:
         tuple[mlx.core.array, mlx.core.array]: A tuple representing the edge index and edge features
