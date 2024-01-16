@@ -1,8 +1,10 @@
 from typing import Optional
 import mlx.core as mx
 from mlx_graphs.utils.sorting import sort_edge_index, sort_edge_index_and_features
+from mlx_graphs.utils.validators import validate_edge_index_and_features
 
 
+@validate_edge_index_and_features
 def is_undirected(
     edge_index: mx.array, edge_features: Optional[mx.array] = None
 ) -> bool:
@@ -42,6 +44,7 @@ def is_undirected(
     return False
 
 
+@validate_edge_index_and_features
 def is_directed(edge_index: mx.array, edge_features: Optional[mx.array] = None) -> bool:
     """
     Determines whether a graph is directed based on the given edge index

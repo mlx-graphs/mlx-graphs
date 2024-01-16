@@ -1,6 +1,11 @@
 import mlx.core as mx
+from mlx_graphs.utils.validators import (
+    validate_edge_index,
+    validate_edge_index_and_features,
+)
 
 
+@validate_edge_index
 def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
     """
     Sort the edge index.
@@ -21,7 +26,10 @@ def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
     return sorted_edge_index, sorting_indices
 
 
-def sort_edge_index_and_features(edge_index: mx.array, edge_features: mx.array):
+@validate_edge_index_and_features
+def sort_edge_index_and_features(
+    edge_index: mx.array, edge_features: mx.array
+) -> tuple[mx.array, mx.array]:
     """
     Sorts the given edge_index and their corresponding features.
 
