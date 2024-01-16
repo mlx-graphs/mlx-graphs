@@ -6,7 +6,11 @@ import mlx.nn as nn
 import mlx.optimizers as optim
 from mlx.nn.losses import nll_loss
 from mlx.utils import tree_flatten
-from torch_geometric.datasets import Planetoid
+
+try:
+    from torch_geometric.datasets import Planetoid
+except ImportError:
+    raise ImportError("Run `pip install torch_geometric` to run this example.")
 
 from mlx_graphs.nn.conv.gat_conv import GATConv
 
@@ -44,9 +48,9 @@ def eval_fn(x, y):
     return mx.mean(mx.argmax(x, axis=1) == y)
 
 
-def forward_fn(gcn, x, adj, y, train_mask, weight_decay):
-    y_hat = gcn(x, adj)
-    loss = loss_fn(y_hat[train_mask], y[train_mask], weight_decay, gcn.parameters())
+def forward_fn(gat, x, adj, y, train_mask, weight_decay):
+    y_hat = gat(x, adj)
+    loss = loss_fn(y_hat[train_mask], y[train_mask], weight_decay, gat.parameters())
     return loss, y_hat
 
 
@@ -82,14 +86,14 @@ def main(args):
         x, y, adj, train_mask, val_mask, test_mask
     )
 
-    gcn = GAT(
+    gat = GAT(
         in_channels=x.shape[-1],
         out_channels=args.nb_classes,
     )
-    mx.eval(gcn.parameters())
+    mx.eval(gat.parameters())
 
     optimizer = optim.Adam(learning_rate=args.lr)
-    loss_and_grad_fn = nn.value_and_grad(gcn, forward_fn)
+    loss_and_grad_fn = nn.value_and_grad(gat, forward_fn)
 
     best_val_loss = float("inf")
     cnt = 0
@@ -101,10 +105,10 @@ def main(args):
 
         # Loss
         (loss, y_hat), grads = loss_and_grad_fn(
-            gcn, x, adj, y, train_mask, args.weight_decay
+            gat, x, adj, y, train_mask, args.weight_decay
         )
-        optimizer.update(gcn, grads)
-        mx.eval(gcn.parameters(), optimizer.state)
+        optimizer.update(gat, grads)
+        mx.eval(gat.parameters(), optimizer.state)
 
         # Validation
         val_loss = loss_fn(y_hat[val_mask], y[val_mask])
@@ -133,7 +137,7 @@ def main(args):
         )
 
     # Test
-    test_y_hat = gcn(x, adj)
+    test_y_hat = gat(x, adj)
     test_loss = loss_fn(test_y_hat[test_mask], y[test_mask])
     test_acc = eval_fn(test_y_hat[test_mask], y[test_mask])
     mean_time = sum(times) / len(times)

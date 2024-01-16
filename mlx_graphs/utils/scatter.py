@@ -59,7 +59,7 @@ def scatter(
         return scatter_max(empty_tensor, index, values)
 
 
-def scatter_add(src: mx.array, index: mx.array, values: mx.array, axis: int = 0):
+def scatter_add(src: mx.array, index: mx.array, values: mx.array):
     """
     Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
     of the values will be assigned to these index.
@@ -68,7 +68,6 @@ def scatter_add(src: mx.array, index: mx.array, values: mx.array, axis: int = 0)
         src (mx.array): Source array where the values will be scattered (often an empty array)
         index (mx.array): Array containing indices that determine the scatter of the 'values'.
         values (mx.array): Input array containing values to be scattered.
-        axis (int, optional): Axis along which to scatter
 
     Returns:
         mx.array: The resulting array after applying scatter and sum operations on the values
@@ -77,7 +76,7 @@ def scatter_add(src: mx.array, index: mx.array, values: mx.array, axis: int = 0)
     return src.at[index].add(values)
 
 
-def scatter_max(src: mx.array, index: mx.array, values: mx.array, axis: int = 0):
+def scatter_max(src: mx.array, index: mx.array, values: mx.array):
     """
     Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
     value is kept at these indices.
@@ -86,7 +85,6 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array, axis: int = 0)
         src (mx.array): Source array where the values will be scattered (often an empty array)
         index (mx.array): Array containing indices that determine the scatter of the 'values'.
         values (mx.array): Input array containing values to be scattered.
-        axis (int, optional): Axis along which to scatter
 
     Returns:
         mx.array: The resulting array after applying scatter and max operations on the values
@@ -106,7 +104,7 @@ def scatter_softmax(
                         undergo a scatter and softmax operation
         index (mx.array): Array containing indices that determine the scatter of the 'values'.
         out_size (int, optional): Size of the output array
-        axis (int, optional): Axis along which to scatter and compute the softmax
+        axis (int, optional): Axis along which to scatter
 
     Returns:
         mx.array: The resulting array after applying scatter and softmax operations on the input 'values'.
