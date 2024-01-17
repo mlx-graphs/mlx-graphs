@@ -58,4 +58,4 @@ class Data:
 
 class Dataset:
     def __init__(self, data: list[Data]) -> None:
-        self.dataset = dx.buffer_from_vector(data)  # type: ignore
+        self.dataset = dx.buffer_from_vector([x.to_dict() for x in data])  # type: ignore
