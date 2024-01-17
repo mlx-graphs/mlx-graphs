@@ -3,7 +3,7 @@ from typing import Optional
 import mlx.core as mx
 
 
-class Data:
+class GraphData:
     """
     Represents a graph data object with optional features and labels.
 
