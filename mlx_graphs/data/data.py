@@ -1,6 +1,7 @@
 from typing import Optional
 
 import mlx.core as mx
+import mlx.data as dx
 
 
 class Data:
@@ -36,20 +37,13 @@ class Data:
         graph_labels: Optional[mx.array] = None,
         **kwargs,
     ):
-        if edge_index:
-            self.edge_index = edge_index
-        if node_features:
-            self.node_features = node_features
-        if edge_features:
-            self.edge_features = edge_features
-        if graph_features:
-            self.graph_features = graph_features
-        if node_labels:
-            self.node_labels = node_labels
-        if edge_labels:
-            self.edge_labels = edge_labels
-        if graph_labels:
-            self.graph_labels = graph_labels
+        self.edge_index = edge_index
+        self.node_features = node_features
+        self.edge_features = edge_features
+        self.graph_features = graph_features
+        self.node_labels = node_labels
+        self.edge_labels = edge_labels
+        self.graph_labels = graph_labels
         for key, value in kwargs.items():
             setattr(self, key, value)
 
@@ -60,3 +54,8 @@ class Data:
             dict: A dictionary representation of the Data object.
         """
         return self.__dict__
+
+
+class Dataset:
+    def __init__(self, data: list[Data]) -> None:
+        self.dataset = dx.buffer_from_vector(data)  # type: ignore

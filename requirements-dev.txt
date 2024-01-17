@@ -1,3 +1,4 @@
 mlx @ git+https://github.com/ml-explore/mlx.git
 # -e path/to/mlx
+mlx-data @ git+https://github.com/ml-explore/mlx-data.git
 pytest==7.4.4
