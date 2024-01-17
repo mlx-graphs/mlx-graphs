@@ -53,7 +53,7 @@ class Data:
         Returns:
             dict: A dictionary representation of the Data object.
         """
-        return self.__dict__
+        return {k: v for k, v in self.__dict__.items() if v is not None}
 
 
 class Dataset:
