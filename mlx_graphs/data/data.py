@@ -1,7 +1,6 @@
 from typing import Optional
 
 import mlx.core as mx
-import mlx.data as dx
 
 
 class Data:
@@ -54,8 +53,3 @@ class Data:
             dict: A dictionary representation of the Data object.
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
-
-
-class Dataset:
-    def __init__(self, data: list[Data]) -> None:
-        self.dataset = dx.buffer_from_vector([x.to_dict() for x in data])  # type: ignore
