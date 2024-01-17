@@ -38,8 +38,9 @@ class GraphNetworkBlock(Module):
 
     .. code-block:: python
         import mlx.core as mx
+        from mlx.nn.layers.base import Module
         from mlx.nn.layers.linear import Linear
-        from mlx.nn.layers.gnn import GraphNetworkBlock
+        from mlx_graphs.nn.graph_network_block import GraphNetworkBlock
 
         class NodeModel(Module):
             def __init__(
