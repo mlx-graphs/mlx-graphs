@@ -3,6 +3,7 @@ from typing import Any
 import mlx.core as mx
 import mlx.nn as nn
 from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.utils.scatter import scatter
 
 
 class GCNConv(MessagePassing):
@@ -73,7 +74,5 @@ class GCNConv(MessagePassing):
         )
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
-        out = mx.zeros((num_edges,))
-        one = mx.ones((index.shape[0],), dtype=out.dtype)
-
-        return mx.scatter_add(out, index, one.reshape(-1, 1), 0)
+        one = mx.ones((index.shape[0],))
+        return scatter(one, index, num_edges, "add")
