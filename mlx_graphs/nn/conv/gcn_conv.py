@@ -37,8 +37,7 @@ class GCNConv(MessagePassing):
         norm: mx.array = None
         if normalize:
             deg = self._degree(col, x.shape[0])
-            deg_inv_sqrt = deg ** (-0.5)
-            # NOTE : need boolean indexing in order to zero out inf values 
+            deg_inv_sqrt = self._deg_inv_sqrt(deg)
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
 
         else:
@@ -55,7 +54,17 @@ class GCNConv(MessagePassing):
         return x_i if edge_weight is None else edge_weight.reshape(-1, 1) * x_i
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
+        
         out = mx.zeros((num_edges,))
         one = mx.ones((index.shape[0],), dtype=out.dtype)
 
         return mx.scatter_add(out, index, one.reshape(-1, 1), 0)
+    
+    def _deg_inv_sqrt(deg: mx.array) -> mx.array:
+
+        deg += 1e-10
+        deg_inv_sqrt = deg**(-0.5)
+        deg_inv_sqrt = mx.where(deg_inv_sqrt <= 1, deg_inv_sqrt, 0)
+        
+        return deg_inv_sqrt
+
