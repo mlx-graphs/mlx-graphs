@@ -4,6 +4,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.linear import Linear
 from mlx_graphs.utils import glorot_init, scatter, get_src_dst_features
 
 
@@ -49,9 +50,7 @@ class GATConv(MessagePassing):
         self.negative_slope = negative_slope
 
         # NOTE: Check to add glorot_init within the Linear layer
-        self.lin_proj = nn.Linear(
-            node_features_dim, heads * out_features_dim, bias=False
-        )
+        self.lin_proj = Linear(node_features_dim, heads * out_features_dim, bias=False)
 
         self.att_src = glorot_init((1, heads, out_features_dim))
         self.att_dst = glorot_init((1, heads, out_features_dim))
@@ -65,7 +64,7 @@ class GATConv(MessagePassing):
 
         if edge_features_dim is not None:
             # NOTE: Check to add glorot_init within the Linear layer
-            self.edge_lin_proj = nn.Linear(
+            self.edge_lin_proj = Linear(
                 edge_features_dim, heads * out_features_dim, bias=False
             )
             self.edge_att = glorot_init((1, heads, out_features_dim))
