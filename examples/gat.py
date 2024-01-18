@@ -17,13 +17,15 @@ from mlx_graphs.nn.conv.gat_conv import GATConv
 
 
 class GAT(nn.Module):
-    def __init__(self, in_channels, out_channels):
+    def __init__(self, in_channels, out_channels, dropout=0.0):
         super().__init__()
 
-        self.conv1 = GATConv(in_channels, 8, heads=8, dropout=0.0)
+        self.conv1 = GATConv(in_channels, 8, heads=8, dropout=dropout)
         # On the Pubmed dataset, use heads=8 in conv2.
-        self.conv2 = GATConv(8 * 8, out_channels, heads=1, concat=False, dropout=0.0)
-        self.dropout = nn.Dropout(p=0.0)
+        self.conv2 = GATConv(
+            8 * 8, out_channels, heads=1, concat=False, dropout=dropout
+        )
+        self.dropout = nn.Dropout(p=dropout)
 
     def __call__(self, x, edge_index):
         x = self.dropout(x)
@@ -39,7 +41,7 @@ def loss_fn(y_hat, y, weight_decay=0.0, parameters=None):
     if weight_decay != 0.0:
         assert parameters is not None, "Model parameters missing for L2 reg."
 
-        l2_reg = sum(mx.sum(p[1] ** 2) for p in tree_flatten(parameters)).sqrt()
+        l2_reg = sum(mx.sum(p[1] ** 2) for p in tree_flatten(parameters))
         return loss + weight_decay * l2_reg
 
     return loss
