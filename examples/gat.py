@@ -8,6 +8,7 @@ from mlx.nn.losses import nll_loss
 from mlx.utils import tree_flatten
 
 try:
+    import torch_geometric.transforms as T
     from torch_geometric.datasets import Planetoid
 except ImportError:
     raise ImportError("Run `pip install torch_geometric` to run this example.")
@@ -29,7 +30,7 @@ class GAT(nn.Module):
         x = nn.elu(self.conv1(x, edge_index))
         x = self.dropout(x)
         x = self.conv2(x, edge_index)
-        return mx.log(mx.softmax(x, axis=-1))
+        return nn.log_softmax(x, axis=-1)
 
 
 def loss_fn(y_hat, y, weight_decay=0.0, parameters=None):
@@ -74,7 +75,7 @@ def get_masks(train_mask, val_mask, test_mask):
 
 def main(args):
     # Data loading
-    dataset = Planetoid(root="data/Cora", name="Cora")
+    dataset = Planetoid(root="data/Cora", name="Cora", transform=T.NormalizeFeatures())
     data = dataset[0]
 
     x, y, adj = data.x, data.y, data.edge_index
