@@ -1,6 +1,8 @@
 from typing import Optional
+
 import mlx.core as mx
 import numpy as np
+
 from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index_and_features,
@@ -21,7 +23,10 @@ def to_edge_index(
     Returns:
         mlx.core.array: a [2, num_edges] array representing the source and target nodes of each edge
 
+    Example:
+
     .. code-block:: python
+
         matrix = mx.array(
             [
                 [0, 1, 2],
@@ -52,7 +57,10 @@ def to_sparse_adjacency_matrix(
     Returns:
         tuple[mlx.core.array, mlx.core.array]: A tuple representing the edge index and edge features
 
+    Example:
+
     .. code-block:: python
+
         matrix = mx.array(
             [
                 [0, 1, 2],
