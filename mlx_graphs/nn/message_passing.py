@@ -1,7 +1,9 @@
-from typing import Any
+from typing import Any, Union, Dict, Optional, Tuple
 
 import mlx.core as mx
 import mlx.nn as nn
+
+from mlx_graphs.utils import scatter, get_src_dst_features
 
 
 class MessagePassing(nn.Module):
@@ -11,7 +13,7 @@ class MessagePassing(nn.Module):
     passing paradigm. This implementation is inspired from PyTorch Geometric [2].
 
     Args:
-        aggr (str): the aggregation strategy used to aggregate messages
+        aggr (str): Aggregation strategy used to aggregate messages
 
     References:
         [1] Gilmer et al. Neural Message Passing for Quantum Chemistry.
@@ -25,40 +27,73 @@ class MessagePassing(nn.Module):
         super().__init__()
 
         self.aggr = aggr
+        self.num_nodes = None
 
-    def __call__(self, x: mx.array, edge_index: mx.array, **kwargs: Any):
+    def __call__(self, node_features: mx.array, edge_index: mx.array, **kwargs: Any):
         raise NotImplementedError
 
-    def propagate(self, x: mx.array, edge_index: mx.array, **kwargs: Any) -> mx.array:
+    def propagate(
+        self,
+        edge_index: mx.array,
+        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
+        message_kwargs: Optional[Dict] = {},
+        aggregate_kwargs: Optional[Dict] = {},
+        update_kwargs: Optional[Dict] = {},
+    ) -> mx.array:
         r"""Computes messages from neighbors, aggregates them and updates
         the final node embeddings.
 
         Args:
-            x (mx.array): input node features/embeddings
-            edge_index (mx.array): graph representation of shape (2, |E|) in COO format
-            **kwargs (Any): arguments to pass to message, aggregate and update
+            edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
+            node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings.
+                Can be either an array or a tuple of arrays, for distinct src and dst node features.
+            message_kwargs (Dict, optional): Arguments to pass to the `message` method
+            aggregate_kwargs (Dict, optional): Arguments to pass to the `aggregate` method
+            update_kwargs (Dict, optional): Arguments to pass to the `update_nodes` method
         """
-        src_idx, dst_idx = edge_index
-        x_i = x[src_idx]
-        x_j = x[dst_idx]
+        if not (isinstance(edge_index, mx.array) and edge_index.shape[0] == 2):
+            raise ValueError("Edge index should be an array with shape (2, |E|)")
+        if isinstance(node_features, tuple):
+            if len(node_features) != 2 or not all(
+                isinstance(array, mx.array) for array in node_features
+            ):
+                raise ValueError(
+                    "Invalid shape for `node_features`, should be a tuple of 2 mx.array"
+                )
+        else:
+            if not isinstance(node_features, mx.array):
+                raise ValueError(
+                    f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}"
+                )
 
-        messages = self.message(x_i, x_j, **kwargs)
+        src_features, dst_features = get_src_dst_features(node_features, edge_index)
 
-        aggregated = self.aggregate(messages, dst_idx, **kwargs)
+        self.num_nodes = (
+            node_features if isinstance(node_features, mx.array) else node_features[0]
+        ).shape[0]
+        dst_idx = edge_index[1]
 
-        output = self.update_(aggregated, **kwargs)
+        messages = self.message(
+            src_features, dst_features, **message_kwargs
+        )  # (|E| -> |E|)
+        aggregated = self.aggregate(
+            messages, dst_idx, **aggregate_kwargs
+        )  # (|E| -> |N|)
+        output = self.update_nodes(aggregated, **update_kwargs)  # (|N| -> |N|)
 
         return output
 
-    def message(self, x_i: mx.array, x_j: mx.array, **kwargs: Any) -> mx.array:
+    def message(
+        self, src_features: mx.array, dst_features: mx.array, **kwargs: Any
+    ) -> mx.array:
         r"""Computes messages between connected nodes.
 
         Args:
-            x_i (mx.array): source node embeddings
-            x_j (mx.array): destination node embeddings
-            **kwargs (Any): optional args to compute messages
+            src_features (mx.array): Source node embeddings
+            dst_features (mx.array): Destination node embeddings
+            **kwargs (Any): Optional args to compute messages
         """
-        return x_i
+        return src_features
 
     def aggregate(
         self, messages: mx.array, indices: mx.array, **kwargs: Any
@@ -66,23 +101,13 @@ class MessagePassing(nn.Module):
         r"""Aggregates the messages using the `self.aggr` strategy.
 
         Args:
-            messages (mx.array): computed messages
-            indices: (mx.array): indices representing the nodes that receive messages
-            **kwargs (Any): optional args to aggregate messages
+            messages (mx.array): Computed messages
+            indices: (mx.array): Indices representing the nodes that receive messages
+            **kwargs (Any): Optional args to aggregate messages
         """
-        if self.aggr == "add":
-            nb_unique_indices = _unique(indices)
-            empty_tensor = mx.zeros((nb_unique_indices, messages.shape[-1]))
-            update_dim = (messages.shape[0], 1, messages.shape[1])
+        return scatter(messages, indices, self.num_nodes, self.aggr)
 
-            return mx.scatter_add(
-                empty_tensor, indices, messages.reshape(update_dim), 0
-            )
-
-        raise NotImplementedError(f"Aggregation {self.aggr} not implemented yet.")
-
-    # NOTE: this method can't be named `update()`, or the grads will be always set to 0.
-    def update_(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
+    def update_nodes(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
         r"""Updates the final embeddings given the aggregated messages.
 
         Args:
@@ -90,7 +115,3 @@ class MessagePassing(nn.Module):
             **kwargs (Any): optional args to update messages
         """
         return aggregated
-
-
-def _unique(array: mx.array):
-    return len(set(array.tolist()))
