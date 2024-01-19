@@ -34,8 +34,8 @@ class MessagePassing(nn.Module):
 
     def propagate(
         self,
-        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
         edge_index: mx.array,
+        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
         message_kwargs: Optional[Dict] = {},
         aggregate_kwargs: Optional[Dict] = {},
         update_kwargs: Optional[Dict] = {},
@@ -44,25 +44,27 @@ class MessagePassing(nn.Module):
         the final node embeddings.
 
         Args:
-            node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings
             edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
+            node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings.
+                Can be either an array or a tuple of arrays, for distinct src and dst node features.
             message_kwargs (optional, Dict): Arguments to pass to the `message` method
             aggregate_kwargs (optional, Dict): Arguments to pass to the `aggregate` method
             update_kwargs (optional, Dict): Arguments to pass to the `update_nodes` method
         """
-        assert (
-            isinstance(edge_index, mx.array) and edge_index.shape[0] == 2
-        ), "Edge index should be an array with shape (2, |E|)."
+        if not (isinstance(edge_index, mx.array) and edge_index.shape[0] == 2):
+            raise ValueError("Edge index should be an array with shape (2, |E|)")
         if isinstance(node_features, tuple):
-            assert (
-                len(node_features) == 2
-                and isinstance(node_features[0], mx.array)
-                and isinstance(node_features[1], mx.array)
-            ), "Invalid shape for `node_features`, should be a tuple of 2 mx.array."
+            if len(node_features) != 2 or not all(
+                isinstance(array, mx.array) for array in node_features
+            ):
+                raise ValueError(
+                    "Invalid shape for `node_features`, should be a tuple of 2 mx.array"
+                )
         else:
-            assert isinstance(
-                node_features, mx.array
-            ), f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}."
+            if not isinstance(node_features, mx.array):
+                raise ValueError(
+                    f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}"
+                )
 
         src_features, dst_features = get_src_dst_features(node_features, edge_index)
 
