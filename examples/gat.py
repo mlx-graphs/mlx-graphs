@@ -92,6 +92,7 @@ def main(args):
     gat = GAT(
         in_channels=x.shape[-1],
         out_channels=args.nb_classes,
+        dropout=args.dropout,
     )
     mx.eval(gat.parameters())
 
@@ -152,13 +153,8 @@ def main(args):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--nodes_path", type=str, default="cora/cora.content")
-    parser.add_argument("--edges_path", type=str, default="cora/cora.cites")
-    parser.add_argument("--hidden_dim", type=int, default=16)
-    parser.add_argument("--dropout", type=float, default=0.5)
-    parser.add_argument("--nb_layers", type=int, default=2)
+    parser.add_argument("--dropout", type=float, default=0.0)
     parser.add_argument("--nb_classes", type=int, default=7)
-    parser.add_argument("--bias", type=bool, default=True)
     parser.add_argument("--lr", type=float, default=0.005)
     parser.add_argument("--weight_decay", type=float, default=5e-4)
     parser.add_argument("--patience", type=int, default=20)
