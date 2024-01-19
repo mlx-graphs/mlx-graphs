@@ -49,7 +49,6 @@ class GATConv(MessagePassing):
         self.concat = concat
         self.negative_slope = negative_slope
 
-        # NOTE: Check to add glorot_init within the Linear layer
         self.lin_proj = Linear(node_features_dim, heads * out_features_dim, bias=False)
 
         self.att_src = glorot_init((1, heads, out_features_dim))
@@ -63,7 +62,6 @@ class GATConv(MessagePassing):
             self.dropout = nn.Dropout(dropout)
 
         if edge_features_dim is not None:
-            # NOTE: Check to add glorot_init within the Linear layer
             self.edge_lin_proj = Linear(
                 edge_features_dim, heads * out_features_dim, bias=False
             )
