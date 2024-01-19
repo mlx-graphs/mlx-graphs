@@ -24,12 +24,19 @@ pip install -r requirements-dev.txt
 
 ### Contributing
 
-##### Pre-commit hooks (temporary)
-Make sure to run [pre-commit](https://pre-commit.com) hooks to ensure code quality. To do that, simply install them by running
+#### Testing
+We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
+Please run `pytest` to ensure breaking changes are not introduced.
+
+
+#### Pre-commit hooks (optional)
+To ensure code quality you can run [pre-commit](https://pre-commit.com) hooks. Simply install them by running
 ```
 pre-commit install
 ```
-> Note: This aims to be a temporary measure until CI/CD is in place.
+and run via `pre-commit run --all-files`.
+
+> Note: CI is in place to verify code quality, so pull requests that don't meet those requirements won't pass CI tests.
 
 
 ## Why running GNNs on my Mac?
