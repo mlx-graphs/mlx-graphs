@@ -20,7 +20,7 @@ def scatter(
         index (mx.array): array with index to which scatter the values
         out_size (int, optional): number of elements in the output array (size of the first dimension).
             If not provided, use the number of elements in `values`
-        aggr (str) ["add" | "max" | "softmax"]: scattering method employed for reduction at index
+        aggr (Literal) ["add" | "max" | "softmax"]: scattering method employed for reduction at index
         axis (int, optional): axis on which applying the scattering
 
     Returns:
