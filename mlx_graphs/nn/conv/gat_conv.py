@@ -126,6 +126,20 @@ class GATConv(MessagePassing):
         index: mx.array = None,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
+        """
+        Computes a message for each edge in the graph following GAT's propagation rule.
+
+        Parameters:
+            src_features (mx.array): Features of the source nodes.
+            dst_features (mx.array): Features of the destination nodes (not used in this function but included for compatibility).
+            alpha_src (mx.array, optional): Precomputed attention values for the source nodes.
+            alpha_dst (mx.array, optional): Precomputed attention values for the destination nodes.
+            index (mx.array, optional): 1D array with indices of either src or dst nodes to compute softmax.
+            edge_features (Optional[mx.array], optional): Features of the edges in the graph.
+
+        Returns:
+            mx.array: The computed messages for each edge in the graph.
+        """
         alpha = alpha_src + alpha_dst
 
         if edge_features is not None:
@@ -141,8 +155,8 @@ class GATConv(MessagePassing):
         return mx.expand_dims(alpha, -1) * src_features
 
     def _compute_alpha_edge_features(self, edge_features: mx.array):
-        assert (
-            "edge_lin_proj" in self and "edge_att" in self
+        assert all(
+            layer in self for layer in ["edge_lin_proj", "edge_att"]
         ), "Using edge features, GATConv layer should be provided argument `edge_features_dim`."
 
         if edge_features.ndim == 1:
