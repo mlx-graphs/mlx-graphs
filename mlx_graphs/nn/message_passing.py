@@ -29,7 +29,7 @@ class MessagePassing(nn.Module):
         self.aggr = aggr
         self.num_nodes = None
 
-    def __call__(self, x: mx.array, edge_index: mx.array, **kwargs: Any):
+    def __call__(self, node_features: mx.array, edge_index: mx.array, **kwargs: Any):
         raise NotImplementedError
 
     def propagate(
