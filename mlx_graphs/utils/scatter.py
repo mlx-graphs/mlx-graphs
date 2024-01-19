@@ -1,15 +1,14 @@
 from typing import Optional
+from typing_extensions import Literal
 
 import mlx.core as mx
-
-scattering_operations = ["add", "sum", "max", "softmax"]
 
 
 def scatter(
     values: mx.array,
     index: mx.array,
     out_size: Optional[int] = None,
-    aggr: str = None,
+    aggr: Literal["add", "max", "softmax"] = "add",
     axis: Optional[int] = 0,
 ) -> mx.array:
     """
@@ -21,7 +20,7 @@ def scatter(
         index (mx.array): array with index to which scatter the values
         out_size (int, optional): number of elements in the output array (size of the first dimension).
             If not provided, use the number of elements in `values`
-        aggr (str) ["add" | "sum" | "max" | "softmax"]: scattering method employed for reduction at index
+        aggr (str) ["add" | "max" | "softmax"]: scattering method employed for reduction at index
         axis (int, optional): axis on which applying the scattering
 
     Returns:
@@ -40,9 +39,6 @@ def scatter(
         scatter(src, index, num_nodes, "add")
         >>>  mx.array([2, 1, 1])
     """
-    if aggr not in scattering_operations:
-        raise NotImplementedError(f"Aggregation {aggr} not implemented yet.")
-
     out_size = out_size if out_size is not None else values.shape[0]
 
     if aggr == "softmax":
@@ -53,10 +49,12 @@ def scatter(
 
     empty_tensor = mx.zeros(out_shape, dtype=values.dtype)
 
-    if aggr in ["add", "sum"]:
+    if aggr == "add":
         return scatter_add(empty_tensor, index, values)
     if aggr == "max":
         return scatter_max(empty_tensor, index, values)
+
+    raise NotImplementedError(f"Aggregation {aggr} not implemented yet.")
 
 
 def scatter_add(src: mx.array, index: mx.array, values: mx.array):
@@ -122,7 +120,7 @@ def scatter_softmax(
     scatt_max = scatt_max[index]
     out = (values - scatt_max).exp()
 
-    scatt_sum = scatter(out, index, out_size, aggr="sum", axis=axis)
+    scatt_sum = scatter(out, index, out_size, aggr="add", axis=axis)
     scatt_sum = scatt_sum[index]
 
     eps = 1e-16
