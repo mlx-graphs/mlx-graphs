@@ -11,11 +11,10 @@ class GraphNetworkBlock(Module):
     returns a graph with the same topology.
 
     The input graph can have:
-    - `node_features`: features associated with each node in the graph, provided as an
-        array of size [N, F_N]
-    - `edge_features`: features associated with each edge in the graph, provided as an
-        array of size [E, F_E]
-    - `global_features`: features associated to the graph itself, of size [F_U]
+        - ``node_features``: features associated with each node in the graph, provided as an array of size [N, F_N]
+        - ``edge_features``: features associated with each edge in the graph, provided as an array of size [E, F_E]
+        - ``global_features``: features associated to the graph itself, of size [F_U]
+
     The topology of the graph is specified as an `edge_index`, an array of size [2, E],
     containing the source and destination nodes of each edge as column vectors.
     A Graph Network block is initialized by providing node, edge and global models (all
@@ -37,6 +36,7 @@ class GraphNetworkBlock(Module):
         [1] Battaglia et al. Relational Inductive Biases, Deep Learning, and Graph Networks. https://arxiv.org/pdf/1806.01261.pdf
 
     .. code-block:: python
+
         import mlx.core as mx
         from mlx.nn.layers.base import Module
         from mlx.nn.layers.linear import Linear
@@ -80,6 +80,7 @@ class GraphNetworkBlock(Module):
                     1,
                 )
                 return self.model(model_input)
+
         class EdgeModel(Module):
             def __init__(
                 self,
@@ -113,6 +114,7 @@ class GraphNetworkBlock(Module):
                     1,
                 )
                 return self.model(model_input)
+
         class GlobalModel(Module):
             def __init__(
                 self,
@@ -139,6 +141,7 @@ class GraphNetworkBlock(Module):
                     [aggregated_nodes, aggregated_edges, global_features], 0
                 )
                 return self.model(model_input)
+
         N = 4 # number of nodes
         F_N = 2 # number of node features
         F_E = 1 # number of edge features

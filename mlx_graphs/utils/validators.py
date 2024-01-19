@@ -1,9 +1,11 @@
+import functools
 import mlx.core as mx
 
 
 def validate_adjacency_matrix(func):
     """Decorator function to check the validity of an adjacency matrix."""
 
+    @functools.wraps(func)
     def wrapper(adjacency_matrix, *args, **kwargs):
         if adjacency_matrix.ndim != 2:
             raise ValueError(
@@ -21,6 +23,7 @@ def validate_adjacency_matrix(func):
 def validate_edge_index(func):
     """Decorator function to check the validity of an edge_index."""
 
+    @functools.wraps(func)
     def wrapper(edge_index, *args, **kwargs):
         if edge_index.ndim != 2:
             raise ValueError(
@@ -40,6 +43,7 @@ def validate_edge_index(func):
 def validate_edge_index_and_features(func):
     """Decorator function to check the validity of an edge_index and edge_features."""
 
+    @functools.wraps(func)
     @validate_edge_index
     def wrapper(edge_index, edge_features=None, *args, **kwargs):
         if edge_features is not None:
