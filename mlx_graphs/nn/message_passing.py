@@ -47,9 +47,9 @@ class MessagePassing(nn.Module):
             edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
             node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings.
                 Can be either an array or a tuple of arrays, for distinct src and dst node features.
-            message_kwargs (optional, Dict): Arguments to pass to the `message` method
-            aggregate_kwargs (optional, Dict): Arguments to pass to the `aggregate` method
-            update_kwargs (optional, Dict): Arguments to pass to the `update_nodes` method
+            message_kwargs (Dict, optional): Arguments to pass to the `message` method
+            aggregate_kwargs (Dict, optional): Arguments to pass to the `aggregate` method
+            update_kwargs (Dict, optional): Arguments to pass to the `update_nodes` method
         """
         if not (isinstance(edge_index, mx.array) and edge_index.shape[0] == 2):
             raise ValueError("Edge index should be an array with shape (2, |E|)")

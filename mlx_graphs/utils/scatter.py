@@ -19,10 +19,10 @@ def scatter(
     Args:
         values (mx.array): array with all the values to scatter in the output tensor
         index (mx.array): array with index to which scatter the values
-        out_size (optional, int): number of elements in the output array (size of the first dimension).
+        out_size (int, optional): number of elements in the output array (size of the first dimension).
             If not provided, use the number of elements in `values`
         aggr (str) ["add" | "sum" | "max" | "softmax"]: scattering method employed for reduction at index
-        axis (optional, int): axis on which applying the scattering
+        axis (int, optional): axis on which applying the scattering
 
     Returns:
         mx.array: array with `out_size` elements containing the scattered values at given index
