@@ -8,9 +8,12 @@ class GCN(nn.Module):
     r"""Graph Convolutional Network implementation [1]
 
     Args:
-        x_dim (int): size of input node features
-        h_dim (int): size of hidden node embeddings
-        bias (bool): whether to use bias in the node projection
+        node_features_dim (int): Size of input node features
+        hid_features_dim (int): Size of hidden node embeddings
+        out_features_dim (int): Size of output node embeddings
+        num_layers (int): Number of GCN layers
+        dropout (float): Probability p for dropout
+        bias (bool): Whether to use bias in the node projection
 
     References:
         [1] Kipf et al. Semi-Supervised Classification with Graph Convolutional Networks.
@@ -19,19 +22,21 @@ class GCN(nn.Module):
 
     def __init__(
         self,
-        x_dim: int,
-        h_dim: int,
-        out_dim: int,
-        nb_layers: int = 2,
+        node_features_dim: int,
+        hid_features_dim: int,
+        out_features_dim: int,
+        num_layers: int = 2,
         dropout: float = 0.5,
         bias: bool = True,
     ):
         super(GCN, self).__init__()
 
-        layer_sizes = [x_dim] + [h_dim] * nb_layers + [out_dim]
+        layer_sizes = (
+            [node_features_dim] + [hid_features_dim] * num_layers + [out_features_dim]
+        )
         self.gcn_layers = [
-            GCNConv(in_dim, out_dim, bias)
-            for in_dim, out_dim in zip(layer_sizes[:-1], layer_sizes[1:])
+            GCNConv(in_dim, out_features_dim, bias)
+            for in_dim, out_features_dim in zip(layer_sizes[:-1], layer_sizes[1:])
         ]
         self.dropout = nn.Dropout(p=dropout)
 

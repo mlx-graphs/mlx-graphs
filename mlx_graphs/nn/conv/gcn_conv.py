@@ -3,6 +3,7 @@ from typing import Any
 import mlx.core as mx
 import mlx.nn as nn
 from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.utils.scatter import scatter
 
 
 class GCNConv(MessagePassing):
@@ -24,12 +25,18 @@ class GCNConv(MessagePassing):
         self.linear = nn.Linear(x_dim, h_dim, bias)
 
     def __call__(
-        self, x: mx.array, edge_index: mx.array, normalize: bool = True, **kwargs: Any
+        self,
+        node_features: mx.array,
+        edge_index: mx.array,
+        normalize: bool = True,
+        **kwargs: Any,
     ) -> mx.array:
         assert edge_index.shape[0] == 2, "edge_index must have shape (2, num_edges)"
-        assert edge_index[1].size > 0, "'col' component of edge_index should not be empty"
+        assert (
+            edge_index[1].size > 0
+        ), "'col' component of edge_index should not be empty"
 
-        x = self.linear(x)
+        node_features = self.linear(node_features)
 
         row, col = edge_index
 
@@ -44,27 +51,27 @@ class GCNConv(MessagePassing):
             norm = mx.ones_like(row)
 
         # Compute messages and aggregate them with sum and norm.
-        x = self.propagate(x=x, edge_index=edge_index, edge_weight=norm)
+        node_features = self.propagate(
+            node_features=node_features,
+            edge_index=edge_index,
+            message_kwargs={"edge_weight": norm},
+        )
 
-        return x
+        return node_features
 
     def message(
-        self, x_i: mx.array, x_j: mx.array, edge_weight: mx.array=None, **kwargs: Any
+        self,
+        src_features: mx.array,
+        dst_features: mx.array,
+        edge_weight: mx.array = None,
+        **kwargs: Any,
     ) -> mx.array:
-        return x_i if edge_weight is None else edge_weight.reshape(-1, 1) * x_i
+        return (
+            src_features
+            if edge_weight is None
+            else edge_weight.reshape(-1, 1) * src_features
+        )
 
     def _degree(self, index: mx.array, num_edges: int) -> mx.array:
-        
-        out = mx.zeros((num_edges,))
-        one = mx.ones((index.shape[0],), dtype=out.dtype)
-
-        return mx.scatter_add(out, index, one.reshape(-1, 1), 0)
-    
-    def _deg_inv_sqrt(deg: mx.array) -> mx.array:
-
-        deg += 1e-10
-        deg_inv_sqrt = deg**(-0.5)
-        deg_inv_sqrt = mx.where(deg_inv_sqrt <= 1, deg_inv_sqrt, 0)
-        
-        return deg_inv_sqrt
-
+        one = mx.ones((index.shape[0],))
+        return scatter(one, index, num_edges, "add")
