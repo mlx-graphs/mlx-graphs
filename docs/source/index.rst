@@ -1,5 +1,14 @@
-mlx-graphs
-======================================
+MLX-graphs
+==========
+
+MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX <https://github.com/ml-explore/mlx>`_.
+
+
+.. caution::
+   We are very early in the development of this library and there may be breaking changes in upcoming versions.
+
+
+Examples showing the functionalities of this library are available `here <https://github.com/TristanBilot/mlx-graphs/tree/main/examples>`_.
 
 .. toctree::
    :caption: Install
@@ -10,41 +19,20 @@ mlx-graphs
 
 .. toctree::
    :caption: API
-   :maxdepth: 3
+   :maxdepth: 1
 
-   api
-
-
-
-
-.. automodule:: mlx_graphs.utils.validators
-   :members:
-
-
-
-.. automodule:: mlx_graphs.utils.transformations
-   :members:
+   api/data/index.rst
+   api/nn/index.rst
+   api/utils/index.rst
 
 
 
 
-.. automodule:: mlx_graphs.utils.topology
-   :members:
 
 
+.. Indices and tables
+.. ==================
 
-.. automodule:: mlx_graphs.utils.sorting
-   :members:
-
-
-.. automodule:: mlx_graphs.nn.graph_network_block
-   :members:
-
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+.. * :ref:`genindex`
+.. * :ref:`modindex`
+.. * :ref:`search`

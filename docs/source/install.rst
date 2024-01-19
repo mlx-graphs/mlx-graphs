@@ -1,5 +1,11 @@
+.. _installation:
+
+
 Installation
 ============
+
+.. caution::
+	We currently only support building from source.
 
 Build from source
 -----------------

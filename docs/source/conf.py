@@ -24,7 +24,9 @@ extensions = [
 
 napoleon_use_param = True
 napoleon_google_docstring = True
+# napoleon_preprocess_types = True
 autosummary_generate = True
+autodoc_typehints_format = "short"
 
 templates_path = ["_templates"]
 exclude_patterns = []
@@ -48,5 +50,5 @@ html_theme_options = {
 # intersphinx
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
-    "mlx": ("https://ml-explore.github.io/mlx/build/html/index.html", None),
+    "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
 }
