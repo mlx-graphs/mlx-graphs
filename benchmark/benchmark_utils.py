@@ -10,15 +10,17 @@ import torch
 def get_dummy_edge_index(shape, num_nodes, device, framework):
     if framework == "mlx":
         return mx.random.randint(0, num_nodes - 1, shape)
-    else:
+    elif framework == "pyg":
         return torch.randint(0, num_nodes - 1, shape).to(device)
+    raise ValueError("Framework should be either mlx or pyg.")
 
 
 def get_dummy_features(shape, device, framework):
     if framework == "mlx":
         return mx.random.normal(shape).astype(mx.float32)
-    else:
+    elif framework == "pyg":
         return torch.randn(shape, dtype=torch.float32).to(device)
+    raise ValueError("Framework should be either mlx or pyg.")
 
 
 def measure_runtime(fn, **kwargs) -> float:
@@ -72,7 +74,6 @@ def print_benchmark(times, args, reduce_mean=False):
 
     max_name_length = max(len(name) for name in times.keys())
 
-    # Formatting the header row
     header_row = (
         "| Operation" + " " * (max_name_length - 5) + " | " + " | ".join(headers) + " |"
     )
