@@ -30,7 +30,7 @@ def measure_runtime(fn, **kwargs) -> float:
     tic = time()
     fn(**kwargs)
 
-    return time() - tic
+    return (time() - tic) * 1000
 
 
 def calculate_speedup(a, compared_to):

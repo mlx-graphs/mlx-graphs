@@ -24,8 +24,7 @@ except RuntimeError:
 
 from benchmark_utils import print_benchmark
 from benchmark_layers import (
-    benchmark_GCNConv,
-    benchmark_GATConv,
+    benchmark_scatter,
 )
 
 
@@ -119,78 +118,128 @@ if __name__ == "__main__":
         assert torch.backends.mps.is_available(), "MPS backend not available."
 
     layers = [
+        # Scatter add benchmarks
         (
-            benchmark_GCNConv,
+            benchmark_scatter,  # 100k indices, with 100 unique sources and destinations
             {
-                "in_dim": 64,
-                "out_dim": 128,
                 "edge_index_shape": (2, 100000),
                 "node_features_shape": (100, 64),
+                "scatter_op": "add",
             },
         ),
         (
-            benchmark_GCNConv,
+            benchmark_scatter,  # 1M indices, with 10 unique sources and destinations
             {
-                "in_dim": 64,
-                "out_dim": 128,
                 "edge_index_shape": (2, 1000000),
-                "node_features_shape": (100, 64),
+                "node_features_shape": (10, 64),
+                "scatter_op": "add",
             },
         ),
         (
-            benchmark_GCNConv,
+            benchmark_scatter,  # 10k indices, with 1000 unique sources and destinations
             {
-                "in_dim": 8,
-                "out_dim": 16,
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (1000, 8),
+                "edge_index_shape": (2, 10000),
+                "node_features_shape": (1000, 64),
+                "scatter_op": "add",
             },
         ),
+        # Scatter max benchmarks
         (
-            benchmark_GCNConv,
+            benchmark_scatter,  # 100k indices, with 100 unique sources and destinations
             {
-                "in_dim": 8,
-                "out_dim": 16,
-                "edge_index_shape": (2, 1000),
-                "node_features_shape": (100, 8),
-            },
-        ),
-        (
-            benchmark_GATConv,
-            {
-                "in_dim": 64,
-                "out_dim": 128,
                 "edge_index_shape": (2, 100000),
                 "node_features_shape": (100, 64),
+                "scatter_op": "max",
             },
         ),
         (
-            benchmark_GATConv,
+            benchmark_scatter,  # 1M indices, with 10 unique sources and destinations
             {
-                "in_dim": 64,
-                "out_dim": 128,
                 "edge_index_shape": (2, 1000000),
-                "node_features_shape": (100, 64),
+                "node_features_shape": (10, 64),
+                "scatter_op": "max",
             },
         ),
         (
-            benchmark_GATConv,
+            benchmark_scatter,  # 10k indices, with 1000 unique sources and destinations
             {
-                "in_dim": 8,
-                "out_dim": 16,
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (1000, 8),
+                "edge_index_shape": (2, 10000),
+                "node_features_shape": (1000, 64),
+                "scatter_op": "max",
             },
         ),
-        (
-            benchmark_GATConv,
-            {
-                "in_dim": 8,
-                "out_dim": 16,
-                "edge_index_shape": (2, 1000),
-                "node_features_shape": (100, 8),
-            },
-        ),
+        # (
+        #     benchmark_GCNConv,
+        #     {
+        #         "in_dim": 64,
+        #         "out_dim": 128,
+        #         "edge_index_shape": (2, 100000),
+        #         "node_features_shape": (100, 64),
+        #     },
+        # ),
+        # (
+        #     benchmark_GCNConv,
+        #     {
+        #         "in_dim": 64,
+        #         "out_dim": 128,
+        #         "edge_index_shape": (2, 1000000),
+        #         "node_features_shape": (100, 64),
+        #     },
+        # ),
+        # (
+        #     benchmark_GCNConv,
+        #     {
+        #         "in_dim": 8,
+        #         "out_dim": 16,
+        #         "edge_index_shape": (2, 1000000),
+        #         "node_features_shape": (1000, 8),
+        #     },
+        # ),
+        # (
+        #     benchmark_GCNConv,
+        #     {
+        #         "in_dim": 8,
+        #         "out_dim": 16,
+        #         "edge_index_shape": (2, 1000),
+        #         "node_features_shape": (100, 8),
+        #     },
+        # ),
+        # (
+        #     benchmark_GATConv,
+        #     {
+        #         "in_dim": 64,
+        #         "out_dim": 128,
+        #         "edge_index_shape": (2, 100000),
+        #         "node_features_shape": (100, 64),
+        #     },
+        # ),
+        # (
+        #     benchmark_GATConv,
+        #     {
+        #         "in_dim": 64,
+        #         "out_dim": 128,
+        #         "edge_index_shape": (2, 1000000),
+        #         "node_features_shape": (100, 64),
+        #     },
+        # ),
+        # (
+        #     benchmark_GATConv,
+        #     {
+        #         "in_dim": 8,
+        #         "out_dim": 16,
+        #         "edge_index_shape": (2, 1000000),
+        #         "node_features_shape": (1000, 8),
+        #     },
+        # ),
+        # (
+        #     benchmark_GATConv,
+        #     {
+        #         "in_dim": 8,
+        #         "out_dim": 16,
+        #         "edge_index_shape": (2, 1000),
+        #         "node_features_shape": (100, 8),
+        #     },
+        # ),
     ]
 
     run_processes(layers, args)
