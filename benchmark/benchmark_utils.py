@@ -24,6 +24,9 @@ def get_dummy_features(shape, device, framework):
 
 
 def measure_runtime(fn, **kwargs) -> float:
+    # Avoid first call due to cold start
+    fn(**kwargs)
+
     tic = time()
     fn(**kwargs)
 
