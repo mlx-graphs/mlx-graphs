@@ -140,6 +140,7 @@ def benchmark_scatter(framework, device=None, **kwargs):
                 if scatter_op == "sum":
                     scatter_op = "add"
                 return scatter_torch(node_features, edge_index, 0, reduce=scatter_op)
+                # return scatter_sum(node_features, edge_index, 0)
 
             edge_index = get_dummy_edge_index(
                 edge_index_shape, node_features_shape[0], device, "pyg"
@@ -155,3 +156,39 @@ def benchmark_scatter(framework, device=None, **kwargs):
             )
 
     return run_benchmark(**kwargs)
+
+
+"""
+scatter_sum operation used in PyG. Will be removed once benchmarks
+of scatter operations is done.
+"""
+
+
+def broadcast(src: torch.Tensor, other: torch.Tensor, dim: int):
+    if dim < 0:
+        dim = other.dim() + dim
+    if src.dim() == 1:
+        for _ in range(0, dim):
+            src = src.unsqueeze(0)
+    for _ in range(src.dim(), other.dim()):
+        src = src.unsqueeze(-1)
+    src = src.expand(other.size())
+    return src
+
+
+def scatter_sum(
+    src: torch.Tensor, index: torch.Tensor, dim: int = -1, out=None, dim_size=None
+) -> torch.Tensor:
+    index = broadcast(index, src, dim)
+    if out is None:
+        size = list(src.size())
+        if dim_size is not None:
+            size[dim] = dim_size
+        elif index.numel() == 0:
+            size[dim] = 0
+        else:
+            size[dim] = int(index.max()) + 1
+        out = torch.zeros(size, dtype=src.dtype, device=src.device)
+        return out.scatter_add_(dim, index, src)
+    else:
+        return out.scatter_add_(dim, index, src)
