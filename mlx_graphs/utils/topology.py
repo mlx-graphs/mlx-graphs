@@ -13,7 +13,7 @@ def is_undirected(
     and optional edge features.
 
     Args:
-        edge_index (mlx.core.array): The edge index of the graph.
+        edge_index (mlx.core.array): The edge index of the graph of shape [num_edges, 2]
         edge_features (mlx.core.array, optional): Edge features associated
             with each edge. If provided, the function considers both edge indices
             and features for the check.
@@ -26,7 +26,9 @@ def is_undirected(
     # it also checks for equality in their order.
     if edge_features is None:
         src_dst_sort, _ = sort_edge_index(edge_index)
-        dst_src_sort, _ = sort_edge_index(mx.stack([edge_index[1], edge_index[0]]))
+        dst_src_sort, _ = sort_edge_index(
+            mx.stack([edge_index[:, 1], edge_index[:, 0]], axis=1)
+        )
         if mx.array_equal(src_dst_sort, dst_src_sort):
             return True
     else:
@@ -34,7 +36,7 @@ def is_undirected(
             edge_index, edge_features
         )
         dst_src_sort, dst_src_feat = sort_edge_index_and_features(
-            mx.stack([edge_index[1], edge_index[0]]), edge_features
+            mx.stack([edge_index[:, 1], edge_index[:, 0]], axis=1), edge_features
         )
         if mx.array_equal(src_dst_sort, dst_src_sort) and mx.array_equal(
             src_dst_feat, dst_src_feat

@@ -33,12 +33,12 @@ def test_validate_adjacency_matrix(x, expected_exception):
 @pytest.mark.parametrize(
     "x, expected_exception",
     [
-        (mx.array([[0, 1, 2, 3], [1, 2, 3, 0]]), None),  # Valid edge_index
+        (mx.array([[0, 1], [1, 2], [2, 3], [3, 0]]), None),  # Valid edge_index
         (mx.array([0, 1, 0, 1, 0, 1]), ValueError),  # non 2d edge_index
         (
-            mx.array([[0, 1, 2, 3], [1, 2, 3, 0], [1, 2, 3, 4]]),
+            mx.array([[0, 1, 2], [1, 2, 3], [1, 2, 3]]),
             ValueError,
-        ),  # more than 2 rows
+        ),  # more than 2 columns
     ],
 )
 def test_validate_edge_index(x, expected_exception):
@@ -57,23 +57,23 @@ def test_validate_edge_index(x, expected_exception):
     "x, f, expected_exception",
     [
         (
-            mx.array([[0, 1, 2], [1, 2, 3]]),
+            mx.array([[0, 1], [1, 2], [2, 3]]),
             mx.array([1, 2, 3]),
             None,
         ),  # Valid index and features
         (
-            mx.array([[0, 1, 2], [1, 2, 3]]),
-            mx.array([[1, 2, 3], [1, 2, 3]]),
+            mx.array([[0, 1], [1, 2], [2, 3]]),
+            mx.array([[1, 2], [3, 1], [2, 3]]),
             None,
         ),  # Valid index and features
         (
-            mx.array([[0, 1, 2], [1, 2, 3]]),
-            mx.array([1, 2]),
+            mx.array([[0, 1], [1, 2], [2, 3]]),
+            mx.array([[1, 2]]).transpose(),
             ValueError,
         ),  # less features than edges
         (
-            mx.array([[0, 1, 2], [1, 2, 3]]),
-            mx.array([1, 2, 3, 4]),
+            mx.array([[0, 1], [1, 2], [2, 3]]),
+            mx.array([[1, 2, 3, 4]]).transpose(),
             ValueError,
         ),  # more features than edges
     ],
