@@ -1,9 +1,9 @@
-from typing import Any, Union, Dict, Optional, Tuple
+from typing import Any, Union, Dict, Optional, Tuple, get_args
 
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils import scatter, get_src_dst_features
+from mlx_graphs.utils import scatter, get_src_dst_features, ScatterAggregations
 
 
 class MessagePassing(nn.Module):
@@ -23,10 +23,14 @@ class MessagePassing(nn.Module):
         https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.MessagePassing.html
     """
 
-    def __init__(self, aggr="add"):
+    def __init__(self, aggr: ScatterAggregations = "add"):
         super().__init__()
-
-        self.aggr = aggr
+        if aggr not in get_args(ScatterAggregations):
+            raise ValueError(
+                "Invalid aggregation function.",
+                f"Available values are {get_args(ScatterAggregations)}",
+            )
+        self.aggr: ScatterAggregations = aggr
         self.num_nodes = None
 
     def __call__(self, node_features: mx.array, edge_index: mx.array, **kwargs: Any):
