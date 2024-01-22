@@ -72,8 +72,8 @@ class GATConv(MessagePassing):
 
     def __call__(
         self,
-        node_features: mx.array,
         edge_index: mx.array,
+        node_features: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
         """
@@ -94,7 +94,7 @@ class GATConv(MessagePassing):
         alpha_src = (src_feats * self.att_src).sum(-1)
         alpha_dst = (dst_feats * self.att_dst).sum(-1)
 
-        alpha_src, alpha_dst = get_src_dst_features((alpha_src, alpha_dst), edge_index)
+        alpha_src, alpha_dst = get_src_dst_features(edge_index, (alpha_src, alpha_dst))
         dst_idx = edge_index[1]
 
         node_features = self.propagate(

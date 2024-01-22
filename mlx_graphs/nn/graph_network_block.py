@@ -15,8 +15,8 @@ class GraphNetworkBlock(Module):
         - ``edge_features``: features associated with each edge in the graph, provided as an array of size [E, F_E]
         - ``graph_features``: features associated to the graph itself, of size [F_U]
 
-    The topology of the graph is specified as an `edge_index`, an array of size [E, 2],
-    containing the source and destination nodes of each edge as row vectors.
+    The topology of the graph is specified as an `edge_index`, an array of size [2, E],
+    containing the source and destination nodes of each edge as column vectors.
     A Graph Network block is initialized by providing node, edge and global models (all
     optional), that are used to update node, edge and global features (if present).
     Depending on which models are provided and how they are implemented, the Graph
@@ -57,7 +57,7 @@ class GraphNetworkBlock(Module):
     ) -> tuple[Optional[mx.array], Optional[mx.array], Optional[mx.array]]:
         """Forward pass of the Graph Network block
         Args:
-            edge_index (array): array of size [E, 2], where each row contains the source
+            edge_index (array): array of size [2, E], where each column contains the source
                 and destination nodes of an edge.
             node_features (array, optional): features associated with each node in the
                 graph, provided as an array of size [N, F_N]

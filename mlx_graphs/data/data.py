@@ -9,7 +9,7 @@ class GraphData:
 
     Args:
         edge_index (mlx.core.array, optional): edge index representing the topology of
-            the graph, with shape [num_edges, 2].
+            the graph, with shape [2, num_edges].
         node_features (mlx.core.array, optional): Array of shape [num_nodes, num_node_features]
             containing the features of each node.
         edge_features (mlx.core.array, optional): Array of shape [num_edges, num_edge_features]
