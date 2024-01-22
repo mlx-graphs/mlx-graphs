@@ -1,40 +1,4 @@
-from typing import Tuple, Union
-
 import mlx.core as mx
-
-
-def get_src_dst_features(
-    edge_index: mx.array,
-    node_features: Union[mx.array, Tuple[mx.array, mx.array]],
-) -> Tuple[mx.array, mx.array]:
-    """
-    Extracts source and destination node features based on the given edge indices.
-
-    Args:
-        edge_index (mx.array): An array of shape (2, number_of_edges), where each columns contains the source
-                and destination nodes of an edge.
-        node_features (mx.array): The input array of node features.
-
-    Returns:
-        Tuple[mx.array, mx.array]: A tuple containing source and destination features.
-    """
-    src_idx, dst_idx = edge_index
-
-    if isinstance(node_features, tuple):
-        src_val, dst_val = node_features
-        src_val = src_val[src_idx]
-        dst_val = dst_val[dst_idx]
-
-    elif isinstance(node_features, mx.array):
-        src_val = node_features[src_idx]
-        dst_val = node_features[dst_idx]
-
-    else:
-        raise ValueError(
-            "Invalid type for argument `array`, should be a `mx.array` or a `tuple`."
-        )
-
-    return src_val, dst_val
 
 
 def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:

@@ -24,6 +24,8 @@ class GraphNetworkBlock(Module):
     architectures, like message-passing networks, deep sets, relation networks and more
     (see [1]).
 
+    For a usage example see [here](https://github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py).
+
     Args:
         node_model (mlx.nn.layers.base.Module, optional): a callable Module which updates
             a graph's node features
