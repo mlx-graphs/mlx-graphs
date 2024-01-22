@@ -25,10 +25,12 @@ except RuntimeError:
 from benchmark_utils import print_benchmark
 from benchmark_layers import (
     benchmark_scatter,
+    benchmark_gather,
+    benchmark_GCNConv,
 )
 
 
-def run_processes(layers, args, iterations=5):
+def run_processes(layers, args, iterations=1):
     """
     Runs all layers in serial, on separate processes.
     Using processes avoids exploding memory within the main process during the bench.
@@ -168,33 +170,54 @@ if __name__ == "__main__":
                 "scatter_op": "max",
             },
         ),
-        # (
-        #     benchmark_GCNConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 100000),
-        #         "node_features_shape": (100, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GCNConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (100, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GCNConv,
-        #     {
-        #         "in_dim": 8,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (1000, 8),
-        #     },
-        # ),
+        (
+            benchmark_gather,  # 100k indices, with 100 unique sources and destinations
+            {
+                "edge_index_shape": (2, 100000),
+                "node_features_shape": (100, 64),
+            },
+        ),
+        (
+            benchmark_gather,  # 1M indices, with 10 unique sources and destinations
+            {
+                "edge_index_shape": (2, 1000000),
+                "node_features_shape": (10, 64),
+            },
+        ),
+        (
+            benchmark_gather,  # 10k indices, with 1000 unique sources and destinations
+            {
+                "edge_index_shape": (2, 10000),
+                "node_features_shape": (1000, 64),
+            },
+        ),
+        (
+            benchmark_GCNConv,
+            {
+                "in_dim": 64,
+                "out_dim": 64,
+                "edge_index_shape": (2, 100000),
+                "node_features_shape": (100, 64),
+            },
+        ),
+        (
+            benchmark_GCNConv,
+            {
+                "in_dim": 64,
+                "out_dim": 64,
+                "edge_index_shape": (2, 1000000),
+                "node_features_shape": (10, 64),
+            },
+        ),
+        (
+            benchmark_GCNConv,
+            {
+                "in_dim": 64,
+                "out_dim": 64,
+                "edge_index_shape": (2, 10000),
+                "node_features_shape": (1000, 64),
+            },
+        ),
         # (
         #     benchmark_GCNConv,
         #     {
@@ -219,16 +242,16 @@ if __name__ == "__main__":
         #         "in_dim": 64,
         #         "out_dim": 128,
         #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (100, 64),
+        #         "node_features_shape": (10, 64),
         #     },
         # ),
         # (
         #     benchmark_GATConv,
         #     {
-        #         "in_dim": 8,
+        #         "in_dim": 64,
         #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (1000, 8),
+        #         "edge_index_shape": (2, 10000),
+        #         "node_features_shape": (1000, 64),
         #     },
         # ),
         # (

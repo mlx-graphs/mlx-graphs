@@ -17,6 +17,15 @@ from benchmark_utils import (
 from mlx_graphs.utils.scatter import scatter
 
 
+def sync_mps_if_needed(device):
+    """
+    Call this function after every torch implementation to ensure
+    the mps execution has finished.
+    """
+    if device == torch.device("mps"):
+        torch.mps.synchronize()
+
+
 class MLXLayer(mlx_nn.Module):
     def __init__(self, layer_cls, **kwargs):
         super().__init__()
@@ -24,7 +33,7 @@ class MLXLayer(mlx_nn.Module):
         self.y = []
 
     def __call__(self, **kwargs):
-        for _ in range(5):
+        for _ in range(1):
             self.y.append(self.layer(**kwargs))
         mx.eval(self.y)
 
@@ -37,19 +46,11 @@ class PyGLayer(torch.nn.Module):
 
     def forward(self, **kwargs):
         with torch.no_grad():
-            for _ in range(5):
+            for _ in range(1):
                 self.y.append(self.layer(**kwargs))
 
-            self.sync_mps_if_needed()
-
-    def sync_mps_if_needed(self):
-        """
-        Call this function after every torch implementation to ensure
-        the mps execution has finished.
-        """
-        device = next(self.parameters()).device
-        if device == torch.device("mps"):
-            torch.mps.synchronize()
+            device = next(self.parameters()).device
+            sync_mps_if_needed(device)
 
 
 def benchmark_GCNConv(framework, device=None, **kwargs):
@@ -117,7 +118,7 @@ def benchmark_scatter(framework, device=None, **kwargs):
                     scatter(
                         node_features_mlx,
                         edge_index_mlx,
-                        edge_index_mlx.max().item() + 1,
+                        edge_index_mlx.max().item() + 2,
                         scatter_op,
                     )
                 )
@@ -136,10 +137,11 @@ def benchmark_scatter(framework, device=None, **kwargs):
             )
         else:
 
-            def pyg_scatter(node_features, edge_index, scatter_op):
+            def pyg_scatter(node_features, edge_index, scatter_op, device):
                 if scatter_op == "sum":
                     scatter_op = "add"
-                return scatter_torch(node_features, edge_index, 0, reduce=scatter_op)
+                _ = scatter_torch(node_features, edge_index, 0, reduce=scatter_op)
+                sync_mps_if_needed(device)
                 # return scatter_sum(node_features, edge_index, 0)
 
             edge_index = get_dummy_edge_index(
@@ -153,6 +155,48 @@ def benchmark_scatter(framework, device=None, **kwargs):
                 node_features=node_features,
                 edge_index=edge_index[1],
                 scatter_op=scatter_op,
+                device=device,
+            )
+
+    return run_benchmark(**kwargs)
+
+
+def benchmark_gather(framework, device=None, **kwargs):
+    def run_benchmark(edge_index_shape, node_features_shape):
+        if framework == "mlx":
+
+            def mlx_gather(node_features, edge_index):
+                src_val = node_features[edge_index[0]]
+                dst_val = node_features[edge_index[1]]
+                mx.eval(src_val, dst_val)
+
+            edge_index = get_dummy_edge_index(
+                edge_index_shape, node_features_shape[0], device, "mlx"
+            )
+            node_features = get_dummy_features(node_features_shape, device, "mlx")
+
+            return measure_runtime(
+                mlx_gather,
+                node_features=node_features,
+                edge_index=edge_index,
+            )
+        else:
+
+            def pyg_gather(node_features, edge_index, device):
+                _ = node_features[edge_index[0]]
+                _ = node_features[edge_index[1]]
+                sync_mps_if_needed(device)
+
+            edge_index = get_dummy_edge_index(
+                edge_index_shape, node_features_shape[0], device, "pyg"
+            )
+            node_features = get_dummy_features(node_features_shape, device, "pyg")
+
+            return measure_runtime(
+                pyg_gather,
+                node_features=node_features,
+                edge_index=edge_index,
+                device=device,
             )
 
     return run_benchmark(**kwargs)
