@@ -105,7 +105,7 @@ def to_adjacency_matrix(
                 f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1} nodes in index",
             )
     else:
-        num_nodes = mx.max(edge_index) + 1
+        num_nodes = (mx.max(edge_index) + 1).item()
 
     if edge_features is not None:
         if edge_features.shape[1] != 1 or edge_features.shape[0] != edge_index.shape[0]:
