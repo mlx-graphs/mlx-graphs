@@ -27,12 +27,12 @@ def validate_edge_index(func):
     def wrapper(edge_index, *args, **kwargs):
         if edge_index.ndim != 2:
             raise ValueError(
-                "edge_index must be 2-dimensional with shape [num_edges, 2]",
+                "edge_index must be 2-dimensional with shape [2, num_edges]",
                 f"(got {edge_index.ndim} dimensions)",
             )
-        if edge_index.shape[1] != 2:
+        if edge_index.shape[0] != 2:
             raise ValueError(
-                "edge_index must be 2-dimensional with shape [num_edges, 2]",
+                "edge_index must be 2-dimensional with shape [2, num_edges]",
                 f"(got {edge_index.shape} shape)",
             )
         return func(edge_index, *args, **kwargs)
@@ -47,10 +47,10 @@ def validate_edge_index_and_features(func):
     @validate_edge_index
     def wrapper(edge_index, edge_features=None, *args, **kwargs):
         if edge_features is not None:
-            if edge_index.shape[0] != edge_features.shape[0]:
+            if edge_index.shape[1] != edge_features.shape[0]:
                 raise ValueError(
                     "edge_features must be 1 per edge ",
-                    f"(got {edge_index.shape[0]} edges and {edge_features.shape[0]} features)",
+                    f"(got {edge_index.shape[1]} edges and {edge_features.shape[0]} features)",
                 )
         return func(edge_index, edge_features, *args, **kwargs)
 
