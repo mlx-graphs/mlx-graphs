@@ -10,3 +10,28 @@ authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">= 3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "mlx==0.0.10.*"
+]
+
+[project.optional-dependencies]
+dev = [
+  "mlx @ git+https://github.com/ml-explore/mlx.git",
+]
+test = [
+  "pytest==7.4.4",
+]
+docs = [
+  "sphinx==7.2.6",
+  "sphinx-book-theme==1.1.0",
+]
+
+[project.urls]
+Repository = "https://github.com/TristanBilot/mlx-graphs"
+Issues = "https://github.com/TristanBilot/mlx-graphs/issues"

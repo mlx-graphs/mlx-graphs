@@ -15,14 +15,18 @@ git clone git@github.com:TristanBilot/mlx-graphs.git && cd mlx-graphs
 ```
 Create a new virtual environment and install the requirements
 ```
-pip install -r requirements.txt
-```
-For dev, install `mlx-graphs` locally and install `requirements-dev.txt`
-```
-pip install -r requirements-dev.txt
+pip install -e .
 ```
 
 ### Contributing
+#### Installing test, dev, docs dependencies
+Extra dependencies are specified in the `pyproject.toml`.
+To install those required for testing, development and building documentation, you can run any of the following
+```
+pip install -e '.[test]'
+pip install -e '.[dev]'
+pip install -e '.[docs]'
+```
 
 #### Testing
 We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
