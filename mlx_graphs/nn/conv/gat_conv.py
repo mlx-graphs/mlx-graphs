@@ -3,9 +3,9 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.nn.linear import Linear
-from mlx_graphs.utils import glorot_init, scatter, get_src_dst_features
+from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
 
 
 class GATConv(MessagePassing):
