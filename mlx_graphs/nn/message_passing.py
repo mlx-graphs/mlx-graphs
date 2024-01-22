@@ -1,9 +1,9 @@
-from typing import Any, Union, Dict, Optional, Tuple, get_args
+from typing import Any, Dict, Optional, Tuple, Union, get_args
 
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils import scatter, get_src_dst_features, ScatterAggregations
+from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 
 class MessagePassing(nn.Module):
