@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mlx-graphs"
 version = "0.0.1"
-description = "Graph Neural Network library made for Apple Silicons"
+description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -23,6 +23,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "mlx @ git+https://github.com/ml-explore/mlx.git",
+  "pre-commit==3.6.0",
 ]
 test = [
   "pytest==7.4.4",
