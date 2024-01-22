@@ -26,8 +26,8 @@ class GCNConv(MessagePassing):
 
     def __call__(
         self,
-        node_features: mx.array,
         edge_index: mx.array,
+        node_features: mx.array,
         normalize: bool = True,
         **kwargs: Any,
     ) -> mx.array:
@@ -53,8 +53,8 @@ class GCNConv(MessagePassing):
 
         # Compute messages and aggregate them with sum and norm.
         node_features = self.propagate(
-            node_features=node_features,
             edge_index=edge_index,
+            node_features=node_features,
             message_kwargs={"edge_weight": norm},
         )
 

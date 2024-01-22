@@ -80,8 +80,8 @@ class GATConv(MessagePassing):
         Computes the forward pass of GATConv.
 
         Args:
-            node_features (mx.array): input node features
             edge_index (mx.array): input edge index of shape (2, |E|)
+            node_features (mx.array): input node features
             edge_features (optional mx.array) edge features of shape (2, |E|)
 
         Returns:
