@@ -12,3 +12,5 @@ Utils
 	topology
 	sorting
 	validators
+	scatter
+	array_ops

@@ -1,5 +1,5 @@
 from math import sqrt
-from typing import Union, Tuple, List
+from typing import List, Tuple, Union
 
 import mlx.core as mx
 

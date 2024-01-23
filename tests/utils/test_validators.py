@@ -63,7 +63,7 @@ def test_validate_edge_index(x, expected_exception):
         ),  # Valid index and features
         (
             mx.array([[0, 1, 2], [1, 2, 3]]),
-            mx.array([[1, 2, 3], [1, 2, 3]]),
+            mx.array([[1, 2, 3], [1, 2, 3]]).T,
             None,
         ),  # Valid index and features
         (

@@ -1,14 +1,15 @@
-from typing import Optional
-from typing_extensions import Literal
+from typing import Literal, Optional, get_args
 
 import mlx.core as mx
+
+ScatterAggregations = Literal["add", "max", "softmax"]
 
 
 def scatter(
     values: mx.array,
     index: mx.array,
     out_size: Optional[int] = None,
-    aggr: Literal["add", "max", "softmax"] = "add",
+    aggr: ScatterAggregations = "add",
     axis: Optional[int] = 0,
 ) -> mx.array:
     """
@@ -39,6 +40,12 @@ def scatter(
         scatter(src, index, num_nodes, "add")
         >>>  mx.array([2, 1, 1])
     """
+    if aggr not in get_args(ScatterAggregations):
+        raise ValueError(
+            "Invalid aggregation function.",
+            f"Available values are {get_args(ScatterAggregations)}",
+        )
+
     out_size = out_size if out_size is not None else values.shape[0]
 
     if aggr == "softmax":

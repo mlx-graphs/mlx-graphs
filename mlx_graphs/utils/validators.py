@@ -1,4 +1,5 @@
 import functools
+
 import mlx.core as mx
 
 
@@ -47,7 +48,7 @@ def validate_edge_index_and_features(func):
     @validate_edge_index
     def wrapper(edge_index, edge_features=None, *args, **kwargs):
         if edge_features is not None:
-            if edge_index.shape[1] != edge_features.shape[-1]:
+            if edge_index.shape[1] != edge_features.shape[0]:
                 raise ValueError(
                     "edge_features must be 1 per edge ",
                     f"(got {edge_index.shape[1]} edges and {edge_features.shape[0]} features)",

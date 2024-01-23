@@ -17,7 +17,8 @@ classifiers = [
     "Programming Language :: Python",
 ]
 dependencies = [
-    "mlx==0.0.10.*"
+    "mlx==0.0.10.*",
+    "numpy==1.26.3",
 ]
 
 [project.optional-dependencies]
@@ -31,6 +32,9 @@ test = [
 docs = [
   "sphinx==7.2.6",
   "sphinx-book-theme==1.1.0",
+]
+benchmarks = [
+  "scipy==1.12.0"
 ]
 
 [project.urls]

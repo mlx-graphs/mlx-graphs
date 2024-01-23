@@ -1,9 +1,9 @@
-from typing import Any, Union, Dict, Optional, Tuple
+from typing import Any, Dict, Optional, Tuple, Union, get_args
 
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils import scatter, get_src_dst_features
+from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 
 class MessagePassing(nn.Module):
@@ -23,10 +23,14 @@ class MessagePassing(nn.Module):
         https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.MessagePassing.html
     """
 
-    def __init__(self, aggr="add"):
+    def __init__(self, aggr: ScatterAggregations = "add"):
         super().__init__()
-
-        self.aggr = aggr
+        if aggr not in get_args(ScatterAggregations):
+            raise ValueError(
+                "Invalid aggregation function.",
+                f"Available values are {get_args(ScatterAggregations)}",
+            )
+        self.aggr: ScatterAggregations = aggr
         self.num_nodes = None
 
     def __call__(self, node_features: mx.array, edge_index: mx.array, **kwargs: Any):
@@ -66,7 +70,7 @@ class MessagePassing(nn.Module):
                     f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}"
                 )
 
-        src_features, dst_features = get_src_dst_features(node_features, edge_index)
+        src_features, dst_features = get_src_dst_features(edge_index, node_features)
 
         self.num_nodes = (
             node_features if isinstance(node_features, mx.array) else node_features[0]

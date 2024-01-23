@@ -34,7 +34,7 @@ def sort_edge_index_and_features(
     Args:
         edge_index (mlx.core.array): A [2, num_edges] array representing edge indices,
             where the first row contains source indices and the second row contains target indices.
-        edge_features (mlx.core.array): An array representing edge features, where each column
+        edge_features (mlx.core.array): An array representing edge features, where each row
             corresponds to an edge.
 
     Returns:
@@ -42,8 +42,5 @@ def sort_edge_index_and_features(
             corresponding sorted edge features.
     """
     sorted_edge_index, sorting_indices = sort_edge_index(edge_index)
-    if edge_features.ndim == 1:
-        sorted_edge_features = edge_features[sorting_indices]
-    else:
-        sorted_edge_features = edge_features[:, sorting_indices]
+    sorted_edge_features = edge_features[sorting_indices]
     return sorted_edge_index, sorted_edge_features
