@@ -24,8 +24,8 @@ Then build and install using `pip` (we suggest using a separate virtual environm
 
 
 
-Installing test, dev, docs dependencies
----------------------------------------
+Installing test, dev, benchmarks, docs dependencies
+---------------------------------------------------
 
 To install any extra dependencies for testing, development and building documentation, you can run any of the following
 
@@ -33,4 +33,5 @@ To install any extra dependencies for testing, development and building document
 
 	pip install -e '.[test]'
 	pip install -e '.[dev]'
+	pip install -e '.[benchmarks]'
 	pip install -e '.[docs]'

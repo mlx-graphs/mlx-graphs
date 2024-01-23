@@ -19,12 +19,13 @@ pip install -e .
 ```
 
 ### Contributing
-#### Installing test, dev, docs dependencies
+#### Installing test, dev, benchmaks, docs dependencies
 Extra dependencies are specified in the `pyproject.toml`.
 To install those required for testing, development and building documentation, you can run any of the following
 ```
 pip install -e '.[test]'
 pip install -e '.[dev]'
+pip install -e '.[benchmarks]'
 pip install -e '.[docs]'
 ```
 

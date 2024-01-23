@@ -3,11 +3,11 @@ import numpy as np
 from typing import Optional
 
 
-def get_src_dst_features_CSR(
+def get_src_dst_features_ROW(
     edge_index: mx.array,
     node_features: mx.array,
 ):
-    src_idx, dst_idx = edge_index[:, 0], edge_index[:, 1]
+    src_idx, dst_idx = edge_index[0], edge_index[1]
 
     src_val = node_features[src_idx]
     dst_val = node_features[dst_idx]
@@ -15,38 +15,36 @@ def get_src_dst_features_CSR(
     return src_val, dst_val
 
 
-def sort_edge_index_CSR(edge_index: mx.array) -> tuple[mx.array, mx.array]:  # win
-    sorted_target_indices = mx.argsort(edge_index[:, 1])
-    target_sorted_index = edge_index[sorted_target_indices]
-    sorted_source_indices = mx.argsort(target_sorted_index[:, 0])
-    sorted_edge_index = target_sorted_index[sorted_source_indices]
+def sort_edge_index_ROW(edge_index: mx.array) -> tuple[mx.array, mx.array]:
+    sorted_target_indices = mx.argsort(edge_index[1])
+    target_sorted_index = edge_index[:, sorted_target_indices]
+    sorted_source_indices = mx.argsort(target_sorted_index[0])
+    sorted_edge_index = target_sorted_index[:, sorted_source_indices]
     sorting_indices = sorted_target_indices[sorted_source_indices]
     return sorted_edge_index, sorting_indices
 
 
-def sort_edge_index_and_features_CSR(
+def sort_edge_index_and_features_ROW(
     edge_index: mx.array, edge_features: mx.array
 ) -> tuple[mx.array, mx.array]:
-    sorted_edge_index, sorting_indices = sort_edge_index_CSR(edge_index)
+    sorted_edge_index, sorting_indices = sort_edge_index_ROW(edge_index)
     sorted_edge_features = edge_features[sorting_indices]
     return sorted_edge_index, sorted_edge_features
 
 
-def is_undirected_CSR(
+def is_undirected_ROW(
     edge_index: mx.array, edge_features: Optional[mx.array] = None
 ) -> bool:
     if edge_features is None:
-        src_dst_sort, _ = sort_edge_index_CSR(edge_index)
-        dst_src_sort, _ = sort_edge_index_CSR(
-            mx.stack([edge_index[:, 1], edge_index[:, 0]], axis=1)
-        )
+        src_dst_sort, _ = sort_edge_index_ROW(edge_index)
+        dst_src_sort, _ = sort_edge_index_ROW(mx.stack([edge_index[1], edge_index[0]]))
         if mx.array_equal(src_dst_sort, dst_src_sort):
             return True
     else:
-        src_dst_sort, src_dst_feat = sort_edge_index_and_features_CSR(
+        src_dst_sort, src_dst_feat = sort_edge_index_and_features_ROW(
             edge_index, edge_features
         )
-        dst_src_sort, dst_src_feat = sort_edge_index_and_features_CSR(
+        dst_src_sort, dst_src_feat = sort_edge_index_and_features_ROW(
             mx.stack([edge_index[:, 1], edge_index[:, 0]], axis=1), edge_features
         )
         if mx.array_equal(src_dst_sort, dst_src_sort) and mx.array_equal(
@@ -57,24 +55,24 @@ def is_undirected_CSR(
     return False
 
 
-def to_edge_index_CSR(
+def to_edge_index_ROW(
     adjacency_matrix: mx.array, *, dtype: mx.Dtype = mx.uint32
 ) -> mx.array:
     edge_index = mx.stack(
-        [mx.array(x, dtype=dtype) for x in np.nonzero(adjacency_matrix)]
+        [mx.array(x, dtype=dtype) for x in np.nonzero(adjacency_matrix)], axis=1
     )
     return edge_index
 
 
-def to_sparse_adjacency_matrix_CSR(
+def to_sparse_adjacency_matrix_ROW(
     adjacency_matrix: mx.array, *, dtype: mx.Dtype = mx.uint32
 ) -> tuple[mx.array, mx.array]:
-    edge_index = to_edge_index_CSR(adjacency_matrix)
-    edge_features = adjacency_matrix[edge_index[0], edge_index[1]]
-    return edge_index, edge_features
+    edge_index = to_edge_index_ROW(adjacency_matrix)
+    edge_features = adjacency_matrix[edge_index[:, 0], edge_index[:, 1]]
+    return edge_index, mx.expand_dims(edge_features, 1)
 
 
-def to_adjacency_matrix_CSR(
+def to_adjacency_matrix_ROW(
     edge_index: mx.array,
     edge_features: Optional[mx.array] = None,
     num_nodes: Optional[int] = None,
@@ -82,7 +80,7 @@ def to_adjacency_matrix_CSR(
     num_nodes = (mx.max(edge_index) + 1).item()
     adjacency_matrix = mx.zeros((num_nodes, num_nodes), dtype=edge_index.dtype)
     if edge_features is None:
-        adjacency_matrix[edge_index[0], edge_index[1]] = 1
+        adjacency_matrix[edge_index[:, 0], edge_index[:, 1]] = 1
     else:
-        adjacency_matrix[edge_index[0], edge_index[1]] = edge_features
+        adjacency_matrix[edge_index[:, 0], edge_index[:, 1]] = edge_features
     return adjacency_matrix
