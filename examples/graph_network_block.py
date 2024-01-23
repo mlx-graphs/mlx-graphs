@@ -117,7 +117,7 @@ F_U = 2  # number of global features
 
 edge_index = mx.array([[0, 0, 1, 2, 3], [1, 2, 3, 3, 0]])
 node_features = mx.random.normal([N, F_N])
-edge_features = mx.random.normal([edge_index.shape[0], F_E])
+edge_features = mx.random.normal([edge_index.shape[1], F_E])
 graph_features = mx.random.normal([F_U])
 
 
