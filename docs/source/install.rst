@@ -20,11 +20,17 @@ Then build and install using `pip` (we suggest using a separate virtual environm
 
 .. code-block:: shell
 
-	pip install -r requirements.txt
-	pip install .
+	pip install -e .
 
-For development, use `requirements-dev.txt`,
+
+
+Installing test, dev, docs dependencies
+---------------------------------------
+
+To install any extra dependencies for testing, development and building documentation, you can run any of the following
 
 .. code-block:: shell
 
-	pip install -r requirements-dev.txt
+	pip install -e '.[test]'
+	pip install -e '.[dev]'
+	pip install -e '.[docs]'
