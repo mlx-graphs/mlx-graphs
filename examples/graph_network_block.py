@@ -25,7 +25,7 @@ class NodeModel(Module):
         edge_features: mx.array,
         graph_features: mx.array,
     ):
-        destination_nodes = edge_index[:, 1]
+        destination_nodes = edge_index[1]
         aggregated_edges = mx.zeros([node_features.shape[0], edge_features.shape[1]])
         for i in range(node_features.shape[0]):
             aggregated_edges[i] = mx.where(
@@ -66,8 +66,8 @@ class EdgeModel(Module):
         edge_features: mx.array,
         graph_features: mx.array,
     ):
-        source_nodes = edge_index[:, 0]
-        destination_nodes = edge_index[:, 1]
+        source_nodes = edge_index[0]
+        destination_nodes = edge_index[1]
         model_input = mx.concatenate(
             [
                 node_features[destination_nodes],
@@ -115,7 +115,7 @@ F_N = 2  # number of node features
 F_E = 1  # number of edge features
 F_U = 2  # number of global features
 
-edge_index = mx.array([[0, 0, 1, 2, 3], [1, 2, 3, 3, 0]]).transpose()
+edge_index = mx.array([[0, 0, 1, 2, 3], [1, 2, 3, 3, 0]])
 node_features = mx.random.normal([N, F_N])
 edge_features = mx.random.normal([edge_index.shape[0], F_E])
 graph_features = mx.random.normal([F_U])
