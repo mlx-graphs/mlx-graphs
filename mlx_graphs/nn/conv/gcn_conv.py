@@ -11,19 +11,19 @@ class GCNConv(MessagePassing):
     r"""Applies a GCN convolution over input node features.
 
     Args:
-        x_dim (int): size of input node features
-        h_dim (int): size of hidden node embeddings
+        node_features_dim (int): size of input node features
+        out_features_dim (int): size of output node embeddings
         bias (bool): whether to use bias in the node projection
     """
 
     def __init__(
         self,
-        x_dim: int,
-        h_dim: int,
+        node_features_dim: int,
+        out_features_dim: int,
         bias: bool = True,
     ):
         super(GCNConv, self).__init__(aggr="add")
-        self.linear = nn.Linear(x_dim, h_dim, bias)
+        self.linear = nn.Linear(node_features_dim, out_features_dim, bias)
 
     def __call__(
         self,
