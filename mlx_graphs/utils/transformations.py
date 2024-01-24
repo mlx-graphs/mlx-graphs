@@ -1,8 +1,11 @@
-from typing import Optional
+from typing import Optional, Union
+
 import mlx.core as mx
 import numpy as np
+
 from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
+    validate_edge_index,
     validate_edge_index_and_features,
 )
 
@@ -21,7 +24,10 @@ def to_edge_index(
     Returns:
         mlx.core.array: a [2, num_edges] array representing the source and target nodes of each edge
 
+    Example:
+
     .. code-block:: python
+
         matrix = mx.array(
             [
                 [0, 1, 2],
@@ -52,7 +58,10 @@ def to_sparse_adjacency_matrix(
     Returns:
         tuple[mlx.core.array, mlx.core.array]: A tuple representing the edge index and edge features
 
+    Example:
+
     .. code-block:: python
+
         matrix = mx.array(
             [
                 [0, 1, 2],
@@ -84,7 +93,7 @@ def to_adjacency_matrix(
 
     Args:
         edge_index (mlx.core.array): a [2, num_edges] array representing the source and target nodes of each edge
-        edge_features (mlx.core.array, optional): edge features corresponding to the edges in edge_index. Defaults to None.
+        edge_features (mlx.core.array, optional): a 1-dimensional array representing the features corresponding to the edges in edge_index. Defaults to None.
         num_nodes (int, optional): the number of nodes in the graph. Defaults to the number of nodes in edge_index
 
     Returns:
@@ -97,7 +106,7 @@ def to_adjacency_matrix(
                 f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1} nodes in index",
             )
     else:
-        num_nodes = mx.max(edge_index) + 1
+        num_nodes = (mx.max(edge_index) + 1).item()
 
     if edge_features is not None:
         if edge_features.ndim != 1:
@@ -111,3 +120,38 @@ def to_adjacency_matrix(
     else:
         adjacency_matrix[edge_index[0], edge_index[1]] = edge_features
     return adjacency_matrix
+
+
+@validate_edge_index
+def get_src_dst_features(
+    edge_index: mx.array,
+    node_features: Union[mx.array, tuple[mx.array, mx.array]],
+) -> tuple[mx.array, mx.array]:
+    """
+    Extracts source and destination node features based on the given edge indices.
+
+    Args:
+        edge_index (mx.array): An array of shape (2, number_of_edges), where each columns contains the source
+                and destination nodes of an edge.
+        node_features (mx.array): The input array of node features.
+
+    Returns:
+        Tuple[mx.array, mx.array]: A tuple containing source and destination features.
+    """
+    src_idx, dst_idx = edge_index
+
+    if isinstance(node_features, tuple):
+        src_val, dst_val = node_features
+        src_val = src_val[src_idx]
+        dst_val = dst_val[dst_idx]
+
+    elif isinstance(node_features, mx.array):
+        src_val = node_features[src_idx]
+        dst_val = node_features[dst_idx]
+
+    else:
+        raise ValueError(
+            "Invalid type for argument `array`, should be a `mx.array` or a `tuple`."
+        )
+
+    return src_val, dst_val

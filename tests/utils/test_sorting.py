@@ -23,8 +23,8 @@ def test_sort_edge_index_and_features():
     assert mx.array_equal(expected_edge_index, s), "Index sorting failes"
     assert mx.array_equal(expected_edge_features, f), "Features sorting failed"
     # test 2d edge_features
-    edge_features = mx.array([[5, 3, 2, 4, 1, 6], [2, 4, 5, 3, 6, 1]])
-    expected_edge_features = mx.array([[1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1]])
+    edge_features = mx.array([[5, 3, 2, 4, 1, 6], [2, 4, 5, 3, 6, 1]]).T
+    expected_edge_features = mx.array([[1, 2, 3, 4, 5, 6], [6, 5, 4, 3, 2, 1]]).T
     s, f = sort_edge_index_and_features(edge_index, edge_features)
     assert mx.array_equal(expected_edge_index, s), "Index sorting failed"
     assert mx.array_equal(expected_edge_features, f), "Features sorting failed"

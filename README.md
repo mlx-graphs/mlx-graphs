@@ -15,21 +15,43 @@ git clone git@github.com:TristanBilot/mlx-graphs.git && cd mlx-graphs
 ```
 Create a new virtual environment and install the requirements
 ```
-pip install -r requirements.txt
+pip install -e .
 ```
-For dev, install `mlx-graphs` locally and install `requirements-dev.txt`
-```
-pip install -r requirements-dev.txt
-```
+
+### Usage
+#### Graph data model
+A graph is defined by a set of (optional) attributes
+  1. `edge_index`: an array of size `[2, num_edges]` which specifies the topology of the graph. The i-th column in `edge_index` defines the source and destination nodes of the i-th edge
+  2. `node_features`: an array of size `[num_nodes, num_node_features]` defining the features associated to each node (if any). The i-th row contains the features of the i-th node
+  3. `edge_features`:  an array of size `[num_edges, num_edge_features]` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
+  4. `graph_features`: an array of size `[num_graph_features]` defining the features associated to the graph itself
+
+We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
 
 ### Contributing
+#### Installing test, dev, benchmaks, docs dependencies
+Extra dependencies are specified in the `pyproject.toml`.
+To install those required for testing, development and building documentation, you can run any of the following
+```
+pip install -e '.[test]'
+pip install -e '.[dev]'
+pip install -e '.[benchmarks]'
+pip install -e '.[docs]'
+```
 
-##### Pre-commit hooks (temporary)
-Make sure to run [pre-commit](https://pre-commit.com) hooks to ensure code quality. To do that, simply install them by running
+#### Testing
+We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
+Please run `pytest` to ensure breaking changes are not introduced.
+
+
+#### Pre-commit hooks (optional)
+To ensure code quality you can run [pre-commit](https://pre-commit.com) hooks. Simply install them by running
 ```
 pre-commit install
 ```
-> Note: This aims to be a temporary measure until CI/CD is in place.
+and run via `pre-commit run --all-files`.
+
+> Note: CI is in place to verify code quality, so pull requests that don't meet those requirements won't pass CI tests.
 
 
 ## Why running GNNs on my Mac?

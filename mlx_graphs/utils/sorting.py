@@ -7,8 +7,7 @@ from mlx_graphs.utils.validators import (
 
 @validate_edge_index
 def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
-    """
-    Sort the edge index.
+    """Sort the edge index.
 
     Args:
         edge_index (mlx.core.array): A [2, num_edges] array representing edge indices,
@@ -30,13 +29,12 @@ def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
 def sort_edge_index_and_features(
     edge_index: mx.array, edge_features: mx.array
 ) -> tuple[mx.array, mx.array]:
-    """
-    Sorts the given edge_index and their corresponding features.
+    """Sorts the given edge_index and their corresponding features.
 
     Args:
         edge_index (mlx.core.array): A [2, num_edges] array representing edge indices,
             where the first row contains source indices and the second row contains target indices.
-        edge_features (mlx.core.array): An array representing edge features, where each column
+        edge_features (mlx.core.array): An array representing edge features, where each row
             corresponds to an edge.
 
     Returns:
@@ -44,8 +42,5 @@ def sort_edge_index_and_features(
             corresponding sorted edge features.
     """
     sorted_edge_index, sorting_indices = sort_edge_index(edge_index)
-    if edge_features.ndim == 1:
-        sorted_edge_features = edge_features[sorting_indices]
-    else:
-        sorted_edge_features = edge_features[:, sorting_indices]
+    sorted_edge_features = edge_features[sorting_indices]
     return sorted_edge_index, sorted_edge_features

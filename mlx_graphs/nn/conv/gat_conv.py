@@ -3,9 +3,9 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.nn.linear import Linear
-from mlx_graphs.utils import glorot_init, scatter, get_src_dst_features
+from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
 
 
 class GATConv(MessagePassing):
@@ -22,6 +22,9 @@ class GATConv(MessagePassing):
         edge_features_dim (int, optional): Size of edge features
 
     Example:
+
+    .. code-block:: python
+
         conv = GATConv(16, 32, heads=2, concat=True)
         x = mx.random.uniform(low=0, high=1, shape=(5, 16))
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
@@ -69,16 +72,16 @@ class GATConv(MessagePassing):
 
     def __call__(
         self,
-        node_features: mx.array,
         edge_index: mx.array,
+        node_features: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
         """
         Computes the forward pass of GATConv.
 
         Args:
-            node_features (mx.array): input node features
             edge_index (mx.array): input edge index of shape (2, |E|)
+            node_features (mx.array): input node features
             edge_features (optional mx.array) edge features of shape (2, |E|)
 
         Returns:
@@ -91,7 +94,7 @@ class GATConv(MessagePassing):
         alpha_src = (src_feats * self.att_src).sum(-1)
         alpha_dst = (dst_feats * self.att_dst).sum(-1)
 
-        alpha_src, alpha_dst = get_src_dst_features((alpha_src, alpha_dst), edge_index)
+        alpha_src, alpha_dst = get_src_dst_features(edge_index, (alpha_src, alpha_dst))
         dst_idx = edge_index[1]
 
         node_features = self.propagate(
