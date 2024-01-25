@@ -2,6 +2,7 @@ from typing import List
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
+from mlx_graphs.data.collate import collate
 
 
 class GraphDataBatch(GraphData):
@@ -55,22 +56,9 @@ def batch(graphs: List[GraphData]) -> GraphDataBatch:
     if not isinstance(graphs, (list, tuple)):
         graphs = list(graphs)
 
-    num_graphs = len(graphs)
+    global_dict = collate(graphs)
 
-    num_nodes = mx.array([0] + [graph.num_nodes() for graph in graphs])
-    cumsum = mx.cumsum(num_nodes)
-
-    global_node_features = [graph.node_features for graph in graphs]
-    global_node_features = mx.concatenate(global_node_features, axis=0)
-
-    global_edge_index = [
-        graph.edge_index + num_nodes[i] for i, graph in enumerate(graphs)
-    ]
-    global_edge_index = mx.concatenate(global_edge_index, axis=1)
-
-    return GraphDataBatch(
-        global_node_features, global_edge_index, cumsum=cumsum, num_graphs=num_graphs
-    )
+    return GraphDataBatch(**global_dict)
 
 
 def unbatch(batch: GraphDataBatch) -> List[GraphData]:

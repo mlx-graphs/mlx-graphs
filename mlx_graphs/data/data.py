@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Any
 
 import mlx.core as mx
 
@@ -66,3 +66,15 @@ class GraphData:
 
     def num_nodes(self) -> int:
         return self.node_features.shape[0]
+
+    def __cat_dim__(self, key: str, *args, **kwargs):
+        if "index" in key:
+            return 1
+        else:
+            return 0
+
+    def __inc__(self, key: str, *args, **kwargs) -> Any:
+        if "index" in key:
+            # return self.num_nodes()
+            return True
+        return False
