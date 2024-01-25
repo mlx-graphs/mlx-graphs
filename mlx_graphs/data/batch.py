@@ -11,10 +11,10 @@ class GraphDataBatch(GraphData):
 
     """
 
-    def __init__(self, node_features, edge_index, cumsum) -> None:
-        self.node_features = node_features
-        self.edge_index = edge_index
+    def __init__(self, node_features, edge_index, cumsum, num_graphs, **kwargs) -> None:
+        super().__init__(node_features=node_features, edge_index=edge_index, **kwargs)
         self.cumsum = cumsum
+        self.num_graphs = num_graphs
 
     def __getitem__(self, idx):
         """Indexing to retrieve a specific graph from the batch
@@ -55,6 +55,8 @@ def batch(graphs: List[GraphData]) -> GraphDataBatch:
     if not isinstance(graphs, (list, tuple)):
         graphs = list(graphs)
 
+    num_graphs = len(graphs)
+
     num_nodes = mx.array([0] + [graph.num_nodes() for graph in graphs])
     cumsum = mx.cumsum(num_nodes)
 
@@ -66,4 +68,14 @@ def batch(graphs: List[GraphData]) -> GraphDataBatch:
     ]
     global_edge_index = mx.concatenate(global_edge_index, axis=1)
 
-    return GraphDataBatch(global_node_features, global_edge_index, cumsum=cumsum)
+    return GraphDataBatch(
+        global_node_features, global_edge_index, cumsum=cumsum, num_graphs=num_graphs
+    )
+
+
+def unbatch(batch: GraphDataBatch) -> List[GraphData]:
+    """Reconstruct the list of :class:`~mlx_graphs.data.GraphData`
+    objects from the :class:`~mlx_graphs.data.GraphDataBatch` object.
+    """
+
+    return [batch[idx] for idx in range(batch.num_graphs)]

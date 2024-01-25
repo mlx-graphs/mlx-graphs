@@ -64,5 +64,5 @@ class GraphData:
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
-    def num_nodes(self)-> int:
+    def num_nodes(self) -> int:
         return self.node_features.shape[0]
