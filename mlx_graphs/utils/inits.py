@@ -9,10 +9,10 @@ def glorot_init(shape: Union[Tuple, List]) -> mx.array:
     Glorot/Xavier initialization for a weight matrix.
 
     Args:
-        shape (Union[Tuple, List]): the shape of the created tensor.
+        shape: the shape of the created tensor.
 
     Returns:
-        mx.array: Initialized weight matrix.
+        Initialized weight matrix.
     """
 
     if len(shape) >= 2:

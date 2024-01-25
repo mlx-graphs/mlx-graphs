@@ -13,14 +13,12 @@ class MessagePassing(nn.Module):
     passing paradigm. This implementation is inspired from PyTorch Geometric [2].
 
     Args:
-        aggr (str): Aggregation strategy used to aggregate messages
+        aggr: Aggregation strategy used to aggregate messages
 
     References:
-        [1] Gilmer et al. Neural Message Passing for Quantum Chemistry.
-        https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf
+        [1] `Gilmer et al. Neural Message Passing for Quantum Chemistry. <https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf>`_
 
-        [2] Fey et al. PyG
-        https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.MessagePassing.html
+        [2] `Fey et al. PyG <https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.MessagePassing.html>`_
     """
 
     def __init__(self, aggr: ScatterAggregations = "add"):
@@ -48,12 +46,12 @@ class MessagePassing(nn.Module):
         the final node embeddings.
 
         Args:
-            edge_index mlx.core.array: Graph representation of shape (2, |E|) in COO format
-            node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings.
+            edge_index: Graph representation of shape `[2, num_edges]`
+            node_features: Input node features/embeddings.
                 Can be either an array or a tuple of arrays, for distinct src and dst node features.
-            message_kwargs (Dict, optional): Arguments to pass to the `message` method
-            aggregate_kwargs (Dict, optional): Arguments to pass to the `aggregate` method
-            update_kwargs (Dict, optional): Arguments to pass to the `update_nodes` method
+            message_kwargs: Arguments to pass to the `message` method
+            aggregate_kwargs: Arguments to pass to the `aggregate` method
+            update_kwargs: Arguments to pass to the `update_nodes` method
         """
         if not (isinstance(edge_index, mx.array) and edge_index.shape[0] == 2):
             raise ValueError("Edge index should be an array with shape (2, |E|)")
@@ -88,34 +86,32 @@ class MessagePassing(nn.Module):
         return output
 
     def message(
-        self, src_features: mx.array, dst_features: mx.array, **kwargs: Any
+        self, src_features: mx.array, dst_features: mx.array, **kwargs
     ) -> mx.array:
         """Computes messages between connected nodes.
 
         Args:
-            src_features mlx.core.array: Source node embeddings
-            dst_features mlx.core.array: Destination node embeddings
-            **kwargs (Any): Optional args to compute messages
+            src_features: Source node embeddings
+            dst_features: Destination node embeddings
+            **kwargs: Optional args to compute messages
         """
         return src_features
 
-    def aggregate(
-        self, messages: mx.array, indices: mx.array, **kwargs: Any
-    ) -> mx.array:
+    def aggregate(self, messages: mx.array, indices: mx.array, **kwargs) -> mx.array:
         """Aggregates the messages using the `self.aggr` strategy.
 
         Args:
-            messages mlx.core.array: Computed messages
-            indices: mlx.core.array: Indices representing the nodes that receive messages
-            **kwargs (Any): Optional args to aggregate messages
+            messages: Computed messages
+            indices: Indices representing the nodes that receive messages
+            **kwargs: Optional args to aggregate messages
         """
         return scatter(messages, indices, self.num_nodes, self.aggr)
 
-    def update_nodes(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
+    def update_nodes(self, aggregated: mx.array, **kwargs) -> mx.array:
         """Updates the final embeddings given the aggregated messages.
 
         Args:
-            aggregated mlx.core.array: aggregated messages
-            **kwargs (Any): optional args to update messages
+            aggregated: aggregated messages
+            **kwargs: optional args to update messages
         """
         return aggregated

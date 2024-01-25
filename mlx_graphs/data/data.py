@@ -8,19 +8,19 @@ class GraphData:
     Represents a graph data object with optional features and labels.
 
     Args:
-        edge_index (mlx.core.array, optional): edge index representing the topology of
+        edge_index: edge index representing the topology of
             the graph, with shape [2, num_edges].
-        node_features (mlx.core.array, optional): Array of shape [num_nodes, num_node_features]
+        node_features: Array of shape [num_nodes, num_node_features]
             containing the features of each node.
-        edge_features (mlx.core.array, optional): Array of shape [num_edges, num_edge_features]
+        edge_features: Array of shape [num_edges, num_edge_features]
             containing the features of each edge.
-        graph_features (mlx.core.array, optional): Array of shape [num_graph_features]
+        graph_features: Array of shape [num_graph_features]
             containing the global features of the graph.
-        node_labels (mlx.core.array, optional): Array of shape [num_nodes, num_node_labels]
+        node_labels: Array of shape [num_nodes, num_node_labels]
             containing the labels of each node.
-        edge_labels (mlx.core.array, optional): Array of shape [num_edges, num_edge_labels]
+        edge_labels: Array of shape [num_edges, num_edge_labels]
             containing the labels of each edge.
-        graph_labels (mlx.core.array, optional): Array of shape [num_graph_labels]
+        graph_labels: Array of shape [num_graph_labels]
             containing the global labels of the graph.
         **kwargs: Additional keyword arguments to store any other custom attributes.
     """

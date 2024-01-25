@@ -10,9 +10,9 @@ class Linear(nn.Linear):
     initialization instead of the default initialization in mlx's Linear.
 
     Args:
-        input_dims (int): Dimensionality of the input features
-        output_dims (int): Dimensionality of the output features
-        bias (bool, optional): If set to ``False`` then the layer will
+        input_dims: Dimensionality of the input features
+        output_dims: Dimensionality of the output features
+        bias: If set to ``False`` then the layer will
           not use a bias. Default is ``True``.
     """
 
