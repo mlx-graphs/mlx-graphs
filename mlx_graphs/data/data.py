@@ -75,6 +75,5 @@ class GraphData:
 
     def __inc__(self, key: str, *args, **kwargs) -> Any:
         if "index" in key:
-            # return self.num_nodes()
             return True
         return False
