@@ -14,3 +14,6 @@ Neural Networks
 	GraphNetworkBlock
 	GATConv
 	GCNConv
+	global_add_pool
+	global_max_pool
+	global_mean_pool
