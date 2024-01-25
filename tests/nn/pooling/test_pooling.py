@@ -56,6 +56,3 @@ def test_global_mean_pooling():
     assert mx.array_equal(
         y_hat2, mx.array([[(1 + 3) / 2, (2 + 4) / 2], [5, 6]])
     ), "global_mean_pool with batch failed"
-
-
-test_global_max_pooling()
