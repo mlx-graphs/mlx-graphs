@@ -2,7 +2,9 @@ from typing import Literal, Optional, get_args
 
 import mlx.core as mx
 
-ScatterAggregations = Literal["add", "max", "softmax"]
+from mlx_graphs.utils.array_ops import broadcast
+
+ScatterAggregations = Literal["add", "max", "mean", "softmax"]
 
 
 def scatter(
@@ -12,23 +14,25 @@ def scatter(
     aggr: ScatterAggregations = "add",
     axis: Optional[int] = 0,
 ) -> mx.array:
-    """
-    Default function for performing all scattering operations.
+    """Default function for performing all scattering operations.
     Scatters `values` at `index` in an empty array of `out_size` elements.
 
     Args:
-        values (mx.array): array with all the values to scatter in the output tensor
-        index (mx.array): array with index to which scatter the values
+        values (mlx.core.array): array with all the values to scatter in the output tensor
+        index (mlx.core.array): array with index to which scatter the values
         out_size (int, optional): number of elements in the output array (size of the first dimension).
-            If not provided, use the number of elements in `values`
+            If not provided, uses the number of elements in `values`
         aggr (Literal) ["add" | "max" | "softmax"]: scattering method employed for reduction at index
         axis (int, optional): axis on which applying the scattering
 
     Returns:
-        mx.array: array with `out_size` elements containing the scattered values at given index
+        mlx.core.array: array with `out_size` elements containing the scattered values at given index
             following the given `aggr` reduction method
 
     Example:
+
+    .. code-block:: python
+
         src = mx.array([1., 1., 1., 1.])
         index = mx.array([0, 0, 1, 2])
         num_nodes = src.shape[0]
@@ -50,6 +54,8 @@ def scatter(
 
     if aggr == "softmax":
         return scatter_softmax(values, index, out_size)
+    if aggr == "mean":
+        return scatter_mean(values, index, out_size)
 
     out_shape = values.shape
     out_shape[axis] = out_size
@@ -65,56 +71,81 @@ def scatter(
 
 
 def scatter_add(src: mx.array, index: mx.array, values: mx.array):
-    """
-    Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
+    """Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
     of the values will be assigned to these index.
 
-    Parameters:
-        src (mx.array): Source array where the values will be scattered (often an empty array)
-        index (mx.array): Array containing indices that determine the scatter of the 'values'.
-        values (mx.array): Input array containing values to be scattered.
+    Args:
+        src (mlx.core.array): Source array where the values will be scattered (often an empty array)
+        index (mlx.core.array): Array containing indices that determine the scatter of the 'values'.
+        values (mlx.core.array): Input array containing values to be scattered.
 
     Returns:
-        mx.array: The resulting array after applying scatter and sum operations on the values
+        mlx.core.array: The resulting array after applying scatter and sum operations on the values
             at duplicate indices
     """
     return src.at[index].add(values)
 
 
 def scatter_max(src: mx.array, index: mx.array, values: mx.array):
-    """
-    Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
+    """Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
     value is kept at these indices.
 
-    Parameters:
-        src (mx.array): Source array where the values will be scattered (often an empty array)
-        index (mx.array): Array containing indices that determine the scatter of the 'values'.
-        values (mx.array): Input array containing values to be scattered.
+    Args:
+        src (mlx.core.array): Source array where the values will be scattered (often an empty array)
+        index (mlx.core.array): Array containing indices that determine the scatter of the 'values'.
+        values (mlx.core.array): Input array containing values to be scattered.
 
     Returns:
-        mx.array: The resulting array after applying scatter and max operations on the values
+        mlx.core.array: The resulting array after applying scatter and max operations on the values
             at duplicate indices
     """
     return src.at[index].maximum(values)
 
 
+def scatter_mean(
+    values: mx.array, index: mx.array, out_size: int, axis: int = 0
+) -> mx.array:
+    """Computes the mean of values that are scattered along a specified axis, grouped by index.
+
+    Args:
+        values (mlx.core.array): Input array containing values to be scattered. These values will
+            undergo a scatter and mean operation.
+        index (mlx.core.array): Array containing indices that determine the scatter of the `values`.
+        out_size (int): Size of the output array.
+        axis (int, optional): Axis along which to scatter.
+
+    Returns:
+        mlx.core.array: An array containing mean of `values` grouped by `index`.
+    """
+    scatt_add = scatter(values, index, out_size, aggr="add", axis=axis)
+    out_size = scatt_add.shape[axis]
+
+    degrees = degree(index, out_size)
+    degrees = mx.where(degrees < 1, 1, degrees)  # Avoid 0 division
+    degrees = broadcast(degrees, scatt_add, axis)  # Match the shapes for division
+
+    return mx.divide(scatt_add, degrees)
+
+
 def scatter_softmax(
     values: mx.array, index: mx.array, out_size: int, axis: int = 0
 ) -> mx.array:
-    """
-    Compute the softmax of values that are scattered along a specified axis, grouped by index.
+    """Computes the softmax of values that are scattered along a specified axis, grouped by index.
 
-    Parameters:
-        values (mx.array): Input array containing values to be scattered. These values will
-                        undergo a scatter and softmax operation
-        index (mx.array): Array containing indices that determine the scatter of the 'values'.
-        out_size (int, optional): Size of the output array
+    Args:
+        values (mlx.core.array): Input array containing values to be scattered. These values will
+            undergo a scatter and softmax operation
+        index (mlx.core.array): Array containing indices that determine the scatter of the 'values'.
+        out_size (int): Size of the output array
         axis (int, optional): Axis along which to scatter
 
     Returns:
-        mx.array: The resulting array after applying scatter and softmax operations on the input 'values'.
+        mlx.core.array: The resulting array after applying scatter and softmax operations on the input 'values'.
 
     Example:
+
+    .. code-block:: python
+
         src = mx.array([1., 1., 1., 1.])
         index = mx.array([0, 0, 1, 2])
         num_nodes = src.shape[0]
@@ -132,3 +163,25 @@ def scatter_softmax(
 
     eps = 1e-16
     return out / (scatt_sum + eps)
+
+
+def degree(index: mx.array, num_nodes: int = None) -> mx.array:
+    """Counts the number of ocurrences of each node in the given `index`.
+
+    Args:
+        index (mlx.core.array): Array with node indices, usually src or dst of an `edge_index`.
+        num_nodes (int, optional): Size of the output degree array. If not provided, the number
+            of nodes will be inferred from the `index`.
+
+    Returns:
+        mlx.core.array: Array of length `num_nodes` with the degree of each node.
+    """
+    if index.ndim != 1:
+        raise ValueError(
+            f"The `degree` function requires a 1D index array, found {index.ndim}."
+        )
+
+    num_nodes = num_nodes if num_nodes is not None else index.max().item() + 1
+
+    ones = mx.ones((index.shape[0],))
+    return scatter(ones, index, num_nodes, "add")

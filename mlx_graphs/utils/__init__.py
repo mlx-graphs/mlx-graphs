@@ -1,7 +1,7 @@
 from .inits import (
     glorot_init,  # noqa
 )
-from .scatter import ScatterAggregations, scatter  # noqa
+from .scatter import ScatterAggregations, scatter, degree  # noqa
 from .transformations import (
     get_src_dst_features,  # noqa
     to_edge_index,  # noqa

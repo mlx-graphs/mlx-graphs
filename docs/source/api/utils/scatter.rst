@@ -14,4 +14,6 @@ Scatter
 	scatter
 	scatter_add
 	scatter_max
+	scatter_mean
 	scatter_softmax
+	degree
