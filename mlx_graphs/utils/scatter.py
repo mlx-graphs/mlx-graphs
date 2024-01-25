@@ -14,7 +14,7 @@ def scatter(
     aggr: ScatterAggregations = "add",
     axis: Optional[int] = 0,
 ) -> mx.array:
-    """Default function for performing all scattering operations.
+    r"""Default function for performing all scattering operations.
     Scatters `values` at `index` in an empty array of `out_size` elements.
 
     Args:
@@ -68,7 +68,7 @@ def scatter(
 
 
 def scatter_add(src: mx.array, index: mx.array, values: mx.array):
-    """Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
+    r"""Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
     of the values will be assigned to these index.
 
     Args:
@@ -84,7 +84,7 @@ def scatter_add(src: mx.array, index: mx.array, values: mx.array):
 
 
 def scatter_max(src: mx.array, index: mx.array, values: mx.array):
-    """Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
+    r"""Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
     value is kept at these indices.
 
     Args:
@@ -102,7 +102,7 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
 def scatter_mean(
     values: mx.array, index: mx.array, out_size: int, axis: int = 0
 ) -> mx.array:
-    """Computes the mean of values that are scattered along a specified axis, grouped by index.
+    r"""Computes the mean of values that are scattered along a specified axis, grouped by index.
 
     Args:
         values (mx.array): Input array containing values to be scattered. These values will
@@ -127,7 +127,7 @@ def scatter_mean(
 def scatter_softmax(
     values: mx.array, index: mx.array, out_size: int, axis: int = 0
 ) -> mx.array:
-    """Computes the softmax of values that are scattered along a specified axis, grouped by index.
+    r"""Computes the softmax of values that are scattered along a specified axis, grouped by index.
 
     Args:
         values (mx.array): Input array containing values to be scattered. These values will
@@ -160,7 +160,7 @@ def scatter_softmax(
 
 
 def degree(index: mx.array, num_nodes: int = None) -> mx.array:
-    """Counts the number of ocurrences of each node in the given `index`.
+    r"""Counts the number of ocurrences of each node in the given `index`.
 
     Args:
         index (mx.array): Array with node indices, usually src or dst of an `edge_index`.
