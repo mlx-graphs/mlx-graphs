@@ -76,8 +76,7 @@ class GATConv(MessagePassing):
         node_features: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes the forward pass of GATConv.
+        """Computes the forward pass of GATConv.
 
         Args:
             edge_index (mx.array): input edge index of shape (2, |E|)
@@ -129,10 +128,9 @@ class GATConv(MessagePassing):
         index: mx.array = None,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes a message for each edge in the graph following GAT's propagation rule.
+        """Computes a message for each edge in the graph following GAT's propagation rule.
 
-        Parameters:
+        Args:
             src_features (mx.array): Features of the source nodes.
             dst_features (mx.array): Features of the destination nodes (not used in this function but included for compatibility).
             alpha_src (mx.array, optional): Precomputed attention values for the source nodes.
