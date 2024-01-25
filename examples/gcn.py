@@ -15,7 +15,7 @@ from mlx_graphs.nn.conv.gcn_conv import GCNConv
 
 
 class GCN(nn.Module):
-    r"""Graph Convolutional Network implementation [1]
+    """Graph Convolutional Network implementation [1]
 
     Args:
         node_features_dim (int): Size of input node features

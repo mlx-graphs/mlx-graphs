@@ -7,8 +7,8 @@ def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
     May be required in some situations like index broadcasting.
 
     Args:
-        src (mx.array): source array to broadcast.
-        other (mx.array): other array to match the shape.
+        src mlx.core.array: source array to broadcast.
+        other mlx.core.array: other array to match the shape.
 
     Returns:
         mx.array: array with new broadcastable shape.
@@ -29,7 +29,7 @@ def expand(array: mx.array, new_shape: tuple) -> mx.array:
     Expand the dimensions of an array to a new shape.
 
     Args:
-        array (mx.array): The array to expand.
+        array mlx.core.array: The array to expand.
         new_shape (tuple): The new shape desired. The new dimensions must be compatible
                        with the original shape of the array.
 

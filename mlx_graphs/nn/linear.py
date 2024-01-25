@@ -4,7 +4,7 @@ from mlx_graphs.utils import glorot_init
 
 
 class Linear(nn.Linear):
-    r"""Linear layer with Xavier Glorot weight inititalization.
+    """Linear layer with Xavier Glorot weight inititalization.
 
     This Linear class inherits from `mx.nn.Linear`, but uses glorot
     initialization instead of the default initialization in mlx's Linear.

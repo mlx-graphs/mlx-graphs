@@ -9,7 +9,7 @@ from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
 
 
 class GATConv(MessagePassing):
-    r"""Graph Attention Network convolution layer.
+    """Graph Attention Network convolution layer.
 
     Args:
         node_features_dim (int): Size of input node features
@@ -76,12 +76,11 @@ class GATConv(MessagePassing):
         node_features: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes the forward pass of GATConv.
+        """Computes the forward pass of GATConv.
 
         Args:
-            edge_index (mx.array): input edge index of shape (2, |E|)
-            node_features (mx.array): input node features
+            edge_index mlx.core.array: input edge index of shape (2, |E|)
+            node_features mlx.core.array: input node features
             edge_features (optional mx.array) edge features of shape (2, |E|)
 
         Returns:
@@ -129,12 +128,11 @@ class GATConv(MessagePassing):
         index: mx.array = None,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes a message for each edge in the graph following GAT's propagation rule.
+        """Computes a message for each edge in the graph following GAT's propagation rule.
 
-        Parameters:
-            src_features (mx.array): Features of the source nodes.
-            dst_features (mx.array): Features of the destination nodes (not used in this function but included for compatibility).
+        Args:
+            src_features mlx.core.array: Features of the source nodes.
+            dst_features mlx.core.array: Features of the destination nodes (not used in this function but included for compatibility).
             alpha_src (mx.array, optional): Precomputed attention values for the source nodes.
             alpha_dst (mx.array, optional): Precomputed attention values for the destination nodes.
             index (mx.array, optional): 1D array with indices of either src or dst nodes to compute softmax.
