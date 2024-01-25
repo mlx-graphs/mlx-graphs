@@ -9,7 +9,7 @@ from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
 
 
 class GATConv(MessagePassing):
-    r"""Graph Attention Network convolution layer.
+    """Graph Attention Network convolution layer.
 
     Args:
         node_features_dim (int): Size of input node features

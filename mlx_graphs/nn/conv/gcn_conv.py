@@ -8,7 +8,7 @@ from mlx_graphs.utils import degree
 
 
 class GCNConv(MessagePassing):
-    r"""Applies a GCN convolution over input node features.
+    """Applies a GCN convolution over input node features.
 
     Args:
         node_features_dim (int): size of input node features

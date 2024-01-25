@@ -7,7 +7,7 @@ from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 
 class MessagePassing(nn.Module):
-    r"""Base class for creating Message Passing Neural Networks (MPNNs) [1].
+    """Base class for creating Message Passing Neural Networks (MPNNs) [1].
 
     Inherit this class to build arbitrary GNN models based on the message
     passing paradigm. This implementation is inspired from PyTorch Geometric [2].
@@ -44,7 +44,7 @@ class MessagePassing(nn.Module):
         aggregate_kwargs: Optional[Dict] = {},
         update_kwargs: Optional[Dict] = {},
     ) -> mx.array:
-        r"""Computes messages from neighbors, aggregates them and updates
+        """Computes messages from neighbors, aggregates them and updates
         the final node embeddings.
 
         Args:
@@ -90,7 +90,7 @@ class MessagePassing(nn.Module):
     def message(
         self, src_features: mx.array, dst_features: mx.array, **kwargs: Any
     ) -> mx.array:
-        r"""Computes messages between connected nodes.
+        """Computes messages between connected nodes.
 
         Args:
             src_features (mx.array): Source node embeddings
@@ -102,7 +102,7 @@ class MessagePassing(nn.Module):
     def aggregate(
         self, messages: mx.array, indices: mx.array, **kwargs: Any
     ) -> mx.array:
-        r"""Aggregates the messages using the `self.aggr` strategy.
+        """Aggregates the messages using the `self.aggr` strategy.
 
         Args:
             messages (mx.array): Computed messages
@@ -112,7 +112,7 @@ class MessagePassing(nn.Module):
         return scatter(messages, indices, self.num_nodes, self.aggr)
 
     def update_nodes(self, aggregated: mx.array, **kwargs: Any) -> mx.array:
-        r"""Updates the final embeddings given the aggregated messages.
+        """Updates the final embeddings given the aggregated messages.
 
         Args:
             aggregated (mx.array): aggregated messages

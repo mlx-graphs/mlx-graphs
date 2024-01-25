@@ -8,7 +8,7 @@ from mlx_graphs.utils import scatter
 def global_add_pool(
     node_features: mx.array, batch: Optional[mx.array] = None
 ) -> mx.array:
-    r"""Sums all node features to obtain a global graph-level representation.
+    """Sums all node features to obtain a global graph-level representation.
 
     If `batch` is provided, applies pooling for each graph in the batch.
     The returned shape is (1, node_features_dim) if `batch` is None, otherise
@@ -32,7 +32,7 @@ def global_add_pool(
 def global_max_pool(
     node_features: mx.array, batch: Optional[mx.array] = None
 ) -> mx.array:
-    r"""Takes the feature-wise maximum value along all node features to obtain
+    """Takes the feature-wise maximum value along all node features to obtain
     a global graph-level representation.
 
     If `batch` is provided, applies pooling for each graph in the batch.
@@ -57,7 +57,7 @@ def global_max_pool(
 def global_mean_pool(
     node_features: mx.array, batch: Optional[mx.array] = None
 ) -> mx.array:
-    r"""Takes the feature-wise mean value along all node features to obtain
+    """Takes the feature-wise mean value along all node features to obtain
     a global graph-level representation.
 
     If `batch` is provided, applies pooling for each graph in the batch.
