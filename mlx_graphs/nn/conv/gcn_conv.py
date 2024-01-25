@@ -4,7 +4,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils.scatter import scatter
+from mlx_graphs.utils import degree
 
 
 class GCNConv(MessagePassing):
@@ -44,7 +44,7 @@ class GCNConv(MessagePassing):
         # Compute node degree normalization for the mean aggregation.
         norm: mx.array = None
         if normalize:
-            deg = self._degree(col, node_features.shape[0])
+            deg = degree(col, node_features.shape[0])
             deg_inv_sqrt = deg ** (-0.5)
             # NOTE : need boolean indexing in order to zero out inf values
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
@@ -73,7 +73,3 @@ class GCNConv(MessagePassing):
             if edge_weight is None
             else edge_weight.reshape(-1, 1) * src_features
         )
-
-    def _degree(self, index: mx.array, num_edges: int) -> mx.array:
-        one = mx.ones((index.shape[0],))
-        return scatter(one, index, num_edges, "add")
