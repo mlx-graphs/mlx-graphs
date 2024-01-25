@@ -15,12 +15,12 @@ def global_add_pool(
     the shape is (num_batches, node_features_dim).
 
     Args:
-        node_features (mx.array): Node features array.
-        batch (mx.array, optional): Batch array of shape (node_features.shape[0]),
+        node_features (mlx.core.array): Node features array.
+        batch (mlx.core.array, optional): Batch array of shape (node_features.shape[0]),
             indicating for each node its batch index.
 
     Returns:
-        mx.array: An array with summed node features for all provided graphs.
+        mlx.core.array: An array with summed node features for all provided graphs.
     """
     if batch is None:
         return node_features.sum(axis=0, keepdims=True)
@@ -40,12 +40,12 @@ def global_max_pool(
     the shape is (num_batches, node_features_dim).
 
     Args:
-        node_features (mx.array): Node features array.
-        batch (mx.array, optional): Batch array of shape (node_features.shape[0]),
+        node_features (mlx.core.array): Node features array.
+        batch (mlx.core.array, optional): Batch array of shape (node_features.shape[0]),
             indicating for each node its batch index.
 
     Returns:
-        mx.array: An array with maximum node features for all provided graphs.
+        mlx.core.array: An array with maximum node features for all provided graphs.
     """
     if batch is None:
         return node_features.max(axis=0, keepdims=True)
@@ -65,12 +65,12 @@ def global_mean_pool(
     the shape is (num_batches, node_features_dim).
 
     Args:
-        node_features (mx.array): Node features array.
-        batch (mx.array, optional): Batch array of shape (node_features.shape[0]),
+        node_features (mlx.core.array): Node features array.
+        batch (mlx.core.array, optional): Batch array of shape (node_features.shape[0]),
             indicating for each node its batch index.
 
     Returns:
-        mx.array: An array with averaged node features for all provided graphs.
+        mlx.core.array: An array with averaged node features for all provided graphs.
     """
     if batch is None:
         return node_features.mean(axis=0, keepdims=True)

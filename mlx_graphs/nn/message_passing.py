@@ -48,7 +48,7 @@ class MessagePassing(nn.Module):
         the final node embeddings.
 
         Args:
-            edge_index (mx.array): Graph representation of shape (2, |E|) in COO format
+            edge_index mlx.core.array: Graph representation of shape (2, |E|) in COO format
             node_features (Union[mx.array, Tuple[mx.array, mx.array]]): Input node features/embeddings.
                 Can be either an array or a tuple of arrays, for distinct src and dst node features.
             message_kwargs (Dict, optional): Arguments to pass to the `message` method
@@ -93,8 +93,8 @@ class MessagePassing(nn.Module):
         """Computes messages between connected nodes.
 
         Args:
-            src_features (mx.array): Source node embeddings
-            dst_features (mx.array): Destination node embeddings
+            src_features mlx.core.array: Source node embeddings
+            dst_features mlx.core.array: Destination node embeddings
             **kwargs (Any): Optional args to compute messages
         """
         return src_features
@@ -105,8 +105,8 @@ class MessagePassing(nn.Module):
         """Aggregates the messages using the `self.aggr` strategy.
 
         Args:
-            messages (mx.array): Computed messages
-            indices: (mx.array): Indices representing the nodes that receive messages
+            messages mlx.core.array: Computed messages
+            indices: mlx.core.array: Indices representing the nodes that receive messages
             **kwargs (Any): Optional args to aggregate messages
         """
         return scatter(messages, indices, self.num_nodes, self.aggr)
@@ -115,7 +115,7 @@ class MessagePassing(nn.Module):
         """Updates the final embeddings given the aggregated messages.
 
         Args:
-            aggregated (mx.array): aggregated messages
+            aggregated mlx.core.array: aggregated messages
             **kwargs (Any): optional args to update messages
         """
         return aggregated

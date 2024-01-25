@@ -131,9 +131,9 @@ def get_src_dst_features(
     Extracts source and destination node features based on the given edge indices.
 
     Args:
-        edge_index (mx.array): An array of shape (2, number_of_edges), where each columns contains the source
+        edge_index mlx.core.array: An array of shape (2, number_of_edges), where each columns contains the source
                 and destination nodes of an edge.
-        node_features (mx.array): The input array of node features.
+        node_features mlx.core.array: The input array of node features.
 
     Returns:
         Tuple[mx.array, mx.array]: A tuple containing source and destination features.
