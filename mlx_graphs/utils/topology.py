@@ -15,13 +15,13 @@ def is_undirected(
     and optional edge features.
 
     Args:
-        edge_index (mlx.core.array): The edge index of the graph.
-        edge_features (mlx.core.array, optional): Edge features associated
+        edge_index: The edge index of the graph.
+        edge_features: Edge features associated
             with each edge. If provided, the function considers both edge indices
             and features for the check.
 
     Returns:
-        bool: True if the graph is undirected, False otherwise.
+        True if the graph is undirected, False otherwise.
     """
     # The function checks if the sorted order of source-destination pairs is equal
     # to the sorted order of destination-source pairs. If edge features are provided,
@@ -53,12 +53,12 @@ def is_directed(edge_index: mx.array, edge_features: Optional[mx.array] = None) 
     and optional edge features.
 
     Args:
-        edge_index (mlx.core.array): The edge index of the graph.
-        edge_features (mlx.core.array, optional): Edge features associated
+        edge_index: The edge index of the graph.
+        edge_features: Edge features associated
             with each edge. If provided, the function considers both edge indices
             and features for the check.
 
     Returns:
-        bool: True if the graph is directed, False otherwise.
+        True if the graph is directed, False otherwise.
     """
     return not is_undirected(edge_index, edge_features)

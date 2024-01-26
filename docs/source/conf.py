@@ -15,18 +15,20 @@ release = "0.0.1"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
 
 extensions = [
-    "sphinx.ext.doctest",
     "sphinx.ext.autodoc",
     "sphinx.ext.autosummary",
     "sphinx.ext.napoleon",
+    "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
 ]
 
 napoleon_use_param = True
 napoleon_google_docstring = True
 # napoleon_preprocess_types = True
+napoleon_attr_annotations = True
+typehints_use_signature = True
+typehints_use_signature_return = True
 autosummary_generate = True
-autodoc_typehints_format = "short"
 
 templates_path = ["_templates"]
 exclude_patterns = []
