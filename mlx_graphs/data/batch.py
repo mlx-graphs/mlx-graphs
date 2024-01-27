@@ -29,22 +29,27 @@ class GraphDataBatch(GraphData):
 
         lower_last_bound = self.cumsum[idx].item()
         upper_bound = self.cumsum[idx + 1].item()
-        node_features = self.node_features[lower_last_bound:upper_bound]
+        large_graph_dict = {
+            attr: getattr(self, attr)
+            for attr in self.to_dict()
+            if attr not in {"cumsum", "num_graphs", "slices"}
+        }
+        single_graph_dict = {}
+        for attr in large_graph_dict:
+            if self.__inc__(attr):
+                mask = (getattr(self, attr) >= lower_last_bound) & (
+                    getattr(self, attr) <= upper_bound
+                )
+                mask = mask[0] & mask[1]
+                indices = mx.array([i for i, e in enumerate(mask) if e])
+                value = getattr(self, attr)[:, indices] - lower_last_bound
+                single_graph_dict[attr] = value
+            else:
+                single_graph_dict[attr] = getattr(self, attr)[
+                    lower_last_bound:upper_bound
+                ]
 
-        mask = (self.edge_index >= lower_last_bound) & (self.edge_index <= upper_bound)
-
-        mask = mask[0] & mask[1]
-
-        # NOTE : since boolean indexing isn't yet available we need to deduce the indices
-        indices = mx.array([i for i, e in enumerate(mask) if e])
-
-        # undo the increment induced by the batching
-        edge_index = self.edge_index[:, indices] - lower_last_bound
-
-        return GraphData(
-            node_features=node_features,
-            edge_index=edge_index,
-        )
+        return GraphData(**single_graph_dict)
 
 
 def batch(graphs: List[GraphData], collate_fn: Callable = collate) -> GraphDataBatch:
