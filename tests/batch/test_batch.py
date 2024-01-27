@@ -1,6 +1,7 @@
 import mlx.core as mx
 from mlx_graphs.data.batch import batch
 from mlx_graphs.data.data import GraphData
+from mlx_graphs.data.collate import collate
 
 
 def test_batching():
@@ -11,7 +12,7 @@ def test_batching():
     g1 = GraphData(node_features=node_features1, edge_index=edge_index1)
     g2 = GraphData(node_features=node_features2, edge_index=edge_index2)
 
-    graph_batch = batch([g1, g2])
+    graph_batch = batch([g1, g2], collate_fn=collate)
 
     expected_global_node_features = mx.array(
         [

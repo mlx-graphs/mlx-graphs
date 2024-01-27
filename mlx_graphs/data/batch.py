@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Callable
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
@@ -47,7 +47,7 @@ class GraphDataBatch(GraphData):
         )
 
 
-def batch(graphs: List[GraphData]) -> GraphDataBatch:
+def batch(graphs: List[GraphData], collate_fn: Callable = collate) -> GraphDataBatch:
     """
     Constructs a :class:`mlx_graphs.batch.Batch` object from a
     list of :class:`~mlx_graphs.data.GraphData`
@@ -56,7 +56,7 @@ def batch(graphs: List[GraphData]) -> GraphDataBatch:
     if not isinstance(graphs, (list, tuple)):
         graphs = list(graphs)
 
-    global_dict = collate(graphs)
+    global_dict = collate_fn(graphs)
 
     return GraphDataBatch(**global_dict)
 
