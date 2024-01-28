@@ -1,4 +1,4 @@
-from typing import Optional, Any
+from typing import Optional
 
 import mlx.core as mx
 
@@ -54,7 +54,7 @@ class GraphData:
 
         return f"{type(self).__name__}({', '.join(strings)})"
 
-    def to_dict(self):
+    def to_dict(self) -> dict:
         """Converts the Data object to a dictionary.
 
         Returns:
@@ -66,12 +66,42 @@ class GraphData:
     def num_nodes(self) -> int:
         return self.node_features.shape[0]
 
-    def __cat_dim__(self, key: str, *args, **kwargs):
+    def __cat_dim__(self, key: str, *args, **kwargs) -> int:
+        """This method can be overriden when batching is used with custom attributes.
+        Given the name of a custom attribute `key`, returns the dimension where the
+        concatenation happens during batching.
+
+        By default, all attribute names containing "index" will be concatenated on axis 1,
+        e.g. `edge_index`. Other attributes are concatenated on axis 0, e.g. node features.
+
+        Args:
+            key: Name of the attribute on which change the default concatenation dimension
+                while using batching.
+
+        Returns:
+            int: The dimension where concatenation will happen when batching.
+        """
         if "index" in key:
             return 1
         return 0
 
-    def __inc__(self, key: str, *args, **kwargs) -> Any:
+    def __inc__(self, key: str, *args, **kwargs) -> bool:
+        """This method can be overriden when batching is used with custom attributes.
+        Given the name of a custom attribute `key`, returns the whether the values
+        of the attribute should be incremented by the cumulative sum of previous batches'
+        number of nodes.
+
+        By default, all attribute names containing "index" will be incremented to avoid
+        duplicate nodes in the index, e.g. `edge_index`.
+        Other attributes are cnot incremented and keep their original values, e.g. node features.
+
+        Args:
+            key: Name of the attribute on which change the default incrementation behavior
+                while using batching.
+
+        Returns:
+            bool: Whether to use incrementation of values for a given attribute.
+        """
         if "index" in key:
             return True
         return False
