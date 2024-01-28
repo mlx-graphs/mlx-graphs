@@ -51,6 +51,12 @@ def collate(graph_list: list[GraphData]) -> dict:
             batch_attr_dict[f"_inc_{attr}"] = True
             batch_attr_dict[f"_cumsum_{attr}"] = cumsum
 
+        if attr == "edge_index":
+            batch_indices = []
+            for i in range(len(cumsum) - 1):
+                batch_indices.extend([i] * (cumsum[i + 1] - cumsum[i]).item())
+            batch_attr_dict["_batch_indices"] = mx.array(batch_indices)
+
         batch_attr_dict[attr] = mx.concatenate(attr_list, axis=__cat_dim__)
 
     return batch_attr_dict

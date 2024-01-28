@@ -264,3 +264,18 @@ def test_batching():
         g1 = GraphData(node_features=node_features1, edge_index=edge_index1)
         g2 = Data(node_features=node_features2, edge_index=edge_index2)
         graph_batch = batch([g1, g2])
+
+    # Batch indices
+    g1 = GraphData(node_features=node_features1, edge_index=edge_index1)
+    g2 = GraphData(node_features=node_features2, edge_index=edge_index2)
+    g3 = GraphData(node_features=node_features2, edge_index=edge_index2)
+
+    graph_batch = batch([g1, g2, g3])
+    assert mx.array_equal(
+        graph_batch.batch_indices, mx.array([0, 0, 0, 0, 1, 1, 1, 2, 2, 2])
+    ), "Batch batch_indices failed"
+
+    graph_batch = batch([g1])
+    assert mx.array_equal(
+        graph_batch.batch_indices, mx.array([0, 0, 0, 0])
+    ), "Batch batch_indices single graph failed"

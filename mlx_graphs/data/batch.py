@@ -69,6 +69,10 @@ class GraphDataBatch(GraphData):
     def num_graphs(self):
         return self._num_graphs
 
+    @property
+    def batch_indices(self):
+        return self._batch_indices
+
     def __getitem__(self, idx: Union[int, slice]) -> Union[GraphData, list[GraphData]]:
         if isinstance(idx, int):
             idx = self._handle_neg_index_if_needed(idx)
