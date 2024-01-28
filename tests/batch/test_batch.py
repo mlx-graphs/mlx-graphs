@@ -279,3 +279,41 @@ def test_batching():
     assert mx.array_equal(
         graph_batch.batch_indices, mx.array([0, 0, 0, 0])
     ), "Batch batch_indices single graph failed"
+
+    # Slicing with lists and arrays
+    graph_batch = batch([g1, g2, g3])
+    indices = [0, 1, 1]
+    sliced = graph_batch[indices]
+
+    assert mx.array_equal(sliced[0].node_features, node_features1) and mx.array_equal(
+        sliced[0].edge_index, edge_index1
+    ), "Batch slicing with list failed"
+    assert mx.array_equal(sliced[1].node_features, node_features2) and mx.array_equal(
+        sliced[1].edge_index, edge_index2
+    ), "Batch slicing with list failed"
+    assert mx.array_equal(sliced[2].node_features, node_features2) and mx.array_equal(
+        sliced[2].edge_index, edge_index2
+    ), "Batch slicing with list failed"
+
+    indices = mx.array([0, 1, 1])
+    sliced = graph_batch[indices]
+
+    assert mx.array_equal(sliced[0].node_features, node_features1) and mx.array_equal(
+        sliced[0].edge_index, edge_index1
+    ), "Batch slicing with list failed"
+    assert mx.array_equal(sliced[1].node_features, node_features2) and mx.array_equal(
+        sliced[1].edge_index, edge_index2
+    ), "Batch slicing with list failed"
+    assert mx.array_equal(sliced[2].node_features, node_features2) and mx.array_equal(
+        sliced[2].edge_index, edge_index2
+    ), "Batch slicing with list failed"
+
+    indices = mx.array([-1, -2])
+    sliced = graph_batch[indices]
+
+    assert mx.array_equal(sliced[0].node_features, node_features2) and mx.array_equal(
+        sliced[0].edge_index, edge_index2
+    ), "Batch slicing with list failed"
+    assert mx.array_equal(sliced[1].node_features, node_features2) and mx.array_equal(
+        sliced[1].edge_index, edge_index2
+    ), "Batch slicing with list failed"
