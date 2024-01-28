@@ -31,8 +31,8 @@ def collate(graph_list: list[GraphData]) -> dict:
 
         cumsum: mx.array = None
         if __inc__:
-            num_nodes_list = [graph.num_nodes for graph in graph_list]
-            cumsum = mx.cumsum(mx.array([0] + num_nodes_list))
+            num_attr_list = [getattr(graph, "__inc__")(attr) for graph in graph_list]
+            cumsum = mx.cumsum(mx.array([0] + num_attr_list))
 
         attr_list, attr_sizes = [], []
         for i, graph in enumerate(graph_list):
@@ -47,9 +47,9 @@ def collate(graph_list: list[GraphData]) -> dict:
         # Private attributes are used later in batching for indexing
         batch_attr_dict[f"_size_{attr}"] = mx.array(attr_sizes)
         batch_attr_dict[f"_cat_dim_{attr}"] = __cat_dim__
-        batch_attr_dict[f"_inc_{attr}"] = __inc__
         if __inc__:
-            batch_attr_dict["_cumsum"] = cumsum
+            batch_attr_dict[f"_inc_{attr}"] = True
+            batch_attr_dict[f"_cumsum_{attr}"] = cumsum
 
         batch_attr_dict[attr] = mx.concatenate(attr_list, axis=__cat_dim__)
 

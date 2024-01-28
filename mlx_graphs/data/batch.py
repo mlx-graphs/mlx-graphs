@@ -120,11 +120,8 @@ class GraphDataBatch(GraphData):
 
             # If __inc__ is True, we get back the original values by subtracting
             # the cumulative sum at the batch index
-            if self.to_dict()[f"_inc_{attr}"]:
-                original_value -= self._cumsum[idx]
-
-            # NOTE: `self._cumsum` is the cumsum of number of nodes per graph. For custom features
-            # with __inc__, each feature should have its own cumsum
+            if f"_inc_{attr}" in self.to_dict():
+                original_value -= self.to_dict()[f"_cumsum_{attr}"][idx]
 
             single_graph_dict[attr] = original_value
 

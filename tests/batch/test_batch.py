@@ -98,7 +98,7 @@ def test_batching():
         graph_batch[1].custom_attr, custom_attr2D_2
     ), "Batch default indexing with custom attribute 2D failed"
 
-    # Custom attributes with custom __cat_dim__ & __incr__
+    # Custom attributes with custom __cat_dim__ & __inc__
     custom_attr_1 = mx.array([[1, 2], [3, 4], [5, 6]])
     custom_attr_2 = mx.array([[7, 8], [9, 10], [11, 12]])
 
@@ -113,8 +113,8 @@ def test_batching():
 
         def __inc__(self, key):
             if key == "custom_attr" or "index" in key:
-                return True
-            return False
+                return len(self.node_features)
+            return None
 
     g1 = CustomData(
         node_features=node_features1, edge_index=edge_index1, custom_attr=custom_attr_1
@@ -129,13 +129,13 @@ def test_batching():
 
     assert mx.array_equal(
         graph_batch.custom_attr, expect
-    ), "Batch with custom __cat_dim__ and __incr__ failed"
+    ), "Batch with custom __cat_dim__ and __inc__ failed"
     assert mx.array_equal(
         graph_batch[0].custom_attr, custom_attr_1
-    ), "Batch indexing with custom __cat_dim__ and __incr__ failed"
+    ), "Batch indexing with custom __cat_dim__ and __inc__ failed"
     assert mx.array_equal(
         graph_batch[1].custom_attr, custom_attr_2
-    ), "Batch indexing with custom __cat_dim__ and __incr__ failed"
+    ), "Batch indexing with custom __cat_dim__ and __inc__ failed"
 
     # Batch backward indexing
     mock_edge_index = mx.array([[0, 1, 0, 1], [0, 1, 0, 1]])

@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Optional, Union
 
 import mlx.core as mx
 
@@ -85,23 +85,24 @@ class GraphData:
             return 1
         return 0
 
-    def __inc__(self, key: str, *args, **kwargs) -> bool:
+    def __inc__(self, key: str, *args, **kwargs) -> Union[int, None]:
         """This method can be overriden when batching is used with custom attributes.
-        Given the name of a custom attribute `key`, returns the whether the values
-        of the attribute should be incremented by the cumulative sum of previous batches'
-        number of nodes.
+        Given the name of a custom attribute `key`, returns an integer indicating the
+        incrementing value to applu to the elemnts of the attribute.
 
-        By default, all attribute names containing "index" will be incremented to avoid
-        duplicate nodes in the index, e.g. `edge_index`.
-        Other attributes are cnot incremented and keep their original values, e.g. node features.
+        By default, all attribute names containing "index" will be incremented based on
+        the number of nodes in previous batches to avoid duplicate nodes in the index,
+        e.g. `edge_index`. Other attributes are cnot incremented and keep their original
+        values, e.g. node features.
+        If incrementation is not used, the return value should be set to `None`.
 
         Args:
             key: Name of the attribute on which change the default incrementation behavior
                 while using batching.
 
         Returns:
-            bool: Whether to use incrementation of values for a given attribute.
+            Union[int, None]: Incrementing value for the given attribute or None.
         """
         if "index" in key:
-            return True
-        return False
+            return len(self.node_features)
+        return None
