@@ -7,6 +7,9 @@ Batch Objects
 
 
 .. autosummary::
-	:toctree: _autosummary
+	:toctree: _autosummary_batch
+
 
 	GraphDataBatch
+	batch
+	unbatch
