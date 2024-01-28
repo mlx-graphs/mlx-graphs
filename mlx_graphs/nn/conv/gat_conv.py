@@ -12,14 +12,14 @@ class GATConv(MessagePassing):
     """Graph Attention Network convolution layer.
 
     Args:
-        node_features_dim (int): Size of input node features
-        out_features_dim (int): Size of output node embeddings
-        heads (int): Number of attention heads
-        concat (bool): Whether to use concat of heads or mean reduction
-        bias (bool): Whether to use bias in the node projection
-        negative_slope (float): Slope for the leaky relu
-        dropout (float): Probability p for dropout
-        edge_features_dim (int, optional): Size of edge features
+        node_features_dim: Size of input node features
+        out_features_dim: Size of output node embeddings
+        heads: Number of attention heads
+        concat: Whether to use concat of heads or mean reduction
+        bias: Whether to use bias in the node projection
+        negative_slope: Slope for the leaky relu
+        dropout: Probability p for dropout
+        edge_features_dim: Size of edge features
 
     Example:
 
@@ -79,9 +79,9 @@ class GATConv(MessagePassing):
         """Computes the forward pass of GATConv.
 
         Args:
-            edge_index mlx.core.array: input edge index of shape (2, |E|)
-            node_features mlx.core.array: input node features
-            edge_features (optional mx.array) edge features of shape (2, |E|)
+            edge_index: input edge index of shape `[2, num_edges]`
+            node_features: input node features
+            edge_features: edge features
 
         Returns:
             mx.array: computed node embeddings
@@ -131,12 +131,12 @@ class GATConv(MessagePassing):
         """Computes a message for each edge in the graph following GAT's propagation rule.
 
         Args:
-            src_features mlx.core.array: Features of the source nodes.
-            dst_features mlx.core.array: Features of the destination nodes (not used in this function but included for compatibility).
-            alpha_src (mx.array, optional): Precomputed attention values for the source nodes.
-            alpha_dst (mx.array, optional): Precomputed attention values for the destination nodes.
-            index (mx.array, optional): 1D array with indices of either src or dst nodes to compute softmax.
-            edge_features (Optional[mx.array], optional): Features of the edges in the graph.
+            src_features: Features of the source nodes.
+            dst_features: Features of the destination nodes (not used in this function but included for compatibility).
+            alpha_src: Precomputed attention values for the source nodes.
+            alpha_dst: Precomputed attention values for the destination nodes.
+            index: 1D array with indices of either src or dst nodes to compute softmax.
+            edge_features: Features of the edges in the graph.
 
         Returns:
             mx.array: The computed messages for each edge in the graph.

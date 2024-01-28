@@ -8,6 +8,7 @@ Neural Networks
 
 .. autosummary::
 	:toctree: _autosummary
+	:template: custom-class-template.rst
 
 	Linear
 	MessagePassing

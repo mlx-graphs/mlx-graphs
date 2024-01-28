@@ -11,9 +11,9 @@ class GCNConv(MessagePassing):
     """Applies a GCN convolution over input node features.
 
     Args:
-        node_features_dim (int): size of input node features
-        out_features_dim (int): size of output node embeddings
-        bias (bool): whether to use bias in the node projection
+        node_features_dim: size of input node features
+        out_features_dim: size of output node embeddings
+        bias: whether to use bias in the node projection
     """
 
     def __init__(

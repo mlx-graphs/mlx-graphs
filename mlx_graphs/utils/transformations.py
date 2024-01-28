@@ -18,11 +18,11 @@ def to_edge_index(
     Converts an adjacency matrix to an edge index representation.
 
     Args:
-        adjacency_matrix (mlx.core.array): the input adjacency matrix
-        dtype (mlx.core.Dtype): type of the output edge_index. Default to uint32.
+        adjacency_matrix: the input adjacency matrix
+        dtype: type of the output edge_index. Default to uint32.
 
     Returns:
-        mlx.core.array: a [2, num_edges] array representing the source and target nodes of each edge
+        A [2, num_edges] array representing the source and target nodes of each edge
 
     Example:
 
@@ -52,11 +52,11 @@ def to_sparse_adjacency_matrix(
     Converts an adjacency matrix to a sparse representation as a tuple of edge index and edge features.
 
     Args:
-        adjacency_matrix (mlx.core.array): the input adjacency matrix
-        dtype (mlx.core.Dtype): type of the output edge_index. Default to uint32.
+        adjacency_matrix: the input adjacency matrix
+        dtype: type of the output edge_index. Default to uint32.
 
     Returns:
-        tuple[mlx.core.array, mlx.core.array]: A tuple representing the edge index and edge features
+        A tuple representing the edge index and edge features
 
     Example:
 
@@ -92,12 +92,12 @@ def to_adjacency_matrix(
     Converts an edge index representation to an adjacency matrix.
 
     Args:
-        edge_index (mlx.core.array): a [2, num_edges] array representing the source and target nodes of each edge
-        edge_features (mlx.core.array, optional): a 1-dimensional array representing the features corresponding to the edges in edge_index. Defaults to None.
-        num_nodes (int, optional): the number of nodes in the graph. Defaults to the number of nodes in edge_index
+        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
+        edge_features: a 1-dimensional array representing the features corresponding to the edges in edge_index. Defaults to None.
+        num_nodes: the number of nodes in the graph. Defaults to the number of nodes in edge_index
 
     Returns:
-        mlx.core.array: the resulting adjacency matrix
+        The resulting adjacency matrix
     """
     if num_nodes is not None:
         if mx.max(edge_index) > num_nodes - 1:
@@ -131,12 +131,12 @@ def get_src_dst_features(
     Extracts source and destination node features based on the given edge indices.
 
     Args:
-        edge_index mlx.core.array: An array of shape (2, number_of_edges), where each columns contains the source
+        edge_index: An array of shape (2, number_of_edges), where each columns contains the source
                 and destination nodes of an edge.
-        node_features mlx.core.array: The input array of node features.
+        node_features: The input array of node features.
 
     Returns:
-        Tuple[mx.array, mx.array]: A tuple containing source and destination features.
+        A tuple containing source and destination features.
     """
     src_idx, dst_idx = edge_index
 

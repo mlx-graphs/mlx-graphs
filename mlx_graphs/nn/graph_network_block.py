@@ -10,7 +10,7 @@ class GraphNetworkBlock(Module):
     A Graph Network block takes as input a graph with N nodes and E edges and
     returns a graph with the same topology.
 
-    The input graph can have:
+    The input graph can have
         - ``node_features``: features associated with each node in the graph, provided as an array of size [N, F_N]
         - ``edge_features``: features associated with each edge in the graph, provided as an array of size [E, F_E]
         - ``graph_features``: features associated to the graph itself, of size [F_U]
@@ -24,18 +24,18 @@ class GraphNetworkBlock(Module):
     architectures, like message-passing networks, deep sets, relation networks and more
     (see [1]).
 
-    For a usage example see [here](https://github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py).
+    For a usage example see `here <https://github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py>`_.
 
     Args:
-        node_model (mlx.nn.layers.base.Module, optional): a callable Module which updates
+        node_model: a callable Module which updates
             a graph's node features
-        edge_model (mlx.nn.layers.base.Module, optional): a callable Module which updates
+        edge_model: a callable Module which updates
             a graph's edge features
-        graph_model (mlx.nn.layers.base.Module, optional): a callable Module which updates
+        graph_model: a callable Module which updates
             a graph's global features
 
     References:
-        [1] Battaglia et al. Relational Inductive Biases, Deep Learning, and Graph Networks. https://arxiv.org/pdf/1806.01261.pdf
+        [1] `Battaglia et al. Relational Inductive Biases, Deep Learning, and Graph Networks. <https://arxiv.org/pdf/1806.01261.pdf>`_
 
     """
 
@@ -58,15 +58,17 @@ class GraphNetworkBlock(Module):
         graph_features: Optional[mx.array] = None,
     ) -> tuple[Optional[mx.array], Optional[mx.array], Optional[mx.array]]:
         """Forward pass of the Graph Network block
+
         Args:
-            edge_index (array): array of size [2, E], where each column contains the source
+            edge_index: array of size [2, E], where each column contains the source
                 and destination nodes of an edge.
-            node_features (array, optional): features associated with each node in the
+            node_features: features associated with each node in the
                 graph, provided as an array of size [N, F_N]
-            edge_features (array, optional): features associated with each edge in the
+            edge_features: features associated with each edge in the
                 graph, provided as an array of size [E, F_E]
-            graph_features (array, optional): features associated to the graph itself,
+            graph_features: features associated to the graph itself,
                 of size [F_U]
+
         Returns:
             The tuple of updated node, edge and global attributes.
         """
