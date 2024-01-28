@@ -1,9 +1,12 @@
 from typing import List
 
 import mlx.core as mx
+
 from mlx_graphs.data.data import GraphData
+from mlx_graphs.utils.validators import validate_list_of_graph_data
 
 
+@validate_list_of_graph_data
 def collate(graph_list: List[GraphData]) -> dict:
     """
     Collate function to perform the unification of graphs in a batch.

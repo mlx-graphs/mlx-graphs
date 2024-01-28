@@ -230,3 +230,33 @@ def test_batching():
 
     with pytest.raises(IndexError):
         graph_batch[-3:2]
+
+    # Inconsistent GraphData list
+    with pytest.raises(ValueError):
+        g1 = GraphData(
+            node_features=node_features1,
+            edge_index=edge_index1,
+            custom_attr=custom_attr_1,
+        )
+        g2 = GraphData(node_features=node_features2, edge_index=edge_index2)
+        graph_batch = batch([g1, g2])
+
+    with pytest.raises(ValueError):
+        g1 = GraphData(node_features=node_features1, edge_index=edge_index1)
+        g2 = GraphData(
+            node_features=node_features2,
+            edge_index=edge_index2,
+            custom_attr=custom_attr_1,
+        )
+        graph_batch = batch([g1, g2])
+
+    with pytest.raises(ValueError):
+
+        class Data:
+            def __init__(self, edge_index, node_features):
+                self.edge_index = edge_index
+                self.node_features = node_features
+
+        g1 = GraphData(node_features=node_features1, edge_index=edge_index1)
+        g2 = Data(node_features=node_features2, edge_index=edge_index2)
+        graph_batch = batch([g1, g2])
