@@ -70,8 +70,7 @@ class GraphData:
     def __cat_dim__(self, key: str, *args, **kwargs):
         if "index" in key:
             return 1
-        else:
-            return 0
+        return 0
 
     def __inc__(self, key: str, *args, **kwargs) -> Any:
         if "index" in key:

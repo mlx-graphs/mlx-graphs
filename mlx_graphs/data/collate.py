@@ -19,33 +19,33 @@ def collate(graph_list: List[GraphData]) -> dict:
         well as the slices corresponding to the portion of node for each graph from the provided
         list of graphs.
     """
+    batch_attr_dict = {}
 
-    global_dict = {}
-    num_graphs = len(graph_list)
-    num_nodes = [graph.num_nodes() for graph in graph_list]
-    cumsum = mx.cumsum(mx.array([0] + num_nodes))
     for attr in graph_list[0].to_dict():
-        inc = graph_list[0].__inc__(key=attr)
-        cat_dim = graph_list[0].__cat_dim__(key=attr)
+        __inc__ = graph_list[0].__inc__(key=attr)
+        __cat_dim__ = graph_list[0].__cat_dim__(key=attr)
 
-        if inc:
-            values = [
-                getattr(graph, attr) + cumsum[i] for i, graph in enumerate(graph_list)
-            ]
-        else:
-            values = [getattr(graph, attr) for graph in graph_list]
+        cumsum: mx.array = None
+        if __inc__:
+            num_nodes_list = [graph.num_nodes() for graph in graph_list]
+            cumsum = mx.cumsum(mx.array([0] + num_nodes_list))
 
-        global_dict[attr] = mx.concatenate(values, axis=cat_dim)
+        attr_list, attr_sizes = [], []
+        for i, graph in enumerate(graph_list):
+            attr_array = getattr(graph, attr)
 
-    nested_slices = [[idx] * num_node for idx, num_node in enumerate(num_nodes)]
-    flattened_slices = []
-    [flattened_slices.extend(inner_list) for inner_list in nested_slices]
-    global_dict.update(
-        {
-            "slices": mx.array(flattened_slices),
-            "cumsum": cumsum,
-            "num_graphs": mx.array(num_graphs),
-        }
-    )
+            if __inc__:
+                attr_array = attr_array + cumsum[i]
 
-    return global_dict
+            attr_list.append(attr_array)
+            attr_sizes.append(attr_array.shape[__cat_dim__])
+
+        batch_attr_dict[f"_size_{attr}"] = mx.array(attr_sizes)
+        batch_attr_dict[f"_cat_dim_{attr}"] = __cat_dim__
+        batch_attr_dict[f"_inc_{attr}"] = __inc__
+        if __inc__:
+            batch_attr_dict["_cumsum"] = cumsum
+
+        batch_attr_dict[attr] = mx.concatenate(attr_list, axis=__cat_dim__)
+
+    return batch_attr_dict
