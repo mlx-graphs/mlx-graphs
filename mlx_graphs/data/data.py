@@ -63,8 +63,11 @@ class GraphData:
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     @property
-    def num_nodes(self) -> int:
-        return self.node_features.shape[0]
+    def num_nodes(self) -> Union[int, None]:
+        """Number of nodes in the graph."""
+        if self.node_features:
+            return self.node_features.shape[0]
+        return None
 
     def __cat_dim__(self, key: str, *args, **kwargs) -> int:
         """This method can be overriden when batching is used with custom attributes.

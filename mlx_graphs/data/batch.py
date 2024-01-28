@@ -69,10 +69,12 @@ class GraphDataBatch(GraphData):
 
     @property
     def num_graphs(self):
+        """Number of graphs in the batch."""
         return self._num_graphs
 
     @property
     def batch_indices(self):
+        """Mask indicating for each node its corresponding batch index."""
         return self._batch_indices
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[GraphData, list[GraphData]]:
@@ -99,7 +101,7 @@ class GraphDataBatch(GraphData):
             if isinstance(idx, list):
                 idx = mx.array(idx)
 
-            if mx.ndim != 1:
+            if idx.ndim != 1:
                 raise ValueError(
                     "Batch indexing with mx.array only supports 1D index array."
                 )
