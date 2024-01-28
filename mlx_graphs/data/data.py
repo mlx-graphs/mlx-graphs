@@ -47,14 +47,12 @@ class GraphData:
             setattr(self, key, value)
 
     def __repr__(self):
-        return "%s(%s)" % (
-            type(self).__name__,
-            ", ".join(
-                "%s=%s" % (item[0], item[1].tolist())
-                for item in vars(self).items()
-                if item[1] is not None
-            ),
-        )
+        strings = []
+        for k, v in vars(self).items():
+            if v is not None and not k.startswith("_"):
+                strings.append(f"{k}={v}")
+
+        return f"{type(self).__name__}({', '.join(strings)})"
 
     def to_dict(self):
         """Converts the Data object to a dictionary.
