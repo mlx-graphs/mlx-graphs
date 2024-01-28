@@ -107,5 +107,5 @@ class GraphData:
             Incrementing value for the given attribute or None.
         """
         if "index" in key:
-            return len(self.node_features)
+            return len(self.node_features) if self.node_features else None
         return None
