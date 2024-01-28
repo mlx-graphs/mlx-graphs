@@ -6,7 +6,62 @@ from mlx_graphs.data.collate import collate
 
 
 class GraphDataBatch(GraphData):
-    def __init__(self, graphs, **kwargs) -> None:
+    """Concatenates multiple `GraphData` into a single unified `GraphBatch`
+    for efficient computation and parallelization over multiple graphs.
+
+    All graphs remain disconnected in the batch, meaning that any pairs of graphs
+    have no nodes or edges in common.
+    `GraphDataBatch` can be especially used to speed up graph classification tasks, where
+    multiple graphs can easily fit into memory and be processed in parallel.
+
+    Args:
+        graphs: List of `GraphData` objects to batch together
+
+    Example:
+
+    .. code-block:: python
+
+        graphs = [
+            GraphData(
+                edge_index=mx.array([[0, 0, 0], [1, 1, 1]]),
+                node_features=mx.zeros((3, 1)),
+            ),
+            GraphData(
+                edge_index=mx.array([[1, 1, 1], [2, 2, 2]]),
+                node_features=mx.ones((3, 1)),
+            ),
+            GraphData(
+                edge_index=mx.array([[3, 3, 3], [4, 4, 4]]),
+                node_features=mx.ones((3, 1)) * 2,
+            )
+        ]
+        batch = GraphDataBatch(graphs)
+
+        >>> batch.num_graphs
+        3
+
+        >>> batch
+        GraphDataBatch(
+            edge_index=array([[0, 0, 0, 4, 4, 4, 9, 9, 9], [1, 1, 1, 5, 5, 5, 10, 10, 10]], dtype=int32),
+            node_features=array([[0.0], [0.0], [0.0], [1.0], [1.0], [1.0], [2.0], [2.0], [2.0]], dtype=float32))
+
+        >>> batch[1]
+        GraphData(
+            edge_index=array([[1, 1, 1], [2, 2, 2]], dtype=int32),
+            node_features=array([[1], [1], [1]], dtype=float32))
+
+        >>> batch[1:]
+        [
+            GraphData(
+                edge_index=array([[1, 1, 1], [2, 2, 2]], dtype=int32),
+                node_features=array([[1], [1], [1]], dtype=float32)),
+            GraphData(
+                edge_index=array([[3, 3, 3], [4, 4, 4]], dtype=int32),
+                node_features=array([[2], [2], [2]], dtype=float32))
+        ]
+    """
+
+    def __init__(self, graphs: list[GraphData], **kwargs) -> None:
         if not isinstance(graphs, (list, tuple)):
             graphs = list(graphs)
 
@@ -25,7 +80,7 @@ class GraphDataBatch(GraphData):
         elif isinstance(idx, slice):
             start, stop, step = (
                 idx.start or 0,
-                idx.stop or self._num_graphs - 1,
+                idx.stop or self._num_graphs,
                 idx.step or 1,
             )
             start = self._handle_neg_index_if_needed(start)
@@ -86,7 +141,7 @@ class GraphDataBatch(GraphData):
     def _handle_neg_index_if_needed(self, index: int):
         if index < 0:
             index = self.num_graphs + index
-        if index < 0 or index >= self.num_graphs:
+        if index < 0 or index > self.num_graphs:
             raise IndexError("Batch indexing out of range.")
         return index
 

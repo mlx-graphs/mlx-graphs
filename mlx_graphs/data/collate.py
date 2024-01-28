@@ -1,5 +1,3 @@
-from typing import List
-
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
@@ -7,20 +5,23 @@ from mlx_graphs.utils.validators import validate_list_of_graph_data
 
 
 @validate_list_of_graph_data
-def collate(graph_list: List[GraphData]) -> dict:
-    """
-    Collate function to perform the unification of graphs in a batch.
-    By default, it concatenates all default graph attributes in dim 0
-    apart from `edge_index` which is concatenated along dim 1 and
-    nodes indices are incremented
+def collate(graph_list: list[GraphData]) -> dict:
+    """Concatenates attributes of multiple graphs based on the specifications
+    of each `GraphData`.
+
+    By default, concatenates all default array attributes in dim 0
+    apart from `edge_index` which is concatenated along dim 1.
+    Each graph remains independent in the final graph by incrementing
+    the indices in `edge_index` based on the cumsum of previous number
+    of nodes per graph.
 
     Args:
-        graph_list (List[GraphData]): the list of GraphData objects to collate
+        graph_list: List of `GraphData` objects to collate
 
     Returns:
         dict: dict containing all the attributes of the unified and disconnected big graph as
-        well as the slices corresponding to the portion of node for each graph from the provided
-        list of graphs.
+            well as the "private" attributes used behind the hood by the batching. These private
+            attributes start with an underscore "_" and can be ignore by the user.
     """
     batch_attr_dict = {}
 
@@ -30,7 +31,7 @@ def collate(graph_list: List[GraphData]) -> dict:
 
         cumsum: mx.array = None
         if __inc__:
-            num_nodes_list = [graph.num_nodes() for graph in graph_list]
+            num_nodes_list = [graph.num_nodes for graph in graph_list]
             cumsum = mx.cumsum(mx.array([0] + num_nodes_list))
 
         attr_list, attr_sizes = [], []
@@ -43,6 +44,7 @@ def collate(graph_list: List[GraphData]) -> dict:
             attr_list.append(attr_array)
             attr_sizes.append(attr_array.shape[__cat_dim__])
 
+        # Private attributes are used later in batching for indexing
         batch_attr_dict[f"_size_{attr}"] = mx.array(attr_sizes)
         batch_attr_dict[f"_cat_dim_{attr}"] = __cat_dim__
         batch_attr_dict[f"_inc_{attr}"] = __inc__

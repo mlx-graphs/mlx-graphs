@@ -219,6 +219,10 @@ def test_batching():
         ]
     ), "Batch slicing attributes with loop jump failed"
 
+    assert mx.array_equal(
+        graph_batch[98:][-1].node_features, mock_node_features * 99
+    ), "Batch indexing with last index failed"
+
     with pytest.raises(IndexError):
         graph_batch[:101]
 
