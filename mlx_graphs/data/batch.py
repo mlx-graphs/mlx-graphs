@@ -1,4 +1,4 @@
-from typing import List, Union
+from typing import Union
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
@@ -153,14 +153,14 @@ class GraphDataBatch(GraphData):
         return index
 
 
-def batch(graphs: List[GraphData]) -> GraphDataBatch:
+def batch(graphs: list[GraphData]) -> GraphDataBatch:
     """Constructs a :class:`mlx_graphs.batch.Batch` object from a
     list of :class:`~mlx_graphs.data.GraphData`
     """
     return GraphDataBatch(graphs)
 
 
-def unbatch(batch: GraphDataBatch) -> List[GraphData]:
+def unbatch(batch: GraphDataBatch) -> list[GraphData]:
     """Reconstructs a list of :class:`~mlx_graphs.data.GraphData`
     objects from the :class:`~mlx_graphs.data.GraphDataBatch` object.
     """
