@@ -94,7 +94,8 @@ class GraphDataBatch(GraphData):
 
         raise TypeError("GraphDataBatch indices should be int or slice.")
 
-    def _get_graph(self, idx: int):
+    def _get_graph(self, idx: int) -> GraphData:
+        """Returns a `GraphData` from the batch with its original attributes and edge index."""
         large_graph_dict = {
             attr: getattr(self, attr)
             for attr in self.to_dict()
@@ -130,6 +131,9 @@ class GraphDataBatch(GraphData):
         return GraphData(**single_graph_dict)
 
     def _get_attr_slice_at_index(self, attr: str, idx: int):
+        """Returns the starting and ending index to retrieve the original attribute `attr`
+        from the batch, at the given index `idx`.
+        """
         attr_sizes = self.to_dict()[f"_size_{attr}"]
         cum_attr_counts = mx.cumsum(mx.concatenate([mx.array([0]), attr_sizes]))
 
@@ -139,6 +143,9 @@ class GraphDataBatch(GraphData):
         return from_idx, upto_idx
 
     def _handle_neg_index_if_needed(self, index: int):
+        """Returns the corresponsing positive index of a negative batch index.
+        Raises an index error if the index is incorrect.
+        """
         if index < 0:
             index = self.num_graphs + index
         if index < 0 or index > self.num_graphs:
@@ -147,16 +154,14 @@ class GraphDataBatch(GraphData):
 
 
 def batch(graphs: List[GraphData]) -> GraphDataBatch:
-    """
-    Constructs a :class:`mlx_graphs.batch.Batch` object from a
+    """Constructs a :class:`mlx_graphs.batch.Batch` object from a
     list of :class:`~mlx_graphs.data.GraphData`
     """
     return GraphDataBatch(graphs)
 
 
 def unbatch(batch: GraphDataBatch) -> List[GraphData]:
-    """Reconstruct the list of :class:`~mlx_graphs.data.GraphData`
+    """Reconstructs a list of :class:`~mlx_graphs.data.GraphData`
     objects from the :class:`~mlx_graphs.data.GraphDataBatch` object.
     """
-
     return [batch[idx] for idx in range(batch.num_graphs)]
