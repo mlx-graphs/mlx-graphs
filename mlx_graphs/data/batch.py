@@ -6,7 +6,7 @@ from mlx_graphs.data.collate import collate
 
 
 class GraphDataBatch(GraphData):
-    """Concatenates multiple `GraphData` into a single unified `GraphBatch`
+    """Concatenates multiple `GraphData` into a single unified `GraphDataBatch`
     for efficient computation and parallelization over multiple graphs.
 
     All graphs remain disconnected in the batch, meaning that any pairs of graphs
@@ -62,9 +62,6 @@ class GraphDataBatch(GraphData):
     """
 
     def __init__(self, graphs: list[GraphData], **kwargs) -> None:
-        if not isinstance(graphs, (list, tuple)):
-            graphs = list(graphs)
-
         batch_kwargs = collate(graphs)
         super().__init__(_num_graphs=len(graphs), **batch_kwargs, **kwargs)
 
@@ -151,14 +148,24 @@ class GraphDataBatch(GraphData):
 
 
 def batch(graphs: list[GraphData]) -> GraphDataBatch:
-    """Constructs a :class:`mlx_graphs.batch.Batch` object from a
-    list of :class:`~mlx_graphs.data.GraphData`
+    """Constructs a `GraphDataBatch` object from a list of `GraphData`.
+
+    Args:
+        batch: List of `GraphData` to merge into a single batch
+
+    Returns:
+        `GraphDataBatch` storing a large batched graph
     """
     return GraphDataBatch(graphs)
 
 
 def unbatch(batch: GraphDataBatch) -> list[GraphData]:
-    """Reconstructs a list of :class:`~mlx_graphs.data.GraphData`
-    objects from the :class:`~mlx_graphs.data.GraphDataBatch` object.
+    """Reconstructs a list of `GraphData` objects from a `GraphDataBatch`.
+
+    Args:
+        batch: `GraphDataBatch` to unbatch
+
+    Returns:
+        List of unbatched `GraphData`
     """
     return [batch[idx] for idx in range(batch.num_graphs)]

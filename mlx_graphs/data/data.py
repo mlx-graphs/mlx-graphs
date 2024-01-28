@@ -58,7 +58,7 @@ class GraphData:
         """Converts the Data object to a dictionary.
 
         Returns:
-            dict: A dictionary representation of the Data object.
+            A dictionary with all attributes of the `GraphData` object.
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
@@ -79,7 +79,7 @@ class GraphData:
                 while using batching.
 
         Returns:
-            int: The dimension where concatenation will happen when batching.
+            The dimension where concatenation will happen when batching.
         """
         if "index" in key:
             return 1
@@ -88,7 +88,7 @@ class GraphData:
     def __inc__(self, key: str, *args, **kwargs) -> Union[int, None]:
         """This method can be overriden when batching is used with custom attributes.
         Given the name of a custom attribute `key`, returns an integer indicating the
-        incrementing value to applu to the elemnts of the attribute.
+        incrementing value to apply to the elemnts of the attribute.
 
         By default, all attribute names containing "index" will be incremented based on
         the number of nodes in previous batches to avoid duplicate nodes in the index,
@@ -101,7 +101,7 @@ class GraphData:
                 while using batching.
 
         Returns:
-            Union[int, None]: Incrementing value for the given attribute or None.
+            Incrementing value for the given attribute or None.
         """
         if "index" in key:
             return len(self.node_features)

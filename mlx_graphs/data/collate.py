@@ -19,7 +19,7 @@ def collate(graph_list: list[GraphData]) -> dict:
         graph_list: List of `GraphData` objects to collate
 
     Returns:
-        dict: dict containing all the attributes of the unified and disconnected big graph as
+        Dict containing all the attributes of the unified and disconnected big graph as
             well as the "private" attributes used behind the hood by the batching. These private
             attributes start with an underscore "_" and can be ignore by the user.
     """
