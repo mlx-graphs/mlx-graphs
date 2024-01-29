@@ -163,8 +163,6 @@ def test_add_self_loops():
     x, y = add_self_loops(edge_index, edge_features, allow_repeated=False)
     expected_x = mx.array([[0, 0, 1, 1, 1, 2], [0, 1, 0, 2, 1, 2]])
     expected_y = mx.ones([6, 2])
-    print(x)
-    print(expected_x)
     assert mx.array_equal(y, expected_y)
     assert mx.array_equal(x, expected_x)
 

@@ -131,8 +131,7 @@ def get_src_dst_features(
     Extracts source and destination node features based on the given edge indices.
 
     Args:
-        edge_index: An array of shape (2, number_of_edges), where each columns contains the source
-                and destination nodes of an edge.
+        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
         node_features: The input array of node features.
 
     Returns:
@@ -159,7 +158,7 @@ def get_src_dst_features(
 
 def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
     """
-    Compute the indices of the edges in edge_index_1 that are NOT present in edge_index_2
+    Computes the indices of the edges in edge_index_1 that are NOT present in edge_index_2
 
     Args:
         edge_index_1: The first edge index array.
@@ -173,22 +172,26 @@ def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> m
 
     .. code-block:: python
 
-        edge_index_1 = mx.array([
-                                    [0, 1, 1, 2],
-                                    [1, 0, 2, 1],
-                                ])
-        edge_index_2 = mx.array([
-                                    [1, 2, 2],
-                                    [2, 1, 2],
-                                ])
+        edge_index_1 = mx.array(
+            [
+                [0, 1, 1, 2],
+                [1, 0, 2, 1],
+            ]
+        )
+        edge_index_2 = mx.array(
+            [
+                [1, 2, 2],
+                [2, 1, 2],
+            ]
+        )
         x = remove_common_edges(edge_index_1, edge_index_2)
         # [0, 1]
     """
     edge_1_tuples = [tuple(edge.tolist()) for edge in edge_index_1.transpose()]
-    edge_2_tuples = [tuple(edge.tolist()) for edge in edge_index_2.transpose()]
+    edge_2_set = set(tuple(edge.tolist()) for edge in edge_index_2.transpose())
 
     return mx.array(
-        [i for i, edge in enumerate(edge_1_tuples) if edge not in edge_2_tuples]
+        [i for i, edge in enumerate(edge_1_tuples) if edge not in edge_2_set]
     )
 
 
@@ -204,7 +207,7 @@ def add_self_loops(
     Adds self-loops to the given graph represented by edge_index and edge_features.
 
     Args:
-        edge_index: the edge index of the graph, with shape [2, num_edges]
+        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
         edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
         num_nodes: Optional number of nodes in the graph. If not provided, it is inferred from edge_index.
         fill_value: Value used for filling the self-loop features. Default is 1.
@@ -247,10 +250,10 @@ def remove_self_loops(
     edge_features: Optional[mx.array] = None,
 ) -> tuple[mx.array, Optional[mx.array]]:
     """
-    Remove self-loops from the given graph represented by edge_index and edge_features.
+    Removes self-loops from the given graph represented by edge_index and edge_features.
 
     Args:
-        edge_index: the edge index of the graph, with shape [2, num_edges]
+        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
         edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
 
     Returns:
