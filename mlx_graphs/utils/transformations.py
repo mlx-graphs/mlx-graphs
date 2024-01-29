@@ -155,3 +155,86 @@ def get_src_dst_features(
         )
 
     return src_val, dst_val
+
+
+def remove_common_edges(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
+    """
+    Removes common edges between two edge index arrays.
+
+    Args:
+        edge_index_1 (mx.array): The first edge index array.
+        edge_index_2 (mx.array): The second edge index array.
+
+    Returns:
+        mx.array: A new edge index array containing edges present in edge_index_1
+                  but not in edge_index_2.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index_1 = mx.array([
+                                    [0, 1, 1, 2],
+                                    [1, 0, 2, 1],
+                                ])
+        edge_index_2 = mx.array([
+                                    [1, 2, 2],
+                                    [2, 1, 2],
+                                ])
+        x = remove_common_edges(edge_index_1, edge_index_2)
+        # [[0, 1]
+        #  [1, 0]]
+    """
+    edge_1_tuples = {tuple(edge.tolist()) for edge in edge_index_1.transpose()}
+    edge_2_tuples = {tuple(edge.tolist()) for edge in edge_index_2.transpose()}
+
+    return mx.array(
+        [edge for edge in edge_1_tuples if edge not in edge_2_tuples]
+    ).transpose()
+
+
+@validate_edge_index_and_features
+def add_self_loops(
+    edge_index: mx.array,
+    edge_features: Optional[mx.array] = None,
+    num_nodes: Optional[int] = None,
+    fill_value: Optional[Union[float, mx.array]] = 1,
+    allow_repeated: Optional[bool] = True,
+) -> tuple[mx.array, Optional[mx.array]]:
+    """
+    Adds self-loops to the given graph represented by edge_index and edge_features.
+
+    Args:
+        edge_index: the edge index of the graph, with shape [2, num_edges]
+        edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
+        num_nodes: Optional number of nodes in the graph. If not provided, it is inferred from edge_index.
+        fill_value: Value used for filling the self-loop features. Default is 1.
+
+    Returns:
+        A tuple containing the updated edge_index and edge_features with self-loops.
+
+    """
+    if num_nodes is not None:
+        if mx.max(edge_index) > num_nodes - 1:
+            raise ValueError(
+                "num_nodes must be >= than the number of nodes in the edge_index ",
+                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1} nodes in index",
+            )
+    else:
+        num_nodes = (mx.max(edge_index) + 1).item()
+
+    # add self loops to index
+    self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
+    if not allow_repeated:
+        self_loop_index = remove_common_edges(self_loop_index, edge_index)
+    full_edge_index = mx.concatenate([edge_index, self_loop_index], 1)
+
+    full_edge_features = None
+    if edge_features is not None:
+        # add self loops to features
+        self_loop_features = (
+            mx.ones([self_loop_index.shape[1], edge_features.shape[1]]) * fill_value
+        )
+        full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
+
+    return full_edge_index, full_edge_features
