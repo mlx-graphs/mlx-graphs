@@ -5,6 +5,7 @@ from mlx_graphs.utils.transformations import (
     to_adjacency_matrix,
     get_unique_edge_indices,
     add_self_loops,
+    remove_self_loops,
 )
 import pytest
 
@@ -165,4 +166,28 @@ def test_add_self_loops():
     print(x)
     print(expected_x)
     assert mx.array_equal(y, expected_y)
+    assert mx.array_equal(x, expected_x)
+
+
+def test_remove_self_loops():
+    edge_index = mx.array([[0, 0, 1, 1], [0, 1, 0, 2]])
+    edge_features = mx.random.normal([4, 2])
+
+    # just index
+    x, y = remove_self_loops(edge_index)
+    expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
+    assert y is None
+    assert mx.array_equal(x, expected_x)
+
+    # index and features
+    x, y = remove_self_loops(edge_index, edge_features)
+    expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
+    expected_y = edge_features[1:]
+    assert mx.array_equal(y, expected_y)
+    assert mx.array_equal(x, expected_x)
+
+    # inactive on graph with no self loops
+    edge_index = mx.array([[0, 1, 1], [1, 0, 2]])
+    x, _ = remove_self_loops(edge_index)
+    expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
     assert mx.array_equal(x, expected_x)
