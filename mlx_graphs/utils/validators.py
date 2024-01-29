@@ -65,13 +65,18 @@ def validate_list_of_graph_data(func):
 
     @functools.wraps(func)
     def wrapper(graph_list: list[GraphData], *args, **kwargs):
-        expected_attr = set(graph_list[0].to_dict())
+        if not isinstance(graph_list, list):
+            raise ValueError(f"Expected list of GraphData, got {type(graph_list)}.")
+
         for i, graph in enumerate(graph_list):
             if not isinstance(graph, GraphData):
                 raise ValueError(
+                    "Expected list of GraphData. "
                     f"Graph at index {i} in the batch is not of type `GraphData`."
                 )
 
+        expected_attr = set(graph_list[0].to_dict())
+        for i, graph in enumerate(graph_list):
             graph_attr = set(graph.to_dict())
             if graph_attr != expected_attr:
                 raise ValueError(
