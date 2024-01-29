@@ -50,9 +50,13 @@ class GraphData:
         strings = []
         for k, v in vars(self).items():
             if v is not None and not k.startswith("_"):
-                strings.append(f"{k}={v}")
+                if isinstance(v, mx.array):
+                    strings.append(f"{k}={v.shape}, {str(v.dtype).split('.')[-1]}")
+                else:
+                    strings.append(f"{k}={v}")
 
-        return f"{type(self).__name__}({', '.join(strings)})"
+        prefix = "\n\t"
+        return f"{type(self).__name__}({prefix + prefix.join(strings)})"
 
     def to_dict(self) -> dict:
         """Converts the Data object to a dictionary.
