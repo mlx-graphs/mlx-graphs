@@ -182,3 +182,21 @@ def degree(index: mx.array, num_nodes: Optional[int] = None) -> mx.array:
 
     ones = mx.ones((index.shape[0],))
     return scatter(ones, index, num_nodes, "add")
+
+
+def invert_sqrt_degree(degree: mx.array) -> mx.array:
+    """
+    Computes the inverted square root of the degree array. NOTE: This is a temporary workaround to deal with infinite values according to the GCN paper as boolean indexing isn't yet available, so we have to pre-pad zero elements of the degree array (i.e. isolated nodes)
+
+    Args:
+        degree: Array of length num_nodes with the inverted square root degree of each node.
+
+    Returns:
+        Array of length `num_nodes` with the inverted square root of the degree of each node.
+    """
+
+    minimal_value = mx.array(1e-6)
+    degree += minimal_value
+    invert_sqrt_degree = degree ** (-0.5)
+    invert_sqrt_degree = mx.where(invert_sqrt_degree <= 1, invert_sqrt_degree, 0)
+    return invert_sqrt_degree

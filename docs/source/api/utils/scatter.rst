@@ -17,3 +17,4 @@ Scatter
 	scatter_mean
 	scatter_softmax
 	degree
+	invert_sqrt_degree
