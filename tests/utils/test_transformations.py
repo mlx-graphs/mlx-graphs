@@ -3,7 +3,7 @@ from mlx_graphs.utils.transformations import (
     to_edge_index,
     to_sparse_adjacency_matrix,
     to_adjacency_matrix,
-    remove_common_edges,
+    get_unique_edges,
     add_self_loops,
 )
 import pytest
@@ -108,7 +108,7 @@ def test_to_adjacency_matrix():
         to_adjacency_matrix(edge_index, edge_features=edge_features, num_nodes=3)
 
 
-def test_remove_common_edges():
+def test_get_unique_edges():
     edge_index_1 = mx.array(
         [
             [0, 1, 1, 2],
@@ -121,9 +121,9 @@ def test_remove_common_edges():
             [2, 1, 2],
         ]
     )
-    x = remove_common_edges(edge_index_1, edge_index_2)
-    expected_x = mx.array([[0, 1], [1, 0]])
-    assert mx.array_equal(x, expected_x)
+    idx = get_unique_edges(edge_index_1, edge_index_2)
+    expected_idx = mx.array([0, 1])
+    assert mx.array_equal(idx, expected_idx)
 
 
 def test_add_self_loops():
@@ -162,5 +162,7 @@ def test_add_self_loops():
     x, y = add_self_loops(edge_index, edge_features, allow_repeated=False)
     expected_x = mx.array([[0, 0, 1, 1, 1, 2], [0, 1, 0, 2, 1, 2]])
     expected_y = mx.ones([6, 2])
+    print(x)
+    print(expected_x)
     assert mx.array_equal(y, expected_y)
     assert mx.array_equal(x, expected_x)

@@ -157,17 +157,17 @@ def get_src_dst_features(
     return src_val, dst_val
 
 
-def remove_common_edges(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
+def get_unique_edges(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
     """
-    Removes common edges between two edge index arrays.
+    Compute the indices of the edges in edge_index_1 that are NOT present in edge_index_2
 
     Args:
-        edge_index_1 (mx.array): The first edge index array.
-        edge_index_2 (mx.array): The second edge index array.
+        edge_index_1: The first edge index array.
+        edge_index_2: The second edge index array.
 
     Returns:
-        mx.array: A new edge index array containing edges present in edge_index_1
-                  but not in edge_index_2.
+        The indices of the edges in edge_index_1 that are not present in edge_index_2
+
 
     Example:
 
@@ -182,15 +182,14 @@ def remove_common_edges(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.ar
                                     [2, 1, 2],
                                 ])
         x = remove_common_edges(edge_index_1, edge_index_2)
-        # [[0, 1]
-        #  [1, 0]]
+        # [0, 1]
     """
-    edge_1_tuples = {tuple(edge.tolist()) for edge in edge_index_1.transpose()}
-    edge_2_tuples = {tuple(edge.tolist()) for edge in edge_index_2.transpose()}
+    edge_1_tuples = [tuple(edge.tolist()) for edge in edge_index_1.transpose()]
+    edge_2_tuples = [tuple(edge.tolist()) for edge in edge_index_2.transpose()]
 
     return mx.array(
-        [edge for edge in edge_1_tuples if edge not in edge_2_tuples]
-    ).transpose()
+        [i for i, edge in enumerate(edge_1_tuples) if edge not in edge_2_tuples]
+    )
 
 
 @validate_edge_index_and_features
@@ -226,7 +225,9 @@ def add_self_loops(
     # add self loops to index
     self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
     if not allow_repeated:
-        self_loop_index = remove_common_edges(self_loop_index, edge_index)
+        self_loop_index = self_loop_index[
+            :, get_unique_edges(self_loop_index, edge_index)
+        ]
     full_edge_index = mx.concatenate([edge_index, self_loop_index], 1)
 
     full_edge_features = None
@@ -238,3 +239,32 @@ def add_self_loops(
         full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
 
     return full_edge_index, full_edge_features
+
+
+@validate_edge_index_and_features
+def remove_self_loops(
+    edge_index: mx.array,
+    edge_features: Optional[mx.array] = None,
+) -> tuple[mx.array, Optional[mx.array]]:
+    """
+    Remove self-loops from the given graph represented by edge_index and edge_features.
+
+    Args:
+        edge_index: the edge index of the graph, with shape [2, num_edges]
+        edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
+
+    Returns:
+        A tuple containing the updated edge_index and edge_features without self-loops.
+
+    """
+    num_nodes = (mx.max(edge_index) + 1).item()
+
+    # add self loops to index
+    self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
+    preserved_idx = get_unique_edges(edge_index, self_loop_index)
+    no_self_loop_index = edge_index[:, preserved_idx]
+
+    no_self_loop_features = None
+    if edge_features is not None:
+        no_self_loop_features = edge_features[preserved_idx]
+    return no_self_loop_index, no_self_loop_features
