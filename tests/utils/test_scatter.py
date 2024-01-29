@@ -1,7 +1,7 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.utils import scatter, degree
+from mlx_graphs.utils import scatter, degree, invert_sqrt_degree
 
 
 @pytest.mark.parametrize(
@@ -95,3 +95,10 @@ def test_degree():
 
     with pytest.raises(ValueError):
         degree(index, 3)
+
+
+def test_inv_degree():
+    deg = mx.array([1, 2, 3, 0])
+    expected = mx.array([1, 0.707107, 0.57735, 0])
+    out = invert_sqrt_degree(deg)
+    assert mx.allclose(out, expected), "Incorrect degree inversion"

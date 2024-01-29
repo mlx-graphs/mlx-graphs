@@ -4,7 +4,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils import degree
+from mlx_graphs.utils import degree, invert_sqrt_degree
 
 
 class GCNConv(MessagePassing):
@@ -45,8 +45,8 @@ class GCNConv(MessagePassing):
         norm: mx.array = None
         if normalize:
             deg = degree(col, node_features.shape[0])
-            deg_inv_sqrt = deg ** (-0.5)
             # NOTE : need boolean indexing in order to zero out inf values
+            deg_inv_sqrt = invert_sqrt_degree(deg)
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
 
         else:
