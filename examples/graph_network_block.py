@@ -9,12 +9,12 @@ class NodeModel(Module):
         self,
         node_features_dim: int,
         edge_features_dim: int,
-        global_features_dim: int,
+        graph_features_dim: int,
         output_dim: int,
     ):
         super().__init__()
         self.model = Linear(
-            input_dims=node_features_dim + edge_features_dim + global_features_dim,
+            input_dims=node_features_dim + edge_features_dim + graph_features_dim,
             output_dims=output_dim,
         )
 
@@ -23,7 +23,7 @@ class NodeModel(Module):
         edge_index: mx.array,
         node_features: mx.array,
         edge_features: mx.array,
-        global_features: mx.array,
+        graph_features: mx.array,
     ):
         destination_nodes = edge_index[1]
         aggregated_edges = mx.zeros([node_features.shape[0], edge_features.shape[1]])
@@ -37,8 +37,8 @@ class NodeModel(Module):
             [
                 node_features,
                 aggregated_edges,
-                mx.ones([node_features.shape[0], global_features.shape[0]])
-                * global_features,
+                mx.ones([node_features.shape[0], graph_features.shape[0]])
+                * graph_features,
             ],
             1,
         )
@@ -50,12 +50,12 @@ class EdgeModel(Module):
         self,
         edge_features_dim: int,
         node_features_dim: int,
-        global_features_dim: int,
+        graph_features_dim: int,
         output_dim: int,
     ):
         super().__init__()
         self.model = Linear(
-            input_dims=2 * node_features_dim + edge_features_dim + global_features_dim,
+            input_dims=2 * node_features_dim + edge_features_dim + graph_features_dim,
             output_dims=output_dim,
         )
 
@@ -64,7 +64,7 @@ class EdgeModel(Module):
         edge_index: mx.array,
         node_features: mx.array,
         edge_features: mx.array,
-        global_features: mx.array,
+        graph_features: mx.array,
     ):
         source_nodes = edge_index[0]
         destination_nodes = edge_index[1]
@@ -73,8 +73,8 @@ class EdgeModel(Module):
                 node_features[destination_nodes],
                 node_features[source_nodes],
                 edge_features,
-                mx.ones([edge_features.shape[0], global_features.shape[0]])
-                * global_features,
+                mx.ones([edge_features.shape[0], graph_features.shape[0]])
+                * graph_features,
             ],
             1,
         )
@@ -86,12 +86,12 @@ class GlobalModel(Module):
         self,
         edge_features_dim: int,
         node_features_dim: int,
-        global_features_dim: int,
+        graph_features_dim: int,
         output_dim: int,
     ):
         super().__init__()
         self.model = Linear(
-            input_dims=node_features_dim + edge_features_dim + global_features_dim,
+            input_dims=node_features_dim + edge_features_dim + graph_features_dim,
             output_dims=output_dim,
         )
 
@@ -100,12 +100,12 @@ class GlobalModel(Module):
         edge_index: mx.array,
         node_features: mx.array,
         edge_features: mx.array,
-        global_features: mx.array,
+        graph_features: mx.array,
     ):
         aggregated_edges = edge_features.mean(axis=0)
         aggregated_nodes = node_features.mean(axis=0)
         model_input = mx.concatenate(
-            [aggregated_nodes, aggregated_edges, global_features], 0
+            [aggregated_nodes, aggregated_edges, graph_features], 0
         )
         return self.model(model_input)
 
@@ -118,14 +118,15 @@ F_U = 2  # number of global features
 edge_index = mx.array([[0, 0, 1, 2, 3], [1, 2, 3, 3, 0]])
 node_features = mx.random.normal([N, F_N])
 edge_features = mx.random.normal([edge_index.shape[1], F_E])
-global_features = mx.random.normal([F_U])
+graph_features = mx.random.normal([F_U])
+
 
 # edge model
 output_edge_feature_dim = F_E
 edge_model = EdgeModel(
     edge_features_dim=F_E,
     node_features_dim=F_N,
-    global_features_dim=F_U,
+    graph_features_dim=F_U,
     output_dim=output_edge_feature_dim,
 )
 
@@ -134,28 +135,28 @@ output_node_features_dim = F_N
 node_model = NodeModel(
     node_features_dim=F_N,
     edge_features_dim=output_edge_feature_dim,
-    global_features_dim=F_U,
+    graph_features_dim=F_U,
     output_dim=output_node_features_dim,
 )
 
 # global_model
-output_global_features_dim = F_U
-global_model = GlobalModel(
+output_graph_features_dim = F_U
+graph_model = GlobalModel(
     node_features_dim=output_node_features_dim,
     edge_features_dim=output_edge_feature_dim,
-    global_features_dim=F_U,
-    output_dim=output_global_features_dim,
+    graph_features_dim=F_U,
+    output_dim=output_graph_features_dim,
 )
 
 # Graph Network block
 gnn = GraphNetworkBlock(
-    node_model=node_model, edge_model=edge_model, global_model=global_model
+    node_model=node_model, edge_model=edge_model, graph_model=graph_model
 )
 
 # forward pass
-node_features, edge_features, global_features = gnn(
+node_features, edge_features, graph_features = gnn(
     edge_index=edge_index,
     node_features=node_features,
     edge_features=edge_features,
-    global_features=global_features,
+    graph_features=graph_features,
 )

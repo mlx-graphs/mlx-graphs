@@ -27,11 +27,11 @@ class GAT(nn.Module):
         )
         self.dropout = nn.Dropout(p=dropout)
 
-    def __call__(self, x, edge_index):
+    def __call__(self, edge_index, x):
         x = self.dropout(x)
-        x = nn.elu(self.conv1(x, edge_index))
+        x = nn.elu(self.conv1(edge_index, x))
         x = self.dropout(x)
-        x = self.conv2(x, edge_index)
+        x = self.conv2(edge_index, x)
         return nn.log_softmax(x, axis=-1)
 
 
@@ -52,7 +52,7 @@ def eval_fn(x, y):
 
 
 def forward_fn(gat, x, adj, y, train_mask, weight_decay):
-    y_hat = gat(x, adj)
+    y_hat = gat(adj, x)
     loss = loss_fn(y_hat[train_mask], y[train_mask], weight_decay, gat.parameters())
     return loss, y_hat
 
@@ -77,7 +77,9 @@ def get_masks(train_mask, val_mask, test_mask):
 
 def main(args):
     # Data loading
-    dataset = Planetoid(root="data/Cora", name="Cora", transform=T.NormalizeFeatures())
+    dataset = Planetoid(
+        root=".local_data/Cora", name="Cora", transform=T.NormalizeFeatures()
+    )
     data = dataset[0]
 
     x, y, adj = data.x, data.y, data.edge_index
@@ -141,7 +143,7 @@ def main(args):
         )
 
     # Test
-    test_y_hat = gat(x, adj)
+    test_y_hat = gat(adj, x)
     test_loss = loss_fn(test_y_hat[test_mask], y[test_mask])
     test_acc = eval_fn(test_y_hat[test_mask], y[test_mask])
     mean_time = sum(times) / len(times)

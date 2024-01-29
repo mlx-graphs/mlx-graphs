@@ -5,8 +5,43 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mlx-graphs"
 version = "0.0.1"
-description = "Graph Neural Network library made for Apple Silicons"
+description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
 license = {file = "LICENSE"}
 requires-python = ">= 3.8"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: MacOS",
+    "Programming Language :: Python",
+]
+dependencies = [
+    "mlx==0.0.10.*",
+    "numpy==1.26.3",
+]
+
+[project.optional-dependencies]
+dev = [
+  "mlx @ git+https://github.com/ml-explore/mlx.git",
+  "pre-commit==3.6.0",
+]
+test = [
+  "pytest==7.4.4",
+]
+docs = [
+  "sphinx==7.2.6",
+  "sphinx-book-theme==1.1.0",
+  "sphinx-autodoc-typehints==1.25.2",
+]
+benchmarks = [
+  "scipy==1.12.0",
+  "torch==2.1.2",
+  "torch_geometric==2.4.0",
+  "torch_scatter==2.1.2",
+  "tqdm==4.66.1",
+]
+
+[project.urls]
+Repository = "https://github.com/TristanBilot/mlx-graphs"
+Issues = "https://github.com/TristanBilot/mlx-graphs/issues"

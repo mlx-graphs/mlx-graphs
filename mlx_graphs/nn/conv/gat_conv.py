@@ -3,23 +3,23 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.nn.linear import Linear
-from mlx_graphs.utils import glorot_init, scatter, get_src_dst_features
+from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
 
 
 class GATConv(MessagePassing):
-    r"""Graph Attention Network convolution layer.
+    """Graph Attention Network convolution layer.
 
     Args:
-        node_features_dim (int): Size of input node features
-        out_features_dim (int): Size of output node embeddings
-        heads (int): Number of attention heads
-        concat (bool): Whether to use concat of heads or mean reduction
-        bias (bool): Whether to use bias in the node projection
-        negative_slope (float): Slope for the leaky relu
-        dropout (float): Probability p for dropout
-        edge_features_dim (int, optional): Size of edge features
+        node_features_dim: Size of input node features
+        out_features_dim: Size of output node embeddings
+        heads: Number of attention heads
+        concat: Whether to use concat of heads or mean reduction
+        bias: Whether to use bias in the node projection
+        negative_slope: Slope for the leaky relu
+        dropout: Probability p for dropout
+        edge_features_dim: Size of edge features
 
     Example:
 
@@ -72,17 +72,16 @@ class GATConv(MessagePassing):
 
     def __call__(
         self,
-        node_features: mx.array,
         edge_index: mx.array,
+        node_features: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes the forward pass of GATConv.
+        """Computes the forward pass of GATConv.
 
         Args:
-            node_features (mx.array): input node features
-            edge_index (mx.array): input edge index of shape (2, |E|)
-            edge_features (optional mx.array) edge features of shape (2, |E|)
+            edge_index: input edge index of shape `[2, num_edges]`
+            node_features: input node features
+            edge_features: edge features
 
         Returns:
             mx.array: computed node embeddings
@@ -94,7 +93,7 @@ class GATConv(MessagePassing):
         alpha_src = (src_feats * self.att_src).sum(-1)
         alpha_dst = (dst_feats * self.att_dst).sum(-1)
 
-        alpha_src, alpha_dst = get_src_dst_features((alpha_src, alpha_dst), edge_index)
+        alpha_src, alpha_dst = get_src_dst_features(edge_index, (alpha_src, alpha_dst))
         dst_idx = edge_index[1]
 
         node_features = self.propagate(
@@ -129,16 +128,15 @@ class GATConv(MessagePassing):
         index: mx.array = None,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
-        """
-        Computes a message for each edge in the graph following GAT's propagation rule.
+        """Computes a message for each edge in the graph following GAT's propagation rule.
 
-        Parameters:
-            src_features (mx.array): Features of the source nodes.
-            dst_features (mx.array): Features of the destination nodes (not used in this function but included for compatibility).
-            alpha_src (mx.array, optional): Precomputed attention values for the source nodes.
-            alpha_dst (mx.array, optional): Precomputed attention values for the destination nodes.
-            index (mx.array, optional): 1D array with indices of either src or dst nodes to compute softmax.
-            edge_features (Optional[mx.array], optional): Features of the edges in the graph.
+        Args:
+            src_features: Features of the source nodes.
+            dst_features: Features of the destination nodes (not used in this function but included for compatibility).
+            alpha_src: Precomputed attention values for the source nodes.
+            alpha_dst: Precomputed attention values for the destination nodes.
+            index: 1D array with indices of either src or dst nodes to compute softmax.
+            edge_features: Features of the edges in the graph.
 
         Returns:
             mx.array: The computed messages for each edge in the graph.

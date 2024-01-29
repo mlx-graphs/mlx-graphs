@@ -15,7 +15,7 @@ from mlx_graphs.nn.conv.gcn_conv import GCNConv
 
 
 class GCN(nn.Module):
-    r"""Graph Convolutional Network implementation [1]
+    """Graph Convolutional Network implementation [1]
 
     Args:
         node_features_dim (int): Size of input node features
@@ -52,12 +52,12 @@ class GCN(nn.Module):
         ]
         self.dropout = nn.Dropout(p=dropout)
 
-    def __call__(self, node_features: mx.array, edge_index: mx.array) -> mx.array:
+    def __call__(self, edge_index: mx.array, node_features: mx.array) -> mx.array:
         for layer in self.gcn_layers[:-1]:
-            node_features = nn.relu(layer(node_features, edge_index))
+            node_features = nn.relu(layer(edge_index, node_features))
             node_features = self.dropout(node_features)
 
-        node_features = self.gcn_layers[-1](node_features, edge_index)
+        node_features = self.gcn_layers[-1](edge_index, node_features)
         return node_features
 
 
@@ -78,7 +78,7 @@ def eval_fn(node_features, y):
 
 
 def forward_fn(gcn, node_features, adj, y, train_mask, weight_decay):
-    y_hat = gcn(node_features, adj)
+    y_hat = gcn(adj, node_features)
     loss = loss_fn(y_hat[train_mask], y[train_mask], weight_decay, gcn.parameters())
     return loss, y_hat
 
@@ -103,7 +103,7 @@ def get_masks(train_mask, val_mask, test_mask):
 
 def main(args):
     # Data loading
-    dataset = Planetoid(root="data/Cora", name="Cora")
+    dataset = Planetoid(root=".local_data/Cora", name="Cora")
     data = dataset[0]
 
     node_features, y, adj = data.x, data.y, data.edge_index
@@ -170,7 +170,7 @@ def main(args):
         )
 
     # Test
-    test_y_hat = gcn(node_features, adj)
+    test_y_hat = gcn(adj, node_features)
     test_loss = loss_fn(test_y_hat[test_mask], y[test_mask])
     test_acc = eval_fn(test_y_hat[test_mask], y[test_mask])
     mean_time = sum(times) / len(times)

@@ -8,5 +8,6 @@ Data Objects
 
 .. autosummary::
 	:toctree: _autosummary
+	:template: data-class-template.rst
 
 	GraphData
