@@ -192,7 +192,7 @@ def invert_sqrt_degree(degree: mx.array) -> mx.array:
         elements of the degree array (ie isolated nodes)
 
     Args:
-        degree: Array of length `num_nodes` with the degree of each node.
+        degree: Array of length num_nodes with the inverted square root degree of each node.
 
     Returns:
         Array of length `num_nodes` with the inverted square root of the degree of each node.
