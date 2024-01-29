@@ -70,12 +70,12 @@ class GraphDataBatch(GraphData):
     @property
     def num_graphs(self):
         """Number of graphs in the batch."""
-        return self._num_graphs
+        return self._num_graphs  # provided via collate
 
     @property
     def batch_indices(self):
         """Mask indicating for each node its corresponding batch index."""
-        return self._batch_indices
+        return self._batch_indices  # provided via collate
 
     def __getitem__(self, idx: Union[int, slice]) -> Union[GraphData, list[GraphData]]:
         if isinstance(idx, int):
