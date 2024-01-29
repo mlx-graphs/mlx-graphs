@@ -157,7 +157,7 @@ def get_src_dst_features(
     return src_val, dst_val
 
 
-def get_unique_edges(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
+def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
     """
     Compute the indices of the edges in edge_index_1 that are NOT present in edge_index_2
 
@@ -226,7 +226,7 @@ def add_self_loops(
     self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
     if not allow_repeated:
         self_loop_index = self_loop_index[
-            :, get_unique_edges(self_loop_index, edge_index)
+            :, get_unique_edge_indices(self_loop_index, edge_index)
         ]
     full_edge_index = mx.concatenate([edge_index, self_loop_index], 1)
 
@@ -261,7 +261,7 @@ def remove_self_loops(
 
     # add self loops to index
     self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
-    preserved_idx = get_unique_edges(edge_index, self_loop_index)
+    preserved_idx = get_unique_edge_indices(edge_index, self_loop_index)
     no_self_loop_index = edge_index[:, preserved_idx]
 
     no_self_loop_features = None

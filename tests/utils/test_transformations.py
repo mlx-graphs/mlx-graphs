@@ -3,7 +3,7 @@ from mlx_graphs.utils.transformations import (
     to_edge_index,
     to_sparse_adjacency_matrix,
     to_adjacency_matrix,
-    get_unique_edges,
+    get_unique_edge_indices,
     add_self_loops,
 )
 import pytest
@@ -121,7 +121,7 @@ def test_get_unique_edges():
             [2, 1, 2],
         ]
     )
-    idx = get_unique_edges(edge_index_1, edge_index_2)
+    idx = get_unique_edge_indices(edge_index_1, edge_index_2)
     expected_idx = mx.array([0, 1])
     assert mx.array_equal(idx, expected_idx)
 
