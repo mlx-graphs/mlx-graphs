@@ -211,6 +211,7 @@ def add_self_loops(
         edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
         num_nodes: Optional number of nodes in the graph. If not provided, it is inferred from edge_index.
         fill_value: Value used for filling the self-loop features. Default is 1.
+        allow_repeated: Specify whether to add self-loops for all nodes, even if they are already in the edge_index. Defaults to True.
 
     Returns:
         A tuple containing the updated edge_index and edge_features with self-loops.
