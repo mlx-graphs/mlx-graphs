@@ -108,8 +108,8 @@ class MessagePassing(nn.Module):
         Args:
             src_features: Source node embeddings
             dst_features: Destination node embeddings
-            edge_weights (optional): Array of scalars with shape (num_edges,) or (num_edges, 1)
-                used to weigh neighbor features during aggregation
+            edge_weights: Array of scalars with shape (num_edges,) or (num_edges, 1)
+                used to weigh neighbor features during aggregation. Default: ``None``
             **kwargs: Optional args to compute messages
         """
         edge_weights = kwargs.get("edge_weights", None)

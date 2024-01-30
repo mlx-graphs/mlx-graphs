@@ -173,8 +173,8 @@ def degree(
         index: Array with node indices, usually src or dst of an `edge_index`.
         num_nodes: Size of the output degree array. If not provided, the number
             of nodes will be inferred from the `index`.
-        edge_weights (optional): Optional edge weights that will be leveraged instead
-            of 1 values during the degree compute.
+        edge_weights: Optional edge weights that will be leveraged instead
+            of 1 values during the degree compute. Default: ``None``
 
     Returns:
         Array of length `num_nodes` with the degree of each node.

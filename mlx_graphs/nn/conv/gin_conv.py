@@ -21,8 +21,8 @@ class GINConv(MessagePassing):
 
     Args:
         mlp: Callable :class:`mlx.core.nn.Module` applied on the final node embeddings
-        eps (optional): Initial value of the :math:`\epsilon` term. Default: ``0``
-        learn_eps (optional): Whether to learn :math:`\epsilon` or not. Default ``False``
+        eps: Initial value of the :math:`\epsilon` term. Default: ``0``
+        learn_eps: Whether to learn :math:`\epsilon` or not. Default ``False``
 
     Example:
 
@@ -79,7 +79,7 @@ class GINConv(MessagePassing):
         Args:
             edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features
-            edge_weights (optional): Edge weights leveraged in message passing
+            edge_weights: Edge weights leveraged in message passing. Default: ``None``
 
         Returns:
             The computed node embeddings

@@ -68,7 +68,7 @@ class SAGEConv(MessagePassing):
         Args:
             edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features
-            edge_weights (optional): Edge weights leveraged in message passing
+            edge_weights: Edge weights leveraged in message passing. Default: ``None``
 
         Returns:
             mx.array: The computed node embeddings
