@@ -27,6 +27,7 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install --no-deps ".[docs]"
+          pip install sphinx sphinx_rtd_theme myst_parser
       - name: Build HTML
         run: |
           cd docs/
