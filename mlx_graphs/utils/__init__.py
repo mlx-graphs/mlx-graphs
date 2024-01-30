@@ -9,4 +9,3 @@ from .transformations import (
     to_sparse_adjacency_matrix,  # noqa
 )
 from .array_ops import expand, broadcast  # noqa
-from .misc import get_num_hops  # noqa
