@@ -46,12 +46,10 @@ class SAGEConv(MessagePassing):
     """
 
     def __init__(
-        self,
-        node_features_dim: int,
-        out_features_dim: int,
-        bias: bool = True,
+        self, node_features_dim: int, out_features_dim: int, bias: bool = True, **kwargs
     ):
-        super(SAGEConv, self).__init__(aggr="mean")
+        kwargs.setdefault("aggr", "mean")
+        super(SAGEConv, self).__init__(**kwargs)
 
         self.node_features_dim = node_features_dim
         self.out_features_dim = out_features_dim
@@ -70,7 +68,7 @@ class SAGEConv(MessagePassing):
         Args:
             edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features
-            edge_weights, optional: Optional edge weights leverage in message passing
+            edge_weights: Edge weights leveraged in message passing. Default: ``None``
 
         Returns:
             mx.array: The computed node embeddings
@@ -79,35 +77,21 @@ class SAGEConv(MessagePassing):
         # We follow DGL's way here by applying projection on the smaller feature dimension
         linear_before_mp = self.node_features_dim > self.out_features_dim
 
-        message_kwargs = {
-            "message_kwargs": {
-                "edge_weights": edge_weights,
-            }
-        }
-
         if linear_before_mp:
             neigh_features = self.neigh_proj(node_features)
             neigh_features = self.propagate(
-                edge_index=edge_index, node_features=neigh_features, **message_kwargs
+                edge_index=edge_index,
+                node_features=neigh_features,
+                message_kwargs={"edge_weights": edge_weights},
             )
         else:
             neigh_features = self.propagate(
-                edge_index=edge_index, node_features=node_features, **message_kwargs
+                edge_index=edge_index,
+                node_features=node_features,
+                message_kwargs={"edge_weights": edge_weights},
             )
             neigh_features = self.neigh_proj(neigh_features)
 
         out_features = self.self_proj(node_features) + neigh_features
 
         return out_features
-
-    def message(
-        self,
-        src_features: mx.array,
-        dst_features: mx.array,
-        edge_weights: Optional[mx.array],
-    ) -> mx.array:
-        return (
-            src_features
-            if edge_weights is None
-            else edge_weights.reshape(-1, 1) * src_features
-        )

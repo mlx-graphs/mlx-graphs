@@ -162,13 +162,19 @@ def scatter_softmax(
     return out / (scatt_sum + eps)
 
 
-def degree(index: mx.array, num_nodes: Optional[int] = None) -> mx.array:
+def degree(
+    index: mx.array,
+    num_nodes: Optional[int] = None,
+    edge_weights: Optional[mx.array] = None,
+) -> mx.array:
     """Counts the number of ocurrences of each node in the given `index`.
 
     Args:
         index: Array with node indices, usually src or dst of an `edge_index`.
         num_nodes: Size of the output degree array. If not provided, the number
             of nodes will be inferred from the `index`.
+        edge_weights: Optional edge weights that will be leveraged instead
+            of 1 values during the degree compute. Default: ``None``
 
     Returns:
         Array of length `num_nodes` with the degree of each node.
@@ -179,9 +185,9 @@ def degree(index: mx.array, num_nodes: Optional[int] = None) -> mx.array:
         )
 
     num_nodes = num_nodes if num_nodes is not None else index.max().item() + 1
+    src = edge_weights if edge_weights is not None else mx.ones((index.shape[0],))
 
-    ones = mx.ones((index.shape[0],))
-    return scatter(ones, index, num_nodes, "add")
+    return scatter(src, index, num_nodes, "add")
 
 
 def invert_sqrt_degree(degree: mx.array) -> mx.array:

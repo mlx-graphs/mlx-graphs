@@ -45,8 +45,10 @@ class GATConv(MessagePassing):
         negative_slope: float = 0.2,
         dropout: float = 0.0,
         edge_features_dim: Optional[int] = None,
+        **kwargs,
     ):
-        super(GATConv, self).__init__(aggr="add")
+        kwargs.setdefault("aggr", "add")
+        super(GATConv, self).__init__(**kwargs)
 
         self.out_features_dim = out_features_dim
         self.heads = heads

@@ -11,7 +11,7 @@ try:
 except ImportError:
     raise ImportError("Run `pip install torch_geometric` to run this example.")
 
-from mlx_graphs.nn.conv.gcn_conv import GCNConv
+from mlx_graphs.nn import GCNConv
 
 
 class GCN(nn.Module):

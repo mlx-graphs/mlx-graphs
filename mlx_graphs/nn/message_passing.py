@@ -75,13 +75,25 @@ class MessagePassing(nn.Module):
         ).shape[0]
         dst_idx = edge_index[1]
 
+        # shapes: (|E| -> |E|)
         messages = self.message(
-            src_features, dst_features, **message_kwargs
-        )  # (|E| -> |E|)
+            src_features=src_features,
+            dst_features=dst_features,
+            **message_kwargs,
+        )
+
+        # shapes: (|E| -> |N|)
         aggregated = self.aggregate(
-            messages, dst_idx, **aggregate_kwargs
-        )  # (|E| -> |N|)
-        output = self.update_nodes(aggregated, **update_kwargs)  # (|N| -> |N|)
+            messages=messages,
+            indices=dst_idx,
+            **aggregate_kwargs,
+        )
+
+        # shapes: (|N| -> |N|)
+        output = self.update_nodes(
+            aggregated=aggregated,
+            **update_kwargs,
+        )
 
         return output
 
@@ -90,12 +102,23 @@ class MessagePassing(nn.Module):
     ) -> mx.array:
         """Computes messages between connected nodes.
 
+        By default, returns the features of source nodes.
+        Optional ``edge_weights`` can be directly integrated in ``kwargs``
+
         Args:
             src_features: Source node embeddings
             dst_features: Destination node embeddings
+            edge_weights: Array of scalars with shape (num_edges,) or (num_edges, 1)
+                used to weigh neighbor features during aggregation. Default: ``None``
             **kwargs: Optional args to compute messages
         """
-        return src_features
+        edge_weights = kwargs.get("edge_weights", None)
+
+        return (
+            src_features
+            if edge_weights is None
+            else edge_weights.reshape(-1, 1) * src_features
+        )
 
     def aggregate(self, messages: mx.array, indices: mx.array, **kwargs) -> mx.array:
         """Aggregates the messages using the `self.aggr` strategy.
