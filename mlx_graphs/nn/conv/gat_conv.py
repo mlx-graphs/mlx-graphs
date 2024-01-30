@@ -26,12 +26,13 @@ class GATConv(MessagePassing):
     .. code-block:: python
 
         conv = GATConv(16, 32, heads=2, concat=True)
-        x = mx.random.uniform(low=0, high=1, shape=(5, 16))
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
+        node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
 
-        h = conv(x, edge_index)
-        h.shape
-        >>> [5, 64]
+        h = conv(edge_index, node_features)
+
+        >>> h.shape
+        [5, 64]
     """
 
     def __init__(
