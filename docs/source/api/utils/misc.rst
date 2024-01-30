@@ -11,4 +11,4 @@ Misc
 .. autosummary::
 	:toctree: _autosummary_misc
 
-	get_current_hops
+	get_num_hops
