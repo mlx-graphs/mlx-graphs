@@ -1,5 +1,5 @@
 # Documentation
-`sphinx` is required to build the docs (we suggest using the `requirements-dev.txt`).
+`sphinx` is required to build the docs (we suggest using `pip install -e '.[docs]'`).
 
 ## Build
 ```
