@@ -31,7 +31,8 @@ jobs:
       - name: Build HTML
         run: |
           cd docs/
-          sphinx-build source build
+          make clean
+          make html
       - name: Run ghp-import
         run: |
           ghp-import -n -p -f docs/build/html
