@@ -51,7 +51,9 @@ class GraphData:
         for k, v in vars(self).items():
             if v is not None and not k.startswith("_"):
                 if isinstance(v, mx.array):
-                    strings.append(f"{k}={v.shape}, {str(v.dtype).split('.')[-1]}")
+                    strings.append(
+                        f"{k}(shape={v.shape}, {str(v.dtype).split('.')[-1]})"
+                    )
                 else:
                     strings.append(f"{k}={v}")
 
