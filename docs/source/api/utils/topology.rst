@@ -12,3 +12,4 @@ Topology
 
 	is_undirected
 	is_directed
+	get_num_hops
