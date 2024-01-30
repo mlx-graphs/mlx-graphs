@@ -15,6 +15,7 @@ Neural Networks
 	GraphNetworkBlock
 	GATConv
 	GCNConv
+	GINConv
 	SAGEConv
 	global_add_pool
 	global_max_pool

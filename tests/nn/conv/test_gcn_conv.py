@@ -23,7 +23,7 @@ def test_gcn_conv():
     conv = GCNConv(16, 32, bias=False)
     node_features = mx.random.uniform(0, 1, (100, 16))
     edge_index = mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]])
-    y_hat4 = conv(edge_index, node_features)
+    y_hat4 = conv(edge_index, node_features, edge_weights=mx.random.normal((5,)))
 
     assert y_hat1.shape == [6, 20], "Simple GCNConv failed"
     assert y_hat2.shape == [6, 20], "GCNConv with negative values failed"

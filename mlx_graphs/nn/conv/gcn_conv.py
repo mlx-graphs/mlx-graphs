@@ -1,4 +1,4 @@
-from typing import Any
+from typing import Any, Optional
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -21,14 +21,18 @@ class GCNConv(MessagePassing):
         node_features_dim: int,
         out_features_dim: int,
         bias: bool = True,
+        **kwargs,
     ):
-        super(GCNConv, self).__init__(aggr="add")
+        kwargs.setdefault("aggr", "add")
+        super(GCNConv, self).__init__(**kwargs)
+
         self.linear = nn.Linear(node_features_dim, out_features_dim, bias)
 
     def __call__(
         self,
         edge_index: mx.array,
         node_features: mx.array,
+        edge_weights: Optional[mx.array] = None,
         normalize: bool = True,
         **kwargs: Any,
     ) -> mx.array:
@@ -44,32 +48,16 @@ class GCNConv(MessagePassing):
         # Compute node degree normalization for the mean aggregation.
         norm: mx.array = None
         if normalize:
-            deg = degree(col, node_features.shape[0])
+            deg = degree(col, node_features.shape[0], edge_weights=edge_weights)
             # NOTE : need boolean indexing in order to zero out inf values
             deg_inv_sqrt = invert_sqrt_degree(deg)
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
-
-        else:
-            norm = mx.ones_like(row)
 
         # Compute messages and aggregate them with sum and norm.
         node_features = self.propagate(
             edge_index=edge_index,
             node_features=node_features,
-            message_kwargs={"edge_weight": norm},
+            message_kwargs={"edge_weights": norm},
         )
 
         return node_features
-
-    def message(
-        self,
-        src_features: mx.array,
-        dst_features: mx.array,
-        edge_weight: mx.array = None,
-        **kwargs: Any,
-    ) -> mx.array:
-        return (
-            src_features
-            if edge_weight is None
-            else edge_weight.reshape(-1, 1) * src_features
-        )

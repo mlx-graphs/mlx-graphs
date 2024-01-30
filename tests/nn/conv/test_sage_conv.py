@@ -1,8 +1,7 @@
 import mlx.core as mx
-from mlx_graphs.nn.conv.sage_conv import SAGEConv
-
-
 import pytest
+
+from mlx_graphs.nn.conv.sage_conv import SAGEConv
 
 
 @pytest.mark.parametrize(
