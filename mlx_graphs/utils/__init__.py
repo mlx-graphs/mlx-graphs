@@ -1,6 +1,3 @@
-from .inits import (
-    glorot_init,  # noqa
-)
 from .scatter import ScatterAggregations, scatter, degree, invert_sqrt_degree  # noqa
 from .transformations import (
     get_src_dst_features,  # noqa
