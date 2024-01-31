@@ -2,7 +2,7 @@ name: build-sphinx-docs
 
 on:
   push:
-    # branches: ["gh_pages"]
+    branches: ["gh_pages"]
 
   workflow_dispatch:
 
