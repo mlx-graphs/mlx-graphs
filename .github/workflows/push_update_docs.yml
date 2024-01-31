@@ -1,9 +1,8 @@
-# This is a basic workflow to help you get started with Actions
-
 name: build-sphinx-docs
 
 on:
   push:
+    branches: ["gh_pages"]
 
   workflow_dispatch:
 
@@ -24,4 +23,8 @@ jobs:
       - name: Build sphinx
         run: |
           cd docs/
-          sphinx-build -b html source build
+          make html
+          # sphinx-build -b html source build
+      - name: Run ghp-import
+        run: |
+          ghp-import -n -p -f docs/build/html
