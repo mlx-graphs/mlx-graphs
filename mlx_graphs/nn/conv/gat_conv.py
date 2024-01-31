@@ -5,7 +5,7 @@ import mlx.nn as nn
 
 from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils import get_src_dst_features, glorot_init, scatter
+from mlx_graphs.utils import get_src_dst_features, scatter
 
 
 class GATConv(MessagePassing):
@@ -57,8 +57,9 @@ class GATConv(MessagePassing):
 
         self.lin_proj = Linear(node_features_dim, heads * out_features_dim, bias=False)
 
-        self.att_src = glorot_init((1, heads, out_features_dim))
-        self.att_dst = glorot_init((1, heads, out_features_dim))
+        glorot_init = nn.init.glorot_uniform()
+        self.att_src = glorot_init(mx.zeros((1, heads, out_features_dim)))
+        self.att_dst = glorot_init(mx.zeros((1, heads, out_features_dim)))
 
         if bias:
             bias_shape = (heads * out_features_dim) if concat else (out_features_dim)
@@ -71,7 +72,7 @@ class GATConv(MessagePassing):
             self.edge_lin_proj = Linear(
                 edge_features_dim, heads * out_features_dim, bias=False
             )
-            self.edge_att = glorot_init((1, heads, out_features_dim))
+            self.edge_att = glorot_init(mx.zeros((1, heads, out_features_dim)))
 
     def __call__(
         self,

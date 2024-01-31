@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python",
 ]
 dependencies = [
-    "mlx==0.0.10.*",
+    "mlx==0.0.11.*",
     "numpy==1.26.3",
 ]
 
