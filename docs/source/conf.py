@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-
+autodoc_mock_imports = ["mlx"]
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -41,7 +41,7 @@ highlight_language = "python"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_book_theme"
-html_static_path = ["_static"]
+# html_static_path = ["_static"]
 html_theme_options = {
     # "show_toc_level": 2,
     "repository_url": "https://github.com/TristanBilot/mlx-graphs",
