@@ -2,14 +2,17 @@ name: build-sphinx-docs
 
 on:
   push:
-    branches: ["gh_pages"]
+    branches:
+      - main
 
-  workflow_dispatch:
+    workflow_dispatch:
 
 jobs:
   build:
 
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout repo content
@@ -24,7 +27,8 @@ jobs:
         run: |
           cd docs/
           make html
-          # sphinx-build -b html source build
-      - name: Run ghp-import
-        run: |
-          ghp-import -n -p -f docs/build/html
+      - name: Deploy to external repos
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: docs/build/html
