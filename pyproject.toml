@@ -23,7 +23,6 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = [
-  "mlx @ git+https://github.com/ml-explore/mlx.git",
   "pre-commit==3.6.0",
 ]
 test = [

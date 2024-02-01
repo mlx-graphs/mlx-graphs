@@ -35,3 +35,6 @@ To install any extra dependencies for testing, development and building document
 	pip install -e '.[dev]'
 	pip install -e '.[benchmarks]'
 	pip install -e '.[docs]'
+
+
+For dev purposes you may want to install the current version of `mlx` via `pip install mlx @ git+https://github.com/ml-explore/mlx.git`
