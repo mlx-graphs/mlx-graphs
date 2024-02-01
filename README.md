@@ -10,7 +10,13 @@ We just started the development of this lib, with the aim to integrate it within
 
 The lib follows the Message Passing Neural Network ([MPNN](https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf)) architecture to build arbitrary GNNs on top of it, similarly as in [PyG](https://github.com/pyg-team/pytorch_geometric).
 
-### Installation (build from source)
+### Installation
+`mlx-graphs` is available on Pypi. To install run
+```
+pip install mlx-graphs
+```
+### Build from source
+
 To build and install `mlx-graphs` from source start by cloning the github repo
 ```
 git clone git@github.com:TristanBilot/mlx-graphs.git && cd mlx-graphs
