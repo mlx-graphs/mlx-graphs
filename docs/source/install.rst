@@ -4,8 +4,13 @@
 Installation
 ============
 
-.. caution::
-	We currently only support building from source.
+`mlx-graphs` is available on Pypi. To install run
+
+.. code-block:: shell
+
+	pip install mlx-graphs
+
+
 
 Build from source
 -----------------
