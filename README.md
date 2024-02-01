@@ -40,6 +40,7 @@ pip install -e '.[dev]'
 pip install -e '.[benchmarks]'
 pip install -e '.[docs]'
 ```
+For dev purposes you may want to install the current version of `mlx` via `pip install mlx @ git+https://github.com/ml-explore/mlx.git`
 
 #### Testing
 We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
