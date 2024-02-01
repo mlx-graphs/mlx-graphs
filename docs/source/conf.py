@@ -9,7 +9,7 @@ autodoc_mock_imports = ["mlx"]
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.1"
+release = "0.0.2"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
