@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlx-graphs"
-version = "0.0.1"
+version = "0.0.2"
 description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
