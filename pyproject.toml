@@ -45,7 +45,7 @@ benchmarks = [
 Repository = "https://github.com/TristanBilot/mlx-graphs"
 Issues = "https://github.com/TristanBilot/mlx-graphs/issues"
 
-[tool.isort]
-multi_line_output = 3
-include_trailing_comma = true
-skip = [".gitignore", "__init__.py"]
+
+[tool.ruff]
+# pyflakes, pycodestyle, isort
+select = ["F", "E", "W", "I001"]
