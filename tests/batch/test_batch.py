@@ -5,7 +5,6 @@ from mlx_graphs.data.batch import batch
 from mlx_graphs.data.data import GraphData
 
 
-@pytest.mark.skip(reason="breaking CI")
 def test_batching():
     node_features1 = mx.array([[1, 1, 1, 1], [1, 1, 1, 1], [1, 0, 1, 1], [0, 0, 1, 1]])
     edge_index1 = mx.array([[0, 1, 1, 2, 3], [1, 0, 2, 3, 1]])

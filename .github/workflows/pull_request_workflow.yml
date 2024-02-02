@@ -26,11 +26,9 @@ jobs:
     - name: Install dependencies
       run: |
         pip install --upgrade pip
-        pip install -v '.[test]'
+        pip install '.[test]'
         pip install pre-commit
         pre-commit install
-        which python
-        pip list
     - name: Run lint
       run: |
         pre-commit run --all-files
