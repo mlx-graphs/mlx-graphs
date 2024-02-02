@@ -25,10 +25,12 @@ jobs:
         python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        python -m pip install '.[test]'
-        python -m pip install pre-commit
+        pip install --upgrade pip
+        pip install '.[test]'
+        pip install pre-commit
         pre-commit install
+        which python
+        pip list
     - name: Run lint
       run: |
         pre-commit run --all-files
