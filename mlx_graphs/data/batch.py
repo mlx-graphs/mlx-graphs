@@ -3,8 +3,8 @@ from typing import Union
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.data.data import GraphData
 from mlx_graphs.data.collate import collate
+from mlx_graphs.data.data import GraphData
 
 
 class GraphDataBatch(GraphData):

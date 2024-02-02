@@ -10,24 +10,24 @@ from argparse import ArgumentParser
 from collections import defaultdict
 from distutils.util import strtobool
 
-import numpy as np
 import mlx.core as mx
+import numpy as np
 from tqdm import tqdm
 
 try:
-    import torch_geometric  # noqa
     import torch
+    import torch_geometric  # noqa
 except RuntimeError:
     raise ImportError(
         "To run the benchmark, install torch_geometric: `pip install torch_geometric`"
     )
 
-from benchmark_utils import print_benchmark
 from benchmark_layers import (
-    benchmark_scatter,
     benchmark_gather,
     benchmark_GCNConv,
+    benchmark_scatter,
 )
+from benchmark_utils import print_benchmark
 
 
 def run_processes(layers, args, iterations=1):

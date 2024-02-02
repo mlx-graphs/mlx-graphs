@@ -3,7 +3,10 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils.sorting import sort_edge_index, sort_edge_index_and_features
+from mlx_graphs.utils.sorting import (
+    sort_edge_index,
+    sort_edge_index_and_features,
+)
 from mlx_graphs.utils.validators import validate_edge_index_and_features
 
 

@@ -1,5 +1,6 @@
 import mlx.core as mx
 import pytest
+
 from mlx_graphs.nn.message_passing import MessagePassing
 
 

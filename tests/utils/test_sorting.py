@@ -1,5 +1,9 @@
 import mlx.core as mx
-from mlx_graphs.utils.topology import sort_edge_index, sort_edge_index_and_features
+
+from mlx_graphs.utils.topology import (
+    sort_edge_index,
+    sort_edge_index_and_features,
+)
 
 
 def test_sort_edge_index():

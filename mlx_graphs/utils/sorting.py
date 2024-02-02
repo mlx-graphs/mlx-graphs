@@ -1,4 +1,5 @@
 import mlx.core as mx
+
 from mlx_graphs.utils.validators import (
     validate_edge_index,
     validate_edge_index_and_features,
