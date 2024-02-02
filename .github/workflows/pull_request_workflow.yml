@@ -36,4 +36,4 @@ jobs:
         pre-commit run --all-files
     - name: Test with pytest
       run: |
-        pytest tests/batch/test_batch.py
+        pytest tests/batch/test_batch.py -rx -v -l
