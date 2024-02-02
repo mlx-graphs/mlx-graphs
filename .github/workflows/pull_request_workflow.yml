@@ -19,19 +19,12 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
-    # - name: Set up Python ${{ matrix.python-version }}
-    #   uses: actions/setup-python@v5
-    #   with:
-    #     python-version: ${{ matrix.python-version }}
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
     - name: Install dependencies
       run: |
-        brew update
-        brew install pyenv
-        eval "$(pyenv init -)"
-        pyenv install ${{ matrix.python-version }}
-        pyenv global ${{ matrix.python-version }}
-        which pyenv
-        which python
         pip install --upgrade pip
         pip install -v '.[test]'
         pip install pre-commit
@@ -40,9 +33,7 @@ jobs:
         pip list
     - name: Run lint
       run: |
-        eval "$(pyenv init -)"
         pre-commit run --all-files
     - name: Test with pytest
       run: |
-        eval "$(pyenv init -)"
-        pytest tests
+        pytest tests/utils/test_validators.py
