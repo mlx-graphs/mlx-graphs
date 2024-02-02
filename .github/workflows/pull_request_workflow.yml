@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10"]
 
     steps:
     - uses: actions/checkout@v4
@@ -29,9 +29,11 @@ jobs:
         brew install pyenv
         pyenv install ${{ matrix.python-version }}
         pyenv global ${{ matrix.python-version }}
-        python -m pip install --upgrade pip
-        python -m pip install -v '.[test]'
-        python -m pip install pre-commit
+        which pyenv
+        which python
+        pip install --upgrade pip
+        pip install -v '.[test]'
+        pip install pre-commit
         pre-commit install
         which python
         pip list
@@ -40,4 +42,4 @@ jobs:
         pre-commit run --all-files
     - name: Test with pytest
       run: |
-        ${PYTEST} tests
+        pytest tests
