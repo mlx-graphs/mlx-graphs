@@ -27,6 +27,7 @@ jobs:
       run: |
         brew update
         brew install pyenv
+        eval "$(pyenv init -)"
         pyenv install ${{ matrix.python-version }}
         pyenv global ${{ matrix.python-version }}
         which pyenv
