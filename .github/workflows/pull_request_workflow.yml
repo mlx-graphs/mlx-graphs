@@ -40,7 +40,9 @@ jobs:
         pip list
     - name: Run lint
       run: |
+        eval "$(pyenv init -)"
         pre-commit run --all-files
     - name: Test with pytest
       run: |
+        eval "$(pyenv init -)"
         pytest tests
