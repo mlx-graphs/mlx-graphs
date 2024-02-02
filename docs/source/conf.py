@@ -20,6 +20,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
+    "nbsphinx",
+    "sphinx_gallery.load_style",
 ]
 
 napoleon_use_param = True

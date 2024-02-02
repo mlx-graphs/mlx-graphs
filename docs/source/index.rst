@@ -35,6 +35,13 @@ We adopt the above convention across the entire library both in terms of shapes 
 
 
 .. toctree::
+   :caption: Tutorials
+   :maxdepth: 1
+
+   tutorials/gcn.rst
+
+
+.. toctree::
    :caption: API
    :maxdepth: 1
 
