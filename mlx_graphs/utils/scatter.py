@@ -12,7 +12,7 @@ def scatter(
     index: mx.array,
     out_size: Optional[int] = None,
     aggr: ScatterAggregations = "add",
-    axis: Optional[int] = 0,
+    axis: int = 0,
 ) -> mx.array:
     """Default function for performing all scattering operations.
     Scatters `values` at `index` in an empty array of `out_size` elements.
@@ -50,15 +50,15 @@ def scatter(
             f"Available values are {get_args(ScatterAggregations)}",
         )
 
-    out_size = out_size if out_size is not None else values.shape[0]
+    _out_size: int = out_size if out_size is not None else values.shape[0]
 
     if aggr == "softmax":
-        return scatter_softmax(values, index, out_size)
+        return scatter_softmax(values, index, _out_size)
     if aggr == "mean":
-        return scatter_mean(values, index, out_size)
+        return scatter_mean(values, index, _out_size)
 
-    out_shape = values.shape
-    out_shape[axis] = out_size
+    out_shape = list(values.shape)
+    out_shape[axis] = _out_size
 
     empty_tensor = mx.zeros(out_shape, dtype=values.dtype)
 

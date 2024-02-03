@@ -17,8 +17,8 @@ def test_data():
     assert (
         data.__repr__()
         == """GraphData(
-	edge_index(shape=[2, 5], int32)
-	node_features(shape=[5], int32))"""
+	edge_index(shape=(2, 5), int32)
+	node_features(shape=(5,), int32))"""
     ), "GraphData printing failed"
 
     data = GraphData(
@@ -29,7 +29,7 @@ def test_data():
     assert (
         data.__repr__()
         == """GraphData(
-	edge_index(shape=[2, 10000], int32)
-	node_features(shape=[5, 100], float32)
+	edge_index(shape=(2, 10000), int32)
+	node_features(shape=(5, 100), float32)
 	new_attr=32)"""
     ), "GraphData printing failed"
