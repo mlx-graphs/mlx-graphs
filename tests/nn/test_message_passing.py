@@ -1,5 +1,6 @@
 import mlx.core as mx
 import pytest
+
 from mlx_graphs.nn.message_passing import MessagePassing
 
 
@@ -79,7 +80,8 @@ def test_sum_aggregation():
     assert mx.array_equal(y1, y_hat1), "Simple message passing failed"
     assert mx.array_equal(y2, y_hat2), "Add message passing failed"
     assert mx.array_equal(y3, y_hat3), "Add message passing failed"
-    # assert mx.array_equal(y4, y_hat4), "Out of bound message passing failed" # mlx.core.array' object has no attribute 'typecode
+    # assert mx.array_equal(y4, y_hat4), "Out of bound message passing failed"
+    # mlx.core.array' object has no attribute 'typecode
     assert mx.array_equal(y5, y_hat5), "Add message passing with multiple dims failed"
     assert mx.array_equal(y6, y_hat6), "Add message passing with multiple dims failed"
 

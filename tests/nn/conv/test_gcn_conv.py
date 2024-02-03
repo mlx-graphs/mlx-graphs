@@ -1,4 +1,5 @@
 import mlx.core as mx
+
 from mlx_graphs.nn.conv.gcn_conv import GCNConv
 
 mx.random.seed(42)

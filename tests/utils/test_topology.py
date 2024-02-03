@@ -2,7 +2,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.conv import GCNConv
-from mlx_graphs.utils.topology import is_undirected, is_directed, get_num_hops
+from mlx_graphs.utils.topology import get_num_hops, is_directed, is_undirected
 
 
 def test_is_undirected():

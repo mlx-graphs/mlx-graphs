@@ -1,6 +1,7 @@
 import mlx.core as mx
 from mlx.nn.layers.base import Module
 from mlx.nn.layers.linear import Linear
+
 from mlx_graphs.nn.graph_network_block import GraphNetworkBlock
 
 

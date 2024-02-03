@@ -1,8 +1,9 @@
-import torch
 import mlx.core as mx
 import mlx.nn as mlx_nn
-import mlx_graphs.nn as mlg_nn
+import torch
 import torch_geometric.nn as pyg_nn
+
+import mlx_graphs.nn as mlg_nn
 
 try:
     from torch_scatter import scatter as scatter_torch
@@ -14,6 +15,7 @@ from benchmark_utils import (
     get_dummy_features,
     measure_runtime,
 )
+
 from mlx_graphs.utils.scatter import scatter
 
 

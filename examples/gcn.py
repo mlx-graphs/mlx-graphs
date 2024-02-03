@@ -26,8 +26,8 @@ class GCN(nn.Module):
         bias (bool): Whether to use bias in the node projection
 
     References:
-        [1] Kipf et al. Semi-Supervised Classification with Graph Convolutional Networks.
-        https://arxiv.org/abs/1609.02907
+        [1] [Kipf et al. Semi-Supervised Classification with
+            Graph Convolutional Networks](https://arxiv.org/abs/1609.02907)
     """
 
     def __init__(

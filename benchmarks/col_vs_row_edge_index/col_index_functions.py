@@ -1,6 +1,7 @@
+from typing import Optional
+
 import mlx.core as mx
 import numpy as np
-from typing import Optional
 
 
 def get_src_dst_features_COL(

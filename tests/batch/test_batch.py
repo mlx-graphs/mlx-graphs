@@ -1,6 +1,6 @@
+import mlx.core as mx
 import pytest
 
-import mlx.core as mx
 from mlx_graphs.data.batch import batch
 from mlx_graphs.data.data import GraphData
 
