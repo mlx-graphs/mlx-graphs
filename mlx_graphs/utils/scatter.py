@@ -26,7 +26,8 @@ def scatter(
         axis: axis on which applying the scattering
 
     Returns:
-        Array with `out_size` elements containing the scattered values at given index following the given `aggr` reduction method
+        Array with `out_size` elements containing the scattered values at given index
+        following the given `aggr` reduction method
 
     Example:
 
@@ -70,8 +71,8 @@ def scatter(
 
 
 def scatter_add(src: mx.array, index: mx.array, values: mx.array):
-    """Scatters `values` at `index` within `src`. If duplicate indices are present, the sum
-    of the values will be assigned to these index.
+    """Scatters `values` at `index` within `src`. If duplicate indices are present,
+    the sum of the values will be assigned to these index.
 
     Args:
         src: Source array where the values will be scattered (often an empty array)
@@ -79,14 +80,15 @@ def scatter_add(src: mx.array, index: mx.array, values: mx.array):
         values: Input array containing values to be scattered.
 
     Returns:
-        The resulting array after applying scatter and sum operations on the values at duplicate indices
+        The resulting array after applying scatter and sum operations on the values at
+        duplicate indices
     """
     return src.at[index].add(values)
 
 
 def scatter_max(src: mx.array, index: mx.array, values: mx.array):
-    """Scatters `values` at `index` within `src`. If duplicate indices are present, the maximum
-    value is kept at these indices.
+    """Scatters `values` at `index` within `src`. If duplicate indices are present,
+    the maximum value is kept at these indices.
 
     Args:
         src: Source array where the values will be scattered (often an empty array)
@@ -94,7 +96,8 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
         values: Input array containing values to be scattered.
 
     Returns:
-        The resulting array after applying scatter and max operations on the values at duplicate indices
+        The resulting array after applying scatter and max operations on the values at
+        duplicate indices
     """
     return src.at[index].maximum(values)
 
@@ -102,7 +105,8 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
 def scatter_mean(
     values: mx.array, index: mx.array, out_size: int, axis: int = 0
 ) -> mx.array:
-    """Computes the mean of values that are scattered along a specified axis, grouped by index.
+    """Computes the mean of values that are scattered along a specified axis, grouped
+    by index.
 
     Args:
         values: Input array containing values to be scattered. These values will
@@ -127,7 +131,8 @@ def scatter_mean(
 def scatter_softmax(
     values: mx.array, index: mx.array, out_size: int, axis: int = 0
 ) -> mx.array:
-    """Computes the softmax of values that are scattered along a specified axis, grouped by index.
+    """Computes the softmax of values that are scattered along a specified axis,
+    grouped by index.
 
     Args:
         values: Input array containing values to be scattered. These values will
@@ -137,7 +142,8 @@ def scatter_softmax(
         axis: Axis along which to scatter
 
     Returns:
-        The resulting array after applying scatter and softmax operations on the input 'values'.
+        The resulting array after applying scatter and softmax operations on the
+        input 'values'.
 
     Example:
 
@@ -192,13 +198,18 @@ def degree(
 
 def invert_sqrt_degree(degree: mx.array) -> mx.array:
     """
-    Computes the inverted square root of the degree array. NOTE: This is a temporary workaround to deal with infinite values according to the GCN paper as boolean indexing isn't yet available, so we have to pre-pad zero elements of the degree array (i.e. isolated nodes)
+    Computes the inverted square root of the degree array. NOTE: This is a temporary
+    workaround to deal with infinite values according to the GCN paper as boolean
+    indexing isn't yet available, so we have to pre-pad zero elements of the degree
+    array (i.e. isolated nodes)
 
     Args:
-        degree: Array of length num_nodes with the inverted square root degree of each node.
+        degree: Array of length num_nodes with the inverted square root degree of
+            each node.
 
     Returns:
-        Array of length `num_nodes` with the inverted square root of the degree of each node.
+        Array of length `num_nodes` with the inverted square root of the degree of
+        each node.
     """
 
     minimal_value = mx.array(1e-6)

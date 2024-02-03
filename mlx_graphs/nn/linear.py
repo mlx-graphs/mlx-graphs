@@ -21,4 +21,4 @@ class Linear(nn.Linear):
         glorot_init = nn.init.glorot_uniform()
         self.weight = glorot_init(mx.zeros((output_dims, input_dims)))
         if bias:
-            self.bias = glorot_init(mx.zeros((output_dims,)))
+            self.bias = glorot_init(mx.zeros((output_dims, 1))).flatten()

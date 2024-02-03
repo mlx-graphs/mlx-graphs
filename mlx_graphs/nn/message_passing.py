@@ -16,9 +16,11 @@ class MessagePassing(nn.Module):
         aggr: Aggregation strategy used to aggregate messages
 
     References:
-        [1] `Gilmer et al. Neural Message Passing for Quantum Chemistry. <https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf>`_
+        [1] `Gilmer et al. Neural Message Passing for Quantum Chemistry.\
+     <https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf>`_
 
-        [2] `Fey et al. PyG <https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.nn.conv.MessagePassing.html>`_
+        [2] `Fey et al. PyG <https://pytorch-geometric.readthedocs.io/en/latest/\
+    generated/torch_geometric.nn.conv.MessagePassing.html>`_
     """
 
     def __init__(self, aggr: ScatterAggregations = "add"):
@@ -48,7 +50,8 @@ class MessagePassing(nn.Module):
         Args:
             edge_index: Graph representation of shape `[2, num_edges]`
             node_features: Input node features/embeddings.
-                Can be either an array or a tuple of arrays, for distinct src and dst node features.
+                Can be either an array or a tuple of arrays, for distinct src and dst
+                node features.
             message_kwargs: Arguments to pass to the `message` method
             aggregate_kwargs: Arguments to pass to the `aggregate` method
             update_kwargs: Arguments to pass to the `update_nodes` method
@@ -65,7 +68,8 @@ class MessagePassing(nn.Module):
         else:
             if not isinstance(node_features, mx.array):
                 raise ValueError(
-                    f"Invalid shape for `node_features`, should be an `mx.array`, found {type(node_features)}"
+                    "Invalid shape for `node_features`, should be an `mx.array`,",
+                    f"found {type(node_features)}",
                 )
 
         src_features, dst_features = get_src_dst_features(edge_index, node_features)

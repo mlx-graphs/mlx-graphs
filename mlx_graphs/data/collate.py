@@ -20,8 +20,9 @@ def collate(graph_list: list[GraphData]) -> dict:
 
     Returns:
         Dict containing all the attributes of the unified and disconnected big graph as
-            well as the "private" attributes used behind the hood by the batching. These private
-            attributes start with an underscore "_" and can be ignore by the user.
+        well as the "private" attributes used behind the hood by the batching.
+        These private attributes start with an underscore "_" and can be ignore by
+        the user.
     """
     batch_attr_dict = {}
 

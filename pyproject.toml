@@ -44,3 +44,13 @@ benchmarks = [
 [project.urls]
 Repository = "https://github.com/TristanBilot/mlx-graphs"
 Issues = "https://github.com/TristanBilot/mlx-graphs/issues"
+
+
+[tool.ruff]
+line-length = 88
+indent-width = 4
+select = ["F", "E", "W", "I001"]
+extend-include = ["*.ipynb"]
+
+[tool.ruff.format]
+docstring-code-format = true

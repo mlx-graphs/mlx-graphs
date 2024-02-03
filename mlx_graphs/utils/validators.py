@@ -12,11 +12,13 @@ def validate_adjacency_matrix(func):
     def wrapper(adjacency_matrix, *args, **kwargs):
         if adjacency_matrix.ndim != 2:
             raise ValueError(
-                f"Adjacency matrix must be two-dimensional (got {adjacency_matrix.ndim} dimensions)"
+                "Adjacency matrix must be two-dimensional",
+                f"(got {adjacency_matrix.ndim} dimensions)",
             )
         if not mx.equal(*adjacency_matrix.shape):
             raise ValueError(
-                f"Adjacency matrix must be a square matrix (got {adjacency_matrix.shape} shape)"
+                "Adjacency matrix must be a square matrix",
+                f"(got {adjacency_matrix.shape} shape)",
             )
         return func(adjacency_matrix, *args, **kwargs)
 
@@ -53,7 +55,8 @@ def validate_edge_index_and_features(func):
             if edge_index.shape[1] != edge_features.shape[0]:
                 raise ValueError(
                     "edge_features must be 1 per edge ",
-                    f"(got {edge_index.shape[1]} edges and {edge_features.shape[0]} features)",
+                    f"(got {edge_index.shape[1]} edges",
+                    f"and {edge_features.shape[0]} features)",
                 )
         return func(edge_index, edge_features, *args, **kwargs)
 

@@ -1,7 +1,7 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.utils import scatter, degree, invert_sqrt_degree
+from mlx_graphs.utils import degree, invert_sqrt_degree, scatter
 
 
 @pytest.mark.parametrize(

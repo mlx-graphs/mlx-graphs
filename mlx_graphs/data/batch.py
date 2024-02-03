@@ -3,8 +3,8 @@ from typing import Union
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.data.data import GraphData
 from mlx_graphs.data.collate import collate
+from mlx_graphs.data.data import GraphData
 
 
 class GraphDataBatch(GraphData):
@@ -13,8 +13,8 @@ class GraphDataBatch(GraphData):
 
     All graphs remain disconnected in the batch, meaning that any pairs of graphs
     have no nodes or edges in common.
-    `GraphDataBatch` can be especially used to speed up graph classification tasks, where
-    multiple graphs can easily fit into memory and be processed in parallel.
+    `GraphDataBatch` can be especially used to speed up graph classification tasks,
+    where multiple graphs can easily fit into memory and be processed in parallel.
 
     Args:
         graphs: List of `GraphData` objects to batch together
@@ -44,22 +44,22 @@ class GraphDataBatch(GraphData):
 
         >>> batch
         GraphDataBatch(
-            edge_index=array([[0, 0, 0, 4, 4, 4, 9, 9, 9], [1, 1, 1, 5, 5, 5, 10, 10, 10]], dtype=int32),
-            node_features=array([[0.0], [0.0], [0.0], [1.0], [1.0], [1.0], [2.0], [2.0], [2.0]], dtype=float32))
+            edge_index(shape=[2, 9], int32)
+            node_features(shape=[9, 1], float32))
 
         >>> batch[1]
         GraphData(
-            edge_index=array([[1, 1, 1], [2, 2, 2]], dtype=int32),
-            node_features=array([[1], [1], [1]], dtype=float32))
+            edge_index(shape=[2, 3], int32)
+            node_features(shape=[3, 1], float32))
 
         >>> batch[1:]
         [
             GraphData(
-                edge_index=array([[1, 1, 1], [2, 2, 2]], dtype=int32),
-                node_features=array([[1], [1], [1]], dtype=float32)),
+                edge_index(shape=[2, 3], int32)
+                node_features(shape=[3, 1], float32)
             GraphData(
-                edge_index=array([[3, 3, 3], [4, 4, 4]], dtype=int32),
-                node_features=array([[2], [2], [2]], dtype=float32))
+                edge_index(shape=[2, 3], int32)
+                node_features(shape=[3, 1], float32)
         ]
     """
 
@@ -112,7 +112,10 @@ class GraphDataBatch(GraphData):
         raise TypeError("GraphDataBatch indices should be int or slice.")
 
     def _get_graph(self, idx: int) -> GraphData:
-        """Returns a `GraphData` from the batch with its original attributes and edge index."""
+        """
+        Returns a `GraphData` from the batch with its original attributes and edge
+        index.
+        """
         large_graph_dict = {
             attr: getattr(self, attr)
             for attr in self.to_dict()
@@ -124,8 +127,10 @@ class GraphDataBatch(GraphData):
             from_idx, upto_idx = self._get_attr_slice_at_index(attr, idx)
             attr_array = getattr(self, attr)
 
-            # Using mx.take_along_axis required indices with same number of dimensions as the values
-            # Singleton dimensions are thus added to all dimensions except the __concat__ dimension
+            # Using mx.take_along_axis required indices with same number of dimensions
+            # as the values
+            # Singleton dimensions are thus added to all dimensions except
+            # the __concat__ dimension
             gather_dim = self.to_dict()[f"_cat_dim_{attr}"]
             broadcast_dim = [
                 -1 if dim == gather_dim else 1 for dim in range(attr_array.ndim)
@@ -145,8 +150,8 @@ class GraphDataBatch(GraphData):
         return GraphData(**single_graph_dict)
 
     def _get_attr_slice_at_index(self, attr: str, idx: int):
-        """Returns the starting and ending index to retrieve the original attribute `attr`
-        from the batch, at the given index `idx`.
+        """Returns the starting and ending index to retrieve the original attribute
+        `attr` from the batch, at the given index `idx`.
         """
         attr_sizes = self.to_dict()[f"_size_{attr}"]
         cum_attr_counts = mx.cumsum(mx.concatenate([mx.array([0]), attr_sizes]))
@@ -157,9 +162,9 @@ class GraphDataBatch(GraphData):
         return from_idx, upto_idx
 
     def _handle_neg_index_if_needed(self, index: Union[mx.array, list, int]):
-        """Returns the corresponsing positive index or indices of negative batch indices.
-        Raises an index error if indices are incorrect. This method accepts either an mx.array,
-        a list or a single int index.
+        """Returns the corresponsing positive index or indices of negative batch
+        indices. Raises an index error if indices are incorrect. This method accepts
+        either an mx.array, a list or a single int index.
         """
         if isinstance(index, int):
             index = mx.array([index])

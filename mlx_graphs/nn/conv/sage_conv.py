@@ -7,15 +7,16 @@ from mlx_graphs.nn.message_passing import MessagePassing
 
 
 class SAGEConv(MessagePassing):
-    r"""GraphSAGE convolution layer from `"Inductive Representation Learning on Large Graphs" <https://arxiv.org/abs/1706.02216>`_ paper.
+    r"""GraphSAGE convolution layer from `"Inductive Representation Learning on Large
+    Graphs" <https://arxiv.org/abs/1706.02216>`_ paper.
 
     .. math::
         \mathbf{h}_i = \mathbf{W}_1 \mathbf{x}_i + \mathbf{W}_2 \cdot
         \bigoplus_{j \in \mathcal{N}(i)} \mathbf{x}_j,
 
-    where :math:`\mathbf{x}_i` represents the input features of node :math:`i`, :math:`\bigoplus`
-    denotes the aggregation function, set by default to `mean` and :math:`\mathbf{h}_i`
-    is the computed embedding of node :math:`i`.
+    where :math:`\mathbf{x}_i` represents the input features of node :math:`i`,
+    :math:`\bigoplus` denotes the aggregation function, set by default to `mean` and
+    :math:`\mathbf{h}_i` is the computed embedding of node :math:`i`.
 
     Args:
         node_features_dim: Size of input node features
@@ -42,7 +43,8 @@ class SAGEConv(MessagePassing):
             [1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
             [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897],
             [1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
-            [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897]], dtype=float32)
+            [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897]],
+            dtype=float32)
     """
 
     def __init__(
@@ -74,7 +76,7 @@ class SAGEConv(MessagePassing):
             mx.array: The computed node embeddings
         """
 
-        # We follow DGL's way here by applying projection on the smaller feature dimension
+        # We follow DGL's way by applying projection on the smaller feature dimension
         linear_before_mp = self.node_features_dim > self.out_features_dim
 
         if linear_before_mp:
