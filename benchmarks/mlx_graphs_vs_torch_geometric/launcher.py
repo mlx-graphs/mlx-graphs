@@ -22,14 +22,17 @@ except RuntimeError:
         "To run the benchmark, install torch_geometric: `pip install torch_geometric`"
     )
 
+
 from benchmark_layers import (
     benchmark_fast_gather,
     benchmark_gather,
+    benchmark_GCNConv,
+    benchmark_scatter,
 )
 from benchmark_utils import print_benchmark
 
 
-def run_processes(layers, args, iterations=4):
+def run_processes(layers, args):
     """
     Runs all layers in serial, on separate processes.
     Using processes avoids exploding memory within the main process during the bench.
@@ -37,23 +40,22 @@ def run_processes(layers, args, iterations=4):
     all_times = defaultdict(dict)
     queue = mp.Queue()
 
-    with tqdm(total=len(layers) * iterations) as pbar:
+    with tqdm(total=len(layers)) as pbar:
         for lay in layers:
             lay_times = defaultdict(list)
             lay_name = None
 
-            for _ in range(iterations):
-                p = mp.Process(target=run, args=(lay, args, queue))
-                p.start()
+            p = mp.Process(target=run, args=(lay, args, queue))
+            p.start()
 
-                times = queue.get()
-                p.join()
+            times = queue.get()
+            p.join()
 
-                for backend, time in list(times.values())[0].items():
-                    lay_times[backend].append(time)
-                lay_name = list(times.keys())[0]
+            for backend, time in list(times.values())[0].items():
+                lay_times[backend].append(time)
+            lay_name = list(times.keys())[0]
 
-                pbar.update(1)
+            pbar.update(1)
 
             lay_times_mean = {k: np.mean(v) for k, v in lay_times.items()}
             all_times[lay_name] = lay_times_mean
@@ -152,17 +154,17 @@ if __name__ == "__main__":
         for shape in shapes:
             edge_index_shape, node_features_shape = shape
 
-            # if op == "benchmark_scatter":
-            #     layers.append(
-            #         (
-            #             benchmark_scatter,
-            #             {
-            #                 "edge_index_shape": edge_index_shape,
-            #                 "node_features_shape": node_features_shape,
-            #                 "scatter_op": "add",
-            #             },
-            #         )
-            #     )
+            if op == "benchmark_scatter":
+                layers.append(
+                    (
+                        benchmark_scatter,
+                        {
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                            "scatter_op": "add",
+                        },
+                    )
+                )
 
             if op == "benchmark_gather":
                 layers.append(
@@ -186,17 +188,17 @@ if __name__ == "__main__":
                     )
                 )
 
-            # if op == "benchmark_GCNConv":
-            #     layers.append(
-            #         (
-            #             benchmark_GCNConv,
-            #             {
-            #                 "in_dim": node_features_shape[-1],
-            #                 "out_dim": node_features_shape[-1],
-            #                 "edge_index_shape": edge_index_shape,
-            #                 "node_features_shape": node_features_shape,
-            #             },
-            #         )
-            #     )
+            if op == "benchmark_GCNConv":
+                layers.append(
+                    (
+                        benchmark_GCNConv,
+                        {
+                            "in_dim": node_features_shape[-1],
+                            "out_dim": node_features_shape[-1],
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                        },
+                    )
+                )
 
     run_processes(layers, args)

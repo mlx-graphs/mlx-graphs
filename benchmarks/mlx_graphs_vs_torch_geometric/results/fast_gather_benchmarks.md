@@ -41,3 +41,48 @@ Detailed benchmark:
 |----------------------------|-------|-------|-------|-----------------------|
 | benchmark_gather       |   8.05 |  20.46 |  10.44 |    +29% |
 | benchmark_fast_gather  |   5.99 |   4.04 |   9.94 |    +66% |
+
+
+**M3 Pro (6E+5P+14GPU)**
+
+Detailed benchmark:
+| Operation                                                              | mlx_gpu | mlx_cpu | pyg_cpu | mlx_gpu/pyg_cpu speedup |
+|------------------------------------------------------------------------|-------|-------|-------|-----------------------|
+| benchmark_gather / edg=(2, 1000) nod=(10, 64)                      |   0.25 |   0.08 |   0.17 |    -31% |
+| benchmark_gather / edg=(2, 10000) nod=(10, 64)                     |   0.95 |   0.48 |   0.93 |     -1% |
+| benchmark_gather / edg=(2, 100000) nod=(10, 64)                    |   2.02 |   1.51 |   1.62 |    -19% |
+| benchmark_gather / edg=(2, 1000000) nod=(10, 64)                   |   9.72 |  14.78 |  25.18 |   +159% |
+| benchmark_gather / edg=(2, 1000) nod=(100, 64)                     |   0.25 |   0.07 |   0.20 |    -20% |
+| benchmark_gather / edg=(2, 10000) nod=(100, 64)                    |   0.67 |   0.49 |   0.88 |    +31% |
+| benchmark_gather / edg=(2, 100000) nod=(100, 64)                   |   1.66 |   1.53 |   1.63 |     -1% |
+| benchmark_gather / edg=(2, 1000000) nod=(100, 64)                  |   9.80 |  14.80 |  25.53 |   +160% |
+| benchmark_gather / edg=(2, 1000) nod=(1000, 64)                    |   0.26 |   0.08 |   0.20 |    -21% |
+| benchmark_gather / edg=(2, 10000) nod=(1000, 64)                   |   0.35 |   0.57 |   0.89 |   +153% |
+| benchmark_gather / edg=(2, 100000) nod=(1000, 64)                  |   1.73 |   1.84 |   1.70 |     -1% |
+| benchmark_gather / edg=(2, 1000000) nod=(1000, 64)                 |   9.82 |  17.73 |  26.58 |   +170% |
+| benchmark_gather / edg=(2, 1000) nod=(10000, 64)                   |   0.26 |   0.09 |   0.22 |    -18% |
+| benchmark_gather / edg=(2, 10000) nod=(10000, 64)                  |   0.65 |   0.70 |   1.20 |    +84% |
+| benchmark_gather / edg=(2, 100000) nod=(10000, 64)                 |   1.63 |   1.84 |   1.77 |     +8% |
+| benchmark_gather / edg=(2, 1000000) nod=(10000, 64)                |   9.80 |  18.31 |  27.32 |   +178% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[10, 64]                 |   0.24 |   0.08 |   0.20 |    -17% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[10, 64]                |   0.68 |   0.48 |   0.65 |     -3% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[10, 64]               |   1.65 |   1.73 |   1.61 |     -2% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[10, 64]              |   9.72 |   9.70 |  25.93 |   +166% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[100, 64]                |   0.24 |   0.08 |   0.20 |    -16% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[100, 64]               |   0.69 |   0.50 |   0.81 |    +18% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[100, 64]              |   1.67 |   1.64 |   1.66 |      0% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[100, 64]             |   9.78 |   9.75 |  25.73 |   +163% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[1000, 64]               |   0.25 |   0.09 |   0.20 |    -18% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[1000, 64]              |   0.74 |   0.57 |   1.09 |    +47% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[1000, 64]             |   1.68 |   1.63 |   1.69 |     +0% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[1000, 64]            |   9.88 |   9.78 |  26.53 |   +168% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[10000, 64]              |   0.25 |   0.09 |   0.12 |    -51% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[10000, 64]             |   0.94 |   0.71 |   1.16 |    +24% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[10000, 64]            |   1.67 |   1.64 |   1.76 |     +5% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[10000, 64]           |   9.76 |   9.75 |  26.90 |   +175% |
+
+ Average benchmark:
+| Operation                  | mlx_gpu | mlx_cpu | pyg_cpu | mlx_gpu/pyg_cpu speedup |
+|----------------------------|-------|-------|-------|-----------------------|
+| benchmark_gather       |   3.11 |   4.68 |   7.25 |   +132% |
+| benchmark_fast_gather  |   3.11 |   3.01 |   7.27 |   +133% |

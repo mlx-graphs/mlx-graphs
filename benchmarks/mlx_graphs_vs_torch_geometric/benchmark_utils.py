@@ -1,6 +1,6 @@
 import math
+import timeit
 from collections import defaultdict
-from time import time
 
 import mlx.core as mx
 import numpy as np
@@ -23,14 +23,9 @@ def get_dummy_features(shape, device, framework):
     raise ValueError("Framework should be either mlx or pyg.")
 
 
-def measure_runtime(fn, **kwargs) -> float:
-    # Avoid first call due to cold start
-    fn(**kwargs)
-
-    tic = time()
-    fn(**kwargs)
-
-    return (time() - tic) * 1000
+def measure_runtime(fn, repeat=5, iters=2, **kwargs) -> float:
+    time = min(timeit.Timer(lambda: fn(**kwargs)).repeat(repeat=repeat, number=iters))
+    return time * 1000 / iters
 
 
 def calculate_speedup(a, compared_to):
@@ -47,7 +42,6 @@ def print_benchmark(times, args, reduce_mean=False):
             op = k.split("/")[0]
             for backend, runtime in v.items():
                 new_times[op][backend].append(runtime)
-
         for k, v in new_times.items():
             for backend, runtimes in v.items():
                 new_times[k][backend] = np.mean(new_times[k][backend])
