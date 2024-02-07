@@ -6,7 +6,10 @@ import torch_geometric.nn as pyg_nn
 import mlx_graphs.nn as mlg_nn
 
 try:
-    from torch_scatter import scatter as scatter_torch
+    # from torch_scatter import scatter as scatter_torch
+    from torch_geometric.utils import (
+        scatter as scatter_torch,  # The one used by PyG (faster)
+    )
 except ImportError:
     raise ImportError("To run this benchmark, run `pip install torch_scatter`")
 

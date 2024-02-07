@@ -43,11 +43,10 @@ class GCNConv(MessagePassing):
 
         node_features = self.linear(node_features)
 
-        row, col = edge_index
-
         # Compute node degree normalization for the mean aggregation.
         norm: mx.array = None
         if normalize:
+            row, col = edge_index
             deg = degree(col, node_features.shape[0], edge_weights=edge_weights)
             # NOTE : need boolean indexing in order to zero out inf values
             deg_inv_sqrt = invert_sqrt_degree(deg)

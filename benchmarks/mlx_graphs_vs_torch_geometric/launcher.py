@@ -30,7 +30,7 @@ from benchmark_layers import (
 from benchmark_utils import print_benchmark
 
 
-def run_processes(layers, args, iterations=1):
+def run_processes(layers, args, iterations=4):
     """
     Runs all layers in serial, on separate processes.
     Using processes avoids exploding memory within the main process during the bench.
@@ -119,150 +119,69 @@ if __name__ == "__main__":
     if args.include_mps:
         assert torch.backends.mps.is_available(), "MPS backend not available."
 
-    layers = [
-        # Scatter add benchmarks
-        (
-            benchmark_scatter,  # 100k indices, with 100 unique sources and destinations
-            {
-                "edge_index_shape": (2, 100000),
-                "node_features_shape": (100, 64),
-                "scatter_op": "add",
-            },
-        ),
-        (
-            benchmark_scatter,  # 1M indices, with 10 unique sources and destinations
-            {
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (10, 64),
-                "scatter_op": "add",
-            },
-        ),
-        (
-            benchmark_scatter,  # 10k indices, with 1000 unique sources and destinations
-            {
-                "edge_index_shape": (2, 10000),
-                "node_features_shape": (1000, 64),
-                "scatter_op": "add",
-            },
-        ),
-        # Scatter max benchmarks
-        (
-            benchmark_scatter,  # 100k indices, with 100 unique sources and destinations
-            {
-                "edge_index_shape": (2, 100000),
-                "node_features_shape": (100, 64),
-                "scatter_op": "max",
-            },
-        ),
-        (
-            benchmark_scatter,  # 1M indices, with 10 unique sources and destinations
-            {
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (10, 64),
-                "scatter_op": "max",
-            },
-        ),
-        (
-            benchmark_scatter,  # 10k indices, with 1000 unique sources and destinations
-            {
-                "edge_index_shape": (2, 10000),
-                "node_features_shape": (1000, 64),
-                "scatter_op": "max",
-            },
-        ),
-        (
-            benchmark_gather,  # 100k indices, with 100 unique sources and destinations
-            {
-                "edge_index_shape": (2, 100000),
-                "node_features_shape": (100, 64),
-            },
-        ),
-        (
-            benchmark_gather,  # 1M indices, with 10 unique sources and destinations
-            {
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (10, 64),
-            },
-        ),
-        (
-            benchmark_gather,  # 10k indices, with 1000 unique sources and destinations
-            {
-                "edge_index_shape": (2, 10000),
-                "node_features_shape": (1000, 64),
-            },
-        ),
-        (
-            benchmark_GCNConv,
-            {
-                "in_dim": 64,
-                "out_dim": 64,
-                "edge_index_shape": (2, 100000),
-                "node_features_shape": (100, 64),
-            },
-        ),
-        (
-            benchmark_GCNConv,
-            {
-                "in_dim": 64,
-                "out_dim": 64,
-                "edge_index_shape": (2, 1000000),
-                "node_features_shape": (10, 64),
-            },
-        ),
-        (
-            benchmark_GCNConv,
-            {
-                "in_dim": 64,
-                "out_dim": 64,
-                "edge_index_shape": (2, 10000),
-                "node_features_shape": (1000, 64),
-            },
-        ),
-        # (
-        #     benchmark_GCNConv,
-        #     {
-        #         "in_dim": 8,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000),
-        #         "node_features_shape": (100, 8),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 100000),
-        #         "node_features_shape": (100, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (10, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 10000),
-        #         "node_features_shape": (1000, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 8,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000),
-        #         "node_features_shape": (100, 8),
-        #     },
-        # ),
+    shapes = [
+        # 10 nodes
+        [(2, 1000), (10, 64)],
+        [(2, 10000), (10, 64)],
+        [(2, 100000), (10, 64)],
+        [(2, 1000000), (10, 64)],
+        # 100 nodes
+        [(2, 1000), (100, 64)],
+        [(2, 10000), (100, 64)],
+        [(2, 100000), (100, 64)],
+        [(2, 1000000), (100, 64)],
+        # 1000 nodes
+        [(2, 1000), (1000, 64)],
+        [(2, 10000), (1000, 64)],
+        [(2, 100000), (1000, 64)],
+        [(2, 1000000), (1000, 64)],
+        # 10_000 nodes
+        [(2, 1000), (10000, 64)],
+        [(2, 10000), (10000, 64)],
+        [(2, 100000), (10000, 64)],
+        [(2, 1000000), (10000, 64)],
     ]
+    operations = ["benchmark_scatter", "benchmark_gather", "benchmark_GCNConv"]
+
+    layers = []
+    for op in operations:
+        for shape in shapes:
+            edge_index_shape, node_features_shape = shape
+
+            if op == "benchmark_scatter":
+                layers.append(
+                    (
+                        benchmark_scatter,
+                        {
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                            "scatter_op": "add",
+                        },
+                    )
+                )
+
+            if op == "benchmark_gather":
+                layers.append(
+                    (
+                        benchmark_gather,
+                        {
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                        },
+                    )
+                )
+
+            if op == "benchmark_GCNConv":
+                layers.append(
+                    (
+                        benchmark_GCNConv,
+                        {
+                            "in_dim": node_features_shape[-1],
+                            "out_dim": node_features_shape[-1],
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                        },
+                    )
+                )
 
     run_processes(layers, args)
