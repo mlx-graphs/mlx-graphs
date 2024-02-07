@@ -19,6 +19,7 @@ from benchmark_utils import (
     measure_runtime,
 )
 
+from mlx_graphs.utils import fast_gather
 from mlx_graphs.utils.scatter import scatter
 
 
@@ -160,6 +161,47 @@ def benchmark_scatter(framework, device=None, **kwargs):
                 node_features=node_features,
                 edge_index=edge_index[1],
                 scatter_op=scatter_op,
+                device=device,
+            )
+
+    return run_benchmark(**kwargs)
+
+
+def benchmark_fast_gather(framework, device=None, **kwargs):
+    def run_benchmark(edge_index_shape, node_features_shape):
+        if framework == "mlx":
+
+            def mlx_gather(node_features, edge_index):
+                src_val = fast_gather(node_features, edge_index[0])
+                dst_val = fast_gather(node_features, edge_index[1])
+                mx.eval(src_val, dst_val)
+
+            edge_index = get_dummy_edge_index(
+                edge_index_shape, node_features_shape[0], device, "mlx"
+            )
+            node_features = get_dummy_features(node_features_shape, device, "mlx")
+
+            return measure_runtime(
+                mlx_gather,
+                node_features=node_features,
+                edge_index=edge_index,
+            )
+        else:
+
+            def pyg_gather(node_features, edge_index, device):
+                _ = node_features[edge_index[0]]
+                _ = node_features[edge_index[1]]
+                sync_mps_if_needed(device)
+
+            edge_index = get_dummy_edge_index(
+                edge_index_shape, node_features_shape[0], device, "pyg"
+            )
+            node_features = get_dummy_features(node_features_shape, device, "pyg")
+
+            return measure_runtime(
+                pyg_gather,
+                node_features=node_features,
+                edge_index=edge_index,
                 device=device,
             )
 

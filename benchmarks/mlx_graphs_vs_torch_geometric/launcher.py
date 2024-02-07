@@ -23,9 +23,8 @@ except RuntimeError:
     )
 
 from benchmark_layers import (
+    benchmark_fast_gather,
     benchmark_gather,
-    benchmark_GCNConv,
-    benchmark_scatter,
 )
 from benchmark_utils import print_benchmark
 
@@ -141,24 +140,29 @@ if __name__ == "__main__":
         [(2, 100000), (10000, 64)],
         [(2, 1000000), (10000, 64)],
     ]
-    operations = ["benchmark_scatter", "benchmark_gather", "benchmark_GCNConv"]
+    operations = [
+        "benchmark_scatter",
+        "benchmark_gather",
+        "benchmark_fast_gather",
+        "benchmark_GCNConv",
+    ]
 
     layers = []
     for op in operations:
         for shape in shapes:
             edge_index_shape, node_features_shape = shape
 
-            if op == "benchmark_scatter":
-                layers.append(
-                    (
-                        benchmark_scatter,
-                        {
-                            "edge_index_shape": edge_index_shape,
-                            "node_features_shape": node_features_shape,
-                            "scatter_op": "add",
-                        },
-                    )
-                )
+            # if op == "benchmark_scatter":
+            #     layers.append(
+            #         (
+            #             benchmark_scatter,
+            #             {
+            #                 "edge_index_shape": edge_index_shape,
+            #                 "node_features_shape": node_features_shape,
+            #                 "scatter_op": "add",
+            #             },
+            #         )
+            #     )
 
             if op == "benchmark_gather":
                 layers.append(
@@ -171,17 +175,28 @@ if __name__ == "__main__":
                     )
                 )
 
-            if op == "benchmark_GCNConv":
+            if op == "benchmark_fast_gather":
                 layers.append(
                     (
-                        benchmark_GCNConv,
+                        benchmark_fast_gather,
                         {
-                            "in_dim": node_features_shape[-1],
-                            "out_dim": node_features_shape[-1],
-                            "edge_index_shape": edge_index_shape,
-                            "node_features_shape": node_features_shape,
+                            "edge_index_shape": list(edge_index_shape),
+                            "node_features_shape": list(node_features_shape),
                         },
                     )
                 )
+
+            # if op == "benchmark_GCNConv":
+            #     layers.append(
+            #         (
+            #             benchmark_GCNConv,
+            #             {
+            #                 "in_dim": node_features_shape[-1],
+            #                 "out_dim": node_features_shape[-1],
+            #                 "edge_index_shape": edge_index_shape,
+            #                 "node_features_shape": node_features_shape,
+            #             },
+            #         )
+            #     )
 
     run_processes(layers, args)

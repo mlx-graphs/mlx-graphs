@@ -1,4 +1,5 @@
 from .scatter import ScatterAggregations, scatter, degree, invert_sqrt_degree  # noqa
+from .gather import fast_gather  # noqa
 from .transformations import (
     get_src_dst_features,  # noqa
     to_edge_index,  # noqa
