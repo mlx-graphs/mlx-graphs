@@ -13,3 +13,4 @@ A comprehensive benchmark of core `mlx` operations vs `torch` operations is also
 ```python
 python launcher.py
 ```
+> Note: check that you have the latest dev version of `mlx` installed
