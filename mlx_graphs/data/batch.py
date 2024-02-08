@@ -23,6 +23,8 @@ class GraphDataBatch(GraphData):
 
     .. code-block:: python
 
+        from mlx_graphs.data.batch import GraphDataBatch
+
         graphs = [
             GraphData(
                 edge_index=mx.array([[0, 0, 0], [1, 1, 1]]),
@@ -38,29 +40,27 @@ class GraphDataBatch(GraphData):
             )
         ]
         batch = GraphDataBatch(graphs)
-
-        >>> batch.num_graphs
-        3
-
-        >>> batch
-        GraphDataBatch(
+        >>> GraphDataBatch(
             edge_index(shape=[2, 9], int32)
             node_features(shape=[9, 1], float32))
 
-        >>> batch[1]
-        GraphData(
+        batch.num_graphs
+        >>> 3
+
+        batch[1]
+        >>> GraphData(
             edge_index(shape=[2, 3], int32)
             node_features(shape=[3, 1], float32))
 
-        >>> batch[1:]
-        [
-            GraphData(
-                edge_index(shape=[2, 3], int32)
-                node_features(shape=[3, 1], float32)
-            GraphData(
-                edge_index(shape=[2, 3], int32)
-                node_features(shape=[3, 1], float32)
-        ]
+        batch[1:]
+        >>> [
+                GraphData(
+                    edge_index(shape=[2, 3], int32)
+                    node_features(shape=[3, 1], float32)),
+                GraphData(
+                    edge_index(shape=[2, 3], int32)
+                    node_features(shape=[3, 1], float32))
+            ]
     """
 
     def __init__(self, graphs: list[GraphData], **kwargs) -> None:

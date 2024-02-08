@@ -27,6 +27,7 @@ class SAGEConv(MessagePassing):
 
     .. code-block:: python
 
+        import mlx.core as mx
         from mlx_graphs.data.data import GraphData
         from mlx_graphs.nn import SAGEConv
 

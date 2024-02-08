@@ -42,7 +42,7 @@ Examples showing the functionalities of this library are available `here <https:
    :maxdepth: 1
 
    tutorials/quickstart.rst
-   .. tutorials/tutorials.rst
+   tutorials/notebooks/notebook.ipynb
 
 
 .. toctree::
