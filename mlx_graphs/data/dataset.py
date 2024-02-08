@@ -1,4 +1,5 @@
 import os
+from typing import Optional
 
 
 class Dataset:
@@ -15,14 +16,18 @@ class Dataset:
     def __init__(
         self,
         name: str,
+        download_url: Optional[str] = None,
         raw_dir: str = ".local_data/raw",
         save_dir: str = ".local_data/processed",
     ):
         self.name = name
+        self.dowload_url = download_url
         self.raw_dir = raw_dir
         self.save_dir = save_dir
         self.raw_path = os.path.join(self.raw_dir, self.name)
         self.save_path = os.path.join(self.save_dir, self.name)
+
+        self.load()
 
     def download(self):
         raise NotImplementedError
