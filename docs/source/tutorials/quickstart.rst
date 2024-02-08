@@ -82,6 +82,17 @@ Just add your own attributes to the constructor using ``kwargs``.
     graph.alpha
     >>> array([1, 1, 1, 1], dtype=float32)
 
+
+Operations on graphs
+--------------------
+
+We provide some utilities to perform operations on graphs in ``mlx_graphs.utils``.
+
+For example, :meth:`~mlx_graphs.utils.transformations.to_edge_index`
+and :meth:`~mlx_graphs.utils.transformations.to_adjacency_matrix` can be used to convert an
+adjacency matrix repesenting a graph into its edge index and viceversa.
+
+
 Batching
 ---------
 
