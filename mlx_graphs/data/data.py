@@ -80,12 +80,13 @@ class GraphData:
         Given the name of a custom attribute `key`, returns the dimension where the
         concatenation happens during batching.
 
-        By default, all attribute names containing "index" will be concatenated on axis 1,
-        e.g. `edge_index`. Other attributes are concatenated on axis 0, e.g. node features.
+        By default, all attribute names containing "index" will be concatenated on
+        axis 1, e.g. `edge_index`. Other attributes are concatenated on axis 0,
+        e.g. node features.
 
         Args:
-            key: Name of the attribute on which change the default concatenation dimension
-                while using batching.
+            key: Name of the attribute on which change the default concatenation
+                dimension while using batching.
 
         Returns:
             The dimension where concatenation will happen when batching.
@@ -106,8 +107,8 @@ class GraphData:
         If incrementation is not used, the return value should be set to `None`.
 
         Args:
-            key: Name of the attribute on which change the default incrementation behavior
-                while using batching.
+            key: Name of the attribute on which change the default incrementation
+                behavior while using batching.
 
         Returns:
             Incrementing value for the given attribute or None.

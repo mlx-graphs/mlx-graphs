@@ -49,7 +49,8 @@ def to_sparse_adjacency_matrix(
     adjacency_matrix: mx.array, *, dtype: mx.Dtype = mx.uint32
 ) -> tuple[mx.array, mx.array]:
     """
-    Converts an adjacency matrix to a sparse representation as a tuple of edge index and edge features.
+    Converts an adjacency matrix to a sparse representation as a tuple of edge index
+    and edge features.
 
     Args:
         adjacency_matrix: the input adjacency matrix
@@ -92,9 +93,12 @@ def to_adjacency_matrix(
     Converts an edge index representation to an adjacency matrix.
 
     Args:
-        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
-        edge_features: a 1-dimensional array representing the features corresponding to the edges in edge_index. Defaults to None.
-        num_nodes: the number of nodes in the graph. Defaults to the number of nodes in edge_index
+        edge_index: a [2, num_edges] array representing the source and target nodes
+            of each edge
+        edge_features: a 1-dimensional array representing the features corresponding
+            to the edges in edge_index. Defaults to None.
+        num_nodes: the number of nodes in the graph. Defaults to the number of nodes
+            in edge_index
 
     Returns:
         The resulting adjacency matrix
@@ -103,7 +107,8 @@ def to_adjacency_matrix(
         if mx.max(edge_index) > num_nodes - 1:
             raise ValueError(
                 "num_nodes must be >= than the number of nodes in the edge_index ",
-                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1} nodes in index",
+                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1}",
+                "nodes in index",
             )
     else:
         num_nodes = (mx.max(edge_index) + 1).item()
@@ -111,7 +116,8 @@ def to_adjacency_matrix(
     if edge_features is not None:
         if edge_features.ndim != 1:
             raise ValueError(
-                f"edge_features must be 1-dimensional (got {edge_features.ndim} dimensions)"
+                "edge_features must be 1-dimensional",
+                f"(got {edge_features.ndim} dimensions)",
             )
 
     adjacency_matrix = mx.zeros((num_nodes, num_nodes), dtype=edge_index.dtype)
@@ -131,7 +137,8 @@ def get_src_dst_features(
     Extracts source and destination node features based on the given edge indices.
 
     Args:
-        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
+        edge_index: a [2, num_edges] array representing the source and target nodes
+            of each edge
         node_features: The input array of node features.
 
     Returns:
@@ -158,7 +165,8 @@ def get_src_dst_features(
 
 def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
     """
-    Computes the indices of the edges in edge_index_1 that are NOT present in edge_index_2
+    Computes the indices of the edges in edge_index_1 that are NOT present in
+    edge_index_2
 
     Args:
         edge_index_1: The first edge index array.
@@ -207,11 +215,15 @@ def add_self_loops(
     Adds self-loops to the given graph represented by edge_index and edge_features.
 
     Args:
-        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
-        edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
-        num_nodes: Optional number of nodes in the graph. If not provided, it is inferred from edge_index.
+        edge_index: a [2, num_edges] array representing the source and target nodes
+            of each edge
+        edge_features: Optional tensor representing features associated with each edge,
+            with shape [num_edges, num_edge_features]
+        num_nodes: Optional number of nodes in the graph. If not provided, it is
+            inferred from edge_index.
         fill_value: Value used for filling the self-loop features. Default is 1.
-        allow_repeated: Specify whether to add self-loops for all nodes, even if they are already in the edge_index. Defaults to True.
+        allow_repeated: Specify whether to add self-loops for all nodes, even if they
+            are already in the edge_index. Defaults to True.
 
     Returns:
         A tuple containing the updated edge_index and edge_features with self-loops.
@@ -221,7 +233,8 @@ def add_self_loops(
         if mx.max(edge_index) > num_nodes - 1:
             raise ValueError(
                 "num_nodes must be >= than the number of nodes in the edge_index ",
-                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1} nodes in index",
+                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1}",
+                "nodes in index",
             )
     else:
         num_nodes = (mx.max(edge_index) + 1).item()
@@ -254,8 +267,10 @@ def remove_self_loops(
     Removes self-loops from the given graph represented by edge_index and edge_features.
 
     Args:
-        edge_index: a [2, num_edges] array representing the source and target nodes of each edge
-        edge_features: Optional tensor representing features associated with each edge, with shape [num_edges, num_edge_features]
+        edge_index: a [2, num_edges] array representing the source and target nodes
+            of each edge
+        edge_features: Optional tensor representing features associated with each edge,
+            with shape [num_edges, num_edge_features]
 
     Returns:
         A tuple containing the updated edge_index and edge_features without self-loops.

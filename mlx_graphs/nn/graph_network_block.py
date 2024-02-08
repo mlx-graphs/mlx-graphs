@@ -11,8 +11,10 @@ class GraphNetworkBlock(Module):
     returns a graph with the same topology.
 
     The input graph can have
-        - ``node_features``: features associated with each node in the graph, provided as an array of size [N, F_N]
-        - ``edge_features``: features associated with each edge in the graph, provided as an array of size [E, F_E]
+        - ``node_features``: features associated with each node in the graph, provided
+            as an array of size [N, F_N]
+        - ``edge_features``: features associated with each edge in the graph, provided
+            as an array of size [E, F_E]
         - ``graph_features``: features associated to the graph itself, of size [F_U]
 
     The topology of the graph is specified as an `edge_index`, an array of size [2, E],
@@ -24,7 +26,8 @@ class GraphNetworkBlock(Module):
     architectures, like message-passing networks, deep sets, relation networks and more
     (see [1]).
 
-    For a usage example see `here <https://github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py>`_.
+    For a usage example see `here
+    <github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py>`_.
 
     Args:
         node_model: a callable Module which updates
@@ -35,7 +38,8 @@ class GraphNetworkBlock(Module):
             a graph's global features
 
     References:
-        [1] `Battaglia et al. Relational Inductive Biases, Deep Learning, and Graph Networks. <https://arxiv.org/pdf/1806.01261.pdf>`_
+        [1] `Battaglia et al. Relational Inductive Biases, Deep Learning, and \
+    Graph Networks. <https://arxiv.org/pdf/1806.01261.pdf>`_
 
     """
 

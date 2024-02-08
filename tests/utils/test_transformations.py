@@ -1,13 +1,14 @@
 import mlx.core as mx
+import pytest
+
 from mlx_graphs.utils.transformations import (
+    add_self_loops,
+    get_unique_edge_indices,
+    remove_self_loops,
+    to_adjacency_matrix,
     to_edge_index,
     to_sparse_adjacency_matrix,
-    to_adjacency_matrix,
-    get_unique_edge_indices,
-    add_self_loops,
-    remove_self_loops,
 )
-import pytest
 
 
 @pytest.mark.parametrize(

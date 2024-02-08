@@ -1,25 +1,26 @@
+import timeit
+
 import mlx.core as mx
 import scipy as sp
-import timeit
-from utils import to_markdown_table
-from row_index_functions import (
-    get_src_dst_features_ROW,
-    sort_edge_index_ROW,
-    sort_edge_index_and_features_ROW,
-    to_edge_index_ROW,
-    to_sparse_adjacency_matrix_ROW,
-    to_adjacency_matrix_ROW,
-    is_undirected_ROW,
-)
 from col_index_functions import (
     get_src_dst_features_COL,
-    sort_edge_index_COL,
+    is_undirected_COL,
     sort_edge_index_and_features_COL,
+    sort_edge_index_COL,
+    to_adjacency_matrix_COL,
     to_edge_index_COL,
     to_sparse_adjacency_matrix_COL,
-    to_adjacency_matrix_COL,
-    is_undirected_COL,
 )
+from row_index_functions import (
+    get_src_dst_features_ROW,
+    is_undirected_ROW,
+    sort_edge_index_and_features_ROW,
+    sort_edge_index_ROW,
+    to_adjacency_matrix_ROW,
+    to_edge_index_ROW,
+    to_sparse_adjacency_matrix_ROW,
+)
+from utils import to_markdown_table
 
 N = 1000
 

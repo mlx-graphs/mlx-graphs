@@ -17,9 +17,9 @@ from mlx_graphs.nn.conv.gin_conv import GINConv
                 ),
             ),
             mx.array([[0, 1, 2, 3], [0, 0, 1, 1]]),
-            mx.random.uniform(0, 1, (10, 16)),
+            mx.random.uniform(0, 1, [10, 16]),
             None,
-            [10, 32],
+            (10, 32),
         ),
         (
             GINConv(
@@ -30,9 +30,9 @@ from mlx_graphs.nn.conv.gin_conv import GINConv
                 ),
             ),
             mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]]),
-            mx.random.uniform(0, 1, (100, 16)),
+            mx.random.uniform(0, 1, [100, 16]),
             None,
-            [100, 32],
+            (100, 32),
         ),
         (
             GINConv(
@@ -43,9 +43,13 @@ from mlx_graphs.nn.conv.gin_conv import GINConv
                 ),
             ),
             mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]]),
-            mx.random.uniform(0, 1, (100, 16)),
-            mx.random.normal((5,)),
-            [100, 32],
+            mx.random.uniform(0, 1, [100, 16]),
+            mx.random.normal(
+                [
+                    5,
+                ]
+            ),
+            (100, 32),
         ),
     ],
 )

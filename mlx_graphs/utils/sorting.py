@@ -1,4 +1,5 @@
 import mlx.core as mx
+
 from mlx_graphs.utils.validators import (
     validate_edge_index,
     validate_edge_index_and_features,
@@ -11,7 +12,8 @@ def sort_edge_index(edge_index: mx.array) -> tuple[mx.array, mx.array]:
 
     Args:
         edge_index: A [2, num_edges] array representing edge indices,
-            where the first row contains source indices and the second row contains target indices.
+            where the first row contains source indices and the second row contains
+            target indices.
 
     Returns:
         A tuple containing the sorted edge index and the
@@ -33,7 +35,8 @@ def sort_edge_index_and_features(
 
     Args:
         edge_index: A [2, num_edges] array representing edge indices,
-            where the first row contains source indices and the second row contains target indices.
+            where the first row contains source indices and the second row contains
+            target indices.
         edge_features: An array representing edge features, where each row
             corresponds to an edge.
 
