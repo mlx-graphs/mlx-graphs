@@ -56,3 +56,9 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
 }
+
+html_static_path = ["_static"]
+
+html_css_files = [
+    "custom.css",
+]

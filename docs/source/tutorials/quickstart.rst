@@ -4,7 +4,7 @@
 Quickstart
 ============
 
-Here is a short introduction of ``mlx-graphs``, starting from building simple graphs to training a first GNN model.
+Here is a short introduction to ``mlx-graphs``, starting from building a simple graph to training a first GNN model.
 
 We'll cover the following topics:
 
