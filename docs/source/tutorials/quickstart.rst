@@ -15,7 +15,7 @@ We'll cover the following topics:
 Representing Graphs
 --------------------
 
-Basic Graphs
+Simple Graphs
 ~~~~~~~~~~~~~
 
 A graph can be easily built in ``mlx-graphs`` using :class:`~mlx_graphs.data.data.GraphData`.
