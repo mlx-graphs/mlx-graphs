@@ -39,6 +39,7 @@ We adopt the above convention across the entire library both in terms of shapes 
    :maxdepth: 1
 
    api/data/index.rst
+   api/datasets/index.rst
    api/nn/index.rst
    api/utils/index.rst
 

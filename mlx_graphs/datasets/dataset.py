@@ -7,7 +7,7 @@ DEFAULT_BASE_DIR = "~/.mlx_graphs_data/"
 
 class Dataset(ABC):
     """
-    Base dataset class. ``download``, ``process``, and ``save`` methods must
+    Base dataset class. ``download`` and ``process`` methods must
     be implemented by children classes
 
     Args:
