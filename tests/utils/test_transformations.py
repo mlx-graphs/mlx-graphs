@@ -8,6 +8,7 @@ from mlx_graphs.utils.transformations import (
     to_adjacency_matrix,
     to_edge_index,
     to_sparse_adjacency_matrix,
+    to_undirected,
 )
 
 
@@ -190,3 +191,14 @@ def test_remove_self_loops():
     x, _ = remove_self_loops(edge_index)
     expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
     assert mx.array_equal(x, expected_x)
+
+
+def test_to_undirected():
+    edge_index = mx.array([[0, 0, 2, 2], [1, 2, 1, 2]])
+    edge_features = mx.array([[1, 2, 3, 4]]).transpose()
+
+    target_edge_index = mx.array([[0, 0, 2, 2, 1, 2, 1, 2], [1, 2, 1, 2, 0, 0, 2, 2]])
+    target_edge_features = mx.array([[1, 2, 3, 4, 1, 2, 3, 4]]).transpose()
+    e, f = to_undirected(edge_index, edge_features)
+    assert mx.array_equal(e, target_edge_index)
+    assert mx.array_equal(f, target_edge_features)

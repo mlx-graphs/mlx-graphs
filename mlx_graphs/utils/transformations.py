@@ -287,3 +287,29 @@ def remove_self_loops(
     if edge_features is not None:
         no_self_loop_features = edge_features[preserved_idx]
     return no_self_loop_index, no_self_loop_features
+
+
+@validate_edge_index_and_features
+def to_undirected(
+    edge_index: mx.array, edge_features: Optional[mx.array] = None
+) -> tuple[mx.array, Optional[mx.array]]:
+    """
+    Converts a graph given as `edge_index` and, optionally, `edge_features`
+    to an undirected one.
+
+    Args:
+        edge_index: The edge index of the graph.
+        edge_features: Edge features associated with each edge.
+
+    Returns:
+        The undirected `edge_index` (and `edge_features`)
+    """
+
+    src, dst = edge_index
+    undirected_edge_index = mx.concatenate(
+        [mx.stack([src, dst]), mx.stack([dst, src])], 1
+    )
+    undirected_edge_features = None
+    if edge_features is not None:
+        undirected_edge_features = mx.concatenate([edge_features, edge_features], 0)
+    return undirected_edge_index, undirected_edge_features

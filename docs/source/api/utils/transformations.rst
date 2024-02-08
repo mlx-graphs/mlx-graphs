@@ -16,3 +16,4 @@ Transformations
 	get_unique_edge_indices
 	add_self_loops
 	remove_self_loops
+	to_undirected

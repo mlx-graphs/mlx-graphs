@@ -11,3 +11,4 @@ Datasets
 	:template: datasets-class-template.rst
 
 	Dataset
+	KarateClubDataset
