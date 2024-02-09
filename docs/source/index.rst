@@ -50,6 +50,7 @@ Examples showing the functionalities of this library are available `here <https:
    :maxdepth: 1
 
    api/data/index.rst
+   api/datasets/index.rst
    api/nn/index.rst
    api/utils/index.rst
 
