@@ -1,8 +1,21 @@
 import hashlib
 import os
+import pickle
 import warnings
+from typing import Optional
 
 import requests
+
+from mlx_graphs.data.data import GraphData
+
+
+def save_graphs(path: str, data: list[GraphData], file_name: Optional[str] = None):
+    if file_name is None:
+        file_name = "data.pkl"
+    if not os.path.exists(path):
+        os.makedirs(path)
+    with open(os.path.join(path, file_name), "wb") as f:
+        pickle.dump(data, f)
 
 
 def download(

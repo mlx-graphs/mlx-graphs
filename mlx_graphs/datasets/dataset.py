@@ -9,8 +9,8 @@ DEFAULT_BASE_DIR = "~/.mlx_graphs_data/"
 
 class Dataset(ABC):
     """
-    Base dataset class. ``download``, ``process``, ``__get_item__``, ``__len__``
-    methods must be implemented by children classes
+    Base dataset class. ``download``, ``process``, ``__get_item__``,
+    ``__len__`` methods must be implemented by children classes
 
     Args:
         name: name of the dataset
@@ -42,7 +42,7 @@ class Dataset(ABC):
 
         """
         if self._base_dir is not None:
-            return os.path.join(self._base_dir, self.name, "raw")
+            return os.path.expanduser(os.path.join(self._base_dir, self.name, "raw"))
         return None
 
     @property
@@ -51,7 +51,9 @@ class Dataset(ABC):
         The path where raw files are stored. Defaults at `<base_dir>/<name>/processed`
         """
         if self._base_dir is not None:
-            return os.path.join(self._base_dir, self.name, "processed")
+            return os.path.expanduser(
+                os.path.join(self._base_dir, self.name, "processed")
+            )
         return None
 
     @abstractmethod
@@ -66,7 +68,7 @@ class Dataset(ABC):
 
     def _download(self):
         if self._base_dir is not None and self.raw_path is not None:
-            if os.path.exists(os.path.expanduser(self.raw_path)):
+            if os.path.exists(self.raw_path):
                 return
             os.makedirs(self._base_dir)
             self.download()

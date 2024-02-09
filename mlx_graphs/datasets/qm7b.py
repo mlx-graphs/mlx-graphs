@@ -1,7 +1,16 @@
 import os
 
+import mlx.core as mx
 from dataset import DEFAULT_BASE_DIR, Dataset
 from utils import check_sha1, download
+
+from mlx_graphs.data import GraphData
+from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
+
+try:
+    import scipy as sp
+except ImportError:
+    raise ImportError("scipy is required to download and process the raw data")
 
 
 class QM7bDataset(Dataset):
@@ -23,7 +32,29 @@ class QM7bDataset(Dataset):
             )
 
     def process(self):
-        pass
+        assert self.raw_path is not None, "Unable to access/create the self.raw_path"
+        mat_path = os.path.join(self.raw_path, self.name + ".mat")
+        data = sp.io.loadmat(mat_path)
+        labels = mx.array(data["T"].tolist())
+        features = data["X"]
+        num_graphs = labels.shape[0]
+        graphs = []
+        for i in range(num_graphs):
+            edge_index, edge_features = to_sparse_adjacency_matrix(features[i])
+            graphs.append(
+                GraphData(
+                    edge_index=edge_index,
+                    edge_features=edge_features,
+                    graph_labels=labels[i],
+                )
+            )
+        self.graphs = graphs
+
+        # # currently skipping saving as mlx arrays don't work with pickle
+        # assert (
+        #     self.processed_path is not None
+        # ), "Unable to access/create the self.processed_path"
+        # save_graphs(self.processed_path, self.graphs)
 
     def __len__(self):
         pass
