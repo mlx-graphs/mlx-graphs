@@ -7,8 +7,26 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's MLX.
 ## Work in progress 🚧
 
 We just started the development of this lib, with the aim to integrate it within [ml-explore](https://github.com/ml-explore).
-
 The lib follows the Message Passing Neural Network ([MPNN](https://proceedings.mlr.press/v70/gilmer17a/gilmer17a.pdf)) architecture to build arbitrary GNNs on top of it, similarly as in [PyG](https://github.com/pyg-team/pytorch_geometric).
+
+
+## Features
+
+- **Fast GNN training and inference on Apple Silicon**
+   
+   ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
+   fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
+   available within the MLX core library.
+- **Scalability to large graphs**
+
+   With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
+   This setup allows Macs to leverage their entire memory capacity for storing graphs.
+   Consequently, Macs equipped with substantial memory can efficiently train GNNs on large graphs, spanning tens of gigabytes, directly using the Mac's GPU.
+- **Multi-device**
+   
+   Unified memory eliminates the need for time-consuming device-to-device transfers.
+   This architecture also enables specific operations to be run explicitly on either the CPU or GPU without incurring any overhead, facilitating more efficient computation and resource utilization.
+
 
 ### Installation
 `mlx-graphs` is available on Pypi. To install run
@@ -26,16 +44,6 @@ Create a new virtual environment and install the requirements
 pip install -e .
 ```
 
-### Usage
-#### Graph data model
-A graph is defined by a set of (optional) attributes
-  1. `edge_index`: an array of size `[2, num_edges]` which specifies the topology of the graph. The i-th column in `edge_index` defines the source and destination nodes of the i-th edge
-  2. `node_features`: an array of size `[num_nodes, num_node_features]` defining the features associated to each node (if any). The i-th row contains the features of the i-th node
-  3. `edge_features`:  an array of size `[num_edges, num_edge_features]` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
-  4. `graph_features`: an array of size `[num_graph_features]` defining the features associated to the graph itself
-
-We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
-
 ### Contributing
 #### Installing test, dev, benchmaks, docs dependencies
 Extra dependencies are specified in the `pyproject.toml`.
@@ -46,7 +54,7 @@ pip install -e '.[dev]'
 pip install -e '.[benchmarks]'
 pip install -e '.[docs]'
 ```
-For dev purposes you may want to install the current version of `mlx` via `pip install mlx @ git+https://github.com/ml-explore/mlx.git`
+For dev purposes you may want to install the current version of `mlx` via `pip install git+https://github.com/ml-explore/mlx.git`
 
 #### Testing
 We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
