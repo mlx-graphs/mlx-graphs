@@ -57,10 +57,7 @@ class QM7bDataset(Dataset):
         # save_graphs(self.processed_path, self.graphs)
 
     def __len__(self):
-        pass
+        return len(self.graphs)
 
     def __getitem__(self, idx):
-        pass
-
-
-a = QM7bDataset()
+        return self.graphs[idx]
