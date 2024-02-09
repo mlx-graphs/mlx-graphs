@@ -1,7 +1,7 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.data.data import GraphData
+from mlx_graphs.data import GraphData
 from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index,
