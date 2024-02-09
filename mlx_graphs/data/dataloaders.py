@@ -11,7 +11,7 @@ class Dataloader:
     Data loader class
 
     Args:
-        dataset: where to load the data from
+        dataset: `Dataset` or list of `GraphData` to batch and iterate over
         batch_size: how many graphs to load per batch. Defaults to 1
         shuffle: whether to reshuffle the data at every epoch. Defaults to False
     """
