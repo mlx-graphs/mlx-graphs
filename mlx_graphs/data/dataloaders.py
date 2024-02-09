@@ -8,7 +8,7 @@ from mlx_graphs.datasets import Dataset
 
 class Dataloader:
     """
-    Data loader class
+    Default data loader to batch and iterate over multiple graphs.
 
     Args:
         dataset: `Dataset` or list of `GraphData` to batch and iterate over
