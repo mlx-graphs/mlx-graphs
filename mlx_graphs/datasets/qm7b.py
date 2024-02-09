@@ -14,6 +14,16 @@ except ImportError:
 
 
 class QM7bDataset(Dataset):
+    """
+    QM7b dataset from the `"MoleculeNet: A Benchmark for Molecular
+    Machine Learning" <https://arxiv.org/abs/1703.00564>`_ paper, consisting of
+    7,211 molecules with 14 regression targets.
+
+    Args:
+        base_dir: directory where to store raw and processed data. Default is
+            ``~/.mlx_graphs_data/``. If `None`, data are not stored.
+    """
+
     _url = "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat"
     _sha1_str = "4102c744bb9d6fd7b40ac67a300e49cd87e28392"
 
