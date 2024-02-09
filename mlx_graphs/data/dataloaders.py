@@ -13,7 +13,7 @@ class Dataloader:
     Args:
         dataset: `Dataset` or list of `GraphData` to batch and iterate over
         batch_size: how many graphs to load per batch. Defaults to 1
-        shuffle: whether to reshuffle the data at every epoch. Defaults to False
+        shuffle: Whether to reshuffle the order of graphs within each batch. Defaults to False
     """
 
     def __init__(
