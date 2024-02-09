@@ -65,9 +65,7 @@ class Dataset(ABC):
         pass
 
     def _download(self):
-        print(self.raw_path)
         if self._base_dir is not None and self.raw_path is not None:
-            print(os.path.exists(os.path.expanduser(self.raw_path)))
             if os.path.exists(os.path.expanduser(self.raw_path)):
                 return
             os.makedirs(self._base_dir)
