@@ -2,6 +2,8 @@ import os
 from abc import ABC, abstractmethod
 from typing import Optional
 
+from mlx_graphs.data import GraphData
+
 DEFAULT_BASE_DIR = "~/.mlx_graphs_data/"
 
 
@@ -74,11 +76,11 @@ class Dataset(ABC):
         self.process()
 
     @abstractmethod
-    def __getitem__(self, idx):
+    def __getitem__(self, idx) -> GraphData:
         """Returns the `GraphData` at index idx."""
         pass
 
     @abstractmethod
-    def __len__(self):
+    def __len__(self) -> int:
         """Number of examples in the dataset"""
         pass

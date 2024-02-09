@@ -1,6 +1,6 @@
 import mlx.core as mx
 
-from mlx_graphs.data.data import GraphData
+from mlx_graphs.data import GraphData
 
 
 def test_data():

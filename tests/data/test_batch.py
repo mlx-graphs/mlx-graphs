@@ -1,8 +1,7 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.data.batch import batch
-from mlx_graphs.data.data import GraphData
+from mlx_graphs.data import GraphData, batch
 
 
 def test_batching():
