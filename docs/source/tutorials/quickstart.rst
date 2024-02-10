@@ -101,7 +101,7 @@ processing several graphs together instead of individually. This approach can dr
 through parallelization on the Mac's GPU.
 
 The :class:`~mlx_graphs.data.batch.GraphDataBatch` class handles all batch operations, enabling the creation of a batch from a list of
-:class:`~mlx_graphs.data.batch.GraphData` objects.
+:class:`~mlx_graphs.data.batch.GraphData` objects. We provide the :meth:`mlx_graphs.data.batch.batch` function as an interface to create a :class:`~mlx_graphs.data.batch.GraphDataBatch` out of a sequence of :class:`~mlx_graphs.data.batch.GraphData` objects.
 
 .. hint::
 
@@ -111,7 +111,7 @@ The :class:`~mlx_graphs.data.batch.GraphDataBatch` class handles all batch opera
 
 .. code-block:: python
 
-    from mlx_graphs.data.batch import GraphDataBatch
+    from mlx_graphs.data.batch import batch
 
     graphs = [
         GraphData(
@@ -127,12 +127,12 @@ The :class:`~mlx_graphs.data.batch.GraphDataBatch` class handles all batch opera
             node_features=mx.ones((3, 1)) * 2,
         )
     ]
-    batch = GraphDataBatch(graphs)
+    graphs_batch = batch(graphs)
     >>> GraphDataBatch(
         edge_index(shape=[2, 9], int32)
         node_features(shape=[9, 1], float32))
 
-    batch.num_graphs
+    graphs_batch.num_graphs
     >>> 3
 
 Internally, :class:`~mlx_graphs.data.batch.GraphDataBatch` simply collates the attributes
@@ -143,12 +143,12 @@ If needed, the graphs within the batch can be easily indexed:
 
 .. code-block:: python
 
-    batch[1]
+    graphs_batch[1]
     >>> GraphData(
         edge_index(shape=[2, 3], int32)
         node_features(shape=[3, 1], float32))
 
-    batch[1:]
+    graphs_batch[1:]
     >>> [
             GraphData(
                 edge_index(shape=[2, 3], int32)
@@ -157,6 +157,69 @@ If needed, the graphs within the batch can be easily indexed:
                 edge_index(shape=[2, 3], int32)
                 node_features(shape=[3, 1], float32))
         ]
+
+Datasets and Data loaders
+-------------------------
+
+Datasets can be implemented by extending the base class :class:`~mlx_graphs.datasets.Dataset` and implementing its abstract methods. For example, a basic implementation of the QM7b molecular dataset could look like
+
+.. code-block:: python
+
+    class QM7bDataset(Dataset):
+
+        def __init__(self):
+            super().__init__(name="qm7b")
+
+        def download(self):
+            file_path = os.path.join(self.raw_path, self.name + ".mat")
+            download(
+                "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat",
+                path=file_path,
+            )
+
+        def process(self):
+            mat_path = os.path.join(self.raw_path, self.name + ".mat")
+            data = scipy.io.loadmat(mat_path)
+            labels = mx.array(data["T"].tolist())
+            features = data["X"]
+            num_graphs = labels.shape[0]
+            graphs = []
+            for i in range(num_graphs):
+                edge_index, edge_features = to_sparse_adjacency_matrix(features[i])
+                graphs.append(
+                    GraphData(
+                        edge_index=edge_index,
+                        edge_features=edge_features,
+                        graph_labels=labels[i],
+                    )
+                )
+            self.graphs = graphs
+
+        def __len__(self):
+            return len(self.graphs)
+
+        def __getitem__(self, idx):
+            return self.graphs[idx]
+
+
+We provide a few widely used datasets and we expect to implement more over time.
+
+Data loaders can be used to automatically load and batch graphs for training routines. 
+The :class:`~mlx_graphs.data.dataloaders.Dataloader` class accepts a :class:`~mlx_graphs.datasets.Dataset`
+or a sequence of :class:`~mlx_graphs.data.data.GraphData` as input together with a ``batch_size``
+and provides an iterable over the dataset.
+
+.. code-block:: python
+
+    from mlx_graphs.data.dataloaders import Dataloader
+    
+    data = QM7bDataset()
+    loader = Dataloader(data, batch_size=16)
+
+    for item in loader:
+        ...
+
+
 
 GNN Layers
 ------------
