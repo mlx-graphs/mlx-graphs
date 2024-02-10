@@ -204,7 +204,7 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
 
 We provide a few widely used datasets and we expect to implement more over time.
 
-Data loaders can be used to automatically load and batch graphs for training routines. 
+Data loaders can be used to automatically load and batch graphs for training routines.
 The :class:`~mlx_graphs.data.dataloaders.Dataloader` class accepts a :class:`~mlx_graphs.datasets.Dataset`
 or a sequence of :class:`~mlx_graphs.data.data.GraphData` as input together with a ``batch_size``
 and provides an iterable over the dataset.
@@ -212,7 +212,7 @@ and provides an iterable over the dataset.
 .. code-block:: python
 
     from mlx_graphs.data.dataloaders import Dataloader
-    
+
     data = QM7bDataset()
     loader = Dataloader(data, batch_size=16)
 
