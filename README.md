@@ -1,4 +1,4 @@
-![mlx-graphs logo](docs/source/_static/logo.png)
+![mlx-graphs logo](docs/source/_static/logo.svg)
 ______________________________________________________________________
 
 **[Documentation](https://mlx-graphs.github.io/mlx-graphs/)**
