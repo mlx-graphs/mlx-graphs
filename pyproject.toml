@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlx-graphs"
-version = "0.0.2"
+version = "0.0.3"
 description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
@@ -42,8 +42,10 @@ benchmarks = [
 ]
 
 [project.urls]
-Repository = "https://github.com/TristanBilot/mlx-graphs"
-Issues = "https://github.com/TristanBilot/mlx-graphs/issues"
+Homepage = "https://mlx-graphs.github.io/mlx-graphs/"
+Documentation = "https://mlx-graphs.github.io/mlx-graphs/"
+Repository = "https://github.com/mlx-graphs/mlx-graphs"
+Issues = "https://github.com/mlx-graphs/mlx-graphs/issues"
 
 
 [tool.ruff]

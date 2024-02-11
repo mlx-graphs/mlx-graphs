@@ -9,7 +9,7 @@ autodoc_mock_imports = ["mlx"]
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.2"
+release = "0.0.3"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -41,12 +41,16 @@ highlight_language = "python"
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
 html_theme = "sphinx_book_theme"
-# html_static_path = ["_static"]
+html_static_path = ["_static"]
 html_theme_options = {
     # "show_toc_level": 2,
     "repository_url": "https://github.com/TristanBilot/mlx-graphs",
     "use_repository_button": True,
     "navigation_with_keys": False,
+    "logo": {
+        "image_light": "_static/logo.svg",
+        "image_dark": "_static/logo_dark.svg",
+    },
 }
 
 # intersphinx
