@@ -1,6 +1,7 @@
-# MLX-graphs
+![mlx-graphs logo](docs/source/_static/logo.png)
+______________________________________________________________________
 
-[Documentation](https://mlx-graphs.github.io/mlx-graphs/)
+**[Documentation](https://mlx-graphs.github.io/mlx-graphs/)**
 
 MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's MLX.
 
