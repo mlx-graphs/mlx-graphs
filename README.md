@@ -24,7 +24,7 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's MLX.
    This architecture also enables specific operations to be run explicitly on either the CPU or GPU without incurring any overhead, facilitating more efficient computation and resource utilization.
 
 
-### Installation
+## Installation
 `mlx-graphs` is available on Pypi. To install run
 ```
 pip install mlx-graphs
@@ -40,8 +40,8 @@ Create a new virtual environment and install the requirements
 pip install -e .
 ```
 
-### Contributing
-#### Installing test, dev, benchmaks, docs dependencies
+## Contributing
+### Installing test, dev, benchmaks, docs dependencies
 Extra dependencies are specified in the `pyproject.toml`.
 To install those required for testing, development and building documentation, you can run any of the following
 ```
@@ -52,12 +52,12 @@ pip install -e '.[docs]'
 ```
 For dev purposes you may want to install the current version of `mlx` via `pip install git+https://github.com/ml-explore/mlx.git`
 
-#### Testing
+### Testing
 We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
 Please run `pytest` to ensure breaking changes are not introduced.
 
 
-#### Pre-commit hooks (optional)
+### Pre-commit hooks (optional)
 To ensure code quality you can run [pre-commit](https://pre-commit.com) hooks. Simply install them by running
 ```
 pre-commit install
