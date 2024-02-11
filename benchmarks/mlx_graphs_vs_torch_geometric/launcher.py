@@ -8,7 +8,6 @@ except RuntimeError:
 import gc
 from argparse import ArgumentParser
 from collections import defaultdict
-from distutils.util import strtobool
 
 import mlx.core as mx
 import numpy as np
@@ -25,11 +24,12 @@ except RuntimeError:
 
 from benchmark_layers import (
     benchmark_fast_gather,
+    benchmark_GATConv,
     benchmark_gather,
     benchmark_GCNConv,
     benchmark_scatter,
 )
-from benchmark_utils import print_benchmark
+from benchmark_utils import print_benchmark, str2bool
 
 
 def run_processes(layers, args):
@@ -111,9 +111,9 @@ def run(fn_with_args, args, queue=None):
 
 if __name__ == "__main__":
     parser = ArgumentParser()
-    parser.add_argument("--include_cpu", type=strtobool, default="True")
-    parser.add_argument("--include_mps", type=strtobool, default="True")
-    parser.add_argument("--include_mlx", type=strtobool, default="True")
+    parser.add_argument("--include_cpu", type=str2bool, default="True")
+    parser.add_argument("--include_mps", type=str2bool, default="True")
+    parser.add_argument("--include_mlx", type=str2bool, default="True")
     args = parser.parse_args()
     print(args)
 
@@ -147,6 +147,7 @@ if __name__ == "__main__":
         "benchmark_gather",
         "benchmark_fast_gather",
         "benchmark_GCNConv",
+        "benchmark_GATConv",
     ]
 
     layers = []
@@ -192,6 +193,18 @@ if __name__ == "__main__":
                 layers.append(
                     (
                         benchmark_GCNConv,
+                        {
+                            "in_dim": node_features_shape[-1],
+                            "out_dim": node_features_shape[-1],
+                            "edge_index_shape": edge_index_shape,
+                            "node_features_shape": node_features_shape,
+                        },
+                    )
+                )
+            if op == "benchmark_GATConv":
+                layers.append(
+                    (
+                        benchmark_GATConv,
                         {
                             "in_dim": node_features_shape[-1],
                             "out_dim": node_features_shape[-1],

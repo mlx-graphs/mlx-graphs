@@ -1,10 +1,22 @@
 import math
 import timeit
+from argparse import ArgumentTypeError
 from collections import defaultdict
 
 import mlx.core as mx
 import numpy as np
 import torch
+
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    else:
+        raise ArgumentTypeError("Boolean value expected.")
 
 
 def get_dummy_edge_index(shape, num_nodes, device, framework):
