@@ -20,6 +20,8 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_autodoc_typehints",
     "sphinx.ext.intersphinx",
+    "nbsphinx",
+    "sphinx_gallery.load_style",
 ]
 
 napoleon_use_param = True
@@ -58,3 +60,9 @@ intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
 }
+
+html_static_path = ["_static"]
+
+html_css_files = [
+    "custom.css",
+]
