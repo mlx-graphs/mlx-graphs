@@ -219,3 +219,99 @@ Detailed benchmark:
 | benchmark_fast_gather  |   4.21 |   3.51 |  14.76 |   9.63 |   +129% |   +250% |
 | benchmark_GCNConv      |  40.52 |  73.41 | 575.63 |  26.44 |    -34% |  +1320% |
 | benchmark_GATConv      |  43.60 | 103.00 | nan |  28.89 |    -33% | nan |
+
+
+**M3 Pro (6E+5P+14GPU)**
+
+Detailed benchmark:
+| Operation                                                              | mlx_gpu | mlx_cpu | pyg_cpu | mlx_gpu/pyg_cpu speedup |
+|------------------------------------------------------------------------|-------|-------|-------|-----------------------|
+| benchmark_scatter / edg=(2, 1000) nod=(10, 64) sca=add             |   0.41 |   0.55 |   0.18 |    -55% |
+| benchmark_scatter / edg=(2, 10000) nod=(10, 64) sca=add            |   0.79 |   3.57 |   0.35 |    -54% |
+| benchmark_scatter / edg=(2, 100000) nod=(10, 64) sca=add           |   1.85 |  18.71 |   3.26 |    +76% |
+| benchmark_scatter / edg=(2, 1000000) nod=(10, 64) sca=add          |  10.54 | 188.44 |  37.18 |   +252% |
+| benchmark_scatter / edg=(2, 1000) nod=(100, 64) sca=add            |   0.87 |   0.54 |   0.13 |    -85% |
+| benchmark_scatter / edg=(2, 10000) nod=(100, 64) sca=add           |   1.23 |   4.97 |   0.30 |    -75% |
+| benchmark_scatter / edg=(2, 100000) nod=(100, 64) sca=add          |   5.17 |  18.84 |   2.63 |    -49% |
+| benchmark_scatter / edg=(2, 1000000) nod=(100, 64) sca=add         |  10.67 | 192.35 |  30.67 |   +187% |
+| benchmark_scatter / edg=(2, 1000) nod=(1000, 64) sca=add           |   0.42 |   0.56 |   0.14 |    -65% |
+| benchmark_scatter / edg=(2, 10000) nod=(1000, 64) sca=add          |   0.79 |   5.09 |   0.31 |    -61% |
+| benchmark_scatter / edg=(2, 100000) nod=(1000, 64) sca=add         |   4.83 |  18.81 |   2.58 |    -46% |
+| benchmark_scatter / edg=(2, 1000000) nod=(1000, 64) sca=add        |  10.56 | 191.59 |  28.45 |   +169% |
+| benchmark_scatter / edg=(2, 1000) nod=(10000, 64) sca=add          |   0.50 |   0.74 |   0.39 |    -23% |
+| benchmark_scatter / edg=(2, 10000) nod=(10000, 64) sca=add         |   0.87 |   5.16 |   0.40 |    -54% |
+| benchmark_scatter / edg=(2, 100000) nod=(10000, 64) sca=add        |   1.90 |  19.15 |   2.87 |    +51% |
+| benchmark_scatter / edg=(2, 1000000) nod=(10000, 64) sca=add       |  10.62 | 193.00 |  28.97 |   +172% |
+| benchmark_gather / edg=(2, 1000) nod=(10, 64)                      |   0.26 |   0.07 |   0.21 |    -18% |
+| benchmark_gather / edg=(2, 10000) nod=(10, 64)                     |   0.66 |   0.49 |   0.94 |    +42% |
+| benchmark_gather / edg=(2, 100000) nod=(10, 64)                    |   1.64 |   1.43 |   1.59 |     -3% |
+| benchmark_gather / edg=(2, 1000000) nod=(10, 64)                   |   9.70 |  14.52 |  25.91 |   +166% |
+| benchmark_gather / edg=(2, 1000) nod=(100, 64)                     |   0.26 |   0.07 |   0.18 |    -31% |
+| benchmark_gather / edg=(2, 10000) nod=(100, 64)                    |   0.66 |   0.49 |   0.77 |    +16% |
+| benchmark_gather / edg=(2, 100000) nod=(100, 64)                   |   2.24 |   1.44 |   1.59 |    -29% |
+| benchmark_gather / edg=(2, 1000000) nod=(100, 64)                  |   9.79 |  14.60 |  25.80 |   +163% |
+| benchmark_gather / edg=(2, 1000) nod=(1000, 64)                    |   0.25 |   0.08 |   0.20 |    -20% |
+| benchmark_gather / edg=(2, 10000) nod=(1000, 64)                   |   0.66 |   0.56 |   1.00 |    +51% |
+| benchmark_gather / edg=(2, 100000) nod=(1000, 64)                  |   4.17 |   1.65 |   1.70 |    -59% |
+| benchmark_gather / edg=(2, 1000000) nod=(1000, 64)                 |   9.84 |  17.45 |  26.38 |   +168% |
+| benchmark_gather / edg=(2, 1000) nod=(10000, 64)                   |   0.54 |   0.09 |   0.14 |    -74% |
+| benchmark_gather / edg=(2, 10000) nod=(10000, 64)                  |   0.95 |   0.21 |   1.19 |    +25% |
+| benchmark_gather / edg=(2, 100000) nod=(10000, 64)                 |   1.96 |   1.86 |   1.74 |    -10% |
+| benchmark_gather / edg=(2, 1000000) nod=(10000, 64)                |   9.93 |  18.17 |  27.08 |   +172% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[10, 64]                 |   0.51 |   0.08 |   0.19 |    -63% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[10, 64]                |   1.02 |   0.49 |   0.79 |    -22% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[10, 64]               |   4.41 |   4.38 |   1.60 |    -63% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[10, 64]              |   9.70 |   9.68 |  25.20 |   +159% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[100, 64]                |   0.23 |   0.08 |   0.19 |    -16% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[100, 64]               |   0.72 |   0.50 |   0.98 |    +35% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[100, 64]              |   1.66 |   1.63 |   1.68 |     +1% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[100, 64]             |   9.79 |   9.77 |  25.90 |   +164% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[1000, 64]               |   0.52 |   0.09 |   0.16 |    -68% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[1000, 64]              |   0.81 |   0.56 |   0.44 |    -45% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[1000, 64]             |   2.19 |   2.05 |   1.71 |    -22% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[1000, 64]            |   9.83 |   9.83 |  26.73 |   +171% |
+| benchmark_fast_gather / edg=[2, 1000] nod=[10000, 64]              |   0.29 |   0.03 |   0.18 |    -38% |
+| benchmark_fast_gather / edg=[2, 10000] nod=[10000, 64]             |   0.97 |   0.55 |   0.93 |     -4% |
+| benchmark_fast_gather / edg=[2, 100000] nod=[10000, 64]            |   1.65 |   1.68 |   1.71 |     +3% |
+| benchmark_fast_gather / edg=[2, 1000000] nod=[10000, 64]           |   9.78 |   9.75 |  26.76 |   +173% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000) nod=(10, 64)       |   0.73 |   0.80 |   0.34 |    -52% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 10000) nod=(10, 64)      |   1.44 |   5.89 |   0.78 |    -46% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 100000) nod=(10, 64)     |   8.22 |  21.93 |   4.90 |    -40% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000000) nod=(10, 64)    |  19.55 | 218.59 |  60.87 |   +211% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000) nod=(100, 64)      |   0.73 |   0.81 |   0.37 |    -49% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 10000) nod=(100, 64)     |   1.42 |   5.81 |   0.72 |    -48% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 100000) nod=(100, 64)    |   3.50 |  21.98 |   5.22 |    +49% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000000) nod=(100, 64)   |  19.43 | 218.57 |  63.13 |   +224% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000) nod=(1000, 64)     |   0.63 |   0.90 |   0.56 |    -12% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 10000) nod=(1000, 64)    |   1.47 |   6.01 |   0.84 |    -42% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 100000) nod=(1000, 64)   |   3.74 |  21.99 |   5.15 |    +37% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000000) nod=(1000, 64)  |  19.43 | 219.55 |  62.60 |   +222% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000) nod=(10000, 64)    |   1.05 |   1.92 |   1.24 |    +18% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 10000) nod=(10000, 64)   |   1.71 |   2.69 |   1.71 |     +0% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 100000) nod=(10000, 64)  |   3.41 |  22.49 |   6.49 |    +90% |
+| benchmark_GCNConv / in_=64 out=64 edg=(2, 1000000) nod=(10000, 64) |  19.49 | 220.96 |  64.75 |   +232% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000) nod=(10, 64)       |   0.86 |   1.12 |   0.42 |    -50% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 10000) nod=(10, 64)      |   1.66 |   3.17 |   0.91 |    -45% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 100000) nod=(10, 64)     |   4.21 |  30.26 |   5.83 |    +38% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000000) nod=(10, 64)    |  24.17 | 300.64 |  67.12 |   +177% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000) nod=(100, 64)      |   1.09 |   1.14 |   0.49 |    -55% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 10000) nod=(100, 64)     |   1.20 |   3.19 |   0.96 |    -20% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 100000) nod=(100, 64)    |   4.42 |  30.19 |   6.21 |    +40% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000000) nod=(100, 64)   |  24.17 | 300.69 |  70.56 |   +191% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000) nod=(1000, 64)     |   0.95 |   1.30 |   0.92 |     -3% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 10000) nod=(1000, 64)    |   2.14 |   3.26 |   1.29 |    -39% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 100000) nod=(1000, 64)   |   4.33 |  30.55 |   6.63 |    +53% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000000) nod=(1000, 64)  |  24.17 | 302.36 |  68.69 |   +184% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000) nod=(10000, 64)    |   1.70 |   1.08 |   1.85 |     +9% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 10000) nod=(10000, 64)   |   2.91 |   3.89 |   2.51 |    -13% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 100000) nod=(10000, 64)  |   4.61 |  31.19 |   7.95 |    +72% |
+| benchmark_GATConv / in_=64 out=64 edg=(2, 1000000) nod=(10000, 64) |  24.41 | 304.62 |  73.20 |   +199% |
+
+ Average benchmark:
+| Operation                  | mlx_gpu | mlx_cpu | pyg_cpu | mlx_gpu/pyg_cpu speedup |
+|----------------------------|-------|-------|-------|-----------------------|
+| benchmark_scatter      |   3.88 |  53.88 |   8.68 |   +123% |
+| benchmark_gather       |   3.34 |   4.57 |   7.28 |   +117% |
+| benchmark_fast_gather  |   3.38 |   3.20 |   7.20 |   +112% |
+| benchmark_GCNConv      |   6.62 |  61.93 |  17.48 |   +163% |
+| benchmark_GATConv      |   7.94 |  84.29 |  19.72 |   +148% |
