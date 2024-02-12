@@ -105,8 +105,8 @@ def read_tu_data(folder, prefix):
     # edge_index, edge_attr = coalesce(edge_index, edge_attr, num_nodes,
     #                                  num_nodes) # check
 
-    # Only dataset with duplicates
-    if prefix == "IMDB-BINARY":
+    # Only datasets with duplicates
+    if prefix in ["IMDB-BINARY", "REDDIT-BINARY"]:
         edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
     else:
         # NOTE: In PyG, the src/dst nodes are swapped in the `coalesce()` function

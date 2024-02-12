@@ -8,7 +8,7 @@ from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR
 
 
 def test_tu_dataset():
-    dataset_name = "IMDB-BINARY"
+    dataset_name = "REDDIT-BINARY"
     dataset = TUDataset(dataset_name)
     dataset_torch = TUDataset_torch(
         DEFAULT_BASE_DIR + "tests/" + dataset_name, dataset_name
