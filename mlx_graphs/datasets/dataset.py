@@ -1,7 +1,11 @@
+import copy
 import os
 from abc import ABC, abstractmethod
 from pathlib import Path
-from typing import Optional
+from typing import Optional, Sequence, Union
+
+import mlx.core as mx
+import numpy as np
 
 from mlx_graphs.data import GraphData
 
@@ -31,6 +35,7 @@ class Dataset(ABC):
         self._name = name
         self._base_dir = base_dir
 
+        self.graphs: np.array[GraphData] = None
         self._load()
 
     @property
@@ -61,6 +66,21 @@ class Dataset(ABC):
             )
         return None
 
+    @property
+    def num_node_classes(self) -> int:
+        """Returns the number of node classes to predict."""
+        return self.graphs[0].num_node_classes
+
+    @property
+    def num_edge_classes(self) -> int:
+        """Returns the number of edge classes to predict."""
+        return self.graphs[0].num_edge_classes
+
+    @property
+    def num_graph_classes(self) -> int:
+        """Returns the number of graph classes to predict."""
+        return self.graphs[0].num_graph_classes
+
     @abstractmethod
     def download(self):
         """Download the dataset at `self.raw_path`."""
@@ -82,15 +102,59 @@ class Dataset(ABC):
         self._download()
         self.process()
 
-    @abstractmethod
-    def __getitem__(self, idx) -> GraphData:
-        """Returns the `GraphData` at index idx."""
-        pass
-
-    @abstractmethod
-    def __len__(self) -> int:
+    def __len__(self):
         """Number of examples in the dataset"""
-        pass
+        return len(self.graphs)
+
+    def __getitem__(
+        self,
+        idx: Union[int, np.integer, slice, mx.array, np.ndarray, Sequence],
+    ) -> Union["Dataset", GraphData]:
+        """
+        Returns graphs from the ``Dataset`` at given indices.
+
+        If ``idx`` contains multiple indices (e.g. list or slice), then
+        another ``Dataset`` object containing the corresponding indexed graphs
+        is returned.
+        If ``idx`` is a single index (e.g. int), then a single ``GraphData``
+        is returned.
+
+        Args:
+            idx: Indices or index of the graphs to gather from the dataset.
+
+        Returns:
+            A ``Dataset`` if ``idx`` contains multiple elements, or a
+                ``GraphData`` otherwise.
+        """
+        indices = range(len(self))
+
+        if isinstance(idx, (int, np.integer)) or (
+            isinstance(idx, mx.array) and idx.ndim == 0
+        ):
+            index = indices[idx]
+            return self.graphs[index]
+
+        if isinstance(idx, slice):
+            indices = indices[idx]
+
+        elif isinstance(idx, mx.array) and idx.dtype in [mx.int64, mx.int32, mx.int16]:
+            return self[idx.flatten().tolist()]
+
+        elif isinstance(idx, np.ndarray) and idx.dtype == np.int64:
+            return self[idx.flatten().tolist()]
+
+        elif isinstance(idx, Sequence) and not isinstance(idx, str):
+            indices = [indices[i] for i in idx]
+
+        else:
+            raise IndexError(
+                f"Dataset indexing failed. Accepted indices are: int, mx.array, "
+                f"list, tuple, np.ndarray (got '{type(idx).__name__}')"
+            )
+
+        dataset = copy.copy(self)
+        dataset.graphs = self.graphs[indices]
+        return dataset
 
     def __repr__(self):
         return (

@@ -1,8 +1,6 @@
-import copy
 import glob
 import os
-from collections.abc import Sequence
-from typing import Optional, Union
+from typing import Optional
 
 import mlx.core as mx
 import numpy as np
@@ -46,7 +44,6 @@ class TUDataset(Dataset):
         base_dir: str = DEFAULT_BASE_DIR,
     ):
         self.cleaned = cleaned
-        self.data_list: np.array[GraphData] = None
 
         super().__init__(name=name, base_dir=base_dir)
 
@@ -73,47 +70,9 @@ class TUDataset(Dataset):
         os.unlink(file_path)
 
     def process(self):
-        self.data_list = read_tu_data(self.raw_path, self.name)
+        self.graphs = read_tu_data(self.raw_path, self.name)
 
-        # TODO: data_list shall be saved to disk once mx.array is pickle-able
-
-    def __getitem__(
-        self,
-        idx: Union[int, np.integer],
-    ) -> Union["Dataset", GraphData]:
-        indices = range(len(self))
-
-        if isinstance(idx, (int, np.integer)) or (
-            isinstance(idx, mx.array) and idx.ndim == 0
-        ):
-            index = indices[idx]
-            return self.data_list[index]
-
-        if isinstance(idx, slice):
-            indices = indices[idx]
-
-        elif isinstance(idx, mx.array) and idx.dtype in [mx.int64, mx.int32, mx.int16]:
-            return self[idx.flatten().tolist()]
-
-        elif isinstance(idx, np.ndarray) and idx.dtype == np.int64:
-            return self[idx.flatten().tolist()]
-
-        elif isinstance(idx, Sequence) and not isinstance(idx, str):
-            indices = [indices[i] for i in idx]
-
-        else:
-            raise IndexError(
-                f"Only slices (':'), list, tuples, torch.tensor and "
-                f"np.ndarray of dtype long or bool are valid indices (got "
-                f"'{type(idx).__name__}')"
-            )
-
-        dataset = copy.copy(self)
-        dataset.data_list = self.data_list[indices]
-        return dataset
-
-    def __len__(self) -> int:
-        return len(self.data_list)
+        # TODO: graphs shall be saved to disk once mx.array is pickle-able
 
 
 def read_tu_data(folder, prefix):
@@ -175,7 +134,7 @@ def read_tu_data(folder, prefix):
     )
     data, slices = split(data, batch_indices)
 
-    data_list = []
+    graphs = []
     for i in range(len(slices["edge_index"]) - 1):
         kwargs = {}
         for k, v in slices.items():
@@ -187,9 +146,9 @@ def read_tu_data(folder, prefix):
                 kwargs[k] = getattr(data, k)[
                     slices[k][i].item() : slices[k][i + 1].item()
                 ]
-        data_list.append(GraphData(**kwargs))
+        graphs.append(GraphData(**kwargs))
 
-    return np.array(data_list)
+    return np.array(graphs)
 
 
 def split(data, batch):

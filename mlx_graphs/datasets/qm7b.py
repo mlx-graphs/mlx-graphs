@@ -65,9 +65,3 @@ class QM7bDataset(Dataset):
         #     self.processed_path is not None
         # ), "Unable to access/create the self.processed_path"
         # save_graphs(self.processed_path, self.graphs)
-
-    def __len__(self):
-        return len(self.graphs)
-
-    def __getitem__(self, idx):
-        return self.graphs[idx]
