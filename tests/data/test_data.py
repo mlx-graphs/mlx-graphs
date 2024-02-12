@@ -33,3 +33,42 @@ def test_data():
 	node_features(shape=(5, 100), float32)
 	new_attr=32)"""
     ), "GraphData printing failed"
+
+    # Labels
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]),
+        node_labels=mx.expand_dims(mx.arange(10), 0),
+    )
+    assert data.num_node_classes == 10, "GraphData num_classes failed"
+
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]),
+        edge_labels=mx.expand_dims(mx.arange(10), 0),
+    )
+    assert data.num_edge_classes == 10, "GraphData num_classes failed"
+
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]),
+        graph_labels=mx.expand_dims(mx.arange(10), 0),
+    )
+    assert data.num_graph_classes == 10, "GraphData num_classes failed"
+
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]),
+        node_labels=mx.array([0.1, 0.4, 0.6, 0.8]),
+    )
+    assert data.num_node_classes == 4, "GraphData num_classes failed"
+
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]), node_labels=mx.array([1, 2, 3, 4])
+    )
+    assert data.num_node_classes == 4, "GraphData num_classes failed"
+
+    data = GraphData(
+        node_features=mx.array([1, 2, 3, 4, 5]),
+        node_labels=mx.array(mx.expand_dims(mx.array([1, 2, 3, 4]), 1)),
+    )
+    assert data.num_node_classes == 4, "GraphData num_classes failed"
+
+
+test_data()

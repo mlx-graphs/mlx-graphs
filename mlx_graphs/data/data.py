@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 import mlx.core as mx
 import numpy as np
@@ -77,6 +77,29 @@ class GraphData:
 
         # NOTE: This may be slow for large graphs
         return np.unique(self.edge_index).size
+
+    @property
+    def num_node_classes(self) -> int:
+        """Returns the number of node classes to predict."""
+        return self._num_classes("node")
+
+    @property
+    def num_edge_classes(self) -> int:
+        """Returns the number of edge classes to predict."""
+        return self._num_classes("edge")
+
+    @property
+    def num_graph_classes(self) -> int:
+        """Returns the number of graph classes to predict."""
+        return self._num_classes("graph")
+
+    def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]):
+        labels = getattr(self, f"{task}_labels")
+        if labels is None:
+            return 0
+        elif labels.size == labels.shape[0]:
+            return np.unique(np.array(labels)).size
+        return labels.shape[-1]
 
     def __cat_dim__(self, key: str, *args, **kwargs) -> int:
         """This method can be overriden when batching is used with custom attributes.
