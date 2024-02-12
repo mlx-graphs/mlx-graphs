@@ -1,3 +1,9 @@
+# Fast gather
+
+We tried in those experiments to improve speedup of gather by switching to CPU for small arrays.
+However, the results remain approximately the same as switching device creates a small overhead avoiding
+speed improvement.
+
 **M1 Pro (2E+8P+16GPU)**
 
 Detailed benchmark:
