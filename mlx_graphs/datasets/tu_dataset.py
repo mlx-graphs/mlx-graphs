@@ -100,9 +100,9 @@ def read_tu_data(folder, prefix):
     if "graph_features" in names:  # Regression problem.
         y = read_file(folder, prefix, "graph_features")
     elif "graph_labels" in names:  # Classification problem.
-        y = read_file(folder, prefix, "graph_labels", mx.int64)
+        y = read_file(folder, prefix, "graph_labels", mx.int32)
         _, y = np.unique(np.array(y), return_inverse=True)
-        y = mx.array(y)
+        y = mx.array(y, dtype=mx.int32)
 
     # num_nodes = edge_index.max().item() + 1 if x is None else x.shape[0]
     # edge_index, edge_attr = remove_self_loops(edge_index, edge_attr) # check
