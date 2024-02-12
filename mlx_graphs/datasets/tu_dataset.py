@@ -100,19 +100,9 @@ def read_tu_data(folder, prefix):
         _, y = np.unique(np.array(y), return_inverse=True)
         y = mx.array(y, dtype=mx.int32)
 
-    # num_nodes = edge_index.max().item() + 1 if x is None else x.shape[0]
-    # edge_index, edge_attr = remove_self_loops(edge_index, edge_attr) # check
-    # edge_index, edge_attr = coalesce(edge_index, edge_attr, num_nodes,
-    #                                  num_nodes) # check
-
-    # Only datasets with duplicates
-    if prefix in ["IMDB-BINARY", "REDDIT-BINARY"]:
-        edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
-    else:
-        # NOTE: In PyG, the src/dst nodes are swapped in the `coalesce()` function
-        # Once we have coalesced(), we can replace remove_duplicate_directed_edges()
-        # by the scatter which will remove duplicates and sum duplicates edge features
-        edge_index = edge_index[mx.array([1, 0])]
+    edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
+    # NOTE: Once we have coalesced(), we can replace remove_duplicate_directed_edges()
+    # by the scatter which will remove duplicates and sum duplicates edge features
 
     data = GraphData(
         edge_index=edge_index, node_features=x, edge_features=edge_attr, graph_labels=y
@@ -169,7 +159,7 @@ class TUDataset(Dataset):
         )
 
     def download(self):
-        url = self.cleaned_url if self.cleaned else self._url
+        url = self._cleaned_url if self.cleaned else self._url
         file_path = os.path.join(self.raw_path, self.name + ".zip")
 
         download(f"{url}/{self.name}.zip", file_path)

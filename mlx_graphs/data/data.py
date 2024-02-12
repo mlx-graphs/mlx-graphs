@@ -72,7 +72,7 @@ class GraphData:
     @property
     def num_nodes(self) -> Union[int, None]:
         """Number of nodes in the graph."""
-        if self.node_features:
+        if self.node_features is not None:
             return self.node_features.shape[0]
 
         # NOTE: This may be slow for large graphs
