@@ -75,7 +75,7 @@ class Dataset(ABC):
         if self._base_dir is not None and self.raw_path is not None:
             if os.path.exists(self.raw_path):
                 return
-            os.makedirs(self._base_dir)
+            os.makedirs(self.raw_path, exist_ok=True)
             self.download()
 
     def _load(self):
@@ -91,3 +91,8 @@ class Dataset(ABC):
     def __len__(self) -> int:
         """Number of examples in the dataset"""
         pass
+
+    def __repr__(self):
+        return (
+            self.name if len(self) is None else f"{self.name}(num_graphs={len(self)})"
+        )

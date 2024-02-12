@@ -85,15 +85,15 @@ def read_tu_data(folder, prefix):
     edge_features, edge_labels = None, None
     if "edge_features" in names:
         edge_features = read_file(folder, prefix, "edge_features")
-    if "edge_labels" in names:  # TODO
-        pass
-        # edge_labels = read_file(folder, prefix, "edge_labels", mx.int64)
-        # if edge_labels.ndim == 1:
-        #     edge_labels = edge_labels.unsqueeze(-1)
-        # edge_labels = edge_labels - edge_labels.min(dim=0)[0]
+    if "edge_labels" in names:
+        edge_labels = read_file(folder, prefix, "edge_labels", mx.int64)
+        if edge_labels.ndim == 1:
+            edge_labels = mx.expand_dims(edge_labels, axis=1)
+        edge_labels = edge_labels - edge_labels.min(axis=0)[0]
         # edge_labels = edge_labels.unbind(dim=-1)
-        # edge_labels = [F.one_hot(e, num_classes=-1) for e in edge_labels]
-        # edge_labels = torch.cat(edge_labels, dim=-1).to(torch.float)
+        edge_labels = [edge_labels]
+        edge_labels = [one_hot(x) for x in edge_labels]
+        edge_labels = mx.concatenate(edge_labels, axis=-1).astype(mx.float32)
     edge_attr = cat([edge_features, edge_labels])
 
     y = None
@@ -101,9 +101,8 @@ def read_tu_data(folder, prefix):
         y = read_file(folder, prefix, "graph_features")
     elif "graph_labels" in names:  # Classification problem.
         y = read_file(folder, prefix, "graph_labels", mx.int64)
-
-        # _, y = y.unique(sorted=True, return_inverse=True)
-        y = y - 1  # also check here
+        _, y = np.unique(np.array(y), return_inverse=True)
+        y = mx.array(y)
 
     # num_nodes = edge_index.max().item() + 1 if x is None else x.shape[0]
     # edge_index, edge_attr = remove_self_loops(edge_index, edge_attr) # check

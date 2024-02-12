@@ -8,23 +8,23 @@ from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR
 
 
 def test_tu_dataset():
-    dataset = TUDataset("DD")
-    dataset_torch = TUDataset_torch(DEFAULT_BASE_DIR + "tests/", "DD")
+    dataset_name = "MUTAG"
+    dataset = TUDataset(dataset_name)
+    dataset_torch = TUDataset_torch(DEFAULT_BASE_DIR + "tests/", dataset_name)
 
     train_loader = Dataloader(dataset, 3, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 3, shuffle=False)
 
     for batch_mxg, batch_pyg in zip(train_loader, train_loader_torch):
-        (
-            mx.array_equal(
-                mx.array(batch_pyg.edge_index.tolist()), batch_mxg.edge_index
-            ),
-            "Two arrays between PyG and mxg are different",
-        )
-        (
-            mx.array_equal(mx.array(batch_pyg.x.tolist()), batch_mxg.node_features),
-            "Two arrays between PyG and mxg are different",
-        )
+        # assert mx.array_equal(
+        #     mx.array(batch_pyg.edge_index.tolist()), batch_mxg.edge_index
+        # ), "Two arrays between PyG and mxg are different"
+        assert mx.array_equal(
+            mx.array(batch_pyg.x.tolist()), batch_mxg.node_features
+        ), "Two arrays between PyG and mxg are different"
+        # assert mx.array_equal(
+        #     mx.array(batch_pyg.edge_attr.tolist()), batch_mxg.edge_features + 1
+        # ), "Two arrays between PyG and mxg are different"
 
 
 test_tu_dataset()
