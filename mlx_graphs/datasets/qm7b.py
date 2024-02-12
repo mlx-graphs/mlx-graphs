@@ -1,10 +1,10 @@
 import os
 
 import mlx.core as mx
-from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR, Dataset
-from mlx_graphs.datasets.utils import check_sha1, download
 
 from mlx_graphs.data import GraphData
+from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR, Dataset
+from mlx_graphs.datasets.utils import check_sha1, download
 from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
 
 try:
@@ -20,8 +20,8 @@ class QM7bDataset(Dataset):
     7,211 molecules with 14 regression targets.
 
     Args:
-        base_dir: directory where to store raw and processed data. Default is
-            ``~/.mlx_graphs_data/``. If `None`, data are not stored.
+        base_dir: Directory where to store dataset files. Default is
+            ``mlx_graphs/.mlx_graphs_data/``.
     """
 
     _url = "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat"

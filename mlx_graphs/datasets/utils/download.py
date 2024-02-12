@@ -2,9 +2,8 @@ import hashlib
 import os
 import pickle
 import warnings
-from typing import Optional
-
 import zipfile
+from typing import Optional
 
 import requests
 
