@@ -11,7 +11,7 @@ from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils.download import download, extract_zip
 from mlx_graphs.datasets.utils.io import read_txt_array
-from mlx_graphs.utils import one_hot
+from mlx_graphs.utils import one_hot, remove_duplicate_directed_edges
 
 
 def cat(seq):
@@ -41,10 +41,6 @@ def split(data, batch):
     slices = {"edge_index": edge_slice}
     if data.node_features is not None:
         slices["node_features"] = node_slice
-    else:
-        # Imitate `collate` functionality:
-        data._num_nodes = np.bincount(batch).tolist()
-        data.num_nodes = batch.size
     if data.edge_features is not None:
         slices["edge_features"] = edge_slice
     if data.graph_labels is not None:
@@ -109,8 +105,14 @@ def read_tu_data(folder, prefix):
     # edge_index, edge_attr = coalesce(edge_index, edge_attr, num_nodes,
     #                                  num_nodes) # check
 
-    # NOTE: In PyG, the src/dst nodes are swapped in the `coalesce()` function
-    edge_index = edge_index[mx.array([1, 0])]
+    # Only dataset with duplicates
+    if prefix == "IMDB-BINARY":
+        edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
+    else:
+        # NOTE: In PyG, the src/dst nodes are swapped in the `coalesce()` function
+        # Once we have coalesced(), we can replace remove_duplicate_directed_edges()
+        # by the scatter which will remove duplicates and sum duplicates edge features
+        edge_index = edge_index[mx.array([1, 0])]
 
     data = GraphData(
         edge_index=edge_index, node_features=x, edge_features=edge_attr, graph_labels=y

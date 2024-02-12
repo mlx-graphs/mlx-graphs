@@ -1,6 +1,7 @@
 from typing import Optional, Union
 
 import mlx.core as mx
+import numpy as np
 
 
 class GraphData:
@@ -73,7 +74,9 @@ class GraphData:
         """Number of nodes in the graph."""
         if self.node_features:
             return self.node_features.shape[0]
-        return None
+
+        # NOTE: This may be slow for large graphs
+        return np.unique(self.edge_index).size
 
     def __cat_dim__(self, key: str, *args, **kwargs) -> int:
         """This method can be overriden when batching is used with custom attributes.
@@ -114,5 +117,5 @@ class GraphData:
             Incrementing value for the given attribute or None.
         """
         if "index" in key:
-            return len(self.node_features) if self.node_features is not None else None
+            return self.num_nodes
         return None

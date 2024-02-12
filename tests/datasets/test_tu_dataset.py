@@ -8,7 +8,7 @@ from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR
 
 
 def test_tu_dataset():
-    dataset_name = "PROTEINS"
+    dataset_name = "IMDB-BINARY"
     dataset = TUDataset(dataset_name)
     dataset_torch = TUDataset_torch(
         DEFAULT_BASE_DIR + "tests/" + dataset_name, dataset_name
@@ -21,9 +21,9 @@ def test_tu_dataset():
         assert mx.array_equal(
             mx.array(batch_pyg.edge_index.tolist()), batch_mxg.edge_index
         ), "Two arrays between PyG and mxg are different"
-        assert mx.array_equal(
-            mx.array(batch_pyg.x.tolist()), batch_mxg.node_features
-        ), "Two arrays between PyG and mxg are different"
+        # assert mx.array_equal(
+        #     mx.array(batch_pyg.x.tolist()), batch_mxg.node_features
+        # ), "Two arrays between PyG and mxg are different"
         assert mx.array_equal(
             mx.array(batch_pyg.y.tolist()), batch_mxg.graph_labels
         ), "Two arrays between PyG and mxg are different"

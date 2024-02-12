@@ -1,6 +1,7 @@
 from typing import Optional
 
 import mlx.core as mx
+import numpy as np
 
 
 def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
@@ -73,3 +74,32 @@ def one_hot(labels: mx.array, num_classes: Optional[int] = None):
 
     one_hot[mx.arange(shape[0]), labels.squeeze()] = 1
     return one_hot
+
+
+def remove_duplicate_directed_edges(edge_index: mx.array) -> mx.array:
+    """
+    Removes the duplicate directed edges in `edge_index`.
+
+    Args:
+        edge_index: The `edge_index` on which remove duplicate edges.
+
+    Returns:
+        An `edge_index` without duplicates.
+    """
+    base_dtype = edge_index.dtype
+    if base_dtype == mx.int64:
+        raise ValueError("Does not support yet `edge_index` with int64 dtype.")
+
+    # TODO: this method shall be updated to full mlx once unique() and structured
+    # arrays are implemented
+    edge_index = np.array(edge_index, np.int32)
+
+    # Convert edge_index to a structured array to leverage np.unique for
+    # multi-column uniqueness
+    dtype = [("node1", edge_index.dtype), ("node2", edge_index.dtype)]
+    structured_edges = np.array(list(zip(edge_index[0], edge_index[1])), dtype=dtype)
+
+    unique_edges = np.unique(structured_edges)
+    unique_edge_index = np.array([unique_edges["node1"], unique_edges["node2"]])
+
+    return mx.array(unique_edge_index, mx.int32)
