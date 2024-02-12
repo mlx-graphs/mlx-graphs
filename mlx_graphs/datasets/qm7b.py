@@ -1,8 +1,8 @@
 import os
 
 import mlx.core as mx
-from dataset import DEFAULT_BASE_DIR, Dataset
-from utils import check_sha1, download
+from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR, Dataset
+from mlx_graphs.datasets.utils import check_sha1, download
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix

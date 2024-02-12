@@ -5,5 +5,7 @@ from .transformations import (
     to_adjacency_matrix,  # noqa
     to_sparse_adjacency_matrix,  # noqa
     to_undirected,  # noqa
+    add_self_loops,  # noqa
+    remove_self_loops,  # noqa
 )
-from .array_ops import expand, broadcast  # noqa
+from .array_ops import expand, broadcast, one_hot  # noqa

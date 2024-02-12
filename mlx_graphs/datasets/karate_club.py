@@ -1,7 +1,7 @@
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
-from mlx_graphs.datasets import Dataset
+from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.utils.transformations import to_undirected
 
 

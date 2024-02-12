@@ -4,6 +4,8 @@ import pickle
 import warnings
 from typing import Optional
 
+import zipfile
+
 import requests
 
 from mlx_graphs.data.data import GraphData
@@ -133,3 +135,16 @@ def check_sha1(filename, sha1_hash):
             sha1.update(data)
 
     return sha1.hexdigest() == sha1_hash
+
+
+def extract_zip(path: str, folder: str, log: bool = True):
+    r"""Extracts a zip archive to a specific folder.
+
+    Code borrowed from PyG
+
+    Args:
+        path (string): The path to the tar archive.
+        folder (string): The folder.
+    """
+    with zipfile.ZipFile(path, "r") as f:
+        f.extractall(folder)
