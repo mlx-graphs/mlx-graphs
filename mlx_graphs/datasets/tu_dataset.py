@@ -29,7 +29,7 @@ class TUDataset(Dataset):
         cleaned: Whether to use the cleaned or original version of datasets.
             Default is False.
         base_dir: Directory where to store dataset files. Default is
-            ``mlx_graphs/.mlx_graphs_data/``.
+            in the local directory ``.mlx_graphs_data/``.
     """
 
     _url = "https://www.chrsmrrs.com/graphkerneldatasets"

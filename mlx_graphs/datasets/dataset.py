@@ -19,8 +19,8 @@ class Dataset(ABC):
 
     Args:
         name: name of the dataset
-        base_dir: directory where to store raw and processed data. Default is
-            ``~/.mlx_graphs_data/``. If `None`, data are not stored.
+        base_dir: Directory where to store dataset files. Default is
+            in the local directory ``.mlx_graphs_data/``.
     """
 
     def __init__(

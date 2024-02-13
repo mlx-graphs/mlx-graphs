@@ -21,7 +21,7 @@ class QM7bDataset(Dataset):
 
     Args:
         base_dir: Directory where to store dataset files. Default is
-            ``mlx_graphs/.mlx_graphs_data/``.
+            in the local directory ``.mlx_graphs_data/``.
     """
 
     _url = "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat"
