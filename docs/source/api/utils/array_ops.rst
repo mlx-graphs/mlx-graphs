@@ -13,3 +13,4 @@ Array ops
 
 	broadcast
 	expand
+	one_hot
