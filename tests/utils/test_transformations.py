@@ -4,6 +4,7 @@ import pytest
 from mlx_graphs.utils.transformations import (
     add_self_loops,
     get_unique_edge_indices,
+    remove_duplicate_directed_edges,
     remove_self_loops,
     to_adjacency_matrix,
     to_edge_index,
@@ -202,3 +203,11 @@ def test_to_undirected():
     e, f = to_undirected(edge_index, edge_features)
     assert mx.array_equal(e, target_edge_index)
     assert mx.array_equal(f, target_edge_features)
+
+
+def test_remove_duplicated_directed_edges():
+    edge_index = mx.array([[0, 0, 2, 2, 0], [1, 2, 1, 2, 1]])
+
+    expected_index = mx.array([[0, 0, 2, 2], [1, 2, 1, 2]])
+    new_index = remove_duplicate_directed_edges(edge_index)
+    assert mx.array_equal(new_index, expected_index)
