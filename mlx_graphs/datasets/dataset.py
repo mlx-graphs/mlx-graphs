@@ -63,6 +63,11 @@ class Dataset(ABC):
         return None
 
     @property
+    def num_graphs(self) -> int:
+        """Returns the number of graphs in the dataset."""
+        return len(self)
+
+    @property
     def num_node_classes(self) -> int:
         """Returns the number of node classes to predict."""
         return self.graphs[0].num_node_classes
