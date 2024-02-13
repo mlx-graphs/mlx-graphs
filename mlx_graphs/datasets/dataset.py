@@ -1,7 +1,6 @@
 import copy
 import os
 from abc import ABC, abstractmethod
-from pathlib import Path
 from typing import Optional, Sequence, Union
 
 import mlx.core as mx
@@ -9,11 +8,8 @@ import numpy as np
 
 from mlx_graphs.data import GraphData
 
-# Default path for downloaded datasets is the root of mlx-graphs package
-file_dir = os.path.dirname(os.path.realpath(__file__))
-DEFAULT_BASE_DIR = os.path.join(
-    Path(file_dir).parents[1].absolute(), ".mlx_graphs_data/"
-)
+# Default path for downloaded datasets is the current working directory
+DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 
 class Dataset(ABC):
