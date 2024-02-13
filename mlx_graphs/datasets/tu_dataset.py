@@ -1,6 +1,5 @@
 import glob
 import os
-from typing import Optional
 
 import mlx.core as mx
 import numpy as np
@@ -48,14 +47,14 @@ class TUDataset(Dataset):
         super().__init__(name=name, base_dir=base_dir)
 
     @property
-    def raw_path(self) -> Optional[str]:
+    def raw_path(self) -> str:
         return (
             f"{super(self.__class__, self).raw_path}"
             f"{'_cleaned' if self.cleaned else ''}"
         )
 
     @property
-    def processed_path(self) -> Optional[str]:
+    def processed_path(self) -> str:
         return (
             f"{super(self.__class__, self).processed_path}"
             f"{'_cleaned' if self.cleaned else ''}"
