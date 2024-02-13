@@ -219,7 +219,7 @@ and provides an iterable over the dataset.
 
 .. code-block:: python
 
-    from mlx_graphs.data.dataloaders import Dataloader
+    from mlx_graphs.loaders import Dataloader
 
     data = QM7bDataset()
     loader = Dataloader(data, batch_size=16)
