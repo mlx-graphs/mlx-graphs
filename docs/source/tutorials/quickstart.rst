@@ -48,13 +48,13 @@ The :class:`~mlx_graphs.data.data.GraphData` class accepts by default the follow
 ``edge_features``:
      an array of size ``[num_edges, num_edge_features]`` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
 ``graph_features``:
-    an array of size ``[num_graph_features]`` defining the features associated to the graph itself
+    an array of size ``[1, num_graph_features]`` defining the features associated to the graph itself
 ``node_labels``:
     an array of shape ``[num_nodes, num_node_labels]`` containing the labels of each node.
 ``edge_labels``:
     an array of shape ``[num_edges, num_edge_labels]`` containing the labels of each edge.
 ``graph_labels``
-    an array of shape ``[num_graph_labels]`` containing the global labels of the graph.
+    an array of shape ``[1, num_graph_labels]`` containing the global labels of the graph.
 
 We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
 
@@ -181,7 +181,7 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
             mat_path = os.path.join(self.raw_path, self.name + ".mat")
             data = scipy.io.loadmat(mat_path)
             labels = mx.array(data["T"].tolist())
-            features = data["X"]
+            features = mx.array(data["X"].to_list())
             num_graphs = labels.shape[0]
             graphs = []
             for i in range(num_graphs):
@@ -190,7 +190,7 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
                     GraphData(
                         edge_index=edge_index,
                         edge_features=edge_features,
-                        graph_labels=labels[i],
+                        graph_labels=mx.expand_dims(labels[i], 0),
                     )
                 )
             self.graphs = graphs
