@@ -14,8 +14,12 @@ DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 class Dataset(ABC):
     """
-    Base dataset class. ``download``, ``process``, ``__get_item__``,
-    ``__len__`` methods must be implemented by children classes
+    Base dataset class. ``download`` and ``process`` methods must be
+    implemented by children classes.
+
+    Graph data within the dataset should be stored in ``self.graphs`` as
+    a List[GraphData]. The creation and preprocessing of this list of graphs
+    is typically done within the overridden ``process`` method.
 
     Args:
         name: name of the dataset
