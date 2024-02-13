@@ -16,7 +16,7 @@ def parse_txt_array(
     end: Optional[int] = None,
     dtype: Optional[mx.Dtype] = None,
     device=None,
-):
+) -> mx.array:
     to_number = float if is_floating_point(dtype) else int
 
     parsed_src = [[to_number(x) for x in line.split(sep)[start:end]] for line in src]
@@ -31,7 +31,7 @@ def read_txt_array(
     end: Optional[int] = None,
     dtype: Optional[mx.Dtype] = None,
     device=None,
-):
+) -> mx.array:
     with open(path, "r") as f:
         src = f.read().split("\n")[:-1]
     return parse_txt_array(src, sep, start, end, dtype, device)

@@ -151,7 +151,7 @@ def read_tu_data(folder: str, prefix: str) -> List[GraphData]:
     return graphs
 
 
-def split(data, batch):
+def split(data: GraphData, batch: mx.array) -> tuple[GraphData, dict]:
     """Borrowed from PyG"""
     node_slice = mx.cumsum(
         mx.array(np.bincount(batch), dtype=mx.int32), 0
@@ -181,14 +181,14 @@ def split(data, batch):
     return data, slices
 
 
-def cat(seq):
+def cat(seq: List[mx.array]) -> mx.array:
     """Borrowed from PyG"""
     seq = [item for item in seq if item is not None]
     seq = [mx.expand_dims(item, -1) if item.ndim == 1 else item for item in seq]
     return mx.concatenate(seq, axis=-1) if len(seq) > 0 else None
 
 
-def read_file(folder, prefix, name, dtype=None):
+def read_file(folder: str, prefix: str, name: str, dtype: mx.Dtype = None) -> mx.array:
     """Borrowed from PyG"""
     path = os.path.join(folder, f"{prefix}_{name}.txt")
     return read_txt_array(path, sep=",", dtype=dtype)
