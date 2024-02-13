@@ -81,6 +81,21 @@ class Dataset(ABC):
         """Returns the number of graph classes to predict."""
         return self.graphs[0].num_graph_classes
 
+    @property
+    def num_node_features(self) -> int:
+        """Returns the number of node features."""
+        return self.graphs[0].num_node_features
+
+    @property
+    def num_edge_features(self) -> int:
+        """Returns the number of edge features."""
+        return self.graphs[0].num_edge_features
+
+    @property
+    def num_graph_features(self) -> int:
+        """Returns the number of graph features."""
+        return self.graphs[0].num_graph_features
+
     @abstractmethod
     def download(self):
         """Download the dataset at `self.raw_path`."""

@@ -93,6 +93,27 @@ class GraphData:
         """Returns the number of graph classes to predict."""
         return self._num_classes("graph")
 
+    @property
+    def num_node_features(self) -> int:
+        """Returns the number of node features."""
+        if self.node_features is None:
+            return 0
+        return 1 if self.node_features.ndim == 1 else self.node_features.shape[-1]
+
+    @property
+    def num_edge_features(self) -> int:
+        """Returns the number of edge features."""
+        if self.edge_features is None:
+            return 0
+        return 1 if self.edge_features.ndim == 1 else self.edge_features.shape[-1]
+
+    @property
+    def num_graph_features(self) -> int:
+        """Returns the number of graph features."""
+        if self.graph_features is None:
+            return 0
+        return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
+
     def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]):
         labels = getattr(self, f"{task}_labels")
         if labels is None:
