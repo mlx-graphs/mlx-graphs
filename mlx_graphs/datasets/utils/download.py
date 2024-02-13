@@ -20,13 +20,13 @@ def save_graphs(path: str, data: list[GraphData], file_name: Optional[str] = Non
 
 
 def download(
-    url,
-    path=None,
-    overwrite=True,
-    sha1_hash=None,
-    retries=5,
-    verify_ssl=True,
-    log=True,
+    url: str,
+    path: Optional[str] = None,
+    overwrite: bool = True,
+    sha1_hash: Optional[str] = None,
+    retries: int = 5,
+    verify_ssl: bool = True,
+    log: bool = True,
 ):
     """Download a given URL.
 
@@ -113,7 +113,7 @@ def download(
     return fname
 
 
-def check_sha1(filename, sha1_hash):
+def check_sha1(filename: str, sha1_hash: str):
     """Check whether the sha1 hash of the file content matches the expected hash.
 
     Code borrowed from dgl
