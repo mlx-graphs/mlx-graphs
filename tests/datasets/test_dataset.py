@@ -27,7 +27,7 @@ def test_dataset_properties():
             pass
 
         def process(self):
-            self.graphs = np.array([data])
+            self.graphs = [data]
 
     dataset = Dataset1("name")
 
@@ -51,7 +51,7 @@ def test_dataset_properties():
     for seq in [
         dataset[:],
         dataset[mx.array([0])],
-        dataset[np.array([0])],
+        dataset[np.array([0, 0])],
         dataset[[0]],
     ]:
         assert isinstance(seq, Dataset1)

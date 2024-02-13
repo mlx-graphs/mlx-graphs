@@ -1,5 +1,6 @@
 import glob
 import os
+from typing import List
 
 import mlx.core as mx
 import numpy as np
@@ -74,7 +75,7 @@ class TUDataset(Dataset):
         # TODO: graphs shall be saved to disk once mx.array is pickle-able
 
 
-def read_tu_data(folder, prefix):
+def read_tu_data(folder: str, prefix: str) -> List[GraphData]:
     folder = os.path.join(folder, prefix)
     files = glob.glob(os.path.join(folder, f"{prefix}_*.txt"))
     names = [f.split(os.sep)[-1][len(prefix) + 1 : -4] for f in files]
@@ -147,7 +148,7 @@ def read_tu_data(folder, prefix):
                 ]
         graphs.append(GraphData(**kwargs))
 
-    return np.array(graphs)
+    return graphs
 
 
 def split(data, batch):

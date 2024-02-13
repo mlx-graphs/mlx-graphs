@@ -1,7 +1,7 @@
 import copy
 import os
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Union
+from typing import List, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
@@ -31,7 +31,7 @@ class Dataset(ABC):
         self._name = name
         self._base_dir = base_dir
 
-        self.graphs: np.array[GraphData] = None
+        self.graphs: List[GraphData] = None
         self._load()
 
     @property
@@ -169,7 +169,7 @@ class Dataset(ABC):
             )
 
         dataset = copy.copy(self)
-        dataset.graphs = self.graphs[indices]
+        dataset.graphs = [g for g in self.graphs]
         return dataset
 
     def __repr__(self):
