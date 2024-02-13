@@ -192,14 +192,17 @@ def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> m
                 [2, 1, 2],
             ]
         )
-        x = remove_common_edges(edge_index_1, edge_index_2)
+        x = get_unique_edge_indices(edge_index_1, edge_index_2)
         # [0, 1]
     """
-    edge_1_tuples = [tuple(edge.tolist()) for edge in edge_index_1.transpose()]
-    edge_2_set = set(tuple(edge.tolist()) for edge in edge_index_2.transpose())
+    edge_2_unique = np.unique(edge_index_2.transpose(), axis=0).tolist()
 
     return mx.array(
-        [i for i, edge in enumerate(edge_1_tuples) if edge not in edge_2_set]
+        [
+            i
+            for i, edge in enumerate(np.array(edge_index_1.transpose(), copy=False))
+            if edge.tolist() not in edge_2_unique
+        ]
     )
 
 
@@ -262,7 +265,7 @@ def add_self_loops(
 def remove_self_loops(
     edge_index: mx.array,
     edge_features: Optional[mx.array] = None,
-) -> tuple[mx.array, Optional[mx.array]]:
+) -> tuple[Optional[mx.array], Optional[mx.array]]:
     """
     Removes self-loops from the given graph represented by edge_index and edge_features.
 
@@ -281,6 +284,8 @@ def remove_self_loops(
     # add self loops to index
     self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
     preserved_idx = get_unique_edge_indices(edge_index, self_loop_index)
+    if len(preserved_idx) == 0:
+        return None, None
     no_self_loop_index = edge_index[:, preserved_idx]
 
     no_self_loop_features = None
