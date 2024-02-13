@@ -82,17 +82,17 @@ class GraphData:
 
     @property
     def num_node_classes(self) -> int:
-        """Returns the number of node classes to predict."""
+        """Returns the number of node classes in the current graph."""
         return self._num_classes("node")
 
     @property
     def num_edge_classes(self) -> int:
-        """Returns the number of edge classes to predict."""
+        """Returns the number of edge classes in the current graph."""
         return self._num_classes("edge")
 
     @property
     def num_graph_classes(self) -> int:
-        """Returns the number of graph classes to predict."""
+        """Returns the number of graph classes in the current graph."""
         return self._num_classes("graph")
 
     @property
