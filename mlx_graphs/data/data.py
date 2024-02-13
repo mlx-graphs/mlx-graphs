@@ -21,7 +21,7 @@ class GraphData:
             containing the labels of each node.
         edge_labels: Array of shape [num_edges, num_edge_labels]
             containing the labels of each edge.
-        graph_labels: Array of shape [num_graph_labels]
+        graph_labels: Array of shape [1, num_graph_labels]
             containing the global labels of the graph.
         **kwargs: Additional keyword arguments to store any other custom attributes.
     """

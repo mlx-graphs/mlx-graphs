@@ -23,7 +23,7 @@ A graph is defined by a set of (optional) attributes
 #. `edge_index`: an array of size `[2, num_edges]` which specifies the topology of the graph. The i-th column in `edge_index` defines the source and destination nodes of the i-th edge
 #. `node_features`: an array of size `[num_nodes, num_node_features]` defining the features associated to each node (if any). The i-th row contains the features of the i-th node
 #. `edge_features`:  an array of size `[num_edges, num_edge_features]` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
-#. `graph_features`: an array of size `[num_graph_features]` defining the features associated to the graph itself
+#. `graph_features`: an array of size `[1, num_graph_features]` defining the features associated to the graph itself
 
 We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
 

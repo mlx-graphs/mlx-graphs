@@ -46,7 +46,7 @@ class QM7bDataset(Dataset):
         mat_path = os.path.join(self.raw_path, self.name + ".mat")
         data = sp.io.loadmat(mat_path)
         labels = mx.array(data["T"].tolist())
-        features = data["X"]
+        features = mx.array(data["X"].tolist())
         num_graphs = labels.shape[0]
         graphs = []
         for i in range(num_graphs):
@@ -55,7 +55,7 @@ class QM7bDataset(Dataset):
                 GraphData(
                     edge_index=edge_index,
                     edge_features=edge_features,
-                    graph_labels=labels[i],
+                    graph_labels=mx.expand_dims(labels[i], 0),
                 )
             )
         self.graphs = graphs
