@@ -186,7 +186,7 @@ class Dataset(ABC):
             )
 
         dataset = copy.copy(self)
-        dataset.graphs = [g for g in self.graphs]
+        dataset.graphs = [self.graphs[i] for i in indices]
         return dataset
 
     def __repr__(self):
