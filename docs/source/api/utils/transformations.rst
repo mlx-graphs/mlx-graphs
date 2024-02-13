@@ -17,3 +17,4 @@ Transformations
 	add_self_loops
 	remove_self_loops
 	to_undirected
+	remove_duplicate_directed_edges

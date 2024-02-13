@@ -1,3 +1,5 @@
+from typing import Optional
+
 import mlx.core as mx
 
 
@@ -45,3 +47,29 @@ def expand(array: mx.array, new_shape: tuple) -> mx.array:
         max(orig_dim, new_dim) for orig_dim, new_dim in zip(orig_shape, new_shape)
     )
     return mx.broadcast_to(array, broadcast_shape)
+
+
+def one_hot(labels: mx.array, num_classes: Optional[int] = None):
+    """
+    Creates one-hot encoded vectors for all elements provided in `labels`.
+
+    Given an array of labels [num_elements,], returns an array with shape
+    [num_elements, num_classes]where each column is an all-zero vector with
+    a one at the index of the label.
+
+    Args:
+        labels: Array with the labels to transform to one-hot encoded vectors.
+        num_classes: Number of labels for the one-hot encoding. By default,
+            ``num_classes`` is set to `max_label + 1`.
+
+    Returns:
+        An array of shape [num_elements, num_classes] with one-hot encoded vectors.
+    """
+    if num_classes is None:
+        num_classes = (labels.max() + 1).item()
+
+    shape = (labels.shape[0], num_classes)
+    one_hot = mx.zeros(shape)
+
+    one_hot[mx.arange(shape[0]), labels.squeeze()] = 1
+    return one_hot

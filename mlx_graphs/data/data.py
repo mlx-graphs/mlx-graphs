@@ -1,6 +1,7 @@
-from typing import Optional, Union
+from typing import Literal, Optional, Union
 
 import mlx.core as mx
+import numpy as np
 
 
 class GraphData:
@@ -20,7 +21,7 @@ class GraphData:
             containing the labels of each node.
         edge_labels: Array of shape [num_edges, num_edge_labels]
             containing the labels of each edge.
-        graph_labels: Array of shape [num_graph_labels]
+        graph_labels: Array of shape [1, num_graph_labels]
             containing the global labels of the graph.
         **kwargs: Additional keyword arguments to store any other custom attributes.
     """
@@ -71,9 +72,57 @@ class GraphData:
     @property
     def num_nodes(self) -> Union[int, None]:
         """Number of nodes in the graph."""
-        if self.node_features:
+        if self.node_features is not None:
             return self.node_features.shape[0]
+
+        # NOTE: This may be slow for large graphs
+        elif self.edge_index is not None:
+            return np.unique(self.edge_index).size
         return None
+
+    @property
+    def num_node_classes(self) -> int:
+        """Returns the number of node classes to predict."""
+        return self._num_classes("node")
+
+    @property
+    def num_edge_classes(self) -> int:
+        """Returns the number of edge classes to predict."""
+        return self._num_classes("edge")
+
+    @property
+    def num_graph_classes(self) -> int:
+        """Returns the number of graph classes to predict."""
+        return self._num_classes("graph")
+
+    @property
+    def num_node_features(self) -> int:
+        """Returns the number of node features."""
+        if self.node_features is None:
+            return 0
+        return 1 if self.node_features.ndim == 1 else self.node_features.shape[-1]
+
+    @property
+    def num_edge_features(self) -> int:
+        """Returns the number of edge features."""
+        if self.edge_features is None:
+            return 0
+        return 1 if self.edge_features.ndim == 1 else self.edge_features.shape[-1]
+
+    @property
+    def num_graph_features(self) -> int:
+        """Returns the number of graph features."""
+        if self.graph_features is None:
+            return 0
+        return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
+
+    def _num_classes(self, task: Literal["node", "edge", "graph"]):
+        labels = getattr(self, f"{task}_labels")
+        if labels is None:
+            return 0
+        elif labels.size == labels.shape[0]:
+            return np.unique(np.array(labels)).size
+        return labels.shape[-1]
 
     def __cat_dim__(self, key: str, *args, **kwargs) -> int:
         """This method can be overriden when batching is used with custom attributes.
@@ -114,5 +163,5 @@ class GraphData:
             Incrementing value for the given attribute or None.
         """
         if "index" in key:
-            return len(self.node_features) if self.node_features is not None else None
+            return self.num_nodes
         return None

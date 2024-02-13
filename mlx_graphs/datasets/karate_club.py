@@ -1,7 +1,7 @@
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
-from mlx_graphs.datasets import Dataset
+from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.utils.transformations import to_undirected
 
 
@@ -146,18 +146,10 @@ class KarateClubDataset(Dataset):
                 ]
             ]
         ).transpose()
-        self._data = GraphData(
-            edge_index=edge_index, node_features=node_features, node_labels=node_labels
-        )
-
-    def __getitem__(self, idx) -> GraphData:
-        assert idx == 0, "There's only one graph in this dataset"
-        return self._data
-
-    def __len__(self):
-        return 1
-
-    @property
-    def num_classes(self):
-        """Number of classes for the nodes in the graph"""
-        return 2
+        self.graphs = [
+            GraphData(
+                edge_index=edge_index,
+                node_features=node_features,
+                node_labels=node_labels,
+            )
+        ]
