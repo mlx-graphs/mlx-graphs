@@ -146,18 +146,10 @@ class KarateClubDataset(Dataset):
                 ]
             ]
         ).transpose()
-        self._data = GraphData(
-            edge_index=edge_index, node_features=node_features, node_labels=node_labels
-        )
-
-    def __getitem__(self, idx) -> GraphData:
-        assert idx == 0, "There's only one graph in this dataset"
-        return self._data
-
-    def __len__(self):
-        return 1
-
-    @property
-    def num_classes(self):
-        """Number of classes for the nodes in the graph"""
-        return 2
+        self.graphs = [
+            GraphData(
+                edge_index=edge_index,
+                node_features=node_features,
+                node_labels=node_labels,
+            )
+        ]
