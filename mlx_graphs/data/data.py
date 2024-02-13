@@ -76,7 +76,9 @@ class GraphData:
             return self.node_features.shape[0]
 
         # NOTE: This may be slow for large graphs
-        return np.unique(self.edge_index).size
+        elif self.edge_index is not None:
+            return np.unique(self.edge_index).size
+        return None
 
     @property
     def num_node_classes(self) -> int:
@@ -114,7 +116,7 @@ class GraphData:
             return 0
         return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
 
-    def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]):
+    def _num_classes(self, task: Literal["node", "edge", "graph"]):
         labels = getattr(self, f"{task}_labels")
         if labels is None:
             return 0

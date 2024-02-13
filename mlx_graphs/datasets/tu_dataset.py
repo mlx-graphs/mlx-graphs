@@ -1,6 +1,5 @@
 import glob
 import os
-from typing import List
 
 import mlx.core as mx
 import numpy as np
@@ -75,7 +74,7 @@ class TUDataset(Dataset):
         # TODO: graphs shall be saved to disk once mx.array is pickle-able
 
 
-def read_tu_data(folder: str, prefix: str) -> List[GraphData]:
+def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     folder = os.path.join(folder, prefix)
     files = glob.glob(os.path.join(folder, f"{prefix}_*.txt"))
     names = [f.split(os.sep)[-1][len(prefix) + 1 : -4] for f in files]
@@ -181,7 +180,7 @@ def split(data: GraphData, batch: mx.array) -> tuple[GraphData, dict]:
     return data, slices
 
 
-def cat(seq: List[mx.array]) -> mx.array:
+def cat(seq: list[mx.array]) -> mx.array:
     """Borrowed from PyG"""
     seq = [item for item in seq if item is not None]
     seq = [mx.expand_dims(item, -1) if item.ndim == 1 else item for item in seq]
