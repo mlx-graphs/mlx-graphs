@@ -7,5 +7,6 @@ from .transformations import (
     to_undirected,  # noqa
     add_self_loops,  # noqa
     remove_self_loops,  # noqa
+    remove_duplicate_directed_edges,  # noqa
 )
-from .array_ops import expand, broadcast, one_hot, remove_duplicate_directed_edges  # noqa
+from .array_ops import expand, broadcast, one_hot  # noqa
