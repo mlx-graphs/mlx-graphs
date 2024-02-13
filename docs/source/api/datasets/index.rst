@@ -12,3 +12,5 @@ Datasets
 
 	Dataset
 	KarateClubDataset
+	QM7bDataset
+	TUDataset
