@@ -21,7 +21,7 @@ class KarateClubDataset(Dataset):
         pass
 
     def process(self):
-        edge_index, _ = to_undirected(
+        edge_index = to_undirected(
             mx.array(
                 [
                     (0, 1),
