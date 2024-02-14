@@ -1,6 +1,6 @@
 import functools
 
-from mlx_graphs.data import GraphData
+from .data import GraphData
 
 
 def validate_list_of_graph_data(func):

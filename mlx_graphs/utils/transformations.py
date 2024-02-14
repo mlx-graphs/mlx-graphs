@@ -213,7 +213,7 @@ def add_self_loops(
     num_nodes: Optional[int] = None,
     fill_value: Optional[Union[float, mx.array]] = 1,
     allow_repeated: Optional[bool] = True,
-) -> mx.array | tuple[mx.array, mx.array]:
+) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
     Adds self-loops to the given graph represented by edge_index and edge_features.
 
@@ -264,7 +264,7 @@ def add_self_loops(
 def remove_self_loops(
     edge_index: mx.array,
     edge_features: Optional[mx.array] = None,
-) -> mx.array | tuple[mx.array, mx.array]:
+) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
     Removes self-loops from the given graph represented by edge_index and edge_features.
 
@@ -298,7 +298,7 @@ def remove_self_loops(
 @validate_edge_index_and_features
 def to_undirected(
     edge_index: mx.array, edge_features: Optional[mx.array] = None
-) -> mx.array | tuple[mx.array, mx.array]:
+) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
     Converts a graph given as `edge_index` and, optionally, `edge_features`
     to an undirected one.

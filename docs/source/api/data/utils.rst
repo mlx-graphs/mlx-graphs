@@ -7,6 +7,6 @@ Utils
 
 
 .. autosummary::
-	:toctree: _autosummary_utils
+	:toctree: _autosummary_data_utils
 
 	validate_list_of_graph_data
