@@ -213,7 +213,7 @@ def add_self_loops(
     num_nodes: Optional[int] = None,
     fill_value: Optional[Union[float, mx.array]] = 1,
     allow_repeated: Optional[bool] = True,
-) -> tuple[mx.array, Optional[mx.array]]:
+) -> mx.array | tuple[mx.array, mx.array]:
     """
     Adds self-loops to the given graph represented by edge_index and edge_features.
 
@@ -250,22 +250,21 @@ def add_self_loops(
         ]
     full_edge_index = mx.concatenate([edge_index, self_loop_index], 1)
 
-    full_edge_features = None
     if edge_features is not None:
         # add self loops to features
         self_loop_features = (
             mx.ones([self_loop_index.shape[1], edge_features.shape[1]]) * fill_value
         )
         full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
-
-    return full_edge_index, full_edge_features
+        return full_edge_index, full_edge_features
+    return full_edge_index
 
 
 @validate_edge_index_and_features
 def remove_self_loops(
     edge_index: mx.array,
     edge_features: Optional[mx.array] = None,
-) -> tuple[Optional[mx.array], Optional[mx.array]]:
+) -> mx.array | tuple[mx.array, mx.array]:
     """
     Removes self-loops from the given graph represented by edge_index and edge_features.
 
@@ -284,20 +283,22 @@ def remove_self_loops(
     # add self loops to index
     self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
     preserved_idx = get_unique_edge_indices(edge_index, self_loop_index)
-    if len(preserved_idx) == 0:
-        return None, None
-    no_self_loop_index = edge_index[:, preserved_idx]
+    no_self_loop_index = mx.array([[]])
+    if len(preserved_idx) != 0:
+        no_self_loop_index = edge_index[:, preserved_idx]
 
-    no_self_loop_features = None
     if edge_features is not None:
-        no_self_loop_features = edge_features[preserved_idx]
-    return no_self_loop_index, no_self_loop_features
+        no_self_loop_features = mx.array([[]])
+        if len(preserved_idx) != 0:
+            no_self_loop_features = edge_features[preserved_idx]
+        return no_self_loop_index, no_self_loop_features
+    return no_self_loop_index
 
 
 @validate_edge_index_and_features
 def to_undirected(
     edge_index: mx.array, edge_features: Optional[mx.array] = None
-) -> tuple[mx.array, Optional[mx.array]]:
+) -> mx.array | tuple[mx.array, mx.array]:
     """
     Converts a graph given as `edge_index` and, optionally, `edge_features`
     to an undirected one.
@@ -314,10 +315,10 @@ def to_undirected(
     undirected_edge_index = mx.concatenate(
         [mx.stack([src, dst]), mx.stack([dst, src])], 1
     )
-    undirected_edge_features = None
     if edge_features is not None:
         undirected_edge_features = mx.concatenate([edge_features, edge_features], 0)
-    return undirected_edge_index, undirected_edge_features
+        return undirected_edge_index, undirected_edge_features
+    return undirected_edge_index
 
 
 @validate_edge_index
