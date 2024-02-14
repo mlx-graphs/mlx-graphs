@@ -18,8 +18,12 @@ jobs:
         uses: actions/setup-python@v4
         with:
            python-version: 3.12
-      - name: Install dependencies
+      - name: Install Python dependencies
         run: python -m pip install .[docs]
+      - name: Install Pandoc
+        uses: pandoc/actions/setup@{main}
+        with:
+          version: 2.19
       - name: Build sphinx
         run: |
           cd docs/
