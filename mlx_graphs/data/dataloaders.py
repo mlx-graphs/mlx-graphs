@@ -3,7 +3,7 @@ from typing import Sequence, Union
 import numpy as np
 
 from mlx_graphs.data import GraphData, GraphDataBatch, batch
-from mlx_graphs.datasets import Dataset
+from mlx_graphs.datasets.dataset import Dataset
 
 
 class Dataloader:

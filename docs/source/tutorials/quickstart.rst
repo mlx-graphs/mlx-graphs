@@ -48,13 +48,13 @@ The :class:`~mlx_graphs.data.data.GraphData` class accepts by default the follow
 ``edge_features``:
      an array of size ``[num_edges, num_edge_features]`` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
 ``graph_features``:
-    an array of size ``[num_graph_features]`` defining the features associated to the graph itself
+    an array of size ``[1, num_graph_features]`` defining the features associated to the graph itself
 ``node_labels``:
     an array of shape ``[num_nodes, num_node_labels]`` containing the labels of each node.
 ``edge_labels``:
     an array of shape ``[num_edges, num_edge_labels]`` containing the labels of each edge.
 ``graph_labels``
-    an array of shape ``[num_graph_labels]`` containing the global labels of the graph.
+    an array of shape ``[1, num_graph_labels]`` containing the global labels of the graph.
 
 We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
 
@@ -86,11 +86,11 @@ Just add your own attributes to the constructor using ``kwargs``.
 Operations on graphs
 --------------------
 
-We provide some utilities to perform operations on graphs in ``mlx_graphs.utils``.
+We provide some utilities to perform operations on graphs in :mod:`~mlx_graphs.utils`.
 
 For example, :meth:`~mlx_graphs.utils.transformations.to_edge_index`
 and :meth:`~mlx_graphs.utils.transformations.to_adjacency_matrix` can be used to convert an
-adjacency matrix repesenting a graph into its edge index and viceversa.
+adjacency matrix representing a graph into its edge index and viceversa.
 
 
 Batching
@@ -101,7 +101,7 @@ processing several graphs together instead of individually. This approach can dr
 through parallelization on the Mac's GPU.
 
 The :class:`~mlx_graphs.data.batch.GraphDataBatch` class handles all batch operations, enabling the creation of a batch from a list of
-:class:`~mlx_graphs.data.batch.GraphData` objects. We provide the :meth:`mlx_graphs.data.batch.batch` function as an interface to create a :class:`~mlx_graphs.data.batch.GraphDataBatch` out of a sequence of :class:`~mlx_graphs.data.batch.GraphData` objects.
+:class:`~mlx_graphs.data.data.GraphData` objects. We provide the :meth:`mlx_graphs.data.batch.batch` function as an interface to create a :class:`~mlx_graphs.data.batch.GraphDataBatch` out of a sequence of :class:`~mlx_graphs.data.data.GraphData` objects.
 
 .. hint::
 
@@ -165,8 +165,17 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
 
 .. code-block:: python
 
-    class QM7bDataset(Dataset):
+    import os
 
+    import mlx.core as mx
+    import scipy as sp
+
+    from mlx_graphs.data import GraphData
+    from mlx_graphs.datasets.dataset import Dataset
+    from mlx_graphs.datasets.utils import download
+    from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
+
+    class QM7bDataset(Dataset):
         def __init__(self):
             super().__init__(name="qm7b")
 
@@ -181,7 +190,7 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
             mat_path = os.path.join(self.raw_path, self.name + ".mat")
             data = scipy.io.loadmat(mat_path)
             labels = mx.array(data["T"].tolist())
-            features = data["X"]
+            features = mx.array(data["X"].to_list())
             num_graphs = labels.shape[0]
             graphs = []
             for i in range(num_graphs):
@@ -190,16 +199,15 @@ Datasets can be implemented by extending the base class :class:`~mlx_graphs.data
                     GraphData(
                         edge_index=edge_index,
                         edge_features=edge_features,
-                        graph_labels=labels[i],
+                        graph_labels=mx.expand_dims(labels[i], 0),
                     )
                 )
             self.graphs = graphs
 
-        def __len__(self):
-            return len(self.graphs)
-
-        def __getitem__(self, idx):
-            return self.graphs[idx]
+Every :class:`~mlx_graphs.datasets.Dataset` should implement two abstract methods: :attr:`~.mlx_graphs.datasets.Dataset.download`, responsible to download raw datasets locally
+and :attr:`~.mlx_graphs.datasets.Dataset.process()`, which transforms the datasets into a ``List[GraphData]``, saved in ``self.graphs``.
+Once the list of graphs is processed, all the indexing and dataset properties such as :attr:`~.mlx_graphs.datasets.Dataset.num_graphs`,
+:attr:`~.mlx_graphs.datasets.Dataset.num_node_features` and :attr:`~.mlx_graphs.datasets.Dataset.num_node_classes` are automatically handled.
 
 
 We provide a few widely used datasets and we expect to implement more over time.

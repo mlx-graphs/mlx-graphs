@@ -168,6 +168,7 @@ docs/build
 
 # local data
 .local_data/
+.mlx_graphs_data/
 
 # VSCode files
 .vscode/
