@@ -49,7 +49,7 @@ def expand(array: mx.array, new_shape: tuple) -> mx.array:
     return mx.broadcast_to(array, broadcast_shape)
 
 
-def one_hot(labels: mx.array, num_classes: Optional[int] = None):
+def one_hot(labels: mx.array, num_classes: Optional[int] = None) -> mx.array:
     """
     Creates one-hot encoded vectors for all elements provided in `labels`.
 

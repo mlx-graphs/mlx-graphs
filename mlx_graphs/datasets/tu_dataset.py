@@ -1,11 +1,12 @@
 import glob
 import os
+from typing import Optional
 
 import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import GraphData
-from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR, Dataset
+from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils.download import download, extract_zip
 from mlx_graphs.datasets.utils.io import read_txt_array
 from mlx_graphs.utils import one_hot, remove_duplicate_directed_edges
@@ -40,7 +41,7 @@ class TUDataset(Dataset):
         self,
         name: str,
         cleaned: bool = False,
-        base_dir: str = DEFAULT_BASE_DIR,
+        base_dir: Optional[str] = None,
     ):
         self.cleaned = cleaned
 
@@ -138,7 +139,7 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
         kwargs = {}
         for k, v in slices.items():
             if k == "edge_index":
-                kwargs[k] = data.edge_index[
+                kwargs[k] = data.edge_index[  # TODO: make edge_index required
                     :, slices[k][i].item() : slices[k][i + 1].item()
                 ]
             else:
@@ -157,7 +158,7 @@ def split(data: GraphData, batch: mx.array) -> tuple[GraphData, dict]:
     )  # TODO: needs to change to int64 once supported in MLX
     node_slice = mx.concatenate([mx.array([0]), node_slice])
 
-    row, _ = data.edge_index
+    row, _ = data.edge_index  # TODO: make edge_index required
     edge_slice = mx.cumsum(mx.array(np.bincount(batch[row]), dtype=mx.int32), 0)
     edge_slice = mx.concatenate([mx.array([0]), edge_slice])
 

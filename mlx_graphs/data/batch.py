@@ -1,4 +1,4 @@
-from typing import Union
+from typing import Union, overload
 
 import mlx.core as mx
 import numpy as np
@@ -63,21 +63,23 @@ class GraphDataBatch(GraphData):
             ]
     """
 
-    def __init__(self, graphs: list[GraphData], **kwargs) -> None:
+    def __init__(self, graphs: list[GraphData], **kwargs):
         batch_kwargs = collate(graphs)
         super().__init__(_num_graphs=len(graphs), **batch_kwargs, **kwargs)
 
     @property
-    def num_graphs(self):
+    def num_graphs(self) -> int:
         """Number of graphs in the batch."""
-        return self._num_graphs  # provided via collate
+        return self._num_graphs  # type: ignore - provided via collate
 
     @property
     def batch_indices(self):
         """Mask indicating for each node its corresponding batch index."""
-        return self._batch_indices  # provided via collate
+        return self._batch_indices  # type: ignore - provided via collate
 
-    def __getitem__(self, idx: Union[int, slice]) -> Union[GraphData, list[GraphData]]:
+    def __getitem__(
+        self, idx: Union[int, slice, mx.array, list[int]]
+    ) -> Union[GraphData, list[GraphData]]:
         if isinstance(idx, int):
             idx = self._handle_neg_index_if_needed(idx)
             return self._get_graph(idx)
@@ -85,7 +87,7 @@ class GraphDataBatch(GraphData):
         elif isinstance(idx, slice):
             start, stop, step = (
                 idx.start or 0,
-                idx.stop or self._num_graphs,
+                idx.stop or self._num_graphs,  # type: ignore
                 idx.step or 1,
             )
             start = self._handle_neg_index_if_needed(start)
@@ -101,7 +103,7 @@ class GraphDataBatch(GraphData):
             if isinstance(idx, list):
                 idx = mx.array(idx)
 
-            if idx.ndim != 1:
+            if idx.ndim != 1:  # type: ignore - idx is a mx.array here
                 raise ValueError(
                     "Batch indexing with mx.array only supports 1D index array."
                 )
@@ -149,7 +151,7 @@ class GraphDataBatch(GraphData):
 
         return GraphData(**single_graph_dict)
 
-    def _get_attr_slice_at_index(self, attr: str, idx: int):
+    def _get_attr_slice_at_index(self, attr: str, idx: int) -> tuple[int, int]:
         """Returns the starting and ending index to retrieve the original attribute
         `attr` from the batch, at the given index `idx`.
         """
@@ -161,25 +163,39 @@ class GraphDataBatch(GraphData):
 
         return from_idx, upto_idx
 
-    def _handle_neg_index_if_needed(self, index: Union[mx.array, list, int]):
+    @overload
+    def _handle_neg_index_if_needed(self, index: int) -> int:
+        ...
+
+    @overload
+    def _handle_neg_index_if_needed(
+        self, index: Union[mx.array, list[int]]
+    ) -> list[int]:
+        ...
+
+    def _handle_neg_index_if_needed(
+        self, index: Union[mx.array, list[int], int]
+    ) -> Union[list[int], int]:
         """Returns the corresponsing positive index or indices of negative batch
         indices. Raises an index error if indices are incorrect. This method accepts
         either an mx.array, a list or a single int index.
         """
         if isinstance(index, int):
-            index = mx.array([index])
+            index_ = mx.array([index])
+        elif isinstance(index, list):  # required for type checks on Union
+            pass
         elif isinstance(index, mx.array):
-            index = index.tolist()
+            index_ = index.tolist()
 
         # Should be changed once boolean indexing exists in mlx
-        index = np.asarray(index)
-        index[index < 0] += self.num_graphs
+        index_ = np.asarray(index_)
+        index_[index_ < 0] += self.num_graphs
 
-        if np.any((index < 0) | (index > self.num_graphs)):
+        if np.any((index_ < 0) | (index_ > self.num_graphs)):
             raise IndexError("Batch indexing out of range.")
 
-        index = index.tolist()
-        return index[0] if len(index) == 1 else index
+        index_ = index_.tolist()
+        return index_[0] if len(index_) == 1 else index_
 
 
 def batch(graphs: list[GraphData]) -> GraphDataBatch:
@@ -203,4 +219,7 @@ def unbatch(batch: GraphDataBatch) -> list[GraphData]:
     Returns:
         List of unbatched `GraphData`
     """
-    return [batch[idx] for idx in range(batch.num_graphs)]
+    return [
+        batch[idx]  # type: ignore
+        for idx in range(batch.num_graphs)
+    ]

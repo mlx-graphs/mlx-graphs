@@ -116,7 +116,7 @@ class GraphData:
             return 0
         return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
 
-    def _num_classes(self, task: Literal["node", "edge", "graph"]):
+    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
         labels = getattr(self, f"{task}_labels")
         if labels is None:
             return 0

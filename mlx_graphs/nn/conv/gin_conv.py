@@ -59,8 +59,8 @@ class GINConv(MessagePassing):
     def __init__(
         self,
         mlp: nn.Module,
-        eps: Optional[float] = 0.0,
-        learn_eps: Optional[bool] = False,
+        eps: float = 0.0,
+        learn_eps: bool = False,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")

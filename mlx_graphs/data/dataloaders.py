@@ -52,6 +52,11 @@ class Dataloader:
         batch_indices = self._indices[
             self._current_index : self._current_index + self.batch_size
         ]
-        batched_data = batch([self.dataset[i] for i in batch_indices])
+        batched_data = batch(
+            [
+                self.dataset[i]  # type: ignore - this is a list[GraphData]
+                for i in batch_indices
+            ]
+        )
         self._current_index += self.batch_size
         return batched_data

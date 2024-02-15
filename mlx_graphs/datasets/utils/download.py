@@ -27,7 +27,7 @@ def download(
     retries: int = 5,
     verify_ssl: bool = True,
     log: bool = True,
-):
+) -> str:
     """Download a given URL.
 
     Code borrowed from dgl
@@ -113,7 +113,7 @@ def download(
     return fname
 
 
-def check_sha1(filename: str, sha1_hash: str):
+def check_sha1(filename: str, sha1_hash: str) -> bool:
     """Check whether the sha1 hash of the file content matches the expected hash.
 
     Code borrowed from dgl

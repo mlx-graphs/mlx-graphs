@@ -1,8 +1,7 @@
 import mlx.core as mx
 
 from mlx_graphs.data.data import GraphData
-
-from .utils import validate_list_of_graph_data
+from mlx_graphs.data.utils import validate_list_of_graph_data
 
 
 @validate_list_of_graph_data
