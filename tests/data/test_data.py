@@ -97,6 +97,11 @@ def test_data_num_features():
     )
     assert data.num_graph_features == 10, "GraphData num_features failed"
 
+    data = GraphData(
+        edge_index=mx.ones((2, 10)),
+    )
+    assert data.num_edges == 10, "GraphData num_features failed"
+
     data = GraphData()
     assert data.num_node_features == 0, "GraphData num_features failed"
     assert data.num_edge_features == 0, "GraphData num_features failed"

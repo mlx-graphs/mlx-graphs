@@ -24,8 +24,10 @@ except RuntimeError:
 
 from benchmark_layers import (
     benchmark_gather,
+    benchmark_gather_batch,
     benchmark_GCNConv,
     benchmark_scatter,
+    benchmark_scatter_batch,
 )
 from benchmark_utils import print_benchmark
 
@@ -122,11 +124,69 @@ if __name__ == "__main__":
     layers = [
         # Scatter add benchmarks
         (
-            benchmark_scatter,  # 100k indices, with 100 unique sources and destinations
+            benchmark_scatter,
             {
-                "edge_index_shape": (2, 100000),
-                "node_features_shape": (100, 64),
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
                 "scatter_op": "add",
+            },
+        ),
+        (
+            benchmark_scatter_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 64,
+                "scatter_op": "add",
+            },
+        ),
+        (
+            benchmark_scatter_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 128,
+                "scatter_op": "add",
+            },
+        ),
+        (
+            benchmark_scatter_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 1024,
+                "scatter_op": "add",
+            },
+        ),
+        (
+            benchmark_gather,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+            },
+        ),
+        (
+            benchmark_gather_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 64,
+            },
+        ),
+        (
+            benchmark_gather_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 128,
+            },
+        ),
+        (
+            benchmark_gather_batch,
+            {
+                "edge_index_shape": (2, 430),
+                "node_features_shape": (207, 66),
+                "batch_size": 1024,
             },
         ),
         (
@@ -218,51 +278,6 @@ if __name__ == "__main__":
                 "node_features_shape": (1000, 64),
             },
         ),
-        # (
-        #     benchmark_GCNConv,
-        #     {
-        #         "in_dim": 8,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000),
-        #         "node_features_shape": (100, 8),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 100000),
-        #         "node_features_shape": (100, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 128,
-        #         "edge_index_shape": (2, 1000000),
-        #         "node_features_shape": (10, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 64,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 10000),
-        #         "node_features_shape": (1000, 64),
-        #     },
-        # ),
-        # (
-        #     benchmark_GATConv,
-        #     {
-        #         "in_dim": 8,
-        #         "out_dim": 16,
-        #         "edge_index_shape": (2, 1000),
-        #         "node_features_shape": (100, 8),
-        #     },
-        # ),
     ]
 
     run_processes(layers, args)
