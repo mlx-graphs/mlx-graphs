@@ -1,12 +1,10 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.data import GraphData
 from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index,
     validate_edge_index_and_features,
-    validate_list_of_graph_data,
 )
 
 
@@ -93,30 +91,3 @@ def test_validate_edge_index_and_features(x, f, expected_exception):
         assert (
             foo(edge_index=x, edge_features=f) is True
         ), "Input with valid edge_index and features failed"
-
-
-@pytest.mark.parametrize(
-    "x, expected_exception",
-    [
-        ([GraphData()], None),  # ok
-        ([1, 2, 3], ValueError),  # not list of GraphData
-        ([GraphData(), 1], ValueError),  # list with spurious items
-        (
-            [
-                GraphData(edge_index=mx.array([[0], [1]])),
-                GraphData(node_features=mx.array([[1]])),
-            ],
-            ValueError,
-        ),  # GraphData with different attributes
-    ],
-)
-def test_validate_list_of_graph_data(x, expected_exception):
-    @validate_list_of_graph_data
-    def foo(graph_list):
-        return True
-
-    if expected_exception:
-        with pytest.raises(expected_exception):
-            foo(graph_list=x)
-    else:
-        assert foo(graph_list=x) is True, "Input with valid edge index failed"
