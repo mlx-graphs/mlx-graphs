@@ -42,6 +42,7 @@ def test_batching():
         graph_batch[1].node_features, node_features2
     ), "Simple batch indexing with node features failed"
     assert graph_batch.num_graphs == 2, "Batch num graphs failed"
+    assert len(graph_batch) == 2, "Batch num graphs failed"
 
     # Custom attributes 1D
     custom_attr1D_1 = mx.array([1, 2, 3, 4, 5])

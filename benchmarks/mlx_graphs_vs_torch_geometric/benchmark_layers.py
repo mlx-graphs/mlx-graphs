@@ -163,6 +163,177 @@ def benchmark_scatter(framework, device=None, **kwargs):
     return run_benchmark(**kwargs)
 
 
+def benchmark_scatter_batch(framework, device=None, **kwargs):
+    def run_benchmark(edge_index_shape, node_features_shape, batch_size, scatter_op):
+        if framework == "mlx":
+
+            def mlx_scatter(node_features_mlx, edge_index_mlx, scatter_op):
+                return mx.eval(
+                    scatter(
+                        node_features_mlx,
+                        edge_index_mlx,
+                        edge_index_mlx.max().item() + 2,
+                        scatter_op,
+                    )
+                )
+
+            edge_index = mx.concatenate(
+                [
+                    get_dummy_edge_index(
+                        edge_index_shape, node_features_shape[0], device, "mlx"
+                    )
+                    for _ in range(batch_size)
+                ],
+                axis=1,
+            )
+
+            node_features = mx.concatenate(
+                [
+                    get_dummy_features(node_features_shape, device, "mlx")
+                    for _ in range(batch_size)
+                ],
+                axis=0,
+            )
+
+            num_nodes = node_features_shape[0]
+            cumsum = mx.cumsum(mx.array([0] + [num_nodes for _ in range(batch_size)]))
+            for i in range(batch_size - 1):
+                node_features[i * num_nodes : (i + 1) * num_nodes] += cumsum[i]
+
+            node_features = node_features[edge_index[0]]
+
+            return measure_runtime(
+                mlx_scatter,
+                node_features_mlx=node_features,
+                edge_index_mlx=edge_index[1],
+                scatter_op=scatter_op,
+            )
+        else:
+
+            def pyg_scatter(node_features, edge_index, scatter_op, device):
+                if scatter_op == "sum":
+                    scatter_op = "add"
+                _ = scatter_torch(node_features, edge_index, 0, reduce=scatter_op)
+                sync_mps_if_needed(device)
+                # return scatter_sum(node_features, edge_index, 0)
+
+            edge_index = torch.cat(
+                [
+                    get_dummy_edge_index(
+                        edge_index_shape, node_features_shape[0], device, "pyg"
+                    )
+                    for _ in range(batch_size)
+                ],
+                dim=1,
+            )
+
+            node_features = torch.cat(
+                [
+                    get_dummy_features(node_features_shape, device, "pyg")
+                    for _ in range(batch_size)
+                ],
+                dim=0,
+            )
+
+            num_nodes = node_features_shape[0]
+            cumsum = torch.cumsum(
+                torch.tensor([0] + [num_nodes for _ in range(batch_size)]), dim=0
+            )
+            for i in range(batch_size - 1):
+                node_features[i * num_nodes : (i + 1) * num_nodes] += cumsum[i]
+
+            node_features = node_features[edge_index[0]]
+
+            return measure_runtime(
+                pyg_scatter,
+                node_features=node_features,
+                edge_index=edge_index[1],
+                scatter_op=scatter_op,
+                device=device,
+            )
+
+    return run_benchmark(**kwargs)
+
+
+def benchmark_gather_batch(framework, device=None, **kwargs):
+    def run_benchmark(edge_index_shape, node_features_shape, batch_size):
+        if framework == "mlx":
+
+            def mlx_gather(node_features, edge_index):
+                src_val = node_features[edge_index[0]]
+                dst_val = node_features[edge_index[1]]
+                mx.eval(src_val, dst_val)
+
+            edge_index = mx.concatenate(
+                [
+                    get_dummy_edge_index(
+                        edge_index_shape, node_features_shape[0], device, "mlx"
+                    )
+                    for _ in range(batch_size)
+                ],
+                axis=1,
+            )
+
+            node_features = mx.concatenate(
+                [
+                    get_dummy_features(node_features_shape, device, "mlx")
+                    for _ in range(batch_size)
+                ],
+                axis=0,
+            )
+
+            num_nodes = node_features_shape[0]
+            cumsum = mx.cumsum(mx.array([0] + [num_nodes for _ in range(batch_size)]))
+            for i in range(batch_size - 1):
+                node_features[i * num_nodes : (i + 1) * num_nodes] += cumsum[i]
+
+            return measure_runtime(
+                mlx_gather,
+                node_features=node_features,
+                edge_index=edge_index,
+            )
+        else:
+
+            def pyg_gather(node_features, edge_index, device):
+                _ = node_features[edge_index[0]]
+                _ = node_features[edge_index[1]]
+                sync_mps_if_needed(device)
+
+            edge_index = torch.cat(
+                [
+                    get_dummy_edge_index(
+                        edge_index_shape, node_features_shape[0], device, "pyg"
+                    )
+                    for _ in range(batch_size)
+                ],
+                dim=1,
+            )
+
+            node_features = torch.cat(
+                [
+                    get_dummy_features(node_features_shape, device, "pyg")
+                    for _ in range(batch_size)
+                ],
+                dim=0,
+            )
+
+            num_nodes = node_features_shape[0]
+            cumsum = torch.cumsum(
+                torch.tensor([0] + [num_nodes for _ in range(batch_size)]), dim=0
+            )
+            for i in range(batch_size - 1):
+                node_features[i * num_nodes : (i + 1) * num_nodes] += cumsum[i]
+
+            return measure_runtime(
+                pyg_gather,
+                node_features=node_features,
+                edge_index=edge_index,
+                device=device,
+            )
+
+    return run_benchmark(**kwargs)
+
+
 def benchmark_gather(framework, device=None, **kwargs):
     def run_benchmark(edge_index_shape, node_features_shape):
         if framework == "mlx":
