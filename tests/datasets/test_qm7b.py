@@ -6,8 +6,8 @@ import pytest
 from torch_geometric.datasets import QM7b as QM7b_torch
 from torch_geometric.loader import DataLoader
 
-from mlx_graphs.data import Dataloader
 from mlx_graphs.datasets import QM7bDataset
+from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow

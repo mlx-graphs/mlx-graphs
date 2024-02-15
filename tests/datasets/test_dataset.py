@@ -56,5 +56,8 @@ def test_dataset_properties():
     ]:
         assert isinstance(seq, Dataset1)
 
+    dataset.graphs = []
 
-test_dataset_properties()
+    assert dataset.num_edge_classes == 0
+    assert dataset.num_node_classes == 0
+    assert dataset.num_graph_classes == 0

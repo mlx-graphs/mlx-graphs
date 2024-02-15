@@ -1,7 +1,7 @@
 import copy
 import os
 from abc import ABC, abstractmethod
-from typing import Optional, Sequence, Union
+from typing import Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
@@ -74,17 +74,17 @@ class Dataset(ABC):
     @property
     def num_node_classes(self) -> int:
         """Returns the number of node classes to predict."""
-        return self.graphs[0].num_node_classes
+        return self._num_classes("node")
 
     @property
     def num_edge_classes(self) -> int:
         """Returns the number of edge classes to predict."""
-        return self.graphs[0].num_edge_classes
+        return self._num_classes("edge")
 
     @property
     def num_graph_classes(self) -> int:
         """Returns the number of graph classes to predict."""
-        return self.graphs[0].num_graph_classes
+        return self._num_classes("graph")
 
     @property
     def num_node_features(self) -> int:
@@ -121,6 +121,19 @@ class Dataset(ABC):
     def _load(self):
         self._download()
         self.process()
+
+    def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]) -> int:
+        flattened_labels = [
+            getattr(g, f"{task}_labels")
+            for g in self.graphs
+            if getattr(g, f"{task}_labels") is not None
+        ]
+
+        if len(flattened_labels) == 0:
+            return 0
+
+        flattened_labels = np.concatenate(flattened_labels)
+        return np.unique(flattened_labels).size
 
     def __len__(self):
         """Number of examples in the dataset"""
@@ -177,7 +190,7 @@ class Dataset(ABC):
             )
 
         dataset = copy.copy(self)
-        dataset.graphs = [g for g in self.graphs]
+        dataset.graphs = [self.graphs[i] for i in indices]
         return dataset
 
     def __repr__(self):

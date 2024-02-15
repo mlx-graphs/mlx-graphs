@@ -113,6 +113,10 @@ class GraphDataBatch(GraphData):
 
         raise TypeError("GraphDataBatch indices should be int or slice.")
 
+    def __len__(self):
+        """The length of a batch is its number of graphs."""
+        return self.num_graphs
+
     def _get_graph(self, idx: int) -> GraphData:
         """
         Returns a `GraphData` from the batch with its original attributes and edge

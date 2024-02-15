@@ -1,4 +1,5 @@
-from mlx_graphs.data import Dataloader, GraphData
+from mlx_graphs.data import GraphData
+from mlx_graphs.loaders import Dataloader
 
 
 def test_dataloader():
