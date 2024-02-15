@@ -8,11 +8,6 @@ from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils import check_sha1, download
 from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
 
-try:
-    import scipy as sp
-except ImportError:
-    raise ImportError("scipy is required to download and process the raw data")
-
 
 class QM7bDataset(Dataset):
     """
@@ -43,6 +38,10 @@ class QM7bDataset(Dataset):
             )
 
     def process(self):
+        try:
+            import scipy as sp
+        except ImportError:
+            raise ImportError("scipy is required to download and process the raw data")
         assert self.raw_path is not None, "Unable to access/create the self.raw_path"
         mat_path = os.path.join(self.raw_path, self.name + ".mat")
         data = sp.io.loadmat(mat_path)
