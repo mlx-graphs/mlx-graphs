@@ -122,7 +122,7 @@ class Dataset(ABC):
         self._download()
         self.process()
 
-    def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]) -> int:
+    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
         flattened_labels = [
             getattr(g, f"{task}_labels")
             for g in self.graphs

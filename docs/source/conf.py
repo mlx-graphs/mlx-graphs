@@ -33,7 +33,7 @@ typehints_use_signature_return = True
 autosummary_generate = True
 
 templates_path = ["_templates"]
-exclude_patterns = []
+exclude_patterns = ["_build", "**.ipynb_checkpoints"]
 
 source_suffix = ".rst"
 master_doc = "index"

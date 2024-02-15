@@ -77,6 +77,14 @@ class GraphDataBatch(GraphData):
         """Mask indicating for each node its corresponding batch index."""
         return self._batch_indices  # type: ignore - provided via collate
 
+    @overload
+    def __getitem__(self, idx: int) -> GraphData:
+        ...
+
+    @overload
+    def __getitem__(self, idx: Union[slice, mx.array, list[int]]) -> list[GraphData]:
+        ...
+
     def __getitem__(
         self, idx: Union[int, slice, mx.array, list[int]]
     ) -> Union[GraphData, list[GraphData]]:

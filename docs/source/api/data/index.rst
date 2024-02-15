@@ -1,4 +1,4 @@
- .. _data:
+.. _data:
 
 Data
 ====
@@ -9,5 +9,4 @@ Data
 
 	data
 	batch
-	dataloaders
 	utils

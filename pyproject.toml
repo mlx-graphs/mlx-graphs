@@ -34,6 +34,7 @@ docs = [
   "sphinx-autodoc-typehints==1.25.2",
   "nbsphinx==0.9.3",
   "sphinx-gallery==0.15.0",
+  "ipython==8.21.0",
 ]
 benchmarks = [
   "scipy==1.12.0",

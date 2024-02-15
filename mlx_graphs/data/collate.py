@@ -52,7 +52,7 @@ def collate(graph_list: list[GraphData]) -> dict:
             attr_array = getattr(graph, attr)
 
             if __inc__:
-                attr_array = attr_array + cumsum[i]
+                attr_array = attr_array + cumsum[i]  # type: ignore
 
             attr_list.append(attr_array)
             attr_sizes.append(attr_array.shape[__cat_dim__])
