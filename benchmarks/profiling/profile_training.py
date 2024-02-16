@@ -15,19 +15,9 @@ SPLIT = 35_000
 
 TIMEIT_REPEAT = 10
 TIMEIT_NUMBER = 1
+
 mx.set_default_device(mx.gpu)
-
-
 mx.random.seed(42)
-
-print("Processing dataset ...")
-dataset = TUDataset(DATASET)
-print("Done ...")
-train_dataset = dataset[:SPLIT]
-test_dataset = dataset[SPLIT:]
-
-train_loader = Dataloader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
-test_loader = Dataloader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 
 class GCN(nn.Module):
@@ -68,6 +58,15 @@ def forward_fn(model, graph, labels):
     return loss, y_hat
 
 
+print("Processing dataset ...")
+dataset = TUDataset(DATASET)
+print("Done ...")
+train_dataset = dataset[:SPLIT]
+test_dataset = dataset[SPLIT:]
+
+train_loader = Dataloader(train_dataset, batch_size=BATCH_SIZE, shuffle=True)
+test_loader = Dataloader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
+
 model = GCN(
     in_dim=dataset.num_node_features,
     hidden_dim=64,
@@ -80,9 +79,9 @@ optimizer = optim.Adam(learning_rate=0.01)
 loss_and_grad_fn = nn.value_and_grad(model, forward_fn)
 
 
-def train(train_loader):
+def train(loader):
     loss_sum = 0.0
-    for graph in train_loader:
+    for graph in loader:
         (loss, y_hat), grads = loss_and_grad_fn(
             model=model,
             graph=graph,
@@ -91,7 +90,7 @@ def train(train_loader):
         optimizer.update(model, grads)
         mx.eval(model.parameters(), optimizer.state)
         loss_sum += loss.item()
-    return loss_sum / len(train_loader.dataset)
+    return loss_sum / len(loader.dataset)
 
 
 def test(loader):
@@ -104,17 +103,15 @@ def test(loader):
     return acc / len(loader.dataset)
 
 
-def epoch():
-    train(train_loader)
-    test(train_loader)
-    test(test_loader)
-
-
+print("Start profiling training loop")
 profiler = cProfile.Profile()
 profiler.enable()
-train(train_loader)
+for _ in range(3):
+    train(train_loader)
 profiler.disable()
+print("Profiling completed ...")
 stats = pstats.Stats(profiler).sort_stats("tottime")
 stats.strip_dirs()
-stats.print_stats()
+# stats.print_stats()
 profiler.dump_stats("program.prof")
+print("Results saved in program.prof")
