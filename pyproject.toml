@@ -28,7 +28,6 @@ dev = [
 ]
 test = [
   "pytest==7.4.4",
-  "tox==4.12.1",
 ]
 docs = [
   "sphinx==7.2.6",
@@ -61,14 +60,3 @@ extend-include = ["*.ipynb"]
 
 [tool.ruff.format]
 docstring-code-format = true
-
-
-[tool.tox]
-legacy_tox_ini = """
-    [tox]
-    min_version = 4.0
-
-    [testenv]
-    deps = pytest
-    commands = pytest tests
-    """
