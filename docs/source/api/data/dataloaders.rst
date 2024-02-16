@@ -3,7 +3,7 @@
 Data Loaders
 ============
 
-.. currentmodule:: mlx_graphs.data.dataloaders
+.. currentmodule:: mlx_graphs.loaders.dataloaders
 
 
 .. autosummary::
