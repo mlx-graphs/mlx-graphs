@@ -10,3 +10,4 @@ from .transformations import (
     remove_duplicate_directed_edges,  # noqa
 )
 from .array_ops import expand, broadcast, one_hot  # noqa
+from .cache import cached  # noqa
