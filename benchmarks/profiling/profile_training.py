@@ -9,12 +9,9 @@ from mlx_graphs.datasets import TUDataset
 from mlx_graphs.loaders import Dataloader
 from mlx_graphs.nn import GCNConv, Linear, global_mean_pool
 
-BATCH_SIZE = 256
+BATCH_SIZE = 1024
 DATASET = "NCI-H23H"
 SPLIT = 35_000
-
-TIMEIT_REPEAT = 10
-TIMEIT_NUMBER = 1
 
 mx.set_default_device(mx.gpu)
 mx.random.seed(42)
@@ -106,8 +103,7 @@ def test(loader):
 print("Start profiling training loop")
 profiler = cProfile.Profile()
 profiler.enable()
-for _ in range(3):
-    train(train_loader)
+train(train_loader)
 profiler.disable()
 print("Profiling completed ...")
 stats = pstats.Stats(profiler).sort_stats("tottime")
