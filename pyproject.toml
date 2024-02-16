@@ -19,6 +19,7 @@ classifiers = [
 dependencies = [
     "mlx==0.2.*; sys_platform == 'darwin'",
     "numpy==1.26.3",
+    "requests==2.31.0",
 ]
 
 [project.optional-dependencies]
