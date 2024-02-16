@@ -3,8 +3,6 @@ from typing import Literal, Optional, Union
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.utils import cached
-
 
 class GraphData:
     """
@@ -71,7 +69,7 @@ class GraphData:
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
-    @cached
+    @property
     def num_nodes(self) -> Union[int, None]:
         """Number of nodes in the graph."""
         if self.node_features is not None:

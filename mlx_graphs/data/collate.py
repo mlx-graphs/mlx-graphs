@@ -7,9 +7,7 @@ from .utils import validate_list_of_graph_data
 
 
 @validate_list_of_graph_data
-def collate(
-    graph_list: list[GraphData], ignore_attributes: set = set(["_decorated_cache"])
-) -> dict:
+def collate(graph_list: list[GraphData]) -> dict:
     """Concatenates attributes of multiple graphs based on the specifications
     of each `GraphData`.
 
@@ -40,14 +38,13 @@ def collate(
     cumsum_dict = {}
 
     for attr, __inc__, __cat_dim__ in attrs_inc_cat_dim:
-        if attr in ignore_attributes:
-            continue
-
         attr_list, attr_sizes = [], []
 
         # Compute cumsum outside the inner loop if __inc__ is True
         if __inc__ and attr not in cumsum_dict:
-            num_attr_list = [getattr(graph, "__inc__")(attr) for graph in graph_list]
+            num_attr_list = [
+                getattr(graph, "__inc__")(attr) for graph in graph_list
+            ]  # Assuming __num_nodes__ provides the needed value
             cumsum_dict[attr] = mx.cumsum(mx.array([0] + num_attr_list))
 
         cumsum = cumsum_dict.get(attr)
