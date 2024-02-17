@@ -19,22 +19,27 @@ import mlx_graphs.nn as mxg_nn
 torch._dynamo.config.suppress_errors = True
 mx.set_default_device(mx.gpu)
 
+torch.manual_seed(42)
+mx.random.seed(42)
+dgl.seed(42)
+
+# config
+BATCH_SIZE = 64
+HIDDEN_SIZE = 128
+
+EPOCHS = 1
+TIMEIT_REPEAT = 10
+TIMEIT_NUMBER = 1
+COMPILE = {
+    "mxg": True,
+    "pyg": False,
+    "dgl": False,
+}
 
 # Benchmark
 frameworks = ["dgl", "pyg", "mxg"]
 datasets = ["BZR_MD", "MUTAG", "DD", "NCI-H23"]
 layers = ["GCNConv", "GATConv"]
-
-batch_size = 64
-hid_size = 128
-
-TIMEIT_REPEAT = 5
-TIMEIT_NUMBER = 1
-COMPILE = False
-
-torch.manual_seed(42)
-mx.random.seed(42)
-dgl.seed(42)
 
 
 framework_to_setup = {
@@ -83,7 +88,7 @@ layer_classes = {
 
 def benchmark(framework, loader, step, state):
     train_fn = framework_to_train[framework]
-    train_fn(loader, step, state)
+    train_fn(loader, step, state, epochs=EPOCHS)
 
 
 for dataset_name in datasets:
@@ -96,7 +101,7 @@ for dataset_name in datasets:
         for i, layer_name in enumerate(layers):
             layer = layer_classes[framework][layer_name]
             loader, step, state = framework_to_setup[framework](
-                dataset, layer, batch_size, hid_size, compile=COMPILE
+                dataset, layer, BATCH_SIZE, HIDDEN_SIZE, compile=COMPILE[framework]
             )
 
             times = timeit.Timer(
