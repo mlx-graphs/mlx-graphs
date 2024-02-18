@@ -1,4 +1,6 @@
+import platform
 import timeit
+from importlib.metadata import version
 
 import dgl
 import dgl.data as dgl_datasets
@@ -12,11 +14,12 @@ import torch_geometric.nn as pyg_nn
 from dgl_setup import setup_training_dgl, train_dgl
 from mlx_graphs_setup import setup_training_mxg, train_mxg
 from pyg_setup import setup_training_pyg, train_pyg
+from tqdm import tqdm
+from utils import to_markdown_table
 
 import mlx_graphs.datasets as mxg_datasets
 import mlx_graphs.nn as mxg_nn
 
-torch._dynamo.config.suppress_errors = True
 mx.set_default_device(mx.gpu)
 
 torch.manual_seed(42)
@@ -31,9 +34,9 @@ EPOCHS = 1
 TIMEIT_REPEAT = 10
 TIMEIT_NUMBER = 1
 COMPILE = {
-    "mxg": True,
-    "pyg": False,
-    "dgl": False,
+    "mxg": [False, True],
+    "pyg": [False],
+    "dgl": [False],
 }
 
 # Benchmark
@@ -91,32 +94,36 @@ def benchmark(framework, loader, step, state):
     train_fn(loader, step, state, epochs=EPOCHS)
 
 
-for dataset_name in datasets:
-    print(dataset_name)
-    print("=" * 10)
-
+results = [["Dataset", "Framework", "Layer", "Time/epoch"]]
+for dataset_name in tqdm(datasets):
     for framework in frameworks:
-        dataset = framework_to_datasets[framework](dataset_name)
+        for compile in COMPILE[framework]:
+            dataset = framework_to_datasets[framework](dataset_name)
 
-        for i, layer_name in enumerate(layers):
-            layer = layer_classes[framework][layer_name]
-            loader, step, state = framework_to_setup[framework](
-                dataset, layer, BATCH_SIZE, HIDDEN_SIZE, compile=COMPILE[framework]
-            )
+            for i, layer_name in enumerate(layers):
+                layer = layer_classes[framework][layer_name]
+                loader, step, state = framework_to_setup[framework](
+                    dataset, layer, BATCH_SIZE, HIDDEN_SIZE, compile=compile
+                )
 
-            times = timeit.Timer(
-                lambda: benchmark(framework, loader, step, state)
-            ).repeat(repeat=TIMEIT_REPEAT, number=TIMEIT_NUMBER)
+                times = timeit.Timer(
+                    lambda: benchmark(framework, loader, step, state)
+                ).repeat(repeat=TIMEIT_REPEAT, number=TIMEIT_NUMBER)
 
-            time = min(times) / TIMEIT_NUMBER
+                time = min(times) / TIMEIT_NUMBER
 
-            print(
-                " | ".join(
+                results.append(
                     [
-                        f"{framework}",
+                        f"{dataset_name}",
+                        f"{framework + ('(compiled)' if compile else '')}",
                         f"{layer_name}",
                         f"{time:.3f}s",
                     ]
                 )
-            )
-        print("")
+
+print(f"\nPlatform {platform.platform(terse=True)}")
+print(f"\nmlx version: {version('mlx')}")
+print(f"mlx-graphs version: {version('mlx_graphs')}")
+print(f"torch version: {version('torch')}")
+print(f"torch_geometric version: {version('torch_geometric')}")
+print(to_markdown_table(results))
