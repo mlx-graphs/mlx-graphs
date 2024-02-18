@@ -30,8 +30,8 @@ dgl.seed(42)
 BATCH_SIZE = 64
 HIDDEN_SIZE = 128
 
-EPOCHS = 1
-TIMEIT_REPEAT = 10
+EPOCHS = 2
+TIMEIT_REPEAT = 5
 TIMEIT_NUMBER = 1
 COMPILE = {
     "mxg": [False, True],
