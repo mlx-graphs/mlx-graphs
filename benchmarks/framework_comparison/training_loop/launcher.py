@@ -30,21 +30,33 @@ dgl.seed(42)
 BATCH_SIZE = 64
 HIDDEN_SIZE = 128
 
-EPOCHS = 2
-TIMEIT_REPEAT = 5
-TIMEIT_NUMBER = 1
-COMPILE = {
+EPOCHS = 1  # epochs to run the training loop for
+TIMEIT_REPEAT = 10  # repeat to use in timeit
+TIMEIT_NUMBER = 1  # iterations per repeat in timeit
+COMPILE = {  # whether to compile training step
     "mxg": [False, True],
     "pyg": [False],
     "dgl": [False],
 }
 
-# Benchmark
-frameworks = ["dgl", "pyg", "mxg"]
-datasets = ["BZR_MD", "MUTAG", "DD", "NCI-H23"]
-layers = ["GCNConv", "GATConv"]
+FRAMEWORKS = [
+    "dgl",
+    "pyg",
+    "mxg",
+]
+DATASETS = [
+    "BZR_MD",
+    "MUTAG",
+    "DD",
+    "NCI-H23",
+]
+LAYERS = [
+    "GCNConv",
+    "GATConv",
+]
 
 
+# Map frameworks to setup/benchmarks
 framework_to_setup = {
     "mxg": setup_training_mxg,
     "pyg": setup_training_pyg,
@@ -94,13 +106,14 @@ def benchmark(framework, loader, step, state):
     train_fn(loader, step, state, epochs=EPOCHS)
 
 
+# Run benchmarks
 results = [["Dataset", "Framework", "Layer", "Time/epoch"]]
-for dataset_name in tqdm(datasets):
-    for framework in frameworks:
+for dataset_name in tqdm(DATASETS):
+    for framework in FRAMEWORKS:
         for compile in COMPILE[framework]:
             dataset = framework_to_datasets[framework](dataset_name)
 
-            for i, layer_name in enumerate(layers):
+            for i, layer_name in enumerate(LAYERS):
                 layer = layer_classes[framework][layer_name]
                 loader, step, state = framework_to_setup[framework](
                     dataset, layer, BATCH_SIZE, HIDDEN_SIZE, compile=compile
