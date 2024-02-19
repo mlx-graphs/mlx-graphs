@@ -1,10 +1,33 @@
 import math
+import multiprocessing as mp
+import timeit
+from argparse import ArgumentTypeError
 from collections import defaultdict
-from time import time
 
 import mlx.core as mx
 import numpy as np
 import torch
+
+try:
+    mp.set_start_method("spawn", force=True)
+except RuntimeError:
+    pass
+
+import gc
+
+import torch_geometric  # noqa
+from tqdm import tqdm
+
+
+def str2bool(v):
+    if isinstance(v, bool):
+        return v
+    if v.lower() in ("yes", "true", "t", "y", "1"):
+        return True
+    elif v.lower() in ("no", "false", "f", "n", "0"):
+        return False
+    else:
+        raise ArgumentTypeError("Boolean value expected.")
 
 
 def get_dummy_edge_index(shape, num_nodes, device, framework):
@@ -23,14 +46,9 @@ def get_dummy_features(shape, device, framework):
     raise ValueError("Framework should be either mlx or pyg.")
 
 
-def measure_runtime(fn, **kwargs) -> float:
-    # Avoid first call due to cold start
-    fn(**kwargs)
-
-    tic = time()
-    fn(**kwargs)
-
-    return (time() - tic) * 1000
+def measure_runtime(fn, repeat=5, iters=2, **kwargs) -> float:
+    time = min(timeit.Timer(lambda: fn(**kwargs)).repeat(repeat=repeat, number=iters))
+    return time * 1000 / iters
 
 
 def calculate_speedup(a, compared_to):
@@ -108,3 +126,77 @@ def print_benchmark(times, args, reduce_mean=False):
 
         # Formatting each row
         print(f"| {op.ljust(max_name_length)} | {times_str} |")
+
+
+def run_processes(layers, args):
+    """
+    Runs all layers in serial, on separate processes.
+    Using processes avoids exploding memory within the main process during the bench.
+    """
+    all_times = defaultdict(dict)
+    queue = mp.Queue()
+
+    with tqdm(total=len(layers)) as pbar:
+        for lay in layers:
+            lay_times = defaultdict(list)
+            lay_name = None
+
+            p = mp.Process(target=run, args=(lay, args, queue))
+            p.start()
+
+            times = queue.get()
+            p.join()
+
+            for backend, time in list(times.values())[0].items():
+                lay_times[backend].append(time)
+            lay_name = list(times.keys())[0]
+
+            pbar.update(1)
+
+            lay_times_mean = {k: np.mean(v) for k, v in lay_times.items()}
+            all_times[lay_name] = lay_times_mean
+
+            # NOTE: without this, memory still increases until the end of the bench.
+            del lay
+            gc.collect()
+
+    return all_times
+
+
+def run(fn_with_args, args, queue=None):
+    """
+    Measures runtime of a single fn on all frameworks and devices included in args.
+    """
+    fn, kwargs = fn_with_args
+    times = times = defaultdict(dict)
+    args_str = " ".join([f"{k[:3]}={v}" for k, v in kwargs.items()])
+    op_name = f"{fn.__name__} / {args_str}"
+
+    # MLX benchmark.
+    if args.include_mlx:
+        # GPU
+        mx.set_default_device(mx.gpu)
+        mlx_time = fn(framework="mlx", **kwargs)
+        times[op_name]["mlx_gpu"] = mlx_time
+
+        # CPU
+        mx.set_default_device(mx.cpu)
+        mlx_time = fn(framework="mlx", **kwargs)
+        times[op_name]["mlx_cpu"] = mlx_time
+
+    # CPU PyTorch benchmarks.
+    if args.include_cpu:
+        cpu_time = fn(framework="torch", device=torch.device("cpu"), **kwargs)
+        times[op_name]["pyg_cpu"] = cpu_time
+
+    # MPS PyTorch benchmarks.
+    if args.include_mps:
+        try:
+            mps_time = fn(framework="torch", device=torch.device("mps"), **kwargs)
+        except Exception:
+            mps_time = float("nan")
+        times[op_name]["pyg_mps"] = mps_time
+
+    if queue is None:
+        return times
+    queue.put(times)
