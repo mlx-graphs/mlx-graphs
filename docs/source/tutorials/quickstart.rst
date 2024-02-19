@@ -213,7 +213,7 @@ Once the list of graphs is processed, all the indexing and dataset properties su
 We provide a few widely used datasets and we expect to implement more over time.
 
 Data loaders can be used to automatically load and batch graphs for training routines.
-The :class:`~mlx_graphs.data.dataloaders.Dataloader` class accepts a :class:`~mlx_graphs.datasets.Dataset`
+The :class:`~mlx_graphs.loaders.Dataloader` class accepts a :class:`~mlx_graphs.datasets.Dataset`
 or a sequence of :class:`~mlx_graphs.data.data.GraphData` as input together with a ``batch_size``
 and provides an iterable over the dataset.
 

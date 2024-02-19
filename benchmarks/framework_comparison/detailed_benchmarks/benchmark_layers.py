@@ -2,20 +2,16 @@ import mlx.core as mx
 import mlx.nn as mlx_nn
 import torch
 import torch_geometric.nn as pyg_nn
-
-import mlx_graphs.nn as mlg_nn
-
-try:
-    from torch_scatter import scatter as scatter_torch
-except ImportError:
-    raise ImportError("To run this benchmark, run `pip install torch_scatter`")
-
 from benchmark_utils import (
     get_dummy_edge_index,
     get_dummy_features,
     measure_runtime,
 )
+from torch_geometric.utils import (
+    scatter as scatter_torch,  # The one used by PyG (faster)
+)
 
+import mlx_graphs.nn as mlg_nn
 from mlx_graphs.utils.scatter import scatter
 
 
