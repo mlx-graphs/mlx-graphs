@@ -1,9 +1,13 @@
 Platform macOS-14.2.1
 
 mlx version: 0.3.0
+
 mlx-graphs version: 0.0.2
+
 torch version: 2.2.0
+
 torch_geometric version: 2.5.0
+
 
 Detailed benchmark:
 | Operation                                                                  | mlx_gpu | mlx_cpu | pyg_cpu | mlx_gpu/pyg_cpu speedup |

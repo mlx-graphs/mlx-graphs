@@ -136,7 +136,7 @@ for dataset_name in tqdm(DATASETS):
 
 print(f"\nPlatform {platform.platform(terse=True)}")
 print(f"\nmlx version: {version('mlx')}")
-print(f"mlx-graphs version: {version('mlx_graphs')}")
-print(f"torch version: {version('torch')}")
-print(f"torch_geometric version: {version('torch_geometric')}")
+print(f"\nmlx-graphs version: {version('mlx_graphs')}")
+print(f"\ntorch version: {version('torch')}")
+print(f"\ntorch_geometric version: {version('torch_geometric')}")
 print(to_markdown_table(results))
