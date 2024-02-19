@@ -1,20 +1,26 @@
 | Dataset | Framework | Layer | Time/epoch |
-|---------|-----------|-------|------------|
-| BZR_MD | dgl | GCNConv | 0.130s |
-| BZR_MD | dgl | GATConv | 0.340s |
-| BZR_MD | pyg | GCNConv | 0.241s |
-| BZR_MD | pyg | GATConv | 0.341s |
-| BZR_MD | mxg (compiled) | GCNConv | 0.024s |
-| BZR_MD | mxg (compiled) | GATConv | 0.113s |
-| MUTAG | dgl | GCNConv | 0.036s |
-| MUTAG | dgl | GATConv | 0.063s |
-| MUTAG | pyg | GCNConv | 0.052s |
-| MUTAG | pyg | GATConv | 0.080s |
-| MUTAG | mxg (compiled) | GCNConv | 0.016s |
-| MUTAG | mxg (compiled) | GATConv | 0.036s |
-| DD | dgl | GCNConv | 2.243s |
-| DD | dgl | GATConv | 4.838s |
-| DD | pyg | GCNConv | 4.176s |
-| DD | pyg | GATConv | 5.380s |
-| DD | mxg (compiled) | GCNConv | 0.743s |
-| DD | mxg (compiled) | GATConv | 1.535s |
+| --- | --- | --- | --- |
+| BZR_MD | dgl | GCNConv | 0.062s |
+| BZR_MD | dgl | GATConv | 0.164s |
+| BZR_MD | pyg | GCNConv | 0.109s |
+| BZR_MD | pyg | GATConv | 0.162s |
+| BZR_MD | mxg | GCNConv | 0.051s |
+| BZR_MD | mxg | GATConv | 0.062s |
+| BZR_MD | mxg(compiled) | GCNConv | 0.039s |
+| BZR_MD | mxg(compiled) | GATConv | 0.051s |
+| MUTAG | dgl | GCNConv | 0.016s |
+| MUTAG | dgl | GATConv | 0.029s |
+| MUTAG | pyg | GCNConv | 0.023s |
+| MUTAG | pyg | GATConv | 0.032s |
+| MUTAG | mxg | GCNConv | 0.017s |
+| MUTAG | mxg | GATConv | 0.021s |
+| MUTAG | mxg(compiled) | GCNConv | 0.010s |
+| MUTAG | mxg(compiled) | GATConv | 0.013s |
+| DD | dgl | GCNConv | 1.090s |
+| DD | dgl | GATConv | 2.375s |
+| DD | pyg | GCNConv | 2.038s |
+| DD | pyg | GATConv | 2.637s |
+| DD | mxg | GCNConv | 1.276s |
+| DD | mxg | GATConv | 1.366s |
+| DD | mxg(compiled) | GCNConv | 0.605s |
+| DD | mxg(compiled) | GATConv | 0.722s |
