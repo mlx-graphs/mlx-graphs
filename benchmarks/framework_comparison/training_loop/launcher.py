@@ -40,14 +40,14 @@ COMPILE = {  # whether to compile training step
 }
 
 FRAMEWORKS = [
-    "dgl",
-    "pyg",
+    # "dgl",
+    # "pyg",
     "mxg",
 ]
 DATASETS = [
-    "BZR_MD",
-    "MUTAG",
-    "DD",
+    # "BZR_MD",
+    # "MUTAG",
+    # "DD",
     "NCI-H23",
 ]
 LAYERS = [

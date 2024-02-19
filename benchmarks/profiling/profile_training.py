@@ -9,7 +9,7 @@ from mlx_graphs.datasets import TUDataset
 from mlx_graphs.loaders import Dataloader
 from mlx_graphs.nn import GCNConv, Linear, global_mean_pool
 
-BATCH_SIZE = 1024
+BATCH_SIZE = 64
 DATASET = "NCI-H23H"
 SPLIT = 35_000
 
@@ -66,7 +66,7 @@ test_loader = Dataloader(test_dataset, batch_size=BATCH_SIZE, shuffle=False)
 
 model = GCN(
     in_dim=dataset.num_node_features,
-    hidden_dim=64,
+    hidden_dim=128,
     out_dim=dataset.num_graph_classes,
 )
 
@@ -76,16 +76,26 @@ optimizer = optim.Adam(learning_rate=0.01)
 loss_and_grad_fn = nn.value_and_grad(model, forward_fn)
 
 
+state = [model.state, optimizer.state, mx.random.state]
+
+
+# @partial(mx.compile, inputs=state, outputs=state)
+def step(graph):
+    (loss, y_hat), grads = loss_and_grad_fn(
+        model=model,
+        graph=graph,
+        labels=graph.graph_labels,
+    )
+    optimizer.update(model, grads)
+    return loss
+
+
 def train(loader):
     loss_sum = 0.0
     for graph in loader:
-        (loss, y_hat), grads = loss_and_grad_fn(
-            model=model,
-            graph=graph,
-            labels=graph.graph_labels,
-        )
-        optimizer.update(model, grads)
-        mx.eval(model.parameters(), optimizer.state)
+        loss = step(graph)
+        # mx.eval(model.parameters(), optimizer.state)
+        mx.eval(state)
         loss_sum += loss.item()
     return loss_sum / len(loader.dataset)
 
