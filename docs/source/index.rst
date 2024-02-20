@@ -11,8 +11,8 @@ Features
 - Fast GNN training and inference on Apple Silicon
    ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
    fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
-   available within the MLX core library. Initial benchmarks shows an up to 10x speed improvement
-   with respect to other frameworks.
+   available within the MLX core library. Initial benchmarks show an up to 10x speed improvement
+   with respect to other frameworks on large datasets.
 - Scalability to large graphs
    With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
    This setup allows Macs to leverage their entire memory capacity for storing graphs.
