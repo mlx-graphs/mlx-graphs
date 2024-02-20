@@ -82,6 +82,7 @@ class GraphData:
 
     @property
     def num_edges(self) -> Union[int, None]:
+        """Number of edges in the graph"""
         if self.edge_index is not None:
             return self.edge_index.shape[1]
 
