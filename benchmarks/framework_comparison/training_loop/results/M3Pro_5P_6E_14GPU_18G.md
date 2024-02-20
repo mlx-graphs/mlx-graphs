@@ -8,6 +8,9 @@ torch version: 2.2.0
 
 torch_geometric version: 2.5.0
 
+dgl version: 2.0.0
+
+
 | Dataset | Framework | Layer | Time/epoch |
 |---------|-----------|-------|------------|
 | BZR_MD | dgl | GCNConv | 0.042s |

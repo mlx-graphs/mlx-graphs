@@ -79,7 +79,6 @@ loss_and_grad_fn = nn.value_and_grad(model, forward_fn)
 state = [model.state, optimizer.state, mx.random.state]
 
 
-# @partial(mx.compile, inputs=state, outputs=state)
 def step(graph):
     (loss, y_hat), grads = loss_and_grad_fn(
         model=model,
@@ -94,7 +93,6 @@ def train(loader):
     loss_sum = 0.0
     for graph in loader:
         loss = step(graph)
-        # mx.eval(model.parameters(), optimizer.state)
         mx.eval(state)
         loss_sum += loss.item()
     return loss_sum / len(loader.dataset)
@@ -118,6 +116,5 @@ profiler.disable()
 print("Profiling completed ...")
 stats = pstats.Stats(profiler).sort_stats("tottime")
 stats.strip_dirs()
-# stats.print_stats()
 profiler.dump_stats("program.prof")
 print("Results saved in program.prof")
