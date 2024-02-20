@@ -1,4 +1,4 @@
-from typing import Optional, Union
+from typing import Optional, Union, overload
 
 import mlx.core as mx
 import numpy as np
@@ -206,6 +206,28 @@ def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> m
     )
 
 
+@overload
+def add_self_loops(
+    edge_index: mx.array,
+    edge_features: mx.array,
+    num_nodes: Optional[int] = None,
+    fill_value: Optional[Union[float, mx.array]] = 1,
+    allow_repeated: Optional[bool] = True,
+) -> tuple[mx.array, mx.array]:
+    ...
+
+
+@overload
+def add_self_loops(
+    edge_index: mx.array,
+    edge_features=None,
+    num_nodes: Optional[int] = None,
+    fill_value: Optional[Union[float, mx.array]] = 1,
+    allow_repeated: Optional[bool] = True,
+) -> mx.array:
+    ...
+
+
 @validate_edge_index_and_features
 def add_self_loops(
     edge_index: mx.array,
@@ -260,6 +282,22 @@ def add_self_loops(
     return full_edge_index
 
 
+@overload
+def remove_self_loops(
+    edge_index: mx.array,
+    edge_features=None,
+) -> mx.array:
+    ...
+
+
+@overload
+def remove_self_loops(
+    edge_index: mx.array,
+    edge_features: mx.array,
+) -> tuple[mx.array, mx.array]:
+    ...
+
+
 @validate_edge_index_and_features
 def remove_self_loops(
     edge_index: mx.array,
@@ -293,6 +331,18 @@ def remove_self_loops(
             no_self_loop_features = edge_features[preserved_idx]
         return no_self_loop_index, no_self_loop_features
     return no_self_loop_index
+
+
+@overload
+def to_undirected(edge_index: mx.array, edge_features=None) -> mx.array:
+    ...
+
+
+@overload
+def to_undirected(
+    edge_index: mx.array, edge_features: mx.array
+) -> tuple[mx.array, mx.array]:
+    ...
 
 
 @validate_edge_index_and_features

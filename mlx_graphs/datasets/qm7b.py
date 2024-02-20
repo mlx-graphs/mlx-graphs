@@ -1,16 +1,12 @@
 import os
+from typing import Optional
 
 import mlx.core as mx
 
 from mlx_graphs.data import GraphData
-from mlx_graphs.datasets.dataset import DEFAULT_BASE_DIR, Dataset
+from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils import check_sha1, download
 from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
-
-try:
-    import scipy as sp
-except ImportError:
-    raise ImportError("scipy is required to download and process the raw data")
 
 
 class QM7bDataset(Dataset):
@@ -27,7 +23,7 @@ class QM7bDataset(Dataset):
     _url = "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat"
     _sha1_str = "4102c744bb9d6fd7b40ac67a300e49cd87e28392"
 
-    def __init__(self, base_dir: str = DEFAULT_BASE_DIR):
+    def __init__(self, base_dir: Optional[str] = None):
         super().__init__(name="qm7b", base_dir=base_dir)
 
     def download(self):
@@ -42,6 +38,10 @@ class QM7bDataset(Dataset):
             )
 
     def process(self):
+        try:
+            import scipy as sp
+        except ImportError:
+            raise ImportError("scipy is required to download and process the raw data")
         assert self.raw_path is not None, "Unable to access/create the self.raw_path"
         mat_path = os.path.join(self.raw_path, self.name + ".mat")
         data = sp.io.loadmat(mat_path)

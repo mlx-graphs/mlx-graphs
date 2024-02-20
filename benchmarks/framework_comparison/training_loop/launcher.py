@@ -40,14 +40,14 @@ COMPILE = {  # whether to compile training step
 }
 
 FRAMEWORKS = [
-    # "dgl",
-    # "pyg",
+    "dgl",
+    "pyg",
     "mxg",
 ]
 DATASETS = [
-    # "BZR_MD",
-    # "MUTAG",
-    # "DD",
+    "BZR_MD",
+    "MUTAG",
+    "DD",
     "NCI-H23",
 ]
 LAYERS = [
@@ -139,4 +139,5 @@ print(f"\nmlx version: {version('mlx')}")
 print(f"\nmlx-graphs version: {version('mlx_graphs')}")
 print(f"\ntorch version: {version('torch')}")
 print(f"\ntorch_geometric version: {version('torch_geometric')}")
+print(f"\ndgl version: {version('dgl')}")
 print(to_markdown_table(results))

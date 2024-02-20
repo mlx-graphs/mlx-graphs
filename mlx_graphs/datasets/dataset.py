@@ -30,10 +30,10 @@ class Dataset(ABC):
     def __init__(
         self,
         name: str,
-        base_dir: Optional[str] = DEFAULT_BASE_DIR,
+        base_dir: Optional[str] = None,
     ):
         self._name = name
-        self._base_dir = base_dir
+        self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
 
         self.graphs: list[GraphData] = []
         self._load()
@@ -122,7 +122,7 @@ class Dataset(ABC):
         self._download()
         self.process()
 
-    def _num_classes(self, task: Literal = Literal["node", "edge", "graph"]) -> int:
+    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
         flattened_labels = [
             getattr(g, f"{task}_labels")
             for g in self.graphs
@@ -162,16 +162,20 @@ class Dataset(ABC):
         indices = range(len(self))
 
         if isinstance(idx, (int, np.integer)) or (
-            isinstance(idx, mx.array) and idx.ndim == 0
+            isinstance(idx, mx.array) and idx.ndim == 0  # type: ignore
         ):
-            index = indices[idx]
+            index = indices[idx]  # type:ignore - idx here is a singleton
             return self.graphs[index]
 
         if isinstance(idx, slice):
             indices = indices[idx]
 
-        elif isinstance(idx, mx.array) and idx.dtype in [mx.int64, mx.int32, mx.int16]:
-            return self[idx.flatten().tolist()]
+        elif isinstance(idx, mx.array) and idx.dtype in [  # type: ignore
+            mx.int64,
+            mx.int32,
+            mx.int16,
+        ]:
+            return self[idx.flatten().tolist()]  # type: ignore - idx is a mx.array
 
         elif isinstance(idx, np.ndarray) and idx.dtype == np.int64:
             return self[idx.flatten().tolist()]

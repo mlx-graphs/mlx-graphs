@@ -3,8 +3,6 @@ import shutil
 
 import mlx.core as mx
 import pytest
-from torch_geometric.datasets import QM7b as QM7b_torch
-from torch_geometric.loader import DataLoader
 
 from mlx_graphs.datasets import QM7bDataset
 from mlx_graphs.loaders import Dataloader
@@ -12,6 +10,9 @@ from mlx_graphs.loaders import Dataloader
 
 @pytest.mark.slow
 def test_tu_dataset():
+    from torch_geometric.datasets import QM7b as QM7b_torch
+    from torch_geometric.loader import DataLoader
+
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
     try:
         shutil.rmtree(path)
