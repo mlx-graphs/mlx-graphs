@@ -12,7 +12,8 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's [MLX
 
    ``mlx-graphs`` has been designed to run GNNs and graph algorithms *fast* on Apple Silicon chips. All GNN operations
    fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
-   available within the MLX core library.
+   available within the MLX core library. Initial benchmarks shows an up to 10x speed improvement
+   with respect to other frameworks.
 - **Scalability to large graphs**
 
    With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
