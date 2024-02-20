@@ -26,6 +26,13 @@
 
 	.. autosummary::
 	
+	  ~GraphData.num_edge_classes
+	  ~GraphData.num_edge_features
+	  ~GraphData.num_edges
+	  ~GraphData.num_graph_classes
+	  ~GraphData.num_graph_features
+	  ~GraphData.num_node_classes
+	  ~GraphData.num_node_features
 	  ~GraphData.num_nodes
 	
 	
