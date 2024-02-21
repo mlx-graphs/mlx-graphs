@@ -467,7 +467,7 @@ This architecture also enables specific operations to be run explicitly on eithe
 <section id="example-usage">
 <h2>Example usage<a class="headerlink" href="#example-usage" title="Link to this heading">#</a></h2>
 <p>This library has been designed to build GNNs with ease and efficiency. Building new GNN layers is straightforward by implementing the <cite>MessagePassing</cite> class. This approach ensures that all operations related to message passing are properly handled and processed efficiently on your Mac’s GPU. As a result, you can focus exclusively on the GNN logic, without worrying about the underlying message passing mechanics.</p>
-<p>Here is an example of a custom [GraphSAGE](<a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/5dd9db5e033da9c6fb5ba83c7a7ebea9-Paper.pdf">https://proceedings.neurips.cc/paper_files/paper/2017/file/5dd9db5e033da9c6fb5ba83c7a7ebea9-Paper.pdf</a>) convolutional layer that considers edge weights:</p>
+<p>Here is an example of a custom <a class="reference external" href="https://proceedings.neurips.cc/paper_files/paper/2017/file/5dd9db5e033da9c6fb5ba83c7a7ebea9-Paper.pdf">GraphSAGE</a> convolutional layer that considers edge weights:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mlx.core</span> <span class="k">as</span> <span class="nn">mx</span>
 <span class="kn">from</span> <span class="nn">mlx_graphs.nn.linear</span> <span class="kn">import</span> <span class="n">Linear</span>
 <span class="kn">from</span> <span class="nn">mlx_graphs.nn.message_passing</span> <span class="kn">import</span> <span class="n">MessagePassing</span>
