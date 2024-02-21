@@ -45,7 +45,15 @@ def forward_fn(model, graph):
 
 
 def setup_training_mxg(dataset, layer, batch_size, hid_size, compile=True):
-    loader = mxg_loaders.Dataloader(dataset, batch_size=batch_size, shuffle=True)
+    # Original batch loader
+    # loader = mxg_loaders.Dataloader(dataset, batch_size=batch_size, shuffle=True)
+
+    # Batch loader with padding
+    mean_num_edges = sum([g.num_edges for g in dataset]) / len(dataset)
+    batch_num_edges = int(batch_size * mean_num_edges)
+    loader = mxg_loaders.PaddedDataloader(
+        dataset, batch_num_edges=batch_num_edges, shuffle=True
+    )
 
     model = MXG_model(
         layer=layer,
