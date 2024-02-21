@@ -59,6 +59,8 @@ class Dataloader:
                 for i in batch_indices
             ]
         )
+        batched_data.batch_size = batched_data._batch_indices.max().item() + 1
+
         self._current_index += self.batch_size
         return batched_data
 
@@ -133,6 +135,7 @@ class PaddedDataloader:
         batched_data._batch_indices = mx.concatenate(
             [batched_data._batch_indices, mx.array([-1])], axis=0
         )
+        batched_data.batch_size = batched_data._batch_indices.max().item() + 1
 
         self._current_index = end_index
         return batched_data
