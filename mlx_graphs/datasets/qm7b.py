@@ -27,7 +27,6 @@ class QM7bDataset(Dataset):
         super().__init__(name="qm7b", base_dir=base_dir)
 
     def download(self):
-        assert self.raw_path is not None, "Unable to access/create the self.raw_path"
         file_path = os.path.join(self.raw_path, self.name + ".mat")
         download(self._url, path=file_path)
         if not check_sha1(file_path, self._sha1_str):

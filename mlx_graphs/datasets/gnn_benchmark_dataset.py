@@ -28,7 +28,6 @@ class SuperPixelDataset(Dataset):
         super().__init__(name=name, base_dir=base_dir)
 
     def download(self):
-        assert self.raw_path is not None, "Unable to access/create the self.raw_path"
         file_path = os.path.join(self.raw_path, "superpixels.zip")
         path = download(self._url, path=file_path)
         extract_archive(path, self.raw_path, overwrite=True)
@@ -43,3 +42,4 @@ class SuperPixelDataset(Dataset):
             "rb",
         ) as f:
             labels, data = pickle.load(f)
+            print(labels)
