@@ -8,7 +8,8 @@ from tqdm import tqdm
 from mlx_graphs.data.data import GraphData
 from mlx_graphs.datasets import Dataset
 from mlx_graphs.datasets.utils import download, extract_archive
-from mlx_graphs.utils.transformations import (
+from mlx_graphs.utils import (
+    pairwise_distances,
     remove_self_loops,
     to_sparse_adjacency_matrix,
 )
@@ -47,25 +48,6 @@ def sigma(distances, k: int = 8) -> mx.array:
         sigma = knns.sum(axis=1).reshape((knns.shape[0], 1)) / k
 
     return sigma + 1e-8
-
-
-def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
-    """
-    Compute pairwise distances between points in vectors x and y.
-
-    Args:
-        x: array of shape (N, D)
-        y: array of shape (M, D)
-
-    Returns:
-        Array of shape (N, M)
-    """
-    assert x.shape[1] == y.shape[1], "Input vectors must have the same dimensionality"
-    # Use broadcasting to compute pairwise differences
-    expanded_x = mx.expand_dims(x, 1)
-    distances = mx.linalg.norm(expanded_x - y, axis=-1)
-
-    return distances
 
 
 def compute_adjacency_matrix_images(
