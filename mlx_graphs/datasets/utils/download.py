@@ -5,6 +5,7 @@ import warnings
 from typing import Optional
 
 import requests
+from tqdm import tqdm
 
 from mlx_graphs.data.data import GraphData
 
@@ -85,10 +86,16 @@ def download(
                 r = requests.get(url, stream=True, verify=verify_ssl)
                 if r.status_code != 200:
                     raise RuntimeError("Failed downloading url %s" % url)
-                with open(fname, "wb") as f:
-                    for chunk in r.iter_content(chunk_size=1024):
-                        if chunk:  # filter out keep-alive new chunks
-                            f.write(chunk)
+                # Sizes in bytes.
+                total_size = int(r.headers.get("content-length", 0))
+                block_size = 1024
+
+                with tqdm(total=total_size, unit="B", unit_scale=True) as progress_bar:
+                    with open(fname, "wb") as f:
+                        for chunk in r.iter_content(chunk_size=block_size):
+                            progress_bar.update(len(chunk))
+                            if chunk:  # filter out keep-alive new chunks
+                                f.write(chunk)
                 if sha1_hash and not check_sha1(fname, sha1_hash):
                     raise UserWarning(
                         "File {} is downloaded but the content hash does not match."

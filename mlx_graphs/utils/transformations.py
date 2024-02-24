@@ -80,7 +80,7 @@ def to_sparse_adjacency_matrix(
     """
     edge_index = to_edge_index(adjacency_matrix)
     edge_features = adjacency_matrix[edge_index[0], edge_index[1]]
-    return edge_index, edge_features
+    return edge_index, mx.expand_dims(edge_features, 1)
 
 
 @validate_edge_index_and_features
