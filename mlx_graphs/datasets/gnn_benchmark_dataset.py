@@ -61,16 +61,9 @@ def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
         Array of shape (N, M)
     """
     assert x.shape[1] == y.shape[1], "Input vectors must have the same dimensionality"
-
-    # Initialize the distances matrix with zeros
-    len_x = x.shape[0]
-    len_y = y.shape[0]
-    distances = mx.zeros([len_x, len_y])
-
-    # Compute pairwise distances using nested loops
-    for i in range(len_x):
-        for j in range(len_y):
-            distances[i, j] = mx.linalg.norm(x[i] - y[j])
+    # Use broadcasting to compute pairwise differences
+    expanded_x = mx.expand_dims(x, 1)
+    distances = mx.linalg.norm(expanded_x - y, axis=-1)
 
     return distances
 
