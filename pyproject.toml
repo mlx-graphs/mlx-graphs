@@ -17,7 +17,7 @@ classifiers = [
     "Programming Language :: Python",
 ]
 dependencies = [
-    "mlx==0.3.*; sys_platform == 'darwin'",
+    "mlx==0.4.*; sys_platform == 'darwin'",
     "numpy==1.26.3",
     "requests==2.31.0",
 ]
