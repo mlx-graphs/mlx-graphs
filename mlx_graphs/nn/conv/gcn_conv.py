@@ -29,7 +29,7 @@ class GCNConv(MessagePassing):
         super(GCNConv, self).__init__(**kwargs)
 
         self.linear = nn.Linear(node_features_dim, out_features_dim, bias)
-        self.add_self_loops = add_self_loops
+        self._add_self_loops = add_self_loops
 
     def __call__(
         self,
@@ -46,7 +46,7 @@ class GCNConv(MessagePassing):
 
         node_features = self.linear(node_features)
 
-        if self.add_self_loops:
+        if self._add_self_loops:
             edge_index = add_self_loops(edge_index)
 
         row, col = edge_index
