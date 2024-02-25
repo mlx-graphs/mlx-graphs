@@ -14,6 +14,7 @@ class GCNConv(MessagePassing):
         node_features_dim: size of input node features
         out_features_dim: size of output node embeddings
         bias: whether to use bias in the node projection
+        add_self_loops: whether to add a self-loop for each node
     """
 
     def __init__(
