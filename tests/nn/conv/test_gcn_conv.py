@@ -34,7 +34,13 @@ def test_gcn_conv():
         ),
     )
 
+    conv = GCNConv(8, 16, add_self_loops=True)
+    node_features = mx.random.uniform(0, 1, [6, 8])
+    edge_index = mx.array([[0, 1, 2], [1, 2, 3]])
+    y_hat5 = conv(edge_index, node_features)
+
     assert y_hat1.shape == (6, 20), "Simple GCNConv failed"
     assert y_hat2.shape == (6, 20), "GCNConv with negative values failed"
     assert y_hat3.shape == (100, 32), "GCNConv with different shapes failed"
     assert y_hat4.shape == (100, 32), "GCNConv without bias failed"
+    assert y_hat5.shape == (6, 16), "GCNConv with self-loops failed"
