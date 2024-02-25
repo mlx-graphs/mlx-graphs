@@ -4,7 +4,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils import degree, invert_sqrt_degree
+from mlx_graphs.utils import add_self_loops, degree, invert_sqrt_degree
 
 
 class GCNConv(MessagePassing):
@@ -21,12 +21,14 @@ class GCNConv(MessagePassing):
         node_features_dim: int,
         out_features_dim: int,
         bias: bool = True,
+        add_self_loops: bool = False,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
         super(GCNConv, self).__init__(**kwargs)
 
         self.linear = nn.Linear(node_features_dim, out_features_dim, bias)
+        self.add_self_loops = add_self_loops
 
     def __call__(
         self,
@@ -42,6 +44,9 @@ class GCNConv(MessagePassing):
         ), "'col' component of edge_index should not be empty"
 
         node_features = self.linear(node_features)
+
+        if self.add_self_loops:
+            edge_index = add_self_loops(edge_index)
 
         row, col = edge_index
 
