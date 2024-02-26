@@ -35,12 +35,11 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
     """
     num_nodes = distances.shape[0]
 
-    # Compute sigma and reshape.
     if k > num_nodes:
-        # Handling for graphs with num_nodes less than kth.
+        # handle graphs with num_nodes less than k
         sigma = mx.array([1] * num_nodes).reshape(num_nodes, 1)
     else:
-        # Get k-nearest neighbors for each node.
+        # get knns for each node
         knns = mx.partition(distances, k, axis=-1)[:, : k + 1]
         sigma = knns.sum(axis=1).reshape((knns.shape[0], 1)) / k
 
@@ -75,7 +74,7 @@ def image_to_superpixel_adjacency_matrix(
     else:
         adjacency_matrix = mx.exp(-((coord_dist / sigma(coord_dist)) ** 2))
 
-    # Convert to symmetric matrix.
+    # convert to symmetric matrix without self-loops
     adjacency_matrix = 0.5 * (adjacency_matrix + adjacency_matrix.T)
     for i in range(adjacency_matrix.shape[0]):
         adjacency_matrix[i, i] = 0
@@ -95,7 +94,6 @@ def compute_edges_list(
     Returns:
         list of knns for each node and list of their features
     """
-    # Get k-similar neighbor indices for each node.
     num_nodes = adjacency_matrix.shape[0]
     new_kth = num_nodes - k
 
@@ -103,17 +101,11 @@ def compute_edges_list(
         knns = mx.argpartition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
         knn_values = mx.partition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
     else:
-        # Handling for graphs with less than kth nodes.
-        # In such cases, the resulting graph will be fully connected.
+        # for graphs with less than k nodes the resulting graph will be fully connected.
         knns = mx.repeat(mx.arange(num_nodes), num_nodes).reshape(num_nodes, num_nodes)
         knn_values = adjacency_matrix
 
-        # Removing self loop.
-        if num_nodes != 1:
-            knn_values = adjacency_matrix[
-                knns != mx.arange(num_nodes)[:, None]
-            ].reshape(num_nodes, -1)
-            knns = knns[knns != mx.arange(num_nodes)[:, None]].reshape(num_nodes, -1)
+        # TODO: eventually remove self-loops
     return knns, knn_values
 
 
