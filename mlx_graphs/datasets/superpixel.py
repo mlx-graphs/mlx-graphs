@@ -27,7 +27,7 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
     See Equation (47) in `<http://arxiv.org/abs/2003.00982>`_ for more details.
 
     Args:
-        distances:
+        distances: array of pairwise distances between points
         k: nearest neighbors to consider
 
     Returns:
@@ -81,7 +81,7 @@ def image_to_superpixel_adjacency_matrix(
     return adjacency_matrix
 
 
-def compute_edges_list(
+def adjacency_matrix_to_knn_edges(
     adjacency_matrix: mx.array, k: int = 9
 ) -> tuple[mx.array, mx.array]:
     """
@@ -105,7 +105,20 @@ def compute_edges_list(
         knns = mx.repeat(mx.arange(num_nodes), num_nodes).reshape(num_nodes, num_nodes)
         knn_values = adjacency_matrix
 
-        # TODO: eventually remove self-loops
+        # remove self loops
+        if num_nodes != 1:
+            knn_values = mx.array(
+                np.array(adjacency_matrix, copy=False)[
+                    knns != np.arange(num_nodes)[:, None]
+                ]
+                .reshape(num_nodes, -1)
+                .tolist()
+            )
+            knns = mx.array(
+                np.array(knns, copy=False)[knns != np.arange(num_nodes)[:, None]]
+                .reshape(num_nodes, -1)
+                .tolist()
+            )
     return knns, knn_values
 
 
@@ -181,7 +194,7 @@ class SuperPixelDataset(Dataset):
                     coord, mean_px, False
                 )  # using only super-pixel locations
 
-            edges_list, edges_values = compute_edges_list(adjacency_matrix)
+            edges_list, edges_values = adjacency_matrix_to_knn_edges(adjacency_matrix)
 
             num_nodes = adjacency_matrix.shape[0]
             mean_px = mean_px.reshape(num_nodes, -1)

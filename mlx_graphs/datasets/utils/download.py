@@ -142,7 +142,7 @@ def check_sha1(filename: str, sha1_hash: str) -> bool:
     return sha1.hexdigest() == sha1_hash
 
 
-def extract_archive(file, target_dir, overwrite=True):
+def extract_archive(file: str, target_dir: str, overwrite=True):
     """Extract archive file.
 
     Code borrowed from dgl
