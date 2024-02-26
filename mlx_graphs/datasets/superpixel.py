@@ -51,16 +51,25 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
 
 
 def image_to_superpixel_adjacency_matrix(
-    coordinates: mx.array, features: mx.array, use_feat: bool = True
+    coordinates: mx.array, features: mx.array, use_features: bool = True
 ) -> mx.array:
     """
     Computes a k-NN adjacency matrix as in Equation (47) in
     `<http://arxiv.org/abs/2003.00982>`_.
+
+    Args:
+        coordinates: coordinates of each pixel/node
+        features: features of each pixel/node
+        use_features: whether to use features in computing the adjacency matrix.
+            Defaults to True
+
+    Returns:
+        Adjacency matrix
     """
     coord = coordinates.reshape(-1, 2)
     coord_dist = pairwise_distances(coord, coord)
 
-    if use_feat:
+    if use_features:
         features_dist = pairwise_distances(features, features)
         adjacency_matrix = mx.exp(
             -((coord_dist / sigma(coord_dist)) ** 2)
@@ -75,6 +84,22 @@ def image_to_superpixel_adjacency_matrix(
 
 
 class SuperPixelDataset(Dataset):
+    """
+    MNIST and CIFAR10 superpixel datasets for graph classification tasks
+    converted fromt the original MINST and CIFAR10 images.
+
+    The datasets were introduced in `<http://arxiv.org/abs/2003.00982>`_.
+
+    Args:
+        name: name of the selected dataset
+        split: split of the dataset to load
+        use_features: if True, the adjacency matrix is computed from superpixels
+            locations and features. If False, only from superpixels locations.
+            Defaults to False.
+        base_dir: directory where to store the datasets
+
+    """
+
     _url = "https://www.dropbox.com/s/y2qwa77a0fxem47/superpixels.zip?dl=1"
 
     def __init__(
