@@ -176,7 +176,7 @@ class SuperPixelDataset(Dataset):
             "rb",
         ) as f:
             labels, data = pickle.load(f)
-            labels = mx.array(labels.tolist())
+            labels = mx.array([labels.tolist()]).T
 
         for idx, sample in enumerate(
             tqdm(data, desc=f"Processing {self.name} {self.split} dataset")
@@ -215,7 +215,7 @@ class SuperPixelDataset(Dataset):
                     dst_nodes.extend(dsts)
 
             edge_index = mx.stack([mx.array(src_nodes), mx.array(dst_nodes)])
-            edge_features = edges_values.reshape(-1)
+            edge_features = mx.expand_dims(edges_values.reshape(-1), 1)
 
             self.graphs.append(
                 GraphData(
