@@ -3,16 +3,13 @@ import pickle
 from typing import Literal, Optional, get_args
 
 import mlx.core as mx
+import numpy as np
 from tqdm import tqdm
 
 from mlx_graphs.data.data import GraphData
 from mlx_graphs.datasets import Dataset
 from mlx_graphs.datasets.utils import download, extract_archive
-from mlx_graphs.utils import (
-    pairwise_distances,
-    remove_self_loops,
-    to_sparse_adjacency_matrix,
-)
+from mlx_graphs.utils import pairwise_distances
 
 SUPERPIXEL_NAMES = Literal["MNIST", "CIFAR10"]
 SUPERPIXEL_SPLITS = Literal["train", "test"]
@@ -80,7 +77,44 @@ def image_to_superpixel_adjacency_matrix(
 
     # Convert to symmetric matrix.
     adjacency_matrix = 0.5 * (adjacency_matrix + adjacency_matrix.T)
+    for i in range(adjacency_matrix.shape[0]):
+        adjacency_matrix[i, i] = 0
     return adjacency_matrix
+
+
+def compute_edges_list(
+    adjacency_matrix: mx.array, k: int = 9
+) -> tuple[mx.array, mx.array]:
+    """
+    Compute list of knn nodes per node (and features)
+
+    Args:
+        adjacency_matrix: the adjacency matrix
+        k: the number of nearest neighbors
+
+    Returns:
+        list of knns for each node and list of their features
+    """
+    # Get k-similar neighbor indices for each node.
+    num_nodes = adjacency_matrix.shape[0]
+    new_kth = num_nodes - k
+
+    if num_nodes > k:
+        knns = mx.argpartition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
+        knn_values = mx.partition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
+    else:
+        # Handling for graphs with less than kth nodes.
+        # In such cases, the resulting graph will be fully connected.
+        knns = mx.repeat(mx.arange(num_nodes), num_nodes).reshape(num_nodes, num_nodes)
+        knn_values = adjacency_matrix
+
+        # Removing self loop.
+        if num_nodes != 1:
+            knn_values = adjacency_matrix[
+                knns != mx.arange(num_nodes)[:, None]
+            ].reshape(num_nodes, -1)
+            knns = knns[knns != mx.arange(num_nodes)[:, None]].reshape(num_nodes, -1)
+    return knns, knn_values
 
 
 class SuperPixelDataset(Dataset):
@@ -154,14 +188,30 @@ class SuperPixelDataset(Dataset):
                 adjacency_matrix = image_to_superpixel_adjacency_matrix(
                     coord, mean_px, False
                 )  # using only super-pixel locations
-            edge_index, edge_features = to_sparse_adjacency_matrix(adjacency_matrix)
-            num_nodes = adjacency_matrix.shape[0]
-            if num_nodes > 1:
-                edge_index, edge_features = remove_self_loops(edge_index, edge_features)
 
+            edges_list, edges_values = compute_edges_list(adjacency_matrix)
+
+            num_nodes = adjacency_matrix.shape[0]
             mean_px = mean_px.reshape(num_nodes, -1)
             coord = coord.reshape(num_nodes, 2)
             node_features = mx.concatenate((mean_px, coord), axis=1)
+
+            src_nodes = []
+            dst_nodes = []
+            # TODO: use mlx once indexing by bool is supported
+            for src, dsts in enumerate(np.array(edges_list, copy=False)):
+                if num_nodes == 1:
+                    src_nodes.append(src)
+                    dst_nodes.append(dsts)
+                else:
+                    dsts = dsts[dsts != src].tolist()
+                    srcs = [src] * len(dsts)
+                    src_nodes.extend(srcs)
+                    dst_nodes.extend(dsts)
+
+            edge_index = mx.stack([mx.array(src_nodes), mx.array(dst_nodes)])
+            edge_features = edges_values.reshape(-1)
+
             self.graphs.append(
                 GraphData(
                     edge_index=edge_index,
