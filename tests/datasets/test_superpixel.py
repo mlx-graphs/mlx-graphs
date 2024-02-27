@@ -9,7 +9,7 @@ from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow
-def test_tu_dataset():
+def test_superpixel_dataset():
     from torch_geometric.datasets import GNNBenchmarkDataset
     from torch_geometric.loader import DataLoader
 
