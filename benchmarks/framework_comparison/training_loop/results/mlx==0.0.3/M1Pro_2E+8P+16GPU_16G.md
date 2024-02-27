@@ -1,46 +1,46 @@
 Platform macOS-14.2
 
-mlx version: 0.3.0
+mlx version: 0.4.0
 
 mlx-graphs version: 0.0.2
 
-torch version: 2.1.2
+torch version: 2.2.1
 
-torch_geometric version: 2.4.0
+torch_geometric version: 2.5.0
 
 dgl version: 2.0.0
 
 | Dataset | Framework | Layer | Time/epoch |
 | --- | --- | --- | --- |
-| BZR_MD | dgl | GCNConv | 0.066s |
-| BZR_MD | dgl | GATConv | 0.174s |
+| BZR_MD | dgl | GCNConv | 0.061s |
+| BZR_MD | dgl | GATConv | 0.166s |
 | BZR_MD | pyg | GCNConv | 0.130s |
-| BZR_MD | pyg | GATConv | 0.175s |
-| BZR_MD | mxg | GCNConv | 0.101s |
-| BZR_MD | mxg | GATConv | 0.113s |
-| BZR_MD | mxg(compiled) | GCNConv | 0.062s |
-| BZR_MD | mxg(compiled) | GATConv | 0.083s |
-| MUTAG | dgl | GCNConv | 0.017s |
-| MUTAG | dgl | GATConv | 0.032s |
-| MUTAG | pyg | GCNConv | 0.025s |
-| MUTAG | pyg | GATConv | 0.037s |
-| MUTAG | mxg | GCNConv | 0.024s |
-| MUTAG | mxg | GATConv | 0.031s |
-| MUTAG | mxg(compiled) | GCNConv | 0.013s |
-| MUTAG | mxg(compiled) | GATConv | 0.017s |
-| DD | dgl | GCNConv | 1.079s |
-| DD | dgl | GATConv | 2.486s |
-| DD | pyg | GCNConv | 2.186s |
-| DD | pyg | GATConv | 2.889s |
-| DD | mxg | GCNConv | 1.413s |
-| DD | mxg | GATConv | 1.481s |
-| DD | mxg(compiled) | GCNConv | 1.002s |
-| DD | mxg(compiled) | GATConv | 1.235s |
-| NCI-H23 | dgl | GCNConv | 5.046s |
-| NCI-H23 | dgl | GATConv | 8.803s |
-| NCI-H23 | pyg | GCNConv | 7.253s |
-| NCI-H23 | pyg | GATConv | 10.505s |
-| NCI-H23 | mxg | GCNConv | 5.585s |
-| NCI-H23 | mxg | GATConv | 7.601s |
-| NCI-H23 | mxg(compiled) | GCNConv | 11.256s |
-| NCI-H23 | mxg(compiled) | GATConv | 12.603s |
+| BZR_MD | pyg | GATConv | 0.186s |
+| BZR_MD | mxg | GCNConv | 0.074s |
+| BZR_MD | mxg | GATConv | 0.090s |
+| BZR_MD | mxg(compiled) | GCNConv | 0.057s |
+| BZR_MD | mxg(compiled) | GATConv | 0.071s |
+| MUTAG | dgl | GCNConv | 0.015s |
+| MUTAG | dgl | GATConv | 0.027s |
+| MUTAG | pyg | GCNConv | 0.029s |
+| MUTAG | pyg | GATConv | 0.039s |
+| MUTAG | mxg | GCNConv | 0.022s |
+| MUTAG | mxg | GATConv | 0.026s |
+| MUTAG | mxg(compiled) | GCNConv | 0.012s |
+| MUTAG | mxg(compiled) | GATConv | 0.015s |
+| DD | dgl | GCNConv | 1.159s |
+| DD | dgl | GATConv | 2.553s |
+| DD | pyg | GCNConv | 2.491s |
+| DD | pyg | GATConv | 3.249s |
+| DD | mxg | GCNConv | 1.239s |
+| DD | mxg | GATConv | 1.249s |
+| DD | mxg(compiled) | GCNConv | 0.822s |
+| DD | mxg(compiled) | GATConv | 0.999s |
+| NCI-H23 | dgl | GCNConv | 7.013s |
+| NCI-H23 | dgl | GATConv | 11.468s |
+| NCI-H23 | pyg | GCNConv | 11.412s |
+| NCI-H23 | pyg | GATConv | 12.725s |
+| NCI-H23 | mxg | GCNConv | 5.295s |
+| NCI-H23 | mxg | GATConv | 7.121s |
+| NCI-H23 | mxg(compiled) | GCNConv | 10.848s |
+| NCI-H23 | mxg(compiled) | GATConv | 11.697s |
