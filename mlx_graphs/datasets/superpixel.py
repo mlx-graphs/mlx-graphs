@@ -46,7 +46,7 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
     return sigma + 1e-8
 
 
-def image_to_superpixel_adjacency_matrix(
+def image_to_adjacency_matrix(
     coordinates: mx.array, features: mx.array, use_features: bool = True
 ) -> mx.array:
     """
@@ -186,11 +186,11 @@ class SuperPixelDataset(Dataset):
             coord = mx.array(coord.tolist()) / self._img_size
 
             if self.use_features:
-                adjacency_matrix = image_to_superpixel_adjacency_matrix(
+                adjacency_matrix = image_to_adjacency_matrix(
                     coord, mean_px
                 )  # using super-pixel locations + features
             else:
-                adjacency_matrix = image_to_superpixel_adjacency_matrix(
+                adjacency_matrix = image_to_adjacency_matrix(
                     coord, mean_px, False
                 )  # using only super-pixel locations
 
