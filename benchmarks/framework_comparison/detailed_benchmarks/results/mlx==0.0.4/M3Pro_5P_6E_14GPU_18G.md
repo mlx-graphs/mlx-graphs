@@ -157,3 +157,4 @@ Average benchmark:
 | benchmark_scatter        |   0.99 |  54.62 |  13.20 |  +1233% |
 | benchmark_scatter_batch  |   4.94 | 487.53 | 138.67 |  +2704% |
 | benchmark_GATConv        |   4.29 |  85.55 |  20.43 |   +376% |
+| benchmark_GCNConv  |   3.66 |  61.81 |  17.53 |   +378% |
