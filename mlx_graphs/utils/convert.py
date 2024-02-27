@@ -1,7 +1,5 @@
 from typing import Any
 
-import mlx.core as mx
-
 from mlx_graphs.data import GraphData
 
 
@@ -36,11 +34,7 @@ def to_networkx(
 
     G = nx.DiGraph()
 
-    def to_networkx_value(value: Any) -> Any:
-        return value.tolist() if isinstance(value, mx.array) else value
-
-    for i, _ in enumerate(data.node_features):
-        G.add_node(i)
+    G.add_nodes_from(range(data.num_nodes))
 
     for v, w in data.edge_index.T.tolist():
         if remove_self_loops and v == w:
