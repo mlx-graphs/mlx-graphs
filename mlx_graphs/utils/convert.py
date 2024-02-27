@@ -33,6 +33,10 @@ def to_networkx(
     import networkx as nx
 
     G = nx.DiGraph()
+
+    if data.num_nodes is None:
+        return G
+
     G.add_nodes_from(range(data.num_nodes))
 
     for v, w in data.edge_index.T.tolist():
