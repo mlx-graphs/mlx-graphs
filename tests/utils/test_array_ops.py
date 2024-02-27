@@ -21,8 +21,10 @@ def test_pairwise_distances():
     distances = pairwise_distances(x, y)
     assert mx.array_equal(distances, expected_distances), "Wrong distances"
 
-    x = mx.random.normal([80, 1])
-    y = mx.random.normal([80, 1])
+    x = mx.random.normal([80, 3])
+    y = mx.random.normal([80, 3])
     distances = pairwise_distances(x, y)
     sp_distances = mx.array(cdist(np.array(x), np.array(y)).tolist())
+    for i in range(10):
+        print(distances[i] - sp_distances[i])
     assert mx.array_equal(distances, sp_distances)
