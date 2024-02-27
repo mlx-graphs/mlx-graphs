@@ -12,13 +12,15 @@ networkx_installed = networkx_spec is not None
 
 @pytest.mark.skipif(not networkx_installed, reason="networkx is not installed")
 def test_to_networkx():
-    edge_index = mx.array([[0, 1, 1, 2, 2, 3], [1, 0, 2, 1, 3, 2]])
+    edge_index = mx.array([[0, 0, 1, 1, 2, 2, 3], [0, 1, 0, 2, 1, 3, 2]])
     node_features = mx.array([[1], [1], [1], [1]])
 
     graph = GraphData(node_features=node_features, edge_index=edge_index)
 
     networkx_graph = to_networkx(graph)
-    print(networkx_graph.number_of_nodes())
 
     assert networkx_graph.number_of_nodes() == 4
     assert networkx_graph.number_of_edges() == len(edge_index[0])
+
+    networkx_graph_no_self_loops = to_networkx(graph, remove_self_loops=True)
+    assert networkx_graph_no_self_loops.number_of_edges() == len(edge_index[0]) - 1
