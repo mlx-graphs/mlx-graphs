@@ -49,7 +49,7 @@ batch_sizes = [16, 128, 1024]
 if __name__ == "__main__":
     parser = ArgumentParser()
     parser.add_argument("--include_cpu", type=str2bool, default="True")
-    parser.add_argument("--include_mps", type=str2bool, default="True")
+    parser.add_argument("--include_mps", type=str2bool, default="False")
     parser.add_argument("--include_mlx", type=str2bool, default="True")
     args = parser.parse_args()
     print(args)
