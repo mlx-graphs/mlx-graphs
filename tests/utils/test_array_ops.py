@@ -1,9 +1,12 @@
 import mlx.core as mx
+import numpy as np
 
 from mlx_graphs.utils.array_ops import pairwise_distances
 
 
 def test_pairwise_distances():
+    from scipy.spatial.distance import cdist
+
     x = mx.zeros([2, 4])
     y = mx.zeros([3, 4])
     expected_distances = mx.zeros([2, 3])
@@ -17,3 +20,9 @@ def test_pairwise_distances():
     expected_distances = mx.array([[1, 2], [0, 1]])
     distances = pairwise_distances(x, y)
     assert mx.array_equal(distances, expected_distances), "Wrong distances"
+
+    x = mx.random.normal([80, 1])
+    y = mx.random.normal([80, 1])
+    distances = pairwise_distances(x, y)
+    sp_distances = mx.array(cdist(np.array(x), np.array(y)).tolist())
+    assert mx.array_equal(distances, sp_distances)
