@@ -1,4 +1,4 @@
-from typing import Any, Optional, Tuple
+from typing import Any, Literal, Optional, Tuple
 
 import mlx.core as mx
 from mlx import nn
@@ -6,6 +6,9 @@ from mlx import nn
 from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.utils import degree, scatter
+
+MessageFunctions = Literal["transe", "distmult", "rotate"]
+AggegationFunctions = Literal["add", "mean", "pna"]
 
 
 class GeneralizedRelationalConv(MessagePassing):
@@ -67,12 +70,20 @@ class GeneralizedRelationalConv(MessagePassing):
         boundary = mx.random.uniform(0, 1, shape=(batch_size, 5, 16)
         size = (node_features.shape[0], node_features.shape[0])
 
-        layer_input = boundary
-        h = conv(layer_input, query, boundary, edge_index, edge_type, size)
+        layer_input = boundary  # initial node features which will be updated
+        h = conv(layer_input, edge_index, edge_type, boundary, size=size)
 
         # optional: residual connection if input dim == output dim
         h = h + layer_input
         layer_input = h
+
+        # another conv type where relations are obtained from the additional
+        # query tensor
+        query = mx.random.uniform(0, 1, shape=(batch_sim, 16))
+        conv2 = GeneralizedRelationalConv(
+            input_dim, output_dim, num_relations, dependent=True)
+
+        h = conv(layer_input, edge_index, edge_type, boundary, query, size=size)
 
     """
 
@@ -83,8 +94,8 @@ class GeneralizedRelationalConv(MessagePassing):
         input_dim: int,
         output_dim: int,
         num_relation: int,
-        message_func: str = "distmult",
-        aggregate_func: str = "add",
+        message_func: MessageFunctions = "distmult",
+        aggregate_func: AggegationFunctions = "add",
         layer_norm: bool = True,
         activation: str = "relu",
         dependent: bool = False,
@@ -113,10 +124,10 @@ class GeneralizedRelationalConv(MessagePassing):
             self.activation = activation
 
         if self.aggregate_func == "pna":
-            # 9 for 3 aggregations (mean, max, std)
+            # 12 for 4 aggregations (mean, max, min, std)
             # and 3 scalers (identity, degree, 1/degree)
             # +1 for the old state, so 10 is the final multiplier
-            self.linear = Linear(input_dim * 10, output_dim)
+            self.linear = Linear(input_dim * 13, output_dim)
         else:
             self.linear = Linear(input_dim * 2, output_dim)
 
@@ -178,8 +189,6 @@ class GeneralizedRelationalConv(MessagePassing):
             # relation features as an embedding matrix unique to each layer
             # relation: (batch_size, num_relation, dim)
             relation = mx.repeat(self.relation.weight[None, :], batch_size, axis=0)
-            # if self.input_dims == 2:
-            #     relation = relation.squeeze(0)
 
         if edge_weight is None:
             edge_weight = mx.ones(len(edge_type))
@@ -200,7 +209,7 @@ class GeneralizedRelationalConv(MessagePassing):
                 relation=relation, boundary=boundary, edge_type=edge_type
             ),
             aggregate_kwargs=dict(edge_weight=edge_weight, dim_size=size),
-            update_kwargs=dict(input=node_features),
+            update_kwargs=dict(old=node_features),
         )
         return output
 
@@ -212,7 +221,6 @@ class GeneralizedRelationalConv(MessagePassing):
         boundary: mx.array,
         edge_type: mx.array,
     ) -> mx.array:
-        # if self.input_dims =
         # extracting relation features
         relation_j = relation[:, edge_type]
 
@@ -273,16 +281,17 @@ class GeneralizedRelationalConv(MessagePassing):
                 out_size=dim_size[0],
                 aggr="max",
             )
-            # scatter_min is not implemented in MLX-graphs
-            # min = scatter(
-            #     messages * edge_weight,
-            #     index, axis=self.node_dim,
-            #     out_size=dim_size[0],
-            #     aggr="min"
-            # )
+            min = scatter(
+                messages * edge_weight,
+                index,
+                axis=self.node_dim,
+                out_size=dim_size[0],
+                aggr="min",
+            )
             std = mx.clip(sq_mean - mean**2, a_min=self.eps, a_max=None).sqrt()
             features = mx.concatenate(
-                [mean[..., None], max[..., None], std[..., None]], axis=-1
+                [mean[..., None], max[..., None], min[..., None], std[..., None]],
+                axis=-1,
             )
             features = features.flatten(-2)
             if self.input_dims == 2:
