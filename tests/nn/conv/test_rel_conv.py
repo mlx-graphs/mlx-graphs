@@ -12,7 +12,7 @@ def test_rel_conv():
     node_features = mx.random.uniform(0, 1, [6, 8])
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
     edge_type = mx.array([0, 0, 1, 1])
-    y_hat1 = conv(node_features, edge_index, edge_type, node_features)
+    y_hat1 = conv(edge_index, node_features, edge_type, node_features)
 
     # 3D inputs (bs separate graphs)
     node_features = mx.random.uniform(0, 1, [3, 6, 8])
@@ -20,13 +20,13 @@ def test_rel_conv():
     boundary[mx.array([0, 1, 2]), mx.array([0, 2, 3])] = 1.0
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
     edge_type = mx.array([0, 0, 1, 1])
-    y_hat2 = conv(node_features, edge_index, edge_type, boundary)
+    y_hat2 = conv(edge_index, node_features, edge_type, boundary)
 
     # disconnected nodes
     node_features = mx.random.uniform(0, 1, [100, 8])
     edge_index = mx.array([[0, 1, 2, 3, 50], [0, 0, 1, 1, 99]])
     edge_type = mx.array([0, 0, 1, 1, 2])
-    y_hat3 = conv(node_features, edge_index, edge_type, node_features)
+    y_hat3 = conv(edge_index, node_features, edge_type, node_features)
 
     # dependent = True
     conv = GeneralizedRelationalConv(8, 8, 4, dependent=True)
@@ -34,14 +34,14 @@ def test_rel_conv():
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
     edge_type = mx.array([0, 0, 1, 1])
     query = mx.random.uniform(0, 1, [3, 8])
-    y_hat4 = conv(node_features, edge_index, edge_type, node_features, query)
+    y_hat4 = conv(edge_index, node_features, edge_type, node_features, query)
 
     # test 2D PNA aggregation
     conv = GeneralizedRelationalConv(8, 8, 4, aggregate_func="pna")
     node_features = mx.random.uniform(0, 1, [6, 8])
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
     edge_type = mx.array([0, 0, 1, 1])
-    y_hat5 = conv(node_features, edge_index, edge_type, node_features)
+    y_hat5 = conv(edge_index, node_features, edge_type, node_features)
 
     # test 3D PNA aggregation
     node_features = mx.random.uniform(0, 1, [3, 6, 8])
@@ -49,7 +49,7 @@ def test_rel_conv():
     boundary[mx.array([0, 1, 2]), mx.array([0, 2, 3])] = 1.0
     edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
     edge_type = mx.array([0, 0, 1, 1])
-    y_hat6 = conv(node_features, edge_index, edge_type, boundary)
+    y_hat6 = conv(edge_index, node_features, edge_type, boundary)
 
     assert y_hat1.shape == (6, 8), "Simple GeneralizedRelationalConv failed"
     assert y_hat2.shape == (3, 6, 8), "3D GeneralizedRelationalConv failed"

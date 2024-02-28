@@ -91,9 +91,9 @@ class GeneralizedRelationalConv(MessagePassing):
 
     def __init__(
         self,
-        input_dim: int,
-        output_dim: int,
-        num_relation: int,
+        in_features_dim: int,
+        out_features_dim: int,
+        num_relations: int,
         message_func: MessageFunctions = "distmult",
         aggregate_func: AggegationFunctions = "add",
         layer_norm: bool = True,
@@ -105,16 +105,16 @@ class GeneralizedRelationalConv(MessagePassing):
         kwargs.setdefault("aggr", "add")
         super(GeneralizedRelationalConv, self).__init__(**kwargs)
 
-        self.input_dim = input_dim
-        self.output_dim = output_dim
-        self.num_relation = num_relation
+        self.in_features_dim = in_features_dim
+        self.out_features_dim = out_features_dim
+        self.num_relation = num_relations
         self.message_func = message_func
         self.aggregate_func = aggregate_func
         self.dependent = dependent
         self.node_dim = node_dim
 
         if layer_norm:
-            self.layer_norm = nn.LayerNorm(output_dim)
+            self.layer_norm = nn.LayerNorm(out_features_dim)
         else:
             self.layer_norm = None
 
@@ -127,34 +127,36 @@ class GeneralizedRelationalConv(MessagePassing):
             # 12 for 4 aggregations (mean, max, min, std)
             # and 3 scalers (identity, degree, 1/degree)
             # +1 for the old state, so 10 is the final multiplier
-            self.linear = Linear(input_dim * 13, output_dim)
+            self.linear = Linear(in_features_dim * 13, out_features_dim)
         else:
-            self.linear = Linear(input_dim * 2, output_dim)
+            self.linear = Linear(in_features_dim * 2, out_features_dim)
 
         if dependent:
             # obtain relation embeddings as a projection of the query relation
-            self.relation_linear = Linear(input_dim, num_relation * input_dim)
+            self.relation_linear = Linear(
+                in_features_dim, num_relations * in_features_dim
+            )
         else:
             # relation embeddings as an independent embedding matrix per each layer
-            self.relation = nn.Embedding(num_relation, input_dim)
+            self.relation = nn.Embedding(num_relations, in_features_dim)
 
     def __call__(
         self,
-        node_features: mx.array,
         edge_index: mx.array,
+        node_features: mx.array,
         edge_type: mx.array,
         boundary: mx.array,
         query: Optional[mx.array] = None,
         size: Optional[tuple[int, int]] = None,
-        edge_weight: Optional[mx.array] = None,
+        edge_weights: Optional[mx.array] = None,
         **kwargs: Any,
     ) -> mx.array:
         """Computes the forward pass of GeneralizedRelationalConv.
 
         Args:
+            edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features,
                 shape `[bs, num_nodes, dim]` or `[num_nodes, dim]`
-            edge_index: Input edge index of shape `[2, num_edges]`
             edge_type: Input edge types of shape `[num_edges,]`
             boundary: Initial node feats `[bs, num_nodes, dim]` or `[num_nodes, dim]`
             query: Optional input node queries, shape `[bs, dim]`
@@ -183,15 +185,15 @@ class GeneralizedRelationalConv(MessagePassing):
             ), "expected input shape is [batch_size, num_nodes, dim]"
             # relation features as a projection of input "query" (relation) embeddings
             relation = self.relation_linear(query).reshape(
-                batch_size, self.num_relation, self.input_dim
+                batch_size, self.num_relation, self.in_features_dim
             )
         else:
             # relation features as an embedding matrix unique to each layer
             # relation: (batch_size, num_relation, dim)
             relation = mx.repeat(self.relation.weight[None, :], batch_size, axis=0)
 
-        if edge_weight is None:
-            edge_weight = mx.ones(len(edge_type))
+        if edge_weights is None:
+            edge_weights = mx.ones(len(edge_type))
 
         # since mlx_graphs gathers always along dimension 0 (num_nodes are rows)
         # we have to reshape input features accordingly
@@ -208,7 +210,7 @@ class GeneralizedRelationalConv(MessagePassing):
             message_kwargs=dict(
                 relation=relation, boundary=boundary, edge_type=edge_type
             ),
-            aggregate_kwargs=dict(edge_weight=edge_weight, dim_size=size),
+            aggregate_kwargs=dict(edge_weight=edge_weights, dim_size=size),
             update_kwargs=dict(old=node_features),
         )
         return output
