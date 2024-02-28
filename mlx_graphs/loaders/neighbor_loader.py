@@ -35,10 +35,10 @@ class NeighborLoader:
 
             # Construct and yield a new GraphData object for the batch
             batch_graph_data = GraphData(
-                edge_index=np.array(sampled_edges).T,
+                edge_index=mx.array(sampled_edges).T,
                 node_features=node_features,
-                n_id=n_id,
-                e_id=e_id,
-                input_nodes=input_nodes,
+                n_id=mx.array(n_id),
+                e_id=mx.array(e_id),
+                input_nodes=mx.array(input_nodes),
             )
             yield batch_graph_data
