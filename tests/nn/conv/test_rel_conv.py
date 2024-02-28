@@ -64,7 +64,3 @@ def test_rel_conv():
     ), "GeneralizedRelationalConv with dependent=True failed"
     assert y_hat5.shape == (6, 8), "2D GeneralizedRelationalConv with PNA failed"
     assert y_hat6.shape == (3, 6, 8), "3D GeneralizedRelationalConv with PNA failed"
-
-
-if __name__ == "__main__":
-    test_rel_conv()
