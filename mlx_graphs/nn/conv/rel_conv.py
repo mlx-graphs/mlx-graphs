@@ -12,12 +12,12 @@ AggegationFunctions = Literal["add", "mean", "pna"]
 
 
 class GeneralizedRelationalConv(MessagePassing):
-    r"""Generalized relational convolution layer from
-    `"Neural Bellman-Ford Networks: A General Graph Neural Network Framework
-      for Link Prediction" <https://arxiv.org/abs/2106.06935>`_ paper.
+    """Generalized relational convolution layer from
+    `Neural Bellman-Ford Networks: A General Graph Neural Network Framework \
+      for Link Prediction <https://arxiv.org/abs/2106.06935>`_ paper.
 
-    Adopted from the PyG version from here:
-    `https://github.com/KiddoZhu/NBFNet-PyG/blob/master/nbfnet/layers.py`
+    Adopted from the PyG version from `here \
+    <https://github.com/KiddoZhu/NBFNet-PyG/blob/master/nbfnet/layers.py>`_.
 
     Part of the Neural Bellman-Ford networks (NBFNet) holding
     state-of-the-art in KG completion.
