@@ -3,7 +3,7 @@ from typing import Any, Optional, Tuple
 import mlx.core as mx
 from mlx import nn
 
-from mlx_graphs.nn import Linear
+from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.utils import degree, scatter
 
