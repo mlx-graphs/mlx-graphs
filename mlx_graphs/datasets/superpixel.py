@@ -42,7 +42,6 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
         # get knns for each node
         knns = mx.partition(distances, k, axis=-1)[:, : k + 1]
         sigma = knns.sum(axis=1).reshape((knns.shape[0], 1)) / k
-        sigma = mx.array(sigma.tolist())
 
     return sigma + 1e-8
 
