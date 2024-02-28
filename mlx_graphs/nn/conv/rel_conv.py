@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional, Tuple
+from typing import Any, Literal, Optional
 
 import mlx.core as mx
 from mlx import nn
@@ -145,8 +145,8 @@ class GeneralizedRelationalConv(MessagePassing):
         edge_type: mx.array,
         boundary: mx.array,
         query: Optional[mx.array] = None,
-        size: Tuple[int, int] = None,
-        edge_weight: mx.array = None,
+        size: Optional[tuple[int, int]] = None,
+        edge_weight: Optional[mx.array] = None,
         **kwargs: Any,
     ) -> mx.array:
         """Computes the forward pass of GeneralizedRelationalConv.
