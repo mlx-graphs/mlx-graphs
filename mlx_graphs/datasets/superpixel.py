@@ -42,6 +42,7 @@ def sigma(distances: mx.array, k: int = 8) -> mx.array:
         # get knns for each node
         knns = mx.partition(distances, k, axis=-1)[:, : k + 1]
         sigma = knns.sum(axis=1).reshape((knns.shape[0], 1)) / k
+        sigma = mx.array(sigma.tolist())
 
     return sigma + 1e-8
 
@@ -97,9 +98,18 @@ def adjacency_matrix_to_knn_edges(
     num_nodes = adjacency_matrix.shape[0]
     new_kth = num_nodes - k
 
+    np_adj_mat = np.array(adjacency_matrix, copy=False)
     if num_nodes > k:
-        knns = mx.argpartition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
-        knn_values = mx.partition(adjacency_matrix, new_kth - 1, axis=-1)[:, new_kth:-1]
+        # we need to use numpy's argpartition and partition because when there are
+        # equal elements in a partition, their order is random with mlx, while when
+        # using `numpy` they're ordered based on their index in the original array.
+        # This turns out to be a significant problem with highly connected graphs.
+        knns = mx.array(
+            np.argpartition(np_adj_mat, new_kth - 1, axis=-1)[:, new_kth:-1].tolist()
+        )
+        knn_values = mx.array(
+            np.partition(np_adj_mat, new_kth - 1, axis=-1)[:, new_kth:-1].tolist()
+        )
     else:
         # for graphs with less than k nodes the resulting graph will be fully connected.
         knns = mx.repeat(mx.arange(num_nodes), num_nodes).reshape(num_nodes, num_nodes)
@@ -108,9 +118,7 @@ def adjacency_matrix_to_knn_edges(
         # remove self loops
         if num_nodes != 1:
             knn_values = mx.array(
-                np.array(adjacency_matrix, copy=False)[
-                    knns != np.arange(num_nodes)[:, None]
-                ]
+                np_adj_mat[knns != np.arange(num_nodes)[:, None]]
                 .reshape(num_nodes, -1)
                 .tolist()
             )

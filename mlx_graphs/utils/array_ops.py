@@ -1,6 +1,8 @@
 from typing import Optional
 
 import mlx.core as mx
+import numpy as np
+from scipy.spatial.distance import cdist
 
 
 def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
@@ -86,9 +88,9 @@ def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
     Returns:
         Array of shape (N, M)
     """
-    assert x.shape[1] == y.shape[1], "Input vectors must have the same dimensionality"
-    # Use broadcasting to compute pairwise differences
-    expanded_x = mx.expand_dims(x, 1)
-    distances = mx.linalg.norm(expanded_x - y, axis=-1)
-
-    return distances
+    # assert x.shape[1] == y.shape[1], "Input vectors must have the same dimensionality"
+    # # Use broadcasting to compute pairwise differences
+    # expanded_x = mx.expand_dims(x, 1)
+    # distances = mx.linalg.norm(expanded_x - y, axis=-1)
+    distances = cdist(np.array(x), np.array(y))
+    return mx.array(distances.tolist())
