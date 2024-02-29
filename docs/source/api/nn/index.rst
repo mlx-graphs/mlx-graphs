@@ -17,6 +17,7 @@ Neural Networks
 	GCNConv
 	GINConv
 	SAGEConv
+	GeneralizedRelationalConv
 	global_add_pool
 	global_max_pool
 	global_mean_pool

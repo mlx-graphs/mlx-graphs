@@ -4,7 +4,7 @@ import mlx.core as mx
 
 from mlx_graphs.utils.array_ops import broadcast
 
-ScatterAggregations = Literal["add", "max", "mean", "softmax"]
+ScatterAggregations = Literal["add", "max", "mean", "softmax", "min"]
 
 
 def scatter(
@@ -66,6 +66,8 @@ def scatter(
         return scatter_add(empty_tensor, index, values)
     if aggr == "max":
         return scatter_max(empty_tensor, index, values)
+    if aggr == "min":
+        return scatter_min(empty_tensor, index, values)
 
     raise NotImplementedError(f"Aggregation {aggr} not implemented yet.")
 
@@ -100,6 +102,22 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
         duplicate indices
     """
     return src.at[index].maximum(values)
+
+
+def scatter_min(src: mx.array, index: mx.array, values: mx.array):
+    """Scatters `values` at `index` within `src`. If duplicate indices are present,
+    the minimum value is kept at these indices.
+
+    Args:
+        src: Source array where the values will be scattered (often an empty array)
+        index: Array containing indices that determine the scatter of the 'values'.
+        values: Input array containing values to be scattered.
+
+    Returns:
+        The resulting array after applying scatter and min operations on the values at
+        duplicate indices
+    """
+    return src.at[index].minimum(values)
 
 
 def scatter_mean(
