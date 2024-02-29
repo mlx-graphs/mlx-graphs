@@ -109,8 +109,6 @@ def index_to_mask(index: mx.array, size: Optional[int] = None) -> mx.array:
         >>> index = mx.array([1, 2, 3])
         >>> index_to_mask(index, size=5)
         array([False, True, True, True, False], dtype=bool)
-
-
     """
     index = index.reshape(-1)
     size = index.max().item() + 1 if size is None else size
