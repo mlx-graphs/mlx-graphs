@@ -39,7 +39,10 @@ def to_edge_index(
         # mx.array([[0, 0, 1, 2, 2, 2], [1, 2, 0, 0, 1, 2]])
     """
     edge_index = mx.stack(
-        [mx.array(x, dtype=dtype) for x in np.nonzero(adjacency_matrix)]
+        [
+            mx.array(x, dtype=dtype)
+            for x in np.nonzero(np.array(adjacency_matrix, copy=False))
+        ]
     )
     return edge_index
 
@@ -80,7 +83,7 @@ def to_sparse_adjacency_matrix(
     """
     edge_index = to_edge_index(adjacency_matrix)
     edge_features = adjacency_matrix[edge_index[0], edge_index[1]]
-    return edge_index, edge_features
+    return edge_index, mx.expand_dims(edge_features, 1)
 
 
 @validate_edge_index_and_features
@@ -195,7 +198,9 @@ def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> m
         x = get_unique_edge_indices(edge_index_1, edge_index_2)
         # [0, 1]
     """
-    edge_2_unique = np.unique(edge_index_2.transpose(), axis=0).tolist()
+    edge_2_unique = np.unique(
+        np.array(edge_index_2.transpose(), copy=False), axis=0
+    ).tolist()
 
     return mx.array(
         [
@@ -388,12 +393,12 @@ def remove_duplicate_directed_edges(edge_index: mx.array) -> mx.array:
 
     # TODO: this method shall be updated to full mlx once unique() and structured
     # arrays are implemented
-    edge_index = np.array(edge_index, np.int32)
+    edge_index_ = np.array(edge_index, np.int32)
 
     # Convert edge_index to a structured array to leverage np.unique for
     # multi-column uniqueness
-    dtype = [("node1", edge_index.dtype), ("node2", edge_index.dtype)]
-    structured_edges = np.array(list(zip(edge_index[0], edge_index[1])), dtype=dtype)
+    dtype = [("node1", edge_index_.dtype), ("node2", edge_index_.dtype)]
+    structured_edges = np.array(list(zip(edge_index_[0], edge_index_[1])), dtype=dtype)
 
     unique_edges = np.unique(structured_edges)
     unique_edge_index = np.array([unique_edges["node1"], unique_edges["node2"]])

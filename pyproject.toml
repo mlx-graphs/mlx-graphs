@@ -28,6 +28,7 @@ dev = [
 ]
 test = [
   "pytest==7.4.4",
+  "scipy==1.12.0",
 ]
 docs = [
   "sphinx==7.2.6",

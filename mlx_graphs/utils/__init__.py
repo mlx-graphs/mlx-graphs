@@ -9,4 +9,4 @@ from .transformations import (
     remove_self_loops,  # noqa
     remove_duplicate_directed_edges,  # noqa
 )
-from .array_ops import expand, broadcast, one_hot  # noqa
+from .array_ops import expand, broadcast, one_hot, pairwise_distances  # noqa
