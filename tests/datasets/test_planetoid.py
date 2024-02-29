@@ -20,8 +20,8 @@ def test_planetoid_dataset():
         pass
 
     dataset_name = "Cora"
-    dataset = Planetoid(dataset_name, base_dir=path)
-    dataset_torch = Planetoid_torch(path, dataset_name)
+    dataset = Planetoid(dataset_name, base_dir=path, split="geom-gcn")
+    dataset_torch = Planetoid_torch(path, dataset_name, split="geom-gcn")
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)

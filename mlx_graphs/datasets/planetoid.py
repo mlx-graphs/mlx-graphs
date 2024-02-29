@@ -56,7 +56,7 @@ class Planetoid(Dataset):
             fs.cp(f"{self._url}/{name}", self.raw_path)
         if self.split == "geom-gcn":
             for i in range(10):
-                url = f"{self.geom_gcn_url}/splits/{self.name.lower()}"
+                url = f"{self._geom_gcn_url}/splits/{self.name.lower()}"
                 fs.cp(f"{url}_split_0.6_0.2_{i}.npz", self.raw_path)
 
     def process(self):
@@ -72,12 +72,12 @@ class Planetoid(Dataset):
             for i in range(10):
                 name = f"{self.name.lower()}_split_0.6_0.2_{i}.npz"
                 splits = np.load(osp.join(self.raw_path, name))
-                train_masks.append(torch.from_numpy(splits["train_mask"]))
-                val_masks.append(torch.from_numpy(splits["val_mask"]))
-                test_masks.append(torch.from_numpy(splits["test_mask"]))
-            graph.train_mask = torch.stack(train_masks, axis=1)
-            graph.val_mask = torch.stack(val_masks, axis=1)
-            graph.test_mask = torch.stack(test_masks, axis=1)
+                train_masks.append(mx.array(splits["train_mask"]))
+                val_masks.append(mx.array(splits["val_mask"]))
+                test_masks.append(mx.array(splits["test_mask"]))
+            graph.train_mask = mx.stack(train_masks, axis=1)
+            graph.val_mask = mx.stack(val_masks, axis=1)
+            graph.test_mask = mx.stack(test_masks, axis=1)
 
         self.graphs = [graph]
 
