@@ -9,7 +9,8 @@ from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow
-def test_planetoid_dataset():
+@pytest.mark.parametrize("dataset_name", ["cora", "citeseer", "pubmed"])
+def test_planetoid_cora_dataset(dataset_name):
     from torch_geometric.datasets import Planetoid as Planetoid_torch
     from torch_geometric.loader import DataLoader
 
@@ -19,9 +20,8 @@ def test_planetoid_dataset():
     except FileNotFoundError:
         pass
 
-    dataset_name = "citeseer"
-    dataset = Planetoid(dataset_name, base_dir=path, split="geom-gcn")
-    dataset_torch = Planetoid_torch(path, dataset_name, split="geom-gcn")
+    dataset = Planetoid(dataset_name, base_dir=path)
+    dataset_torch = Planetoid_torch(path, dataset_name)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
@@ -57,6 +57,3 @@ def test_planetoid_dataset():
             ), "Two arrays between PyG and mxg are different"
 
     shutil.rmtree(path)
-
-
-test_planetoid_dataset()
