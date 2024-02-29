@@ -49,7 +49,7 @@ def test_to_sparse_adjacency_matrix():
 
     expected_index = mx.array([[0, 0, 1, 2, 2, 2], [1, 2, 0, 0, 1, 2]])
     assert mx.array_equal(edge_index, expected_index), "Incorrect computed edge index"
-    expected_features = mx.array([1, 2, 3, 5, 1, 2])
+    expected_features = mx.array([[1, 2, 3, 5, 1, 2]]).transpose()
     assert mx.array_equal(edge_features, expected_features), "Incorrect edge features"
 
 

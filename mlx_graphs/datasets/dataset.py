@@ -46,25 +46,19 @@ class Dataset(ABC):
         return self._name
 
     @property
-    def raw_path(self) -> Optional[str]:
+    def raw_path(self) -> str:
         """
         The path where raw files are stored. Defaults at `<base_dir>/<name>/raw`
 
         """
-        if self._base_dir is not None:
-            return os.path.expanduser(os.path.join(self._base_dir, self.name, "raw"))
-        return None
+        return os.path.expanduser(os.path.join(self._base_dir, self.name, "raw"))
 
     @property
-    def processed_path(self) -> Optional[str]:
+    def processed_path(self) -> str:
         """
         The path where raw files are stored. Defaults at `<base_dir>/<name>/processed`
         """
-        if self._base_dir is not None:
-            return os.path.expanduser(
-                os.path.join(self._base_dir, self.name, "processed")
-            )
-        return None
+        return os.path.expanduser(os.path.join(self._base_dir, self.name, "processed"))
 
     @property
     def num_graphs(self) -> int:
