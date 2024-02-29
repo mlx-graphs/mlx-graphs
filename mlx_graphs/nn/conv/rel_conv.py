@@ -135,7 +135,7 @@ class GeneralizedRelationalConv(MessagePassing):
         if self.aggregate_func == "pna":
             # 12 for 4 aggregations (mean, max, min, std)
             # and 3 scalers (identity, degree, 1/degree)
-            # +1 for the old state, so 10 is the final multiplier
+            # +1 for the old state, so 13 is the final multiplier
             self.linear = Linear(in_features_dim * 13, out_features_dim)
         else:
             self.linear = Linear(in_features_dim * 2, out_features_dim)
