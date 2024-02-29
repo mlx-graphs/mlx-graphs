@@ -10,4 +10,4 @@ from .transformations import (
     remove_duplicate_directed_edges,  # noqa
     coalesce,  # noqa
 )
-from .array_ops import expand, broadcast, one_hot, index_to_mask  # noqa
+from .array_ops import expand, broadcast, one_hot, pairwise_distances, index_to_mask  # noqa

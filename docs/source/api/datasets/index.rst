@@ -14,3 +14,4 @@ Datasets
 	KarateClubDataset
 	QM7bDataset
 	TUDataset
+	SuperPixelDataset

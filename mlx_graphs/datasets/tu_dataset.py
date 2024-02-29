@@ -7,7 +7,7 @@ import numpy as np
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
-from mlx_graphs.datasets.utils.download import download, extract_zip
+from mlx_graphs.datasets.utils.download import download, extract_archive
 from mlx_graphs.datasets.utils.io import read_txt_array
 from mlx_graphs.utils import one_hot, remove_duplicate_directed_edges
 
@@ -66,7 +66,7 @@ class TUDataset(Dataset):
         file_path = os.path.join(self.raw_path, self.name + ".zip")
 
         download(f"{url}/{self.name}.zip", file_path)
-        extract_zip(file_path, self.raw_path)
+        extract_archive(file_path, self.raw_path)
         os.unlink(file_path)
 
     def process(self):
