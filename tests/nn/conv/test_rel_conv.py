@@ -51,6 +51,13 @@ def test_rel_conv():
     edge_type = mx.array([0, 0, 1, 1])
     y_hat6 = conv(edge_index, node_features, edge_type, boundary)
 
+    # test rotate message function
+    conv = GeneralizedRelationalConv(8, 8, 4, message_func="rotate")
+    node_features = mx.random.uniform(0, 1, [3, 6, 8])
+    edge_index = mx.array([[0, 1, 2, 3], [0, 0, 1, 1]])
+    edge_type = mx.array([0, 0, 1, 1])
+    y_hat7 = conv(edge_index, node_features, edge_type, node_features)
+
     assert y_hat1.shape == (6, 8), "Simple GeneralizedRelationalConv failed"
     assert y_hat2.shape == (3, 6, 8), "3D GeneralizedRelationalConv failed"
     assert y_hat3.shape == (
@@ -64,3 +71,4 @@ def test_rel_conv():
     ), "GeneralizedRelationalConv with dependent=True failed"
     assert y_hat5.shape == (6, 8), "2D GeneralizedRelationalConv with PNA failed"
     assert y_hat6.shape == (3, 6, 8), "3D GeneralizedRelationalConv with PNA failed"
+    assert y_hat7.shape == (3, 6, 8), "GeneralizedRelationalConv with rotate failed"

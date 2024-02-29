@@ -71,7 +71,7 @@ class GeneralizedRelationalConv(MessagePassing):
         size = (node_features.shape[0], node_features.shape[0])
 
         layer_input = boundary  # initial node features which will be updated
-        h = conv(layer_input, edge_index, edge_type, boundary, size=size)
+        h = conv(edge_index, layer_input, edge_type, boundary, size=size)
 
         # optional: residual connection if input dim == output dim
         h = h + layer_input
@@ -83,7 +83,7 @@ class GeneralizedRelationalConv(MessagePassing):
         conv2 = GeneralizedRelationalConv(
             input_dim, output_dim, num_relations, dependent=True)
 
-        h = conv(layer_input, edge_index, edge_type, boundary, query, size=size)
+        h = conv2(edge_index, layer_input, edge_type, boundary, query, size=size)
 
     """
 
@@ -236,8 +236,8 @@ class GeneralizedRelationalConv(MessagePassing):
         elif self.message_func == "distmult":
             message = src_features * relation_j
         elif self.message_func == "rotate":
-            x_j_re, x_j_im = src_features.chunk(2, dim=-1)
-            r_j_re, r_j_im = relation_j.chunk(2, dim=-1)
+            x_j_re, x_j_im = src_features.split(2, axis=-1)
+            r_j_re, r_j_im = relation_j.split(2, axis=-1)
             message_re = x_j_re * r_j_re - x_j_im * r_j_im
             message_im = x_j_re * r_j_im + x_j_im * r_j_re
             message = mx.concatenate([message_re, message_im], axis=-1)
@@ -251,7 +251,13 @@ class GeneralizedRelationalConv(MessagePassing):
 
         return message
 
-    def aggregate(self, messages, indices, edge_weight, dim_size) -> mx.array:
+    def aggregate(
+        self,
+        messages: mx.array,
+        indices: mx.array,
+        edge_weight: mx.array,
+        dim_size: tuple[int, int],
+    ) -> mx.array:
         # augment aggregation index with self-loops for the boundary condition
         index = mx.concatenate(
             [indices, mx.arange(dim_size[0])]
