@@ -8,5 +8,6 @@ from .transformations import (
     add_self_loops,  # noqa
     remove_self_loops,  # noqa
     remove_duplicate_directed_edges,  # noqa
+    coalesce,  # noqa
 )
-from .array_ops import expand, broadcast, one_hot  # noqa
+from .array_ops import expand, broadcast, one_hot, index_to_mask  # noqa

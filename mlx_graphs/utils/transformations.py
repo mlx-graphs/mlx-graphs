@@ -399,3 +399,30 @@ def remove_duplicate_directed_edges(edge_index: mx.array) -> mx.array:
     unique_edge_index = np.array([unique_edges["node1"], unique_edges["node2"]])
 
     return mx.array(unique_edge_index, mx.int32)
+
+
+@validate_edge_index
+def coalesce(edge_index: mx.array) -> mx.array:
+    """
+    Aims to mimic the behavior of PyG's coalesce function, which removes
+    duplicate edges in ``edge_index`` and scatters the duplicate edges to the
+    edge attributes following a given reduction operation (e.g. sum of duplicate edges).
+
+    However, this one is much simple yet, and just removes the duplicate edges.
+    We also found out that the source and destination nodes have to be swapped in order
+    to match the ``coalesce`` function used in PyG.
+
+    TODO: some work has to be done to match the exact behavior of PyG's coalesce.
+
+    Args:
+        edge_index: Edges to coalesce.
+
+    Returns:
+        The edges without duplicates, following the same order as PyG's implementation.
+    """
+    edge_index = remove_duplicate_directed_edges(edge_index)
+
+    row, col = edge_index
+    edge_index = mx.stack([col, row])
+
+    return edge_index
