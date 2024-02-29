@@ -55,7 +55,6 @@ class GeneralizedRelationalConv(MessagePassing):
     .. code-block:: python
 
         import mlx.core as mx
-        import mlx.nn as nn
         from mlx_graphs.nn import GeneralizedRelationalConv
 
         input_dim = 16
@@ -67,11 +66,11 @@ class GeneralizedRelationalConv(MessagePassing):
         batch_size = 2
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
         edge_types = mx.array([0, 0, 1, 1, 2])
-        boundary = mx.random.uniform(0, 1, shape=(batch_size, 5, 16)
-        size = (node_features.shape[0], node_features.shape[0])
+        boundary = mx.random.uniform(0, 1, shape=(batch_size, 5, 16))
+        size = (boundary.shape[1], boundary.shape[1])
 
         layer_input = boundary  # initial node features which will be updated
-        h = conv(edge_index, layer_input, edge_type, boundary, size=size)
+        h = conv(edge_index, layer_input, edge_types, boundary, size=size)
 
         # optional: residual connection if input dim == output dim
         h = h + layer_input
@@ -79,11 +78,11 @@ class GeneralizedRelationalConv(MessagePassing):
 
         # another conv type where relations are obtained from the additional
         # query tensor
-        query = mx.random.uniform(0, 1, shape=(batch_sim, 16))
+        query = mx.random.uniform(0, 1, shape=(batch_size, 16))
         conv2 = GeneralizedRelationalConv(
             input_dim, output_dim, num_relations, dependent=True)
 
-        h = conv2(edge_index, layer_input, edge_type, boundary, query, size=size)
+        h = conv2(edge_index, layer_input, edge_types, boundary, query, size=size)
 
     """
 
