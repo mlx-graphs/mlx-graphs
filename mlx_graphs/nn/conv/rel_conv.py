@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional
+from typing import Literal, Optional, get_args
 
 import mlx.core as mx
 from mlx import nn
@@ -105,9 +105,20 @@ class GeneralizedRelationalConv(MessagePassing):
         kwargs.setdefault("aggr", "add")
         super(GeneralizedRelationalConv, self).__init__(**kwargs)
 
+        if aggregate_func not in get_args(AggegationFunctions):
+            raise ValueError(
+                "Invalid aggregate_func.",
+                f"Available values are {get_args(AggegationFunctions)}",
+            )
+        if message_func not in get_args(MessageFunctions):
+            raise ValueError(
+                "Invalid message_func.",
+                f"Available values are {get_args(MessageFunctions)}",
+            )
+
         self.in_features_dim = in_features_dim
         self.out_features_dim = out_features_dim
-        self.num_relation = num_relations
+        self.num_relations = num_relations
         self.message_func = message_func
         self.aggregate_func = aggregate_func
         self.dependent = dependent
@@ -149,7 +160,7 @@ class GeneralizedRelationalConv(MessagePassing):
         query: Optional[mx.array] = None,
         size: Optional[tuple[int, int]] = None,
         edge_weights: Optional[mx.array] = None,
-        **kwargs: Any,
+        **kwargs,
     ) -> mx.array:
         """Computes the forward pass of GeneralizedRelationalConv.
 
@@ -185,7 +196,7 @@ class GeneralizedRelationalConv(MessagePassing):
             ), "expected input shape is [batch_size, num_nodes, dim]"
             # relation features as a projection of input "query" (relation) embeddings
             relation = self.relation_linear(query).reshape(
-                batch_size, self.num_relation, self.in_features_dim
+                batch_size, self.num_relations, self.in_features_dim
             )
         else:
             # relation features as an embedding matrix unique to each layer
@@ -210,7 +221,7 @@ class GeneralizedRelationalConv(MessagePassing):
             message_kwargs=dict(
                 relation=relation, boundary=boundary, edge_type=edge_type
             ),
-            aggregate_kwargs=dict(edge_weight=edge_weights, dim_size=size),
+            aggregate_kwargs=dict(edge_weights=edge_weights, dim_size=size),
             update_kwargs=dict(old=node_features),
         )
         return output
@@ -255,42 +266,42 @@ class GeneralizedRelationalConv(MessagePassing):
         self,
         messages: mx.array,
         indices: mx.array,
-        edge_weight: mx.array,
+        edge_weights: mx.array,
         dim_size: tuple[int, int],
     ) -> mx.array:
         # augment aggregation index with self-loops for the boundary condition
         index = mx.concatenate(
             [indices, mx.arange(dim_size[0])]
         )  # (num_edges + num_nodes,)
-        edge_weight = mx.concatenate([edge_weight, mx.ones(dim_size[0])])
+        edge_weights = mx.concatenate([edge_weights, mx.ones(dim_size[0])])
         shape = [1] * messages.ndim
         shape[self.node_dim] = -1
-        edge_weight = edge_weight.reshape(shape)
+        edge_weights = edge_weights.reshape(shape)
 
         if self.aggregate_func == "pna":
             mean = scatter(
-                messages * edge_weight,
+                messages * edge_weights,
                 index,
                 axis=self.node_dim,
                 out_size=dim_size[0],
                 aggr="mean",
             )
             sq_mean = scatter(
-                messages**2 * edge_weight,
+                messages**2 * edge_weights,
                 index,
                 axis=self.node_dim,
                 out_size=dim_size[0],
                 aggr="mean",
             )
             max = scatter(
-                messages * edge_weight,
+                messages * edge_weights,
                 index,
                 axis=self.node_dim,
                 out_size=dim_size[0],
                 aggr="max",
             )
             min = scatter(
-                messages * edge_weight,
+                messages * edge_weights,
                 index,
                 axis=self.node_dim,
                 out_size=dim_size[0],
@@ -321,11 +332,11 @@ class GeneralizedRelationalConv(MessagePassing):
                 output = output.squeeze(1)
         else:
             output = scatter(
-                messages * edge_weight,
+                messages * edge_weights,
                 index,
                 axis=self.node_dim,
                 out_size=dim_size[0],
-                aggr=self.aggregate_func,
+                aggr=self.aggregate_func,  # type: ignore - it's either "add" or "mean"
             )
 
         return output
