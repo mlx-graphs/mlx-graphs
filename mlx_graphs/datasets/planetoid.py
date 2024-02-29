@@ -95,11 +95,11 @@ def read_planetoid_data(
         # There are some isolated nodes in the Citeseer graph, resulting in
         # none consecutive test indices. We need to identify them and add them
         # as zero vectors to `tx` and `ty`.
-        len_test_indices = int(test_index.max() - test_index.min()) + 1
+        len_test_indices = (test_index.max() - test_index.min()).item() + 1
 
-        tx_ext = mx.zeros(len_test_indices, tx.shape[1], dtype=tx.dtype)
+        tx_ext = mx.zeros((len_test_indices, tx.shape[1]), dtype=tx.dtype)
         tx_ext[sorted_test_index - test_index.min(), :] = tx
-        ty_ext = mx.zeros(len_test_indices, ty.shape[1], dtype=ty.dtype)
+        ty_ext = mx.zeros((len_test_indices, ty.shape[1]), dtype=ty.dtype)
         ty_ext[sorted_test_index - test_index.min(), :] = ty
 
         tx, ty = tx_ext, ty_ext

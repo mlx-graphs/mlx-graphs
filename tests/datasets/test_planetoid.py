@@ -19,7 +19,7 @@ def test_planetoid_dataset():
     except FileNotFoundError:
         pass
 
-    dataset_name = "Cora"
+    dataset_name = "citeseer"
     dataset = Planetoid(dataset_name, base_dir=path, split="geom-gcn")
     dataset_torch = Planetoid_torch(path, dataset_name, split="geom-gcn")
 
