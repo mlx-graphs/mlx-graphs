@@ -36,9 +36,9 @@ class GeneralizedRelationalConv(MessagePassing):
     from the NBFNet-PyG repo to the MLX framework (not implemented here).
 
     Args:
-        input_dim: input feature dimension (same for node and edge features)
-        output_dim: output node feature dimension
-        num_relation: number of unique relations in the graph
+        in_features_dim: input feature dimension (same for node and edge features)
+        out_features_dim: output node feature dimension
+        num_relations: number of unique relations in the graph
         message_func: "transe" (sum), "distmult" (mult),
             "rotate" (complex rotation). Default: ``distmult``
         aggregate_func: "add", "mean", or "pna". Default: ``add``
@@ -102,7 +102,6 @@ class GeneralizedRelationalConv(MessagePassing):
         node_dim: int = 0,
         **kwargs,
     ):
-        kwargs.setdefault("aggr", "add")
         super(GeneralizedRelationalConv, self).__init__(**kwargs)
 
         if aggregate_func not in get_args(AggegationFunctions):
