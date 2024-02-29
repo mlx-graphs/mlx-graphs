@@ -74,7 +74,7 @@ def one_hot(labels: mx.array, num_classes: Optional[int] = None) -> mx.array:
     one_hot[mx.arange(shape[0]), labels.squeeze()] = 1
     return one_hot
 
-  
+
 def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
     """
     Compute pairwise distances between points in vectors x and y.
@@ -92,7 +92,7 @@ def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
     distances = mx.linalg.norm(expanded_x - y, axis=-1)
     return mx.array(distances.tolist())
 
- 
+
 def index_to_mask(index: mx.array, size: Optional[int] = None) -> mx.array:
     """Converts indices to a mask representation.
 
