@@ -6,11 +6,7 @@ from typing import List, Literal, Optional
 import fsspec
 import mlx.core as mx
 import numpy as np
-import torch
 from torch_geometric.data import Data
-from torch_geometric.utils import (
-    to_torch_csr_tensor,
-)
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
@@ -24,7 +20,34 @@ except ImportError:
 
 
 class Planetoid(Dataset):
-    """ """
+    """The citation network datasets :obj:`"Cora"`, :obj:`"CiteSeer"` and
+    :obj:`"PubMed"` from the `"Revisiting Semi-Supervised Learning with Graph
+    Embeddings" <https://arxiv.org/abs/1603.08861>`_ paper.
+    Nodes represent documents and edges represent citation links.
+    Training, validation and test splits are given by binary masks.
+
+    This dataset follows a similar implementation as in `PyG
+    <https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.datasets.Planetoid.html>`_.
+
+    Args:
+        name: The name of the dataset (:obj:`"Cora"`, :obj:`"CiteSeer"`,
+            :obj:`"PubMed"`).
+        split (str, optional): The type of dataset split (:obj:`"public"`,
+            :obj:`"full"`, :obj:`"geom-gcn"`).
+            If set to :obj:`"public"`, the split will be the public fixed split
+            from the `"Revisiting Semi-Supervised Learning with Graph
+            Embeddings" <https://arxiv.org/abs/1603.08861>`_ paper.
+            If set to :obj:`"full"`, all nodes except those in the validation
+            and test sets will be used for training (as in the
+            `"FastGCN: Fast Learning with Graph Convolutional Networks via
+            Importance Sampling" <https://arxiv.org/abs/1801.10247>`_ paper).
+            If set to :obj:`"geom-gcn"`, the 10 public fixed splits from the
+            `"Geom-GCN: Geometric Graph Convolutional Networks"
+            <https://openreview.net/forum?id=S1e2agrFvS>`_ paper are given.
+        without_self_loops: Whether to remove self loops. Default to ``True``.
+        base_dir: Directory where to store dataset files. Default is
+            in the local directory ``.mlx_graphs_data/``.
+    """
 
     _url = "https://github.com/kimiyoung/planetoid/raw/master/data"
     _geom_gcn_url = (
@@ -34,10 +57,7 @@ class Planetoid(Dataset):
     def __init__(
         self,
         name: str,
-        split: Literal[["public", "full", "geom-gcn", "random"]] = "public",
-        num_train_per_class: int = 20,
-        num_val: int = 500,
-        num_test: int = 1000,
+        split: Literal[["public", "full", "geom-gcn"]] = "public",
         without_self_loops: bool = True,
         base_dir: Optional[str] = None,
     ):
@@ -45,6 +65,10 @@ class Planetoid(Dataset):
         self.without_self_loops = without_self_loops
 
         super().__init__(name=name, base_dir=base_dir)
+
+        if self.split == "full":
+            data = self[0]
+            data.train_mask = mx.where(data.val_mask | data.test_mask, False, True)
 
     @property
     def raw_file_names(self) -> List[str]:
@@ -104,40 +128,6 @@ def read_planetoid_data(
 
         tx, ty = tx_ext, ty_ext
 
-    if prefix.lower() == "nell.0.001":
-        tx_ext = mx.zeros(len(graph) - allx.shape[0], node_features.shape[1])
-        tx_ext[sorted_test_index - allx.shape[0]] = tx
-
-        ty_ext = mx.zeros(len(graph) - ally.shape[0], y.shape[1])
-        ty_ext[sorted_test_index - ally.shape[0]] = ty
-
-        tx, ty = tx_ext, ty_ext
-
-        node_features = torch.cat([allx, tx], axis=0)
-        node_features[test_index] = node_features[sorted_test_index]
-
-        # Creating feature vectors for relations.
-        row, col = node_features.nonzero(as_tuple=True)
-        value = node_features[row, col]
-
-        mask = ~index_to_mask(test_index, size=len(graph))
-        mask[: allx.shape[0]] = False
-        isolated_idx = mask.nonzero().view(-1)
-
-        row = torch.cat([row, isolated_idx])
-        col = torch.cat(
-            [col, mx.arange(isolated_idx.shape[0]) + node_features.shape[1]]
-        )
-        value = torch.cat([value, value.new_ones(isolated_idx.shape[0])])
-
-        node_features = to_torch_csr_tensor(
-            edge_index=torch.stack([row, col], axis=0),
-            edge_attr=value,
-            size=(
-                node_features.shape[0],
-                isolated_idx.shape[0] + node_features.shape[1],
-            ),
-        )
     else:
         node_features = mx.concatenate([allx, tx], axis=0)
         node_features[test_index] = node_features[sorted_test_index]
@@ -150,7 +140,7 @@ def read_planetoid_data(
     test_mask = index_to_mask(test_index, size=y.shape[0])
 
     edge_index = edge_index_from_dict(
-        graph_dict=graph,  # type: ignore
+        graph_dict=graph,
         num_nodes=y.shape[0],
         without_self_loops=without_self_loops,
     )

@@ -15,6 +15,7 @@ def test_tu_dataset():
 
     dataset_name = "ENZYMES"
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
+    shutil.rmtree(path, ignore_errors=True)
 
     dataset = TUDataset(dataset_name, base_dir=path)
     dataset_torch = TUDataset_torch(path, dataset_name)

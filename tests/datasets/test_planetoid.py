@@ -9,19 +9,25 @@ from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize("dataset_name", ["cora", "citeseer", "pubmed"])
-def test_planetoid_cora_dataset(dataset_name):
+@pytest.mark.parametrize(
+    "dataset_name, split",
+    [
+        ("cora", "public"),
+        ("cora", "full"),
+        ("cora", "geom-gcn"),
+        ("citeseer", "public"),
+        ("pubmed", "public"),
+    ],
+)
+def test_planetoid_cora_dataset(dataset_name, split):
     from torch_geometric.datasets import Planetoid as Planetoid_torch
     from torch_geometric.loader import DataLoader
 
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    try:
-        shutil.rmtree(path)
-    except FileNotFoundError:
-        pass
+    shutil.rmtree(path, ignore_errors=True)
 
-    dataset = Planetoid(dataset_name, base_dir=path)
-    dataset_torch = Planetoid_torch(path, dataset_name)
+    dataset = Planetoid(dataset_name, base_dir=path, split=split)
+    dataset_torch = Planetoid_torch(path, dataset_name, split=split)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
