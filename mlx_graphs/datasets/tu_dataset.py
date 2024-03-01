@@ -83,10 +83,10 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     edge_index = read_file(folder, prefix, "A", mx.int64).transpose() - 1
     batch_indices = read_file(folder, prefix, "graph_indicator", mx.int64) - 1
 
-    node_features, node_labels = None, None
-    if "node_attributes" in names:
-        node_features = read_file(folder, prefix, "node_attributes", mx.float32)
-    if "node_labels" in names:
+    node_attributes, node_labels = None, None
+    if "node_attributes" in names:  # float features
+        node_attributes = read_file(folder, prefix, "node_attributes", mx.float32)
+    if "node_labels" in names:  # int features
         node_labels = read_file(folder, prefix, "node_labels", mx.int64)
         if node_labels.ndim == 1:
             node_labels = mx.expand_dims(node_labels, axis=1)
@@ -98,11 +98,17 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         node_labels = [one_hot(x) for x in node_labels]
         node_labels = mx.concatenate(node_labels, axis=-1)
+    if node_attributes is not None and node_labels is not None:
+        node_features = cat([node_attributes, node_labels])
+    elif node_attributes is not None:
+        node_features = node_attributes
+    elif node_labels is not None:
+        node_features = node_labels
 
-    edge_features, edge_labels = None, None
-    if "edge_attributes" in names:
-        edge_features = read_file(folder, prefix, "edge_attributes", mx.float32)
-    if "edge_labels" in names:
+    edge_attributes, edge_labels = None, None
+    if "edge_attributes" in names:  # float features
+        edge_attributes = read_file(folder, prefix, "edge_attributes", mx.float32)
+    if "edge_labels" in names:  # int features
         edge_labels = read_file(folder, prefix, "edge_labels", mx.int64)
         if edge_labels.ndim == 1:
             edge_labels = mx.expand_dims(edge_labels, axis=1)
@@ -114,14 +120,20 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         edge_labels = [one_hot(x) for x in edge_labels]
         edge_labels = mx.concatenate(edge_labels, axis=-1).astype(mx.float32)
+    if edge_attributes is not None and edge_labels is not None:
+        edge_features = cat([edge_attributes, edge_labels])
+    elif edge_attributes is not None:
+        edge_features = edge_attributes
+    elif edge_labels is not None:
+        edge_features = edge_attributes
 
-    y = None
+    graph_labels = None
     if "graph_attributes" in names:  # Regression problem.
-        y = read_file(folder, prefix, "graph_attributes", mx.float32)
+        graph_labels = read_file(folder, prefix, "graph_attributes", mx.float32)
     elif "graph_labels" in names:  # Classification problem.
-        y = read_file(folder, prefix, "graph_labels", mx.int32)
-        _, y = np.unique(np.array(y), return_inverse=True)
-        y = mx.array(y, dtype=mx.int32)
+        graph_labels = read_file(folder, prefix, "graph_labels", mx.int32)
+        _, graph_labels = np.unique(np.array(graph_labels), return_inverse=True)
+        graph_labels = mx.array(graph_labels, dtype=mx.int32)
 
     edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
     # TODO: Once we have coalesced(), we can replace remove_duplicate_directed_edges()
@@ -130,10 +142,8 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     data = GraphData(
         edge_index=edge_index,
         node_features=node_features,
-        node_labels=node_labels,
         edge_features=edge_features,
-        edge_labels=edge_labels,
-        graph_labels=y,
+        graph_labels=graph_labels,
     )
     data, slices = split(data, batch_indices)
 
@@ -157,7 +167,7 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 def split(data: GraphData, batch: mx.array) -> tuple[GraphData, dict]:
     """Borrowed from PyG"""
     node_slice = mx.cumsum(
-        mx.array(np.bincount(batch), dtype=mx.int32), 0
+        mx.array(np.bincount(np.array(batch, copy=False)), dtype=mx.int32), 0
     )  # TODO: needs to change to int64 once supported in MLX
     node_slice = mx.concatenate([mx.array([0]), node_slice])
 
@@ -185,13 +195,13 @@ def split(data: GraphData, batch: mx.array) -> tuple[GraphData, dict]:
 
 
 def cat(seq: list[mx.array]) -> mx.array:
-    """Borrowed from PyG"""
-    seq = [item for item in seq if item is not None]
     seq = [mx.expand_dims(item, -1) if item.ndim == 1 else item for item in seq]
-    return mx.concatenate(seq, axis=-1) if len(seq) > 0 else None
+    return mx.concatenate(seq, axis=-1)
 
 
-def read_file(folder: str, prefix: str, name: str, dtype: mx.Dtype = None) -> mx.array:
+def read_file(
+    folder: str, prefix: str, name: str, dtype: Optional[mx.Dtype] = None
+) -> mx.array:
     """Borrowed from PyG"""
     path = os.path.join(folder, f"{prefix}_{name}.txt")
     return read_txt_array(path, sep=",", dtype=dtype)
