@@ -199,9 +199,6 @@ def cat(seq: list[mx.array]) -> mx.array:
     return mx.concatenate(seq, axis=-1)
 
 
-def read_file(
-    folder: str, prefix: str, name: str, dtype: Optional[mx.Dtype] = None
-) -> mx.array:
-    """Borrowed from PyG"""
+def read_file(folder: str, prefix: str, name: str, dtype: mx.Dtype) -> mx.array:
     path = os.path.join(folder, f"{prefix}_{name}.txt")
     return read_txt_array(path, sep=",", dtype=dtype)
