@@ -3,7 +3,9 @@ from typing import Optional
 import mlx.core as mx
 
 
-def is_floating_point(dtype: mx.Dtype) -> bool:
+def is_floating_point(dtype: Optional[mx.Dtype]) -> bool:
+    if dtype is None:
+        return False
     if dtype in [mx.float16, mx.float32, mx.bfloat16]:
         return True
     return False

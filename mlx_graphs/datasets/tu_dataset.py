@@ -83,9 +83,9 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     edge_index = read_file(folder, prefix, "A", mx.int64).transpose() - 1
     batch_indices = read_file(folder, prefix, "graph_indicator", mx.int64) - 1
 
-    node_features = node_labels = None
-    if "node_features" in names:
-        node_features = read_file(folder, prefix, "node_features")
+    node_features, node_labels = None, None
+    if "node_attributes" in names:
+        node_features = read_file(folder, prefix, "node_attributes", mx.float32)
     if "node_labels" in names:
         node_labels = read_file(folder, prefix, "node_labels", mx.int64)
         if node_labels.ndim == 1:
@@ -98,11 +98,10 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         node_labels = [one_hot(x) for x in node_labels]
         node_labels = mx.concatenate(node_labels, axis=-1)
-    x = cat([node_features, node_labels])
 
     edge_features, edge_labels = None, None
-    if "edge_features" in names:
-        edge_features = read_file(folder, prefix, "edge_features")
+    if "edge_attributes" in names:
+        edge_features = read_file(folder, prefix, "edge_attributes", mx.float32)
     if "edge_labels" in names:
         edge_labels = read_file(folder, prefix, "edge_labels", mx.int64)
         if edge_labels.ndim == 1:
@@ -115,11 +114,10 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         edge_labels = [one_hot(x) for x in edge_labels]
         edge_labels = mx.concatenate(edge_labels, axis=-1).astype(mx.float32)
-    edge_attr = cat([edge_features, edge_labels])
 
     y = None
-    if "graph_features" in names:  # Regression problem.
-        y = read_file(folder, prefix, "graph_features")
+    if "graph_attributes" in names:  # Regression problem.
+        y = read_file(folder, prefix, "graph_attributes", mx.float32)
     elif "graph_labels" in names:  # Classification problem.
         y = read_file(folder, prefix, "graph_labels", mx.int32)
         _, y = np.unique(np.array(y), return_inverse=True)
@@ -130,7 +128,12 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     # by the scatter which will remove duplicates and sum duplicates edge features
 
     data = GraphData(
-        edge_index=edge_index, node_features=x, edge_features=edge_attr, graph_labels=y
+        edge_index=edge_index,
+        node_features=node_features,
+        node_labels=node_labels,
+        edge_features=edge_features,
+        edge_labels=edge_labels,
+        graph_labels=y,
     )
     data, slices = split(data, batch_indices)
 
