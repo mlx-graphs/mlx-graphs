@@ -75,11 +75,12 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
 .. toctree::
    :caption: Tutorials
-   :maxdepth: 1
+   :maxdepth: 2
 
    tutorials/quickstart.rst
    tutorials/notebooks/graph_classification.ipynb
    tutorials/notebooks/benchmark_pyg_dgl_mxg.ipynb
+   tutorials/examples/index.rst
 
 
 .. toctree::
