@@ -20,6 +20,7 @@ dependencies = [
     "mlx==0.5.*; sys_platform == 'darwin'",
     "numpy==1.26.3",
     "requests==2.31.0",
+    "tqdm==4.66.1",
 ]
 
 [project.optional-dependencies]
@@ -31,19 +32,18 @@ test = [
   "scipy==1.12.0",
 ]
 docs = [
+  "ipython==8.21.0",
   "sphinx==7.2.6",
   "sphinx-book-theme==1.1.0",
   "sphinx-autodoc-typehints==1.25.2",
   "nbsphinx==0.9.3",
   "sphinx-gallery==0.15.0",
-  "ipython==8.21.0",
 ]
 benchmarks = [
   "scipy==1.12.0",
   "dgl==2.0.0",
   "torch==2.2.0",
   "torch_geometric==2.5.0",
-  "tqdm==4.66.1",
 ]
 
 [project.urls]
