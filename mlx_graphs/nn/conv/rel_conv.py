@@ -8,7 +8,7 @@ from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.utils import degree, scatter
 
 MessageFunctions = Literal["transe", "distmult", "rotate"]
-AggegationFunctions = Literal["add", "mean", "pna"]
+AggregationFunctions = Literal["add", "mean", "pna"]
 
 
 class GeneralizedRelationalConv(MessagePassing):
@@ -94,7 +94,7 @@ class GeneralizedRelationalConv(MessagePassing):
         out_features_dim: int,
         num_relations: int,
         message_func: MessageFunctions = "distmult",
-        aggregate_func: AggegationFunctions = "add",
+        aggregate_func: AggregationFunctions = "add",
         layer_norm: bool = True,
         activation: str = "relu",
         dependent: bool = False,
@@ -103,10 +103,10 @@ class GeneralizedRelationalConv(MessagePassing):
     ):
         super(GeneralizedRelationalConv, self).__init__(**kwargs)
 
-        if aggregate_func not in get_args(AggegationFunctions):
+        if aggregate_func not in get_args(AggregationFunctions):
             raise ValueError(
                 "Invalid aggregate_func.",
-                f"Available values are {get_args(AggegationFunctions)}",
+                f"Available values are {get_args(AggregationFunctions)}",
             )
         if message_func not in get_args(MessageFunctions):
             raise ValueError(
