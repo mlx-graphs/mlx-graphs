@@ -454,7 +454,7 @@ document.write(`
 <h2>Loading the dataset<a class="headerlink" href="#Loading-the-dataset" title="Link to this heading">#</a></h2>
 <p>We will be using the QM9 dataset as provided via <code class="docutils literal notranslate"><span class="pre">TUDataset</span></code>, which consists of about 130,000 small molecules consisting of 9 heavy atoms drawn from the elements C, H, O, N, F. Each molecule includes spatial information for the single low energy conformation (i.e., 3D coordinates of the atoms, specified in the latest 3 columns in the <code class="docutils literal notranslate"><span class="pre">node_features</span></code> of the graph) in addition to 13 other features. The dataset consists of 19 regression tasks, corresponding to different quantum-chemical
 properties of the molecules.</p>
-<p>Let’s start by loading the dataset and looking at some of it’s properties</p>
+<p>Let’s start by loading the dataset and looking at some of its properties</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
@@ -511,7 +511,6 @@ Number of regression tasks: 19
 <section id="Graph-Neural-Network-module">
 <h2>Graph Neural Network module<a class="headerlink" href="#Graph-Neural-Network-module" title="Link to this heading">#</a></h2>
 <p>To dive a bit deeper into the GNN logic and allow for more flexibility, we will implement node and edge processing blocks from scratch (as in <a class="reference external" href="https://arxiv.org/pdf/1806.01261.pdf">https://arxiv.org/pdf/1806.01261.pdf</a>) and then combine them through the <code class="docutils literal notranslate"><span class="pre">GraphNetworkBlock</span></code> provided by <code class="docutils literal notranslate"><span class="pre">mlx-graphs</span></code>.</p>
-<p>import mlx.core as mx import mlx.nn as nn from mlx_graphs.nn import GraphNetworkBlock from mlx.nn.layers.base import Module from mlx_graphs.nn.linear import Linear from mlx_graphs.utils import scatter</p>
 <p>Let’s start with the edge features update model. It will concatenate the <code class="docutils literal notranslate"><span class="pre">edge_features</span></code> with the <code class="docutils literal notranslate"><span class="pre">node_features</span></code> of the coreesponding source and target nodes, pass them through a simple MLP (just a linear layer followed by a ReLU) and output the updated <code class="docutils literal notranslate"><span class="pre">edge_features</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
@@ -770,7 +769,7 @@ Epoch 20: 100%|█████████████████████�
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_examples_qm9_tutorial_22_0.png" src="../../_images/tutorials_examples_qm9_tutorial_22_0.png" />
+<img alt="../../_images/tutorials_examples_qm9_tutorial_21_0.png" src="../../_images/tutorials_examples_qm9_tutorial_21_0.png" />
 </div>
 </div>
 </section>
