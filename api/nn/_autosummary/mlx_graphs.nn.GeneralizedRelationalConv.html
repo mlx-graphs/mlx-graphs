@@ -1,0 +1,730 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>mlx_graphs.nn.GeneralizedRelationalConv &#8212; mlx-graphs 0.0.4 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script src="../../../_static/documentation_options.js?v=dfd84850"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="mlx_graphs.nn.global_add_pool" href="mlx_graphs.nn.global_add_pool.html" />
+    <link rel="prev" title="mlx_graphs.nn.SAGEConv" href="mlx_graphs.nn.SAGEConv.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.4 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.4 documentation - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../data/index.html">Data</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/data.html">Data Objects</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/batch.html">Batch Objects</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/utils.html">Utils</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../datasets/index.html">Datasets</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../loaders/index.html">Loaders</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Neural Networks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../utils/index.html">Utils</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/transformations.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/topology.html">Topology</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/sorting.html">Sorting</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/validators.html">Validators</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/scatter.html">Scatter</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/array_ops.html">Array ops</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/convert.html">Convert</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>mlx_graphs.nn.GeneralizedRelationalConv</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.__call__"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.aggregate"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.aggregate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.message"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.message()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.update_nodes"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.update_nodes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mlx-graphs-nn-generalizedrelationalconv">
+<h1>mlx_graphs.nn.GeneralizedRelationalConv<a class="headerlink" href="#mlx-graphs-nn-generalizedrelationalconv" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GeneralizedRelationalConv">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.nn.</span></span><span class="sig-name descname"><span class="pre">GeneralizedRelationalConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">in_features_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">out_features_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">num_relations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">message_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'transe'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'distmult'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'rotate'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'distmult'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">aggregate_func</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'add'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'mean'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'pna'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'add'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">layer_norm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">activation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'relu'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dependent</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.nn.GeneralizedRelationalConv" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <a class="reference internal" href="mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.message_passing.MessagePassing"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessagePassing</span></code></a></p>
+<p>Generalized relational convolution layer from
+<a class="reference external" href="https://arxiv.org/abs/2106.06935">Neural Bellman-Ford Networks: A General Graph Neural Network Framework       for Link Prediction</a> paper.</p>
+<p>Adopted from the PyG version from <a class="reference external" href="https://github.com/KiddoZhu/NBFNet-PyG/blob/master/nbfnet/layers.py">here</a>.</p>
+<p>Part of the Neural Bellman-Ford networks (NBFNet) holding
+state-of-the-art in KG completion.
+Works with multi-relational graphs where edge types are stored in <cite>edge_labels</cite>.
+The message function composes node and relation vectors in three possible ways.
+The expected behavior is to work with “labeling trick” graphs where one node
+in the graph is labeled with a <cite>query</cite> vector, while rest are zeros.
+Message passing is then done separately for each data point in the batch.
+The input shape is expected to be [batch_size, num_nodes, input_dim]</p>
+<p>Alternatively, the layer can work as a standard relational conv
+with shapes [num_nodes, input_dim].</p>
+<p>Note that this implementation materializes all edge messages and is O(E).
+The complexity can be further reduced by adopting the O(V) <cite>rspmm</cite> C++ kernel
+from the NBFNet-PyG repo to the MLX framework (not implemented here).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>in_features_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – input feature dimension (same for node and edge features)</p></li>
+<li><p><strong>out_features_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – output node feature dimension</p></li>
+<li><p><strong>num_relations</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – number of unique relations in the graph</p></li>
+<li><p><strong>message_func</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'transe'</span></code>, <code class="docutils literal notranslate"><span class="pre">'distmult'</span></code>, <code class="docutils literal notranslate"><span class="pre">'rotate'</span></code>]</span>) – “transe” (sum), “distmult” (mult),
+“rotate” (complex rotation). Default: <code class="docutils literal notranslate"><span class="pre">distmult</span></code></p></li>
+<li><p><strong>aggregate_func</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'add'</span></code>, <code class="docutils literal notranslate"><span class="pre">'mean'</span></code>, <code class="docutils literal notranslate"><span class="pre">'pna'</span></code>]</span>) – “add”, “mean”, or “pna”. Default: <code class="docutils literal notranslate"><span class="pre">add</span></code></p></li>
+<li><p><strong>layer_norm</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – whether to use layer norm
+(often crucial to the performance). Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>activation</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – non-linearity. Default: <code class="docutils literal notranslate"><span class="pre">relu</span></code></p></li>
+<li><p><strong>dependent</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – whether to use separate relation embedding matrix
+<code class="docutils literal notranslate"><span class="pre">False</span></code> or build relations from the input relations <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>node_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a></span>) – for 3D batches, specified which dimension contains all nodes.
+Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
+</ul>
+</dd>
+</dl>
+<p>Example:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mlx.core</span> <span class="k">as</span> <span class="nn">mx</span>
+<span class="kn">from</span> <span class="nn">mlx_graphs.nn</span> <span class="kn">import</span> <span class="n">GeneralizedRelationalConv</span>
+
+<span class="n">input_dim</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">output_dim</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">num_relations</span> <span class="o">=</span> <span class="mi">3</span>
+
+<span class="n">conv</span> <span class="o">=</span> <span class="n">GeneralizedRelationalConv</span><span class="p">(</span><span class="n">input_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">)</span>
+
+<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">2</span>
+<span class="n">edge_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
+<span class="n">edge_types</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
+<span class="n">boundary</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">size</span> <span class="o">=</span> <span class="p">(</span><span class="n">boundary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">boundary</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+<span class="n">layer_input</span> <span class="o">=</span> <span class="n">boundary</span>  <span class="c1"># initial node features which will be updated</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">,</span> <span class="n">edge_types</span><span class="p">,</span> <span class="n">boundary</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+
+<span class="c1"># optional: residual connection if input dim == output dim</span>
+<span class="n">h</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">layer_input</span>
+<span class="n">layer_input</span> <span class="o">=</span> <span class="n">h</span>
+
+<span class="c1"># another conv type where relations are obtained from the additional</span>
+<span class="c1"># query tensor</span>
+<span class="n">query</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="n">batch_size</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
+<span class="n">conv2</span> <span class="o">=</span> <span class="n">GeneralizedRelationalConv</span><span class="p">(</span>
+    <span class="n">input_dim</span><span class="p">,</span> <span class="n">output_dim</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">,</span> <span class="n">dependent</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="n">h</span> <span class="o">=</span> <span class="n">conv2</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">layer_input</span><span class="p">,</span> <span class="n">edge_types</span><span class="p">,</span> <span class="n">boundary</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">size</span><span class="p">)</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GeneralizedRelationalConv.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">query</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="headerlink" href="#mlx_graphs.nn.GeneralizedRelationalConv.__call__" title="Link to this definition">#</a></dt>
+<dd><p>Computes the forward pass of GeneralizedRelationalConv.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>edge_index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input edge index of shape <cite>[2, num_edges]</cite></p></li>
+<li><p><strong>node_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input node features,
+shape <cite>[bs, num_nodes, dim]</cite> or <cite>[num_nodes, dim]</cite></p></li>
+<li><p><strong>edge_type</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input edge types of shape <cite>[num_edges,]</cite></p></li>
+<li><p><strong>boundary</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Initial node feats <cite>[bs, num_nodes, dim]</cite> or <cite>[num_nodes, dim]</cite></p></li>
+<li><p><strong>query</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Optional input node queries, shape <cite>[bs, dim]</cite></p></li>
+<li><p><strong>size</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">tuple</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>, <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]]</span>) – a tuple encoding the size of the graph eg <cite>(5, 5)</cite></p></li>
+<li><p><strong>edge_weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Edge weights leveraged in message passing. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+</dd>
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>The computed node embeddings</p>
+</dd>
+</dl>
+</dd></dl>
+
+<p class="rubric">Methods</p>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.nn.GeneralizedRelationalConv.aggregate" title="mlx_graphs.nn.GeneralizedRelationalConv.aggregate"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aggregate</span></code></a>(messages, indices, edge_weights, ...)</p></td>
+<td><p>Aggregates the messages using the <cite>self.aggr</cite> strategy.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.nn.GeneralizedRelationalConv.message" title="mlx_graphs.nn.GeneralizedRelationalConv.message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message</span></code></a>(src_features, dst_features, ...)</p></td>
+<td><p>Computes messages between connected nodes.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.nn.GeneralizedRelationalConv.update_nodes" title="mlx_graphs.nn.GeneralizedRelationalConv.update_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">update_nodes</span></code></a>(aggregated, old)</p></td>
+<td><p>Updates the final embeddings given the aggregated messages.</p></td>
+</tr>
+</tbody>
+</table>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GeneralizedRelationalConv.aggregate">
+<span class="sig-name descname"><span class="pre">aggregate</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">messages</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">indices</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dim_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.12)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="headerlink" href="#mlx_graphs.nn.GeneralizedRelationalConv.aggregate" title="Link to this definition">#</a></dt>
+<dd><p>Aggregates the messages using the <cite>self.aggr</cite> strategy.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>messages</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Computed messages</p></li>
+<li><p><strong>indices</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Indices representing the nodes that receive messages</p></li>
+<li><p><strong>**kwargs</strong> – Optional args to aggregate messages</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GeneralizedRelationalConv.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">relation</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">boundary</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_type</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="headerlink" href="#mlx_graphs.nn.GeneralizedRelationalConv.message" title="Link to this definition">#</a></dt>
+<dd><p>Computes messages between connected nodes.</p>
+<p>By default, returns the features of source nodes.
+Optional <code class="docutils literal notranslate"><span class="pre">edge_weights</span></code> can be directly integrated in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Source node embeddings</p></li>
+<li><p><strong>dst_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Destination node embeddings</p></li>
+<li><p><strong>edge_weights</strong> – Array of scalars with shape (num_edges,) or (num_edges, 1)
+used to weigh neighbor features during aggregation. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>**kwargs</strong> – Optional args to compute messages</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GeneralizedRelationalConv.update_nodes">
+<span class="sig-name descname"><span class="pre">update_nodes</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">aggregated</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">old</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="headerlink" href="#mlx_graphs.nn.GeneralizedRelationalConv.update_nodes" title="Link to this definition">#</a></dt>
+<dd><p>Updates the final embeddings given the aggregated messages.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>aggregated</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – aggregated messages</p></li>
+<li><p><strong>**kwargs</strong> – optional args to update messages</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.5.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mlx_graphs.nn.SAGEConv.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mlx_graphs.nn.SAGEConv</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mlx_graphs.nn.global_add_pool.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">mlx_graphs.nn.global_add_pool</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.__call__"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.aggregate"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.aggregate()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.message"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.message()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GeneralizedRelationalConv.update_nodes"><code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv.update_nodes()</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
