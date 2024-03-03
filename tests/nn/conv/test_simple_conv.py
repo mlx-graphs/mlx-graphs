@@ -2,8 +2,6 @@ import mlx.core as mx
 
 from mlx_graphs.nn.conv.simple_conv import SimpleConv
 
-mx.random.seed(42)
-
 
 def test_simple_conv():
     # Aggr: add, combine_root_func=None, with edge weights.

@@ -24,7 +24,7 @@ class SimpleConv(MessagePassing):
     def __init__(
         self,
         aggr: ScatterAggregations = "add",
-        combine_root_func: CombineRootFunctions = None,
+        combine_root_func: Optional[CombineRootFunctions] = None,
         **kwargs,
     ):
         super(SimpleConv, self).__init__(aggr, **kwargs)
@@ -50,6 +50,7 @@ class SimpleConv(MessagePassing):
             edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features
             edge_weights: Edge weights leveraged in message passing. Default: ``None``
+
         Returns:
             mx.array: The computed node embeddings
         """
