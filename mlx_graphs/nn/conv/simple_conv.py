@@ -83,7 +83,7 @@ class SimpleConv(MessagePassing):
             edge_weights: Edge weights leveraged in message passing. Default: ``None``
 
         Returns:
-            mx.array: The computed node embeddings
+            The computed node embeddings
         """
         # Add self-loops, if needed.
         if self.combine_root_func == "self_loop":
