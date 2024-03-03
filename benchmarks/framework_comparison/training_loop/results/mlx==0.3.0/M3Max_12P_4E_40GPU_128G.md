@@ -45,4 +45,3 @@ dgl version: 2.0.0
 | NCI-H23 | mxg | GATConv | 4.319s |
 | NCI-H23 | mxg(compiled) | GCNConv | 5.673s |
 | NCI-H23 | mxg(compiled) | GATConv | 6.110s |
-
