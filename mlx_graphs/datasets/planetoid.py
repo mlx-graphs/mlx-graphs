@@ -128,9 +128,8 @@ def read_planetoid_data(
 
         tx, ty = tx_ext, ty_ext
 
-    else:
-        node_features = mx.concatenate([allx, tx], axis=0)
-        node_features[test_index] = node_features[sorted_test_index]
+    node_features = mx.concatenate([allx, tx], axis=0)
+    node_features[test_index] = node_features[sorted_test_index]
 
     y = mx.argmax(mx.concatenate([ally, ty], axis=0), axis=1)
     y[test_index] = y[sorted_test_index]
