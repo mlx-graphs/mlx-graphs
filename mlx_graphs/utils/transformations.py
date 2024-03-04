@@ -412,17 +412,11 @@ def coalesce(edge_index: mx.array) -> mx.array:
     Removes duplicate edges in ``edge_index`` and scatters the duplicate edges to the
     edge attributes following a given reduction operation (e.g. sum of duplicate edges).
 
-    However, this implementation is simpler yet, and just removes the duplicate edges.
-    We also found out that the source and destination nodes have to be swapped in order
-    to match the ``coalesce`` function used in PyG.
-
-    TODO: some work has to be done to match the exact behavior of PyG's coalesce.
-
     Args:
         edge_index: Edges to coalesce.
 
     Returns:
-        The edges without duplicates, following the same order as PyG's implementation.
+        The edges without duplicates, with source and destination nodes swapped.
     """
     edge_index = remove_duplicate_directed_edges(edge_index)
 
