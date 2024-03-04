@@ -50,6 +50,24 @@ class Planetoid(Dataset):
         without_self_loops: Whether to remove self loops. Default to ``True``.
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
+
+    Example:
+
+    .. code-block:: python
+
+        from mlx_graphs.datasets import Planetoid
+
+        dataset = Planetoid("cora")
+        >>> cora(num_graphs=1)
+
+        dataset[0]
+        >>> GraphData(
+                edge_index(shape=(2, 10556), int32)
+                node_features(shape=(2708, 1433), float32)
+                node_labels(shape=(2708,), int32)
+                train_mask(shape=(2708,), bool)
+                val_mask(shape=(2708,), bool)
+                test_mask(shape=(2708,), bool))
     """
 
     _url = "https://github.com/kimiyoung/planetoid/raw/master/data"
