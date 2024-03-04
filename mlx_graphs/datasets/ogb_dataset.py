@@ -87,6 +87,10 @@ class OGBDataset(Dataset):
 
     .. note::
 
+       `ogb` needs to be installed to use this dataset
+
+    .. note::
+
         The ogbn-mag, ogbl-wikikg2 and igbl-biokg and the graphs belonging to the
         largs-scale challenge category are currently not available as
         they require heterogenous graphs which are not yet supported by `mlx-graphs`
@@ -115,13 +119,19 @@ class OGBDataset(Dataset):
         self._load_data()
 
     def _load_data(self):
-        if self.name in get_args(OGB_NODE_DATASET):
-            from ogb.nodeproppred import NodePropPredDataset as OGB_dataset
-        elif self.name in get_args(OGB_EDGE_DATASET):
-            from ogb.linkproppred import LinkPropPredDataset as OGB_dataset
-        elif self.name in get_args(OGB_GRAPH_DATASET):
-            from ogb.graphproppred import GraphPropPredDataset as OGB_dataset
-        self._raw_ogb_dataset = OGB_dataset(name=self.name, root=self.raw_path)
+        try:
+            if self.name in get_args(OGB_NODE_DATASET):
+                from ogb.nodeproppred import NodePropPredDataset as OGB_dataset
+            elif self.name in get_args(OGB_EDGE_DATASET):
+                from ogb.linkproppred import LinkPropPredDataset as OGB_dataset
+            elif self.name in get_args(OGB_GRAPH_DATASET):
+                from ogb.graphproppred import GraphPropPredDataset as OGB_dataset
+            self._raw_ogb_dataset = OGB_dataset(name=self.name, root=self.raw_path)
+        except ImportError:
+            raise ImportError(
+                "ogb needs to be installed to use this dataset",
+                "you can install it via pip install ogb",
+            )
 
     def process(self):
         try:
