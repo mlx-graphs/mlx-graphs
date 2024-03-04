@@ -30,6 +30,15 @@ OGB_GRAPH_DATASET = Literal[
     "ogbg-code2",
 ]
 
+ALL_DATASETS = Literal[
+    *[
+        i
+        for i in list(get_args(OGB_NODE_DATASET))
+        + list(get_args(OGB_EDGE_DATASET))
+        + list(get_args(OGB_GRAPH_DATASET))
+    ]
+]
+
 
 @overload
 def to_mx_array(x: None) -> None:
@@ -49,9 +58,53 @@ def to_mx_array(x: Union[np.ndarray, None]) -> Union[mx.array, None]:
 
 
 class OGBDataset(Dataset):
+    """
+    Datasets from the `Open Graph Benchmark (OGB) <https://ogb.stanford.edu>`_
+    collection of realistic, large-scale, and diverse benchmark datasets for machine
+    learning on graphs.
+
+    Datasets belongs to three fundamental graph machine learning task categories:
+    predicting the properties of nodes, links, and graphs.
+    Node property prediction datasets consist of a single graph with three additional
+    properties: `train_mask`, `val_mask` and `test_mask` specifying the masks for the
+    train, validation and test splits.
+    Link property prediction datasets also consist of a single graphs with three
+    additional properties: `train_edge_index`, `val_edge_index` and `test_edge_index`,
+    specifying the edges to be considered for training, validation and testing.
+    Graph property prediction datasets consists of multiple graphs. The desired split
+    can be specified via the `split` arg.
+
+    See `here <https://ogb.stanford.edu/docs/dataset_overview/>`_ for further details
+    and a list of the available datasets with their descriptions
+
+    Args:
+        name: Name of the dataset
+        split: Split of the dataset to load. Thi parameter has effect only on graph
+            property prediction dataset. If `None`, the entire dataset is loaded.
+            Defaults to `None`.
+        base_dir: Directory where to store dataset files. Default is
+            in the local directory ``.mlx_graphs_data/``.
+
+    .. note::
+
+        The ogbn-mag, ogbl-wikikg2 and igbl-biokg and the graphs belonging to the
+        largs-scale challenge category are currently not available as
+        they require heterogenous graphs which are not yet supported by `mlx-graphs`
+
+    Example:
+
+    .. code-block:: python
+
+        from mlx_graphs.datasets.ogb_dataset import OGBDataset
+
+        ds = OGBDataset("ogbg-molhiv", split="train")
+        >>> ogbg-molhiv(num_graphs=32901)
+
+    """
+
     def __init__(
         self,
-        name: Union[OGB_NODE_DATASET, OGB_EDGE_DATASET, OGB_GRAPH_DATASET],
+        name: ALL_DATASETS,
         split: Optional[Literal["train", "val", "test"]] = None,
         base_dir: Optional[str] = None,
     ):
