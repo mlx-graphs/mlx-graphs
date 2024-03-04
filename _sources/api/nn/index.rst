@@ -13,6 +13,7 @@ Neural Networks
 	Linear
 	MessagePassing
 	GraphNetworkBlock
+	SimpleConv
 	GATConv
 	GCNConv
 	GINConv
