@@ -24,8 +24,8 @@ def parse_txt_array(
 
 def read_txt_array(
     path: str,
-    sep: str,
     dtype: mx.Dtype,
+    sep: str = None,
     start: int = 0,
     end: Optional[int] = None,
 ) -> mx.array:
