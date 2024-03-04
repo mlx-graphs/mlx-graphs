@@ -14,3 +14,5 @@ Array ops
 	broadcast
 	expand
 	one_hot
+	pairwise_distances
+	index_to_mask

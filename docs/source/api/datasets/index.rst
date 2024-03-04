@@ -12,6 +12,7 @@ Datasets
 
 	Dataset
 	KarateClubDataset
+	Planetoid
 	QM7bDataset
 	TUDataset
 	SuperPixelDataset
