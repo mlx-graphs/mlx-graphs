@@ -91,3 +91,30 @@ def pairwise_distances(x: mx.array, y: mx.array) -> mx.array:
     expanded_x = mx.expand_dims(x, 1)
     distances = mx.linalg.norm(expanded_x - y, axis=-1)
     return mx.array(distances.tolist())
+
+
+def index_to_mask(index: mx.array, size: Optional[int] = None) -> mx.array:
+    """Converts indices to a mask representation.
+
+    Args:
+        index: Array of indices where the mask will be True.
+        size: Length of the returned mask array. By default,
+            the size is set to the maximum index in the indices + 1.
+
+    Returns:
+        A boolean array of length ``size``, with `True` at the given
+        ``index`` indices and `False` elsewhere.
+
+    Example:
+
+    .. code-block:: python
+
+        >>> index = mx.array([1, 2, 3])
+        >>> index_to_mask(index, size=5)
+        array([False, True, True, True, False], dtype=bool)
+    """
+    index = index.reshape(-1)
+    size = index.max().item() + 1 if size is None else size
+    mask = mx.zeros(size, dtype=mx.bool_)
+    mask[index] = True
+    return mask

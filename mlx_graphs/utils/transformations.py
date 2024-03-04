@@ -404,3 +404,23 @@ def remove_duplicate_directed_edges(edge_index: mx.array) -> mx.array:
     unique_edge_index = np.array([unique_edges["node1"], unique_edges["node2"]])
 
     return mx.array(unique_edge_index, mx.int32)
+
+
+@validate_edge_index
+def coalesce(edge_index: mx.array) -> mx.array:
+    """
+    Removes duplicate edges in ``edge_index`` and scatters the duplicate edges to the
+    edge attributes following a given reduction operation (e.g. sum of duplicate edges).
+
+    Args:
+        edge_index: Edges to coalesce.
+
+    Returns:
+        The edges without duplicates, with source and destination nodes swapped.
+    """
+    edge_index = remove_duplicate_directed_edges(edge_index)
+
+    row, col = edge_index
+    edge_index = mx.stack([col, row])
+
+    return edge_index

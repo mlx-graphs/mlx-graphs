@@ -14,10 +14,7 @@ def test_qm7b_dataset():
     from torch_geometric.loader import DataLoader
 
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    try:
-        shutil.rmtree(path)
-    except FileNotFoundError:
-        pass
+    shutil.rmtree(path, ignore_errors=True)
 
     dataset = QM7bDataset(base_dir=path)
     dataset_torch = QM7b_torch(path)
