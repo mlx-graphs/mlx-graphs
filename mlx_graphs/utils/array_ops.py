@@ -106,6 +106,9 @@ def index_to_mask(index: mx.array, size: Optional[int] = None) -> mx.array:
         ``index`` indices and `False` elsewhere.
 
     Example:
+
+    .. code-block:: python
+
         >>> index = mx.array([1, 2, 3])
         >>> index_to_mask(index, size=5)
         array([False, True, True, True, False], dtype=bool)

@@ -1,12 +1,11 @@
 import os.path as osp
 import warnings
 from itertools import repeat
-from typing import List, Literal, Optional
+from typing import List, Literal, Optional, get_args
 
 import fsspec
 import mlx.core as mx
 import numpy as np
-from torch_geometric.data import Data
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
@@ -17,6 +16,10 @@ try:
     import cPickle as pickle
 except ImportError:
     import pickle
+
+
+PLANETOID_NAMES = Literal["cora", "citeseer", "pubmed"]
+PLANETOID_SPLITS = Literal["public", "full", "geom-gcn"]
 
 
 class Planetoid(Dataset):
@@ -56,13 +59,16 @@ class Planetoid(Dataset):
 
     def __init__(
         self,
-        name: str,
-        split: Literal[["public", "full", "geom-gcn"]] = "public",
+        name: PLANETOID_NAMES,
+        split: PLANETOID_SPLITS = "public",
         without_self_loops: bool = True,
         base_dir: Optional[str] = None,
     ):
-        self.split = split.lower()
+        name, self.split = name.lower(), split.lower()
         self.without_self_loops = without_self_loops
+
+        assert name in get_args(PLANETOID_NAMES), "Invalid dataset name"
+        assert self.split in get_args(PLANETOID_SPLITS), "Invalid split specified"
 
         super().__init__(name=name, base_dir=base_dir)
 
@@ -108,7 +114,7 @@ class Planetoid(Dataset):
 
 def read_planetoid_data(
     folder: str, prefix: str, file_names: list[str], without_self_loops: bool
-) -> Data:
+) -> GraphData:
     items = [read_file(folder, prefix, name) for name in file_names]
     node_features, tx, allx, y, ty, ally, graph, test_index = items
     train_index = mx.arange(y.shape[0], dtype=mx.int32)
