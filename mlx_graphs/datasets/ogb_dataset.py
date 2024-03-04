@@ -81,7 +81,7 @@ class OGBDataset(Dataset):
         if self.name in get_args(OGB_NODE_DATASET):
             graph, label = dataset[0]
             split_idx: dict = dataset.get_idx_split()  # type: ignore
-            train_idx, valid_idx, test_idx = (
+            train_idx, val_idx, test_idx = (
                 split_idx["train"],
                 split_idx["valid"],
                 split_idx["test"],
@@ -94,14 +94,14 @@ class OGBDataset(Dataset):
                     edge_features=to_mx_array(graph["edge_feat"]),
                     node_labels=to_mx_array(label),  # type: ignore
                     train_mask=index_to_mask(to_mx_array(train_idx), size=num_nodes),
-                    val_mask=index_to_mask(to_mx_array(valid_idx), size=num_nodes),
+                    val_mask=index_to_mask(to_mx_array(val_idx), size=num_nodes),
                     test_mask=index_to_mask(to_mx_array(test_idx), size=num_nodes),
                 )
             )
-        if self.name in get_args(OGB_EDGE_DATASET):
-            graph: dict = dataset[0]
+        elif self.name in get_args(OGB_EDGE_DATASET):
+            graph = dataset[0]
             split_idx: dict = dataset.get_edge_split()  # type: ignore
-            train_idx, valid_idx, test_idx = (
+            train_edges, val_edges, test_edges = (
                 split_idx["train"]["edge"].reshape(2, -1),
                 split_idx["valid"]["edge"].reshape(2, -1),
                 split_idx["test"]["edge"].reshape(2, -1),
@@ -111,5 +111,31 @@ class OGBDataset(Dataset):
                     edge_index=to_mx_array(graph["edge_index"]),
                     node_features=to_mx_array(graph["node_feat"]),
                     edge_features=to_mx_array(graph["edge_feat"]),
+                    train_edge_index=to_mx_array(train_edges),
+                    val_edge_index=to_mx_array(val_edges),
+                    test_edge_index=to_mx_array(test_edges),
                 )
             )
+
+        elif self.name in get_args(OGB_GRAPH_DATASET):
+            for graph, label in dataset:
+                self.graphs.append(
+                    GraphData(
+                        edge_index=to_mx_array(graph["edge_index"]),
+                        node_features=to_mx_array(graph["node_feat"]),
+                        edge_features=to_mx_array(graph["edge_feat"]),
+                        node_labels=to_mx_array(label),  # type: ignore
+                    )
+                )
+            split_idx: dict = dataset.get_idx_split()  # type: ignore
+            train_idx, val_idx, test_idx = (
+                split_idx["train"],
+                split_idx["valid"],
+                split_idx["test"],
+            )
+            if self.split == "train":
+                self.graphs = [self.graphs[i] for i in train_idx]
+            elif self.split == "val":
+                self.graphs = [self.graphs[i] for i in val_idx]
+            elif self.split == "test":
+                self.graphs = [self.graphs[i] for i in test_idx]
