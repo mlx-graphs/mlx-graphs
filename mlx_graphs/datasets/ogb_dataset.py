@@ -31,7 +31,7 @@ OGB_GRAPH_DATASET = Literal[
 ]
 
 ALL_DATASETS = Literal[
-    *[
+    *[  # type: ignore
         i
         for i in list(get_args(OGB_NODE_DATASET))
         + list(get_args(OGB_EDGE_DATASET))
@@ -113,6 +113,7 @@ class OGBDataset(Dataset):
         base_dir: Optional[str] = None,
     ):
         self.split = split
+        self._raw_ogb_dataset = None
         super().__init__(name, base_dir)
 
     def download(self):
@@ -134,15 +135,15 @@ class OGBDataset(Dataset):
             )
 
     def process(self):
-        try:
+        if self._raw_ogb_dataset is not None:
             dataset = self._raw_ogb_dataset
-        except AttributeError:
+        else:
             # reload if already downloaded
             self._load_data()
             dataset = self._raw_ogb_dataset
 
         if self.name in get_args(OGB_NODE_DATASET):
-            graph, label = dataset[0]
+            graph, label = dataset[0]  # type: ignore - it's NodePropPredDataset
             split_idx: dict = dataset.get_idx_split()  # type: ignore
             train_idx, val_idx, test_idx = (
                 split_idx["train"],
@@ -162,7 +163,7 @@ class OGBDataset(Dataset):
                 )
             )
         elif self.name in get_args(OGB_EDGE_DATASET):
-            graph = dataset[0]
+            graph = dataset[0]  # type: ignore - it's LinkPropPredDataset
             split_idx: dict = dataset.get_edge_split()  # type: ignore
             train_edges, val_edges, test_edges = (
                 split_idx["train"]["edge"].reshape(2, -1),
@@ -171,9 +172,9 @@ class OGBDataset(Dataset):
             )
             self.graphs.append(
                 GraphData(
-                    edge_index=to_mx_array(graph["edge_index"]),
-                    node_features=to_mx_array(graph["node_feat"]),
-                    edge_features=to_mx_array(graph["edge_feat"]),
+                    edge_index=to_mx_array(graph["edge_index"]),  # type: ignore
+                    node_features=to_mx_array(graph["node_feat"]),  # type: ignore
+                    edge_features=to_mx_array(graph["edge_feat"]),  # type: ignore
                     train_edge_index=to_mx_array(train_edges),
                     val_edge_index=to_mx_array(val_edges),
                     test_edge_index=to_mx_array(test_edges),
@@ -181,7 +182,7 @@ class OGBDataset(Dataset):
             )
 
         elif self.name in get_args(OGB_GRAPH_DATASET):
-            for graph, label in dataset:
+            for graph, label in dataset:  # type: ignore - it's GraphPropPredDataset
                 self.graphs.append(
                     GraphData(
                         edge_index=to_mx_array(graph["edge_index"]),
