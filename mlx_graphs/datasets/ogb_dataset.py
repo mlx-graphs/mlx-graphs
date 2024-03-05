@@ -31,12 +31,22 @@ OGB_GRAPH_DATASET = Literal[
 ]
 
 ALL_DATASETS = Literal[
-    *[  # type: ignore
-        i
-        for i in list(get_args(OGB_NODE_DATASET))
-        + list(get_args(OGB_EDGE_DATASET))
-        + list(get_args(OGB_GRAPH_DATASET))
-    ]
+    "ogbn-products",
+    "ogbn-proteins",
+    "ogbn-arxiv",
+    "ogbn-papers100M",
+    # "ogbn-mag", # TODO: requires heterogeneous graphs
+    "ogbl-ppa",
+    "ogbl-collab",
+    "ogbl-ddi",
+    "ogbl-citation2",
+    # "ogbl-wikikg2",  # TODO: requires heterogeneous graphs
+    # "ogbl-biokg",  # TODO: requires heterogeneous graphs
+    "ogbl-vessel",
+    "ogbg-molhiv",
+    "ogbg-molpcba",
+    "ogbg-ppa",
+    "ogbg-code2",
 ]
 
 
