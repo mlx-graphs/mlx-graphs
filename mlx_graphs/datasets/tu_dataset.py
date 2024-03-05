@@ -98,6 +98,8 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         node_labels = [one_hot(x) for x in node_labels]
         node_labels = mx.concatenate(node_labels, axis=-1)
+
+    node_features = None
     if node_attributes is not None and node_labels is not None:
         node_features = cat([node_attributes, node_labels])
     elif node_attributes is not None:
@@ -120,6 +122,8 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
 
         edge_labels = [one_hot(x) for x in edge_labels]
         edge_labels = mx.concatenate(edge_labels, axis=-1).astype(mx.float32)
+
+    edge_features = None
     if edge_attributes is not None and edge_labels is not None:
         edge_features = cat([edge_attributes, edge_labels])
     elif edge_attributes is not None:
