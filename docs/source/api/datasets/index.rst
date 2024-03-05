@@ -16,3 +16,4 @@ Datasets
 	QM7bDataset
 	TUDataset
 	SuperPixelDataset
+	OGBDataset
