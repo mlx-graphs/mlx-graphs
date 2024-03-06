@@ -1,13 +1,15 @@
 from typing import List, Tuple
 
+import mlx.core as mx
 import numpy as np
+
+from mlx_graphs.data import GraphData
 
 
 def sample_nodes(
     edge_index: np.ndarray,
     num_neighbors: List[int],
-    batch_size: int,
-    input_nodes: np.ndarray = None,
+    input_node: int = None,
 ) -> Tuple[np.array, np.array, np.array, np.array]:
     r"""GraphSage neighbor sampler implementation.
 
@@ -16,10 +18,7 @@ def sample_nodes(
         edge_index : the edge index representing the original graph
         to sample from nodes.
         num_neighbors : number of neighbors to sample for each hop.
-        batch_size : number of seed nodes to take into consideration
-        to build a computational graph for `batch_size` number of seed nodes.
-        input_nodes : seed_nodes to take into consideration,
-        if not provided `batch_size` number of seed nodes will be randomly sampled.
+        input_nodes : seed_nodes to take into consideration.
 
     Returns:
         sampled_edges_array : the sampled edge_index.
@@ -38,17 +37,13 @@ def sample_nodes(
     if not num_neighbors:
         raise ValueError("num_neighbors cannot be an empty list.")
 
-    all_nodes = np.unique(edge_index)
-    if input_nodes is None or len(input_nodes) != batch_size:
-        input_nodes = np.random.choice(all_nodes, size=batch_size, replace=False)
-
     sampled_edges = []
     sampled_edges_indices = []
     # Will include all unique nodes encountered
-    n_id = set(input_nodes)
+    n_id = set([input_node])
     e_id = []
-    visited_nodes = set(input_nodes)
-    current_layer_nodes = input_nodes
+    visited_nodes = set([input_node])
+    current_layer_nodes = [input_node]
 
     structured_edge_index = np.core.records.fromarrays(
         edge_index, names="source, target", formats="i8, i8"
@@ -86,8 +81,49 @@ def sample_nodes(
         n_id.update(next_layer_nodes)
 
     sampled_edges_array = np.array(sampled_edges, dtype=int).T
-    e_id = np.array(sampled_edges_indices)
+    e_id = sampled_edges_indices
 
-    n_id_list = np.array(list(n_id))  # Convert n_id to a list for the output
+    n_id_list = list(n_id)
 
-    return sampled_edges_array, n_id_list, e_id, input_nodes
+    return sampled_edges_array, n_id_list, e_id, input_node
+
+
+def sampler(
+    graph: GraphData, input_nodes: List[int], num_neighbors: List[int], batch_size: int
+) -> List[GraphData]:
+    """Function that samples subgraphs from a graph using Neighbor Sampling strategy.
+
+    Args:
+        graph : Original `GraphData` object to sample from.
+        input_nodes : seed_nodes to take into consideration.
+        num_neighbors : number of neighbors to sample for each hop.
+        batch_size : number of seed nodes to take into consideration
+        to build a computational graph for `batch_size` number of seed nodes.
+
+    Returns:
+        list of samples for each seed node.
+    """
+
+    graphs = []
+    for seed_node in input_nodes:
+        sampled_edges, n_id, e_id, input_node = sample_nodes(
+            edge_index=np.array(graph.edge_index),
+            num_neighbors=num_neighbors,
+            input_node=seed_node,
+        )
+        n_id = [int(id_) for id_ in n_id]
+        subgraph_node_features = graph.node_features[mx.array(n_id)]
+        subgraph = GraphData(
+            edge_index=mx.array(sampled_edges),
+            node_features=subgraph_node_features,
+            n_id=mx.array(n_id),
+            e_id=mx.array(e_id),
+            input_nodes=mx.array(input_node),
+        )
+        graphs.append(subgraph)
+
+    return graphs
+
+
+def collate_subgraphs(subgraphs: List[GraphData], batch_size: int, **kwargs):
+    pass

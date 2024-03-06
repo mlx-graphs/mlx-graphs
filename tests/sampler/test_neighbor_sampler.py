@@ -13,7 +13,7 @@ def test_sample_nodes_no_hop():
     )
     with pytest.raises(ValueError):
         sampled_edge, n_id, e_id, input_nodes = sample_nodes(
-            edge_index=edge_index_numpy, num_neighbors=[], batch_size=1, input_nodes=[0]
+            edge_index=edge_index_numpy, num_neighbors=[], batch_size=1, input_node=0
         )
 
 
@@ -26,13 +26,13 @@ def test_sample_nodes_one_hop():
     )
 
     sampled_edge, n_id, e_id, input_nodes = sample_nodes(
-        edge_index=edge_index_numpy, num_neighbors=[2], batch_size=1, input_nodes=[0]
+        edge_index=edge_index_numpy, num_neighbors=[2], batch_size=1, input_node=0
     )
 
     assert sampled_edge.shape == (2, 2), "sampled edges shape is incorrect"
-    assert n_id.shape == (3,), "Incorrect reference to sampled nodes"
-    assert e_id.shape == (2,), "Incorrect reference to sampled edges"
-    assert input_nodes == [0], "Incorrect reference to input nodes"
+    assert len(n_id) == 3, "Incorrect reference to sampled nodes"
+    assert len(e_id) == 2, "Incorrect reference to sampled edges"
+    assert input_nodes == 0, "Incorrect reference to input nodes"
 
 
 def test_sample_nodes_two_hop():
@@ -44,10 +44,17 @@ def test_sample_nodes_two_hop():
     )
 
     sampled_edge, n_id, e_id, input_nodes = sample_nodes(
-        edge_index=edge_index_numpy, num_neighbors=[3, 2], batch_size=1, input_nodes=[0]
+        edge_index=edge_index_numpy, num_neighbors=[3, 2], batch_size=1, input_node=0
     )
 
     assert sampled_edge.shape == (2, 9), "sampled edges shape is incorrect"
-    assert n_id.shape == (10,), "Incorrect reference to sampled nodes"
-    assert e_id.shape == (9,), "Incorrect reference to sampled edges"
-    assert input_nodes == [0], "Incorrect reference to input nodes"
+    assert len(n_id) == 10, "Incorrect reference to sampled nodes"
+    assert len(e_id) == 9, "Incorrect reference to sampled edges"
+    assert input_nodes == 0, "Incorrect reference to input nodes"
+
+
+# def test_sample_nodes_two_hop_two_seed_nodes():
+#     edge_index = np.array([
+#     [2, 3, 3, 4, 5, 6, 7],
+#     [0, 0, 1, 1, 2, 3, 4]],
+# )
