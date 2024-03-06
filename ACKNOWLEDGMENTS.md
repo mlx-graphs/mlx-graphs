@@ -10,6 +10,7 @@ mlx-graphs was developed with contributions from the following individuals:
 
 - Michael Galkin: `GeneralizedRelationalConv`
 - Nikos Kanakaris: `SimpleConv`
+- Djamel Mesbah: `to_networkx`
 
 
 <a href="https://github.com/mlx-graphs/mlx-graphs/graphs/contributors">
