@@ -12,8 +12,8 @@ A great way to contribute to the project is to open a detailed (bug) issue when 
 
 ### Feature Requests
 
-Another great way to contribute is to open feature requests! 
-While all requests are valid, we cannot guarantee your request will be accepted. Your idea may be great, but also out-of-scope for the project. 
+Another great way to contribute is to open feature requests!
+While all requests are valid, we cannot guarantee your request will be accepted. Your idea may be great, but also out-of-scope for the project.
 For every feature request, you are welcome to submit a pull request to help!
 
 
@@ -31,4 +31,4 @@ To open a PR:
    and after the change.
 - Run tests locally to make sure you're not introducing breaking changes.
 - Format the code using pre-commit.
-- Every PR should have passing CI tests and at least one review. 
+- Every PR should have passing CI tests and at least one review.
