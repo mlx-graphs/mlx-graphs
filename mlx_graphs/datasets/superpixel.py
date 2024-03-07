@@ -170,7 +170,7 @@ class SuperPixelDataset(Dataset):
 
     @property
     def processed_path(self) -> str:
-        # processed path includes split and ude_features
+        # processed path includes split and use_features
         return os.path.join(
             f"{super(self.__class__, self).processed_path}",
             self.split,
