@@ -4,7 +4,7 @@
 
 - Before [creating an issue](https://help.github.com/en/github/managing-your-work-on-github/creating-an-issue), check if you are using the latest version of the project. If you are not up-to-date, see if updating fixes your issue first.
 - Do not to open duplicate issues**; before creating a new issue, go through existing ones to see if it has previously been reported. If your issue exists, comment with any additional information you have.
-- Select the appropriate issue template and fully complete it. If no template is available for your specific issue, please use a blank one and report as much details as needed
+- Select the appropriate issue template and fully complete it. If no template is available for your specific issue, please use a blank one and report as much details as needed.
 
 ### Reporting bugs
 
