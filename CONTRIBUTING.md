@@ -24,7 +24,8 @@ GitHub issues are not the appropriate place to debug your specific project, but 
 ## Pull Requests
 When you submit a pull request, you'll be presented with a template to fill with a description of your contribution and checks on whether you added tests and documentation. Please fill all the parts.
 To open a PR:
-- Fork and submit pull requests to the repo.
+- Fork the repo and follow the [local installation guidelines](https://github.com/mlx-graphs/mlx-graphs?tab=readme-ov-file#contributing).
+- Add your contribution and submit a pull request to the repo.
 - If you've added code that should be tested, add tests.
 - Update the necessary documentation
 - If a change is likely to impact efficiency, run some of the benchmarks before
