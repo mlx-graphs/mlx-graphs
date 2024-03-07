@@ -1,3 +1,4 @@
+import os
 from typing import Literal, Optional, Union, get_args, overload
 
 import mlx.core as mx
@@ -125,6 +126,17 @@ class OGBDataset(Dataset):
         self.split = split
         self._raw_ogb_dataset = None
         super().__init__(name, base_dir)
+
+    @property
+    def processed_path(self) -> str:
+        # processed path includes split
+        if self.name in get_args(OGB_GRAPH_DATASET):
+            return os.path.join(
+                f"{super(self.__class__, self).processed_path}",
+                self.split if self.split is not None else "full",
+            )
+        else:
+            return super(self.__class__, self).processed_path
 
     def download(self):
         self._load_data()

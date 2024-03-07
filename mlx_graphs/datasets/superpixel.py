@@ -171,14 +171,10 @@ class SuperPixelDataset(Dataset):
     @property
     def processed_path(self) -> str:
         # processed path includes split and ude_features
-        return os.path.expanduser(
-            os.path.join(
-                self._base_dir,
-                self.name,
-                "processed",
-                self.split,
-                "use_features_" + str(self.use_features),
-            )
+        return os.path.join(
+            f"{super(self.__class__, self).processed_path}",
+            self.split,
+            "use_features_" + str(self.use_features),
         )
 
     def download(self):

@@ -97,26 +97,18 @@ class PlanetoidDataset(Dataset):
     @property
     def raw_path(self) -> str:
         # raw path includes split
-        return os.path.expanduser(
-            os.path.join(
-                self._base_dir,
-                self.name,
-                "raw",
-                self.split,
-            )
+        return os.path.join(
+            f"{super(self.__class__, self).raw_path}",
+            self.split,
         )
 
     @property
     def processed_path(self) -> str:
         # processed path includes split and presence of self loops
-        return os.path.expanduser(
-            os.path.join(
-                self._base_dir,
-                self.name,
-                "processed",
-                self.split,
-                "self_loops_" + str(self.without_self_loops),
-            )
+        return os.path.join(
+            f"{super(self.__class__, self).processed_path}",
+            self.split,
+            "self_loops_" + str(self.without_self_loops),
         )
 
     @property

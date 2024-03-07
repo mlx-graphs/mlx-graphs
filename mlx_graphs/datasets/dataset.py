@@ -124,25 +124,30 @@ class Dataset(ABC):
             if os.path.exists(self.raw_path):
                 return
             os.makedirs(self.raw_path, exist_ok=True)
-            print("Downloading raw data ...")
+            print(f"Downloading {self.name} raw data ...", end=" ")
             self.download()
+            print("Done")
 
     def _save(self):
         if self._base_dir is not None and self.processed_path is not None:
             if not os.path.exists(self.processed_path):
                 os.makedirs(self.processed_path, exist_ok=True)
-        print("Saving processed data ...")
+        print(f"Saving processed {self.name} data ...", end=" ")
         self.save()
+        print("Done")
 
     def _load(self):
         # try to load the already processed dataset, if unavailable download
         # and process the raw data and save the processed one
         try:
+            print(f"Loading {self.name} data ...", end=" ")
             self.load()
+            print("Done")
         except FileNotFoundError:
             self._download()
-            print("Processing raw data ...")
+            print(f"Processing {self.name} raw data ...", end=" ")
             self.process()
+            print("Done")
             self._save()
 
     def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
