@@ -129,11 +129,10 @@ class Dataset(ABC):
 
     def _save(self):
         if self._base_dir is not None and self.processed_path is not None:
-            if os.path.exists(self.processed_path):
-                return
-            os.makedirs(self.processed_path, exist_ok=True)
-            print("Saving processed data ...")
-            self.save()
+            if not os.path.exists(self.processed_path):
+                os.makedirs(self.processed_path, exist_ok=True)
+        print("Saving processed data ...")
+        self.save()
 
     def _load(self):
         # try to load the already processed dataset, if unavailable download

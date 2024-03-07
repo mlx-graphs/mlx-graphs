@@ -168,6 +168,19 @@ class SuperPixelDataset(Dataset):
             return 28
         return 32
 
+    @property
+    def processed_path(self) -> str:
+        # processed path includes split and ude_features
+        return os.path.expanduser(
+            os.path.join(
+                self._base_dir,
+                self.name,
+                "processed",
+                self.split,
+                "use_features_" + str(self.use_features),
+            )
+        )
+
     def download(self):
         file_path = os.path.join(self.raw_path, "superpixels.zip")
         path = download(self._url, path=file_path)
