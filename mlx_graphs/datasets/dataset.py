@@ -105,16 +105,16 @@ class Dataset(ABC):
 
     @abstractmethod
     def process(self):
-        """Process the dataset and construct self.graphs"""
+        """Process the dataset and store graphs in ``self.graphs``"""
         pass
 
     def save(self):
-        """Save self.graphs"""
+        """Save the processed dataset"""
         with open(os.path.join(self.processed_path, "graphs.pkl"), "wb") as f:
             pickle.dump(self.graphs, f)
 
     def load(self):
-        """Load self.graphs"""
+        """Load the processed dataset"""
         with open(os.path.join(self.processed_path, "graphs.pkl"), "rb") as f:
             obj = pickle.load(f)
             self.graphs = obj
