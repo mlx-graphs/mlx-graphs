@@ -1,5 +1,6 @@
 import copy
 import os
+import pickle
 from abc import ABC, abstractmethod
 from typing import Literal, Optional, Sequence, Union
 
@@ -15,7 +16,9 @@ DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 class Dataset(ABC):
     """
     Base dataset class. ``download`` and ``process`` methods must be
-    implemented by children classes.
+    implemented by children classes. The ``save`` and ``load`` methods save and load
+    only the processed ``self.graphs`` attribute by default. You may want to
+    override them to store/load additional processed attributes.
 
     Graph data within the dataset should be stored in ``self.graphs`` as
     a List[GraphData]. The creation and preprocessing of this list of graphs
@@ -102,19 +105,46 @@ class Dataset(ABC):
 
     @abstractmethod
     def process(self):
-        """Process the dataset and possibly save it at `self.processed_path`"""
+        """Process the dataset and construct self.graphs"""
         pass
+
+    def save(self):
+        """Save self.graphs"""
+        with open(os.path.join(self.processed_path, "graphs.pkl"), "wb") as f:
+            pickle.dump(self.graphs, f)
+
+    def load(self):
+        """Load self.graphs"""
+        with open(os.path.join(self.processed_path, "graphs.pkl"), "rb") as f:
+            obj = pickle.load(f)
+            self.graphs = obj
 
     def _download(self):
         if self._base_dir is not None and self.raw_path is not None:
             if os.path.exists(self.raw_path):
                 return
             os.makedirs(self.raw_path, exist_ok=True)
+            print("Downloading raw data ...")
             self.download()
 
+    def _save(self):
+        if self._base_dir is not None and self.processed_path is not None:
+            if os.path.exists(self.processed_path):
+                return
+            os.makedirs(self.processed_path, exist_ok=True)
+            print("Saving processed data ...")
+            self.save()
+
     def _load(self):
-        self._download()
-        self.process()
+        # try to load the already processed dataset, if unavailable download
+        # and process the raw data and save the processed one
+        try:
+            self.load()
+        except FileNotFoundError:
+            self._download()
+            print("Processing raw data ...")
+            self.process()
+            self._save()
 
     def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
         flattened_labels = [

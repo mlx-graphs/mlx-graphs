@@ -2,6 +2,7 @@ import os
 from typing import Optional
 
 import mlx.core as mx
+from tqdm import tqdm
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
@@ -48,7 +49,7 @@ class QM7bDataset(Dataset):
         features = mx.array(data["X"].tolist())
         num_graphs = labels.shape[0]
         graphs = []
-        for i in range(num_graphs):
+        for i in tqdm(range(num_graphs)):
             edge_index, edge_features = to_sparse_adjacency_matrix(features[i])
             graphs.append(
                 GraphData(
@@ -58,9 +59,3 @@ class QM7bDataset(Dataset):
                 )
             )
         self.graphs = graphs
-
-        # # currently skipping saving as mlx arrays don't work with pickle
-        # assert (
-        #     self.processed_path is not None
-        # ), "Unable to access/create the self.processed_path"
-        # save_graphs(self.processed_path, self.graphs)
