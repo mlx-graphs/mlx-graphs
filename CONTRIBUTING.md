@@ -20,6 +20,7 @@ For every feature request, you are welcome to submit a pull request to help!
 ## Asking Questions
 Please use [Discussions](https://github.com/mlx-graphs/mlx-graphs/discussions) to ask questions instead of issues.
 GitHub issues are not the appropriate place to debug your specific project, but should be reserved for filing bugs and feature requests.
+To chat and share random questions with the community, we recommend to join our [Discord server](https://discord.gg/K3mWFCxxM7).
 
 ## Pull Requests
 When you submit a pull request, you'll be presented with a template to fill with a description of your contribution and checks on whether you added tests and documentation. Please fill all the parts.
