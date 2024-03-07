@@ -27,7 +27,7 @@ To open a PR:
 - Fork the repo and follow the [local installation guidelines](https://github.com/mlx-graphs/mlx-graphs?tab=readme-ov-file#contributing).
 - Add your contribution and submit a pull request to the repo.
 - If you've added code that should be tested, add tests.
-- Update the necessary documentation
+- Update the necessary documentation.
 - If a change is likely to impact efficiency, run some of the benchmarks before
    and after the change.
 - Run tests locally to make sure you're not introducing breaking changes.
