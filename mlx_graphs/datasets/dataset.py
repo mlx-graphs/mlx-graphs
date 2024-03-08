@@ -1,7 +1,7 @@
 import copy
 import os
 from abc import ABC, abstractmethod
-from typing import Literal, Optional, Sequence, Union
+from typing import Literal, Optional, Sequence, Union, Callable
 
 import mlx.core as mx
 import numpy as np
@@ -25,15 +25,20 @@ class Dataset(ABC):
         name: name of the dataset
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
+        transform (callable, optional): A function/transform that
+            transforms a `GraphData`` object during the `__getitem__`
+            call. By default, no transformation is applied.
     """
 
     def __init__(
         self,
         name: str,
         base_dir: Optional[str] = None,
+        transform: Optional[Callable] = None,
     ):
         self._name = name
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
+        self.transform = transform
 
         self.graphs: list[GraphData] = []
         self._load()
@@ -159,7 +164,12 @@ class Dataset(ABC):
             isinstance(idx, mx.array) and idx.ndim == 0  # type: ignore
         ):
             index = indices[idx]  # type:ignore - idx here is a singleton
-            return self.graphs[index]
+            data = self.graphs[index]
+
+            if self.transform is not None:
+                data = self.transform(data)
+
+            return data
 
         if isinstance(idx, slice):
             indices = indices[idx]
@@ -184,7 +194,10 @@ class Dataset(ABC):
             )
 
         dataset = copy.copy(self)
-        dataset.graphs = [self.graphs[i] for i in indices]
+        graphs = [self.graphs[i] for i in indices]
+        if self.transform is not None:
+            graphs = [self.transform(g) for g in graphs]
+        dataset.graphs = graphs
         return dataset
 
     def __repr__(self):
