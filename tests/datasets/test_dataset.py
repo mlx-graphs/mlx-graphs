@@ -1,3 +1,7 @@
+import os
+import pickle
+import shutil
+
 import mlx.core as mx
 import numpy as np
 import pytest
@@ -22,14 +26,20 @@ def test_dataset_properties():
         edge_labels=mx.ones((10, 1)),
     )
 
+    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
+    shutil.rmtree(path, ignore_errors=True)
+
     class Dataset1(Dataset):
+        def __init__(self):
+            super().__init__("test_dataset", path)
+
         def download(self):
             pass
 
         def process(self):
             self.graphs = [data]
 
-    dataset = Dataset1("name")
+    dataset = Dataset1()
 
     assert dataset.num_node_features == 5
     assert dataset.num_edge_features == 0
@@ -61,3 +71,12 @@ def test_dataset_properties():
     assert dataset.num_edge_classes == 0
     assert dataset.num_node_classes == 0
     assert dataset.num_graph_classes == 0
+
+    # test saved files
+    processed_file_name = os.path.join(path, "test_dataset/processed/graphs.pkl")
+    assert os.path.exists(processed_file_name)
+
+    with open(processed_file_name, "rb") as f:
+        saved_graphs = pickle.load(f)
+        assert mx.array_equal(saved_graphs[0].node_features, data.node_features)
+    shutil.rmtree(path)

@@ -1,4 +1,4 @@
-import os.path as osp
+import os
 import warnings
 from itertools import repeat
 from typing import List, Literal, Optional, get_args
@@ -22,7 +22,7 @@ PLANETOID_NAMES = Literal["cora", "citeseer", "pubmed"]
 PLANETOID_SPLITS = Literal["public", "full", "geom-gcn"]
 
 
-class Planetoid(Dataset):
+class PlanetoidDataset(Dataset):
     """The citation network datasets :obj:`"Cora"`, :obj:`"CiteSeer"` and
     :obj:`"PubMed"` from the `"Revisiting Semi-Supervised Learning with Graph
     Embeddings" <https://arxiv.org/abs/1603.08861>`_ paper.
@@ -95,9 +95,30 @@ class Planetoid(Dataset):
             data.train_mask = mx.where(data.val_mask | data.test_mask, False, True)
 
     @property
+    def raw_path(self) -> str:
+        # raw path includes split
+        return os.path.join(
+            f"{super(self.__class__, self).raw_path}",
+            self.split,
+        )
+
+    @property
+    def processed_path(self) -> str:
+        # processed path includes split and presence of self loops
+        return os.path.join(
+            f"{super(self.__class__, self).processed_path}",
+            self.split,
+            "self_loops_" + str(self.without_self_loops),
+        )
+
+    @property
     def raw_file_names(self) -> List[str]:
         names = ["x", "tx", "allx", "y", "ty", "ally", "graph", "test.index"]
         return [f"ind.{self.name.lower()}.{name}" for name in names]
+
+    @property
+    def _processed_file_name(self):
+        return f"{self.name}_{self.split}_{self.without_self_loops}_graphs.pkl"
 
     def download(self):
         for name in self.raw_file_names:
@@ -119,7 +140,7 @@ class Planetoid(Dataset):
             train_masks, val_masks, test_masks = [], [], []
             for i in range(10):
                 name = f"{self.name.lower()}_split_0.6_0.2_{i}.npz"
-                splits = np.load(osp.join(self.raw_path, name))
+                splits = np.load(os.path.join(self.raw_path, name))
                 train_masks.append(mx.array(splits["train_mask"]))
                 val_masks.append(mx.array(splits["val_mask"]))
                 test_masks.append(mx.array(splits["test_mask"]))
@@ -181,7 +202,7 @@ def read_planetoid_data(
 
 
 def read_file(folder: str, prefix: str, name: str) -> mx.array:
-    path = osp.join(folder, name)
+    path = os.path.join(folder, name)
     prefix = prefix.lower()
 
     if name == f"ind.{prefix}.test.index":
