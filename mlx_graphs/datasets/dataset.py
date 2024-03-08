@@ -1,7 +1,7 @@
 import copy
 import os
 from abc import ABC, abstractmethod
-from typing import Literal, Optional, Sequence, Union, Callable
+from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
