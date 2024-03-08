@@ -4,7 +4,7 @@ import shutil
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.datasets import Planetoid
+from mlx_graphs.datasets import PlanetoidDataset
 from mlx_graphs.loaders import Dataloader
 
 
@@ -26,7 +26,7 @@ def test_planetoid_cora_dataset(dataset_name, split):
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
     shutil.rmtree(path, ignore_errors=True)
 
-    dataset = Planetoid(dataset_name, base_dir=path, split=split)
+    dataset = PlanetoidDataset(dataset_name, base_dir=path, split=split)
     dataset_torch = Planetoid_torch(path, dataset_name, split=split)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
