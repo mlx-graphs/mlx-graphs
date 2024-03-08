@@ -28,15 +28,6 @@ def sample_nodes(
 
     """
 
-    if not isinstance(num_neighbors, list):
-        try:
-            num_neighbors = list(num_neighbors)
-        except TypeError:
-            raise ValueError("num_neighbors must be a list.")
-
-    if not num_neighbors:
-        raise ValueError("num_neighbors cannot be an empty list.")
-
     sampled_edges = []
     sampled_edges_indices = []
     # Will include all unique nodes encountered
@@ -91,38 +82,66 @@ def sample_nodes(
 def sampler(
     graph: GraphData, input_nodes: List[int], num_neighbors: List[int], batch_size: int
 ) -> List[GraphData]:
-    """Function that samples subgraphs from a graph using Neighbor Sampling strategy.
+    """Function that samples subgraphs from a graph using
+    Neighbor Sampling strategy with batching."""
 
-    Args:
-        graph : Original `GraphData` object to sample from.
-        input_nodes : seed_nodes to take into consideration.
-        num_neighbors : number of neighbors to sample for each hop.
-        batch_size : number of seed nodes to take into consideration
-        to build a computational graph for `batch_size` number of seed nodes.
+    if not isinstance(graph, GraphData):
+        raise ValueError("graph must be a GraphData object")
 
-    Returns:
-        list of samples for each seed node.
-    """
+    if not isinstance(num_neighbors, list):
+        try:
+            num_neighbors = list(num_neighbors)
+        except TypeError:
+            raise ValueError("num_neighbors must be a list.")
 
-    graphs = []
-    for seed_node in input_nodes:
-        sampled_edges, n_id, e_id, input_node = sample_nodes(
-            edge_index=np.array(graph.edge_index),
-            num_neighbors=num_neighbors,
-            input_node=seed_node,
-        )
-        n_id = [int(id_) for id_ in n_id]
-        subgraph_node_features = graph.node_features[mx.array(n_id)]
+    if not num_neighbors:
+        raise ValueError("num_neighbors cannot be an empty list.")
+
+    if not isinstance(input_nodes, list):
+        try:
+            input_nodes = list(input_nodes)
+        except TypeError:
+            raise ValueError("input_nodes must be a list.")
+
+    if not input_nodes:
+        raise ValueError("input_nodes cannot be an empty list.")
+
+    batched_graphs = []
+
+    for i in range(0, len(input_nodes), batch_size):
+        batch_nodes = input_nodes[i : i + batch_size]
+
+        # lists to store aggregated values for the current batch
+        batch_sampled_edges = np.empty([2, 0])
+        batch_n_id = []
+        batch_e_id = []
+        batch_input_node = []
+
+        for seed_node in batch_nodes:
+            sampled_edges, n_id, e_id, input_node = sample_nodes(
+                edge_index=np.array(graph.edge_index),
+                num_neighbors=num_neighbors,
+                input_node=seed_node,
+            )
+
+            batch_sampled_edges = np.append(batch_sampled_edges, sampled_edges, axis=1)
+            batch_n_id.extend(n_id)
+            batch_e_id.extend(e_id)
+            batch_input_node.append(input_node)
+
+        batch_n_id = [int(id_) for id_ in batch_n_id]
+        subgraph_node_features = graph.node_features[mx.array(batch_n_id)]
         subgraph = GraphData(
-            edge_index=mx.array(sampled_edges),
+            edge_index=mx.array(batch_sampled_edges),
             node_features=subgraph_node_features,
-            n_id=mx.array(n_id),
+            n_id=mx.array(batch_n_id),
             e_id=mx.array(e_id),
             input_nodes=mx.array(input_node),
         )
-        graphs.append(subgraph)
 
-    return graphs
+        batched_graphs.append(subgraph)
+
+    return batched_graphs
 
 
 def collate_subgraphs(subgraphs: List[GraphData], batch_size: int, **kwargs):
