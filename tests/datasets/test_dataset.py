@@ -109,3 +109,5 @@ def test_dataset_transform():
 
     for i in range(len(dataset)):
         assert dataset[i].feat == "test_transform"
+
+    shutil.rmtree(path)
