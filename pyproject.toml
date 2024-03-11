@@ -9,7 +9,7 @@ description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
 license = {file = "LICENSE"}
-requires-python = ">= 3.8"
+requires-python = ">= 3.10"
 classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
