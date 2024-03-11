@@ -113,7 +113,7 @@ def sampler(
 
         # lists to store aggregated values for the current batch
         batch_sampled_edges = np.empty([2, 0])
-        batch_n_id = []
+        batch_n_id = np.empty([1, 0], dtype=int)
         batch_e_id = []
         batch_input_node = []
 
@@ -125,11 +125,10 @@ def sampler(
             )
 
             batch_sampled_edges = np.append(batch_sampled_edges, sampled_edges, axis=1)
-            batch_n_id.extend(n_id)
+            batch_n_id = np.append(batch_n_id, n_id)
             batch_e_id.extend(e_id)
             batch_input_node.append(input_node)
 
-        batch_n_id = [int(id_) for id_ in batch_n_id]
         subgraph_node_features = graph.node_features[mx.array(batch_n_id)]
         subgraph = GraphData(
             edge_index=mx.array(batch_sampled_edges),
