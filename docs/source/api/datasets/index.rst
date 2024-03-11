@@ -8,11 +8,17 @@ Datasets
 
 .. autosummary::
 	:toctree: _autosummary
-	:template: datasets-class-template.rst
+	:template: dataset-class-template.rst
 
 	Dataset
+
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: datasets-class-template.rst
+
 	KarateClubDataset
-	Planetoid
+	PlanetoidDataset
 	QM7bDataset
 	TUDataset
 	SuperPixelDataset
