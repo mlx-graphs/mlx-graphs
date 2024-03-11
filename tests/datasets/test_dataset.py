@@ -61,3 +61,26 @@ def test_dataset_properties():
     assert dataset.num_edge_classes == 0
     assert dataset.num_node_classes == 0
     assert dataset.num_graph_classes == 0
+
+
+def test_dataset_transform():
+    data = [
+        GraphData(node_features=mx.ones((10, 5)), edge_labels=mx.ones((10, 1)))
+        for _ in range(3)
+    ]
+
+    def custom_transform(graph):
+        graph.feat = "test_transform"
+        return graph
+
+    class Dataset1(Dataset):
+        def download(self):
+            pass
+
+        def process(self):
+            self.graphs = data
+
+    dataset = Dataset1("name", transform=custom_transform)
+
+    for i in range(len(dataset)):
+        assert dataset[i].feat == "test_transform"
