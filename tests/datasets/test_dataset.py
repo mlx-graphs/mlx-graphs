@@ -83,7 +83,7 @@ def test_dataset_properties():
 
 
 def test_dataset_transform():
-    data = [
+    data_list = [
         GraphData(node_features=mx.ones((10, 5)), edge_labels=mx.ones((10, 1)))
         for _ in range(3)
     ]
@@ -92,14 +92,20 @@ def test_dataset_transform():
         graph.feat = "test_transform"
         return graph
 
+    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
+    shutil.rmtree(path, ignore_errors=True)
+
     class Dataset1(Dataset):
+        def __init__(self, transform):
+            super().__init__("test_dataset", path, transform=transform)
+
         def download(self):
             pass
 
         def process(self):
-            self.graphs = data
+            self.graphs = data_list
 
-    dataset = Dataset1("name", transform=custom_transform)
+    dataset = Dataset1(custom_transform)
 
     for i in range(len(dataset)):
         assert dataset[i].feat == "test_transform"
