@@ -2,7 +2,7 @@ import mlx.core as mx
 import pytest
 
 from mlx_graphs.data import GraphData
-from mlx_graphs.sampler.neighbor_sampler import sampler
+from mlx_graphs.sampling.neighbor_sampler import sampler
 
 
 def test_sampler():
