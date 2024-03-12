@@ -112,9 +112,10 @@ pip install -e '.[docs]'
 For dev purposes you may want to install the current version of `mlx` via `pip install git+https://github.com/ml-explore/mlx.git`
 
 ### Testing
-We encourage to write tests for all components. CI is currently not in place as runners with Apple Silicon are required.
+We encourage to write tests for all components.
 Please run `pytest` to ensure breaking changes are not introduced.
 
+> Note: CI is in place to automatically run tests upon opening a PR.
 
 ### Pre-commit hooks (optional)
 To ensure code quality you can run [pre-commit](https://pre-commit.com) hooks. Simply install them by running
