@@ -28,9 +28,10 @@ class Dataset(ABC):
         name: name of the dataset
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
-        transform (callable, optional): A function/transform that
-            transforms a `GraphData`` object during the `__getitem__`
-            call. By default, no transformation is applied.
+        transform: A function/transform that takes in a ``GraphData`` object and returns
+            a transformed version. The transformation is applied before every access,
+            i.e., during the ``__getitem__`` call.
+            By default, no transformation is applied.
     """
 
     def __init__(
