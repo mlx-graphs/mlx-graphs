@@ -112,7 +112,7 @@ def sampler(
         batch_nodes = input_nodes[i : i + batch_size]
 
         # lists to store aggregated values for the current batch
-        batch_sampled_edges = np.empty([2, 0])
+        batch_sampled_edges = np.empty([2, 0], dtype=int)
         batch_n_id = np.empty([1, 0], dtype=int)
         batch_e_id = []
         batch_input_node = []
@@ -123,7 +123,8 @@ def sampler(
                 num_neighbors=num_neighbors,
                 input_node=seed_node,
             )
-
+            if sampled_edges.size == 0:
+                sampled_edges = np.empty([2, 0], dtype=int)
             batch_sampled_edges = np.append(batch_sampled_edges, sampled_edges, axis=1)
             batch_n_id = np.append(batch_n_id, n_id)
             batch_e_id.extend(e_id)
