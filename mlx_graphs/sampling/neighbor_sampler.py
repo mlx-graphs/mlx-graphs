@@ -7,12 +7,9 @@ from mlx_graphs.data import GraphData
 
 
 def sample_nodes(
-    edge_index: np.ndarray,
-    num_neighbors: List[int],
-    input_node: int = None,
-) -> Tuple[np.array, np.array, np.array, np.array]:
-    r"""GraphSage neighbor sampler implementation.
-
+    edge_index: np.ndarray, num_neighbors: List[int], input_node: int
+) -> Tuple[np.array, List[int], List[int], int]:
+    """GraphSage neighbor sampler implementation.
 
     Args:
         edge_index : the edge index representing the original graph
@@ -27,56 +24,46 @@ def sample_nodes(
         input_nodes : a reference to the seed nodes.
 
     """
-
     sampled_edges = []
     sampled_edges_indices = []
-    # Will include all unique nodes encountered
-    n_id = set([input_node])
-    e_id = []
+    n_id = set([input_node])  # Will include all unique nodes encountered
     visited_nodes = set([input_node])
-    current_layer_nodes = [input_node]
-
-    structured_edge_index = np.core.records.fromarrays(
-        edge_index, names="source, target", formats="i8, i8"
-    )
+    current_layer_nodes = np.array([input_node], dtype=np.int32)
 
     for num in num_neighbors:
-        # to collect unique nodes found in this layer
         next_layer_nodes = set()
-
         for node in current_layer_nodes:
-            # Filter edges starting from current node, avoiding revisited nodes
-            mask = (structured_edge_index.source == node) & (
-                ~np.isin(structured_edge_index.target, list(visited_nodes))
+            # Find indices of outgoing edges from the current node
+            indices = np.where(edge_index[0] == node)[0]
+            possible_targets = edge_index[1][indices]
+
+            # Filter out already visited nodes
+            targets = np.setdiff1d(
+                possible_targets, np.array(list(visited_nodes), dtype=np.int32)
             )
-            possible_edges_masked_indices = np.where(mask)[0]
-            possible_edges = structured_edge_index[mask]
 
-            num_edges_to_select = min(len(possible_edges), num)
-            if num_edges_to_select > 0:
-                selected_indices = np.random.choice(
-                    len(possible_edges), size=num_edges_to_select, replace=False
+            if len(targets) > 0:
+                num_edges_to_select = min(len(targets), num)
+                selected_targets_idx = np.random.choice(
+                    range(len(targets)), size=num_edges_to_select, replace=False
                 )
-                selected_edges = possible_edges[selected_indices]
+                selected_targets = targets[selected_targets_idx]
+                selected_indices = indices[selected_targets_idx]
 
-                original_indices = possible_edges_masked_indices[selected_indices]
+                next_layer_nodes.update(selected_targets)
+                visited_nodes.update(selected_targets)
+                sampled_edges_indices.extend(selected_indices.tolist())
 
-                next_layer_nodes.update(selected_edges["target"])
-                sampled_edges.extend(selected_edges.tolist())
-                sampled_edges_indices.extend(original_indices.tolist())
+                for target in selected_targets:
+                    sampled_edges.append([node, target])
 
-                visited_nodes.update(selected_edges["target"])
-
-        # nodes to process in next layer
-        current_layer_nodes = np.array(list(next_layer_nodes - n_id), dtype=int)
+        current_layer_nodes = np.array(list(next_layer_nodes - n_id), dtype=np.int32)
         n_id.update(next_layer_nodes)
 
-    sampled_edges_array = np.array(sampled_edges, dtype=int).T
-    e_id = sampled_edges_indices
-
+    sampled_edges_array = np.array(sampled_edges).T
     n_id_list = list(n_id)
 
-    return sampled_edges_array, n_id_list, e_id, input_node
+    return sampled_edges_array, n_id_list, sampled_edges_indices, input_node
 
 
 def sampler(
