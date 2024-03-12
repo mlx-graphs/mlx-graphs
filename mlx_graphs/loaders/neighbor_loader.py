@@ -4,7 +4,7 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import GraphData
-from mlx_graphs.sampler.neighbor_sampler import sample_nodes
+from mlx_graphs.sampling.neighbor_sampler import sample_nodes
 
 
 class NeighborLoader:
