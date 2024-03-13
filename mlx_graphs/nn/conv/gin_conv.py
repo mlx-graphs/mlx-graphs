@@ -2,6 +2,7 @@ from typing import Optional
 
 import mlx.core as mx
 import mlx.nn as nn
+from mlx_graphs.nn.linear import Linear
 
 from mlx_graphs.nn.message_passing import MessagePassing
 
@@ -33,6 +34,7 @@ class GINConv(MessagePassing):
         from mlx_graphs.nn import GINConv
 
         node_feat_dim = 16
+        edge_feat_dim = 10
         out_feat_dim = 32
 
         mlp = nn.Sequential(
@@ -40,14 +42,24 @@ class GINConv(MessagePassing):
             nn.ReLU(),
             nn.Linear(node_feat_dim * 2, out_feat_dim),
         )
+
+        # original GINConv for node features
+
         conv = GINConv(mlp)
 
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
         node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
 
-        h = conv(edge_index, node_features)
+        h1 = conv(edge_index, node_features)
 
-        >>> h
+        # advanced GINConv including edge features:
+
+        conv = GINConv(mlp, edge_features_dim=edge_feat_dim, node_features_dim=node_feat_dim)
+        edge_features = mx.random.uniform(low=0, high=1, shape=(5, edge_feat_dim))
+
+        h2 = conv(edge_index, node_features, edge_features)
+
+        >>> h1
         array([[-0.536501, 0.154826, 0.745569, ..., 0.31547, -0.0962588, -0.108504],
             [-0.415889, -0.0498145, 0.597379, ..., 0.194553, -0.251498, -0.207561],
             [-0.119966, -0.0159533, 0.276559, ..., 0.0258303, -0.194533, -0.15515],
@@ -61,6 +73,9 @@ class GINConv(MessagePassing):
         mlp: nn.Module,
         eps: float = 0.0,
         learn_eps: bool = False,
+        node_features_dim: Optional[int] = None,
+        edge_features_dim: Optional[int] = None,
+        use_bias: Optional[bool] = True,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
@@ -69,10 +84,17 @@ class GINConv(MessagePassing):
         self.mlp = mlp
         self.eps = mx.array([eps]) if learn_eps else eps
 
+        if edge_features_dim is not None:
+            self.edge_projection = Linear(
+                edge_features_dim, node_features_dim, bias=use_bias
+            )
+
+
     def __call__(
         self,
         edge_index: mx.array,
         node_features: mx.array,
+        edge_features: Optional[mx.array] = None,
         edge_weights: Optional[mx.array] = None,
     ) -> mx.array:
         """Computes the forward pass of GINConv.
@@ -80,6 +102,7 @@ class GINConv(MessagePassing):
         Args:
             edge_index: Input edge index of shape `[2, num_edges]`
             node_features: Input node features
+            edge_features: Input edge features. Defautl: ``None``
             edge_weights: Edge weights leveraged in message passing. Default: ``None``
 
         Returns:
@@ -88,13 +111,19 @@ class GINConv(MessagePassing):
         if isinstance(node_features, mx.array):
             node_features = (node_features, node_features)
 
+        if 'edge_projection' in self:
+            edge_features = self.edge_projection(edge_features)
+        
         dst_features = node_features[1]
 
         aggr_features = self.propagate(
             edge_index=edge_index,
             node_features=node_features,
-            message_kwargs={"edge_weights": edge_weights},
+            message_kwargs={"edge_weights": edge_weights,
+                            "edge_features": edge_features},
         )
+        if 'edge_projection' in self:
+            aggr_features += edge_features
         node_features = self.mlp(aggr_features + (1 + self.eps) * dst_features)
 
         return node_features
