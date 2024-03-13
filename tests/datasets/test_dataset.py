@@ -80,3 +80,34 @@ def test_dataset_properties():
         saved_graphs = pickle.load(f)
         assert mx.array_equal(saved_graphs[0].node_features, data.node_features)
     shutil.rmtree(path)
+
+
+def test_dataset_transform():
+    data_list = [
+        GraphData(node_features=mx.ones((10, 5)), edge_labels=mx.ones((10, 1)))
+        for _ in range(3)
+    ]
+
+    def custom_transform(graph):
+        graph.feat = "test_transform"
+        return graph
+
+    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
+    shutil.rmtree(path, ignore_errors=True)
+
+    class Dataset1(Dataset):
+        def __init__(self, transform):
+            super().__init__("test_dataset", path, transform=transform)
+
+        def download(self):
+            pass
+
+        def process(self):
+            self.graphs = data_list
+
+    dataset = Dataset1(custom_transform)
+
+    for i in range(len(dataset)):
+        assert dataset[i].feat == "test_transform"
+
+    shutil.rmtree(path)
