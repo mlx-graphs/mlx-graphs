@@ -2,8 +2,8 @@ from typing import Optional
 
 import mlx.core as mx
 import mlx.nn as nn
-from mlx_graphs.nn.linear import Linear
 
+from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing
 
 
@@ -50,21 +50,26 @@ class GINConv(MessagePassing):
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
         node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
 
-        h1 = conv(edge_index, node_features)
-
-        # advanced GINConv including edge features:
-
-        conv = GINConv(mlp, edge_features_dim=edge_feat_dim, node_features_dim=node_feat_dim)
-        edge_features = mx.random.uniform(low=0, high=1, shape=(5, edge_feat_dim))
-
-        h2 = conv(edge_index, node_features, edge_features)
-
-        >>> h1
+        >>> conv(edge_index, node_features)
         array([[-0.536501, 0.154826, 0.745569, ..., 0.31547, -0.0962588, -0.108504],
             [-0.415889, -0.0498145, 0.597379, ..., 0.194553, -0.251498, -0.207561],
             [-0.119966, -0.0159533, 0.276559, ..., 0.0258303, -0.194533, -0.15515],
             [-0.21477, -0.169684, 0.485867, ..., 0.0194768, -0.145761, -0.139433],
             [-0.133289, -0.0279559, 0.358095, ..., -0.0443346, -0.11571, -0.114396]],
+            dtype=float32)
+
+        # GINEConv including edge features:
+
+        conv = GINConv(mlp, edge_features_dim=edge_feat_dim,
+            node_features_dim=node_feat_dim)
+        edge_features = mx.random.uniform(low=0, high=1, shape=(5, edge_feat_dim))
+
+        >>> conv(edge_index, node_features, edge_features)
+        array([[-0.175581, 0.67481, -0.260592, ..., -1.13234, -0.631736, 0.572239],
+            [0.0536669, 0.496115, -0.319334, ..., -1.165, -0.573817, 0.495315],
+            [-0.0505168, 0.102068, 0.0221924, ..., -0.516901, -0.331266, 0.317491],
+            [-0.00632942, 0.433597, -0.162906, ..., -0.957552, -0.41922, 0.670711],
+            [-0.119726, 0.173545, 0.0951687, ..., -0.577839, -0.244039, 0.399055]],
             dtype=float32)
     """
 
@@ -89,7 +94,6 @@ class GINConv(MessagePassing):
                 edge_features_dim, node_features_dim, bias=use_bias
             )
 
-
     def __call__(
         self,
         edge_index: mx.array,
@@ -111,19 +115,29 @@ class GINConv(MessagePassing):
         if isinstance(node_features, mx.array):
             node_features = (node_features, node_features)
 
-        if 'edge_projection' in self:
-            edge_features = self.edge_projection(edge_features)
-        
         dst_features = node_features[1]
 
         aggr_features = self.propagate(
             edge_index=edge_index,
             node_features=node_features,
-            message_kwargs={"edge_weights": edge_weights,
-                            "edge_features": edge_features},
+            message_kwargs={
+                "edge_weights": edge_weights,
+                "edge_features": edge_features,
+            },
         )
-        if 'edge_projection' in self:
-            aggr_features += edge_features
         node_features = self.mlp(aggr_features + (1 + self.eps) * dst_features)
 
         return node_features
+
+    def message(
+        self, src_features: mx.array, dst_features: mx.array, **kwargs
+    ) -> mx.array:
+        edge_features = kwargs.get("edge_features", None)
+        if edge_features is not None:
+            # GINEConv
+            if "edge_projection" in self:
+                edge_emb = self.edge_projection(edge_features)
+            return nn.relu(src_features + edge_emb)
+
+        # GINConv
+        return super(self.__class__, self).message(src_features, dst_features, **kwargs)
