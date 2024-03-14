@@ -45,14 +45,14 @@ class EllipticBitcoinDataset(Dataset):
         url = "https://data.pyg.org/datasets/elliptic/"
         for files in self.raw_file_names:
             download(f"{url}{files}.zip", self.raw_path)
-            extract_archive(f"{self.raw_path}/{files}.zip", self.processed_path)
+            extract_archive(f"{self.raw_path}/{files}.zip", f"{self.raw_path}")
 
     def process(self, train=True):
         tx_features = pd.read_csv(
-            f"{self.processed_path}/{self.raw_file_names[0]}", header=None
+            f"{self.raw_path}/{self.raw_file_names[0]}", header=None
         )
-        edge_file = f"{self.processed_path}/{self.raw_file_names[1]}"
-        label_file = f"{self.processed_path}/{self.raw_file_names[2]}"
+        edge_file = f"{self.raw_path}/{self.raw_file_names[1]}"
+        label_file = f"{self.raw_path}/{self.raw_file_names[2]}"
         tx_edges = pd.read_csv(edge_file)
         tx_labels = pd.read_csv(label_file)
 
