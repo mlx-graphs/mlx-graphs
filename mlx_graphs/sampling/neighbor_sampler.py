@@ -30,7 +30,7 @@ def sample_nodes(
     visited_nodes = set([input_node])
     current_layer_nodes = np.array([input_node], dtype=np.int32)
 
-    for num in num_neighbors:
+    for num_hop, num in enumerate(num_neighbors):
         next_layer_nodes = set()
         for node in current_layer_nodes:
             # Find indices of outgoing edges from the current node
@@ -43,12 +43,16 @@ def sample_nodes(
             )
 
             if len(targets) > 0:
-                num_edges_to_select = min(len(targets), num)
-                selected_targets_idx = np.random.choice(
-                    range(len(targets)), size=num_edges_to_select, replace=False
-                )
-                selected_targets = targets[selected_targets_idx]
-                selected_indices = indices[selected_targets_idx]
+                if num == -1:
+                    selected_targets = targets
+                    selected_indices = indices[: len(targets)]
+                else:
+                    num_edges_to_select = min(len(targets), num)
+                    selected_targets_idx = np.random.choice(
+                        range(len(targets)), size=num_edges_to_select, replace=False
+                    )
+                    selected_targets = targets[selected_targets_idx]
+                    selected_indices = indices[selected_targets_idx]
 
                 next_layer_nodes.update(selected_targets)
                 visited_nodes.update(selected_targets)
