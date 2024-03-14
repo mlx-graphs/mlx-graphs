@@ -20,10 +20,18 @@ class GINConv(MessagePassing):
     a custom neural network provided by the user and :math:`\epsilon` is an epsilon
     value either fixed or learned.
 
+    Setting `edge_features_dim` will result in a `GINEConv`, where `edge_features` are
+    expected to be passed in the forward. In this case, edge features are first
+    projectedto the same dimension as node embeddings and are summed, then passed to a
+    relu activation.
+    To use `GINEConv`, setting `node_features_dim` is also required.
+
     Args:
         mlp: Callable :class:`mlx.core.nn.Module` applied on the final node embeddings
         eps: Initial value of the :math:`\epsilon` term. Default: ``0``
         learn_eps: Whether to learn :math:`\epsilon` or not. Default ``False``
+        edge_features_dim: Size of the edge features passed in the GINE layer
+        node_features_dim: Size of the node features (only required if GINE is used)
 
     Example:
 
@@ -80,7 +88,6 @@ class GINConv(MessagePassing):
         learn_eps: bool = False,
         node_features_dim: Optional[int] = None,
         edge_features_dim: Optional[int] = None,
-        use_bias: Optional[bool] = True,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
@@ -91,7 +98,7 @@ class GINConv(MessagePassing):
 
         if edge_features_dim is not None:
             self.edge_projection = Linear(
-                edge_features_dim, node_features_dim, bias=use_bias
+                edge_features_dim, node_features_dim, bias=True
             )
 
     def __call__(
