@@ -18,7 +18,6 @@ classifiers = [
 ]
 dependencies = [
     "mlx==0.6.*; sys_platform == 'darwin'",
-    "pandas==2.0.3",
     "numpy==1.26.3",
     "requests==2.31.0",
     "fsspec==2024.2.0",

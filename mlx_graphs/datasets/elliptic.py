@@ -1,8 +1,8 @@
 from typing import Optional
 
 import mlx.core as mx
-import pandas as pd
-
+import numpy as np
+import shutil
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils import download, extract_archive
@@ -48,39 +48,53 @@ class EllipticBitcoinDataset(Dataset):
             extract_archive(f"{self.raw_path}/{files}.zip", f"{self.raw_path}")
 
     def process(self, train=True):
-        tx_features = pd.read_csv(
-            f"{self.raw_path}/{self.raw_file_names[0]}", header=None
+        tx_features_from_np = np.loadtxt(
+            f"{self.raw_path}/{self.raw_file_names[0]}",
+            dtype=float,
+            delimiter=",",
+            usecols=np.arange(2, 167),
+        )
+        node_ids = np.loadtxt(
+            f"{self.raw_path}/{self.raw_file_names[0]}",
+            dtype=str,
+            delimiter=",",
+            usecols=np.arange(0, 2),
         )
         edge_file = f"{self.raw_path}/{self.raw_file_names[1]}"
         label_file = f"{self.raw_path}/{self.raw_file_names[2]}"
-        tx_edges = pd.read_csv(edge_file)
-        tx_labels = pd.read_csv(label_file)
 
-        # Get the node features ready for preprocessing
-        columns = {0: "txId", 1: "time_step"}
-        tx_features = tx_features.rename(columns=columns)
-        node_features = mx.array(tx_features.loc[:, 2:].values)
+        tx_edges_from_np = np.loadtxt(edge_file, dtype=str, delimiter=",", skiprows=1)
+        tx_labels_from_np = np.loadtxt(label_file, dtype=str, delimiter=",", skiprows=1)
+
+        node_features_np = mx.array(tx_features_from_np)
 
         mapping = {"unknown": 2, "1": 1, "2": 0}
-        tx_labels["class"] = tx_labels["class"].map(mapping)
 
-        y = mx.array(tx_labels["class"].values)
+        tx_labels_from_np_classes = tx_labels_from_np[:, 1]
+        tx_labels_from_np_classes[tx_labels_from_np_classes == "2"] = 0
+        tx_labels_from_np_classes[tx_labels_from_np_classes == "1"] = 1
+        tx_labels_from_np_classes[tx_labels_from_np_classes == "unknown"] = 2
 
-        mapping = {idx: i for i, idx in enumerate(tx_features["txId"].values)}
-        tx_edges.loc[:, "txId1"] = tx_edges["txId1"].map(mapping)
-        tx_edges.loc[:, "txId2"] = tx_edges["txId2"].map(mapping)
-        edge_index = mx.array(tx_edges.values.T)
-        # Timestamp based split:
-        # train_mask: 1 - 34 time_step, test_mask: 35-49 time_step
-        time_step = mx.array(tx_features["time_step"].values)
-        train_mask = (time_step < 35) & (y != 2)
-        test_mask = (time_step >= 35) & (y != 2)
+        mapping = {idx: i for i, idx in enumerate(node_ids[:, 0])}
 
-        print("Train mask values is ", train_mask)
+        tx_labels_from_np_classes = tx_labels_from_np_classes.astype(int)
+        y_numpy = mx.array(tx_labels_from_np_classes.astype(int))
+
+        tx_edges_from_np[:, 0] = np.vectorize(mapping.get)(tx_edges_from_np[:, 0])
+        tx_edges_from_np[:, 1] = np.vectorize(mapping.get)(tx_edges_from_np[:, 1])
+
+        tx_edges_from_np = tx_edges_from_np.astype(int)
+        edge_index_numpy_array = mx.array(tx_edges_from_np.T)
+
+        time_step = mx.array(node_ids[:, 1].astype(int))
+
+        train_mask = (time_step < 35) & (y_numpy != 2)
+        test_mask = (time_step >= 35) & (y_numpy != 2)
+
         graph = GraphData(
-            edge_index=edge_index,
-            node_features=node_features,
-            node_labels=mx.array(tx_labels["class"].values),
+            edge_index=edge_index_numpy_array,
+            node_features=node_features_np,
+            node_labels=y_numpy,
         )
         graph.train_mask = train_mask
         graph.test_mask = test_mask
