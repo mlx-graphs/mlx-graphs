@@ -2,7 +2,7 @@ from typing import Optional
 
 import mlx.core as mx
 import numpy as np
-import shutil
+
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils import download, extract_archive
@@ -25,7 +25,8 @@ class EllipticBitcoinDataset(Dataset):
     The remaining transactions are unknown
 
     Args:
-        Dataset (_type_): _description_
+        base_dir: Directory where to store dataset files. Default is
+            in the local directory ``.mlx_graphs_data/``.
     """
 
     def __init__(self, base_dir: Optional[str] = None):

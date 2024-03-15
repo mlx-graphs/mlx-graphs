@@ -2,13 +2,12 @@ import os
 import shutil
 
 import mlx.core as mx
-import pytest
 
 from mlx_graphs.datasets import EllipticBitcoinDataset
 from mlx_graphs.loaders import Dataloader
 
 
-@pytest.mark.slow
+# @pytest.mark.slow
 def test_elliptic_bitcoin_dataset():
     from torch_geometric.datasets import (
         EllipticBitcoinDataset as EllipticBitcoinDataset_torch,
