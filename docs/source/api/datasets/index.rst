@@ -23,3 +23,4 @@ Datasets
 	TUDataset
 	SuperPixelDataset
 	OGBDataset
+	EllipticBitcoinDataset
