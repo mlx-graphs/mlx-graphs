@@ -1,8 +1,9 @@
 name: build-sphinx-docs
 
 on:
-  release:
-    types: [published]
+  push:
+  # release:
+  #   types: [published]
   workflow_dispatch:
 
 jobs:
@@ -29,8 +30,8 @@ jobs:
         run: |
           cd docs/
           make html
-      - name: Deploy to external repos
-        uses: peaceiris/actions-gh-pages@v3
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: docs/build/html
+      # - name: Deploy to external repos
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: docs/build/html
