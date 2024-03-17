@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.datasets.TUDataset &#8212; mlx-graphs 0.0.4 documentation</title>
+    <title>mlx_graphs.datasets.TUDataset &#8212; mlx-graphs 0.0.5 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=dfd84850"></script>
+    <script src="../../../_static/documentation_options.js?v=6424ca4d"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.4 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.4 documentation - Home"/>`);</script>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.5 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.5 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -191,10 +191,12 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Datasets</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Planetoid.html">mlx_graphs.datasets.Planetoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../loaders/index.html">Loaders</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -434,13 +436,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset"><code class="docutils literal notranslate"><span class="pre">TUDataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.download"><code class="docutils literal notranslate"><span class="pre">TUDataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.process"><code class="docutils literal notranslate"><span class="pre">TUDataset.process()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.processed_path"><code class="docutils literal notranslate"><span class="pre">TUDataset.processed_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.raw_path"><code class="docutils literal notranslate"><span class="pre">TUDataset.raw_path</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset"><code class="docutils literal notranslate"><span class="pre">TUDataset</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -477,41 +473,6 @@ in the local directory <code class="docutils literal notranslate"><span class="p
 </ul>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.TUDataset.download" title="mlx_graphs.datasets.TUDataset.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a>()</p></td>
-<td><p>Download the dataset at <cite>self.raw_path</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.TUDataset.process" title="mlx_graphs.datasets.TUDataset.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>()</p></td>
-<td><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.TUDataset.download">
-<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.TUDataset.download" title="Link to this definition">#</a></dt>
-<dd><p>Download the dataset at <cite>self.raw_path</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.TUDataset.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.TUDataset.process" title="Link to this definition">#</a></dt>
-<dd><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.TUDataset.processed_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">processed_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.TUDataset.processed_path" title="Link to this definition">#</a></dt>
-<dd><p>The path where raw files are stored. Defaults at <cite>&lt;base_dir&gt;/&lt;name&gt;/processed</cite></p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.TUDataset.raw_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.TUDataset.raw_path" title="Link to this definition">#</a></dt>
-<dd><p>The path where raw files are stored. Defaults at <cite>&lt;base_dir&gt;/&lt;name&gt;/raw</cite></p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -561,13 +522,7 @@ in the local directory <code class="docutils literal notranslate"><span class="p
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset"><code class="docutils literal notranslate"><span class="pre">TUDataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.download"><code class="docutils literal notranslate"><span class="pre">TUDataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.process"><code class="docutils literal notranslate"><span class="pre">TUDataset.process()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.processed_path"><code class="docutils literal notranslate"><span class="pre">TUDataset.processed_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset.raw_path"><code class="docutils literal notranslate"><span class="pre">TUDataset.raw_path</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.TUDataset"><code class="docutils literal notranslate"><span class="pre">TUDataset</span></code></a></li>
 </ul>
   </nav></div>
 

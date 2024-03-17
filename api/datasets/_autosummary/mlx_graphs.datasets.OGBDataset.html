@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.datasets.Planetoid &#8212; mlx-graphs 0.0.4 documentation</title>
+    <title>mlx_graphs.datasets.OGBDataset &#8212; mlx-graphs 0.0.5 documentation</title>
   
   
   
@@ -38,16 +38,16 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=dfd84850"></script>
+    <script src="../../../_static/documentation_options.js?v=6424ca4d"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'api/datasets/_autosummary/mlx_graphs.datasets.Planetoid';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mlx_graphs.datasets.QM7bDataset" href="mlx_graphs.datasets.QM7bDataset.html" />
-    <link rel="prev" title="mlx_graphs.datasets.KarateClubDataset" href="mlx_graphs.datasets.KarateClubDataset.html" />
+    <link rel="next" title="mlx_graphs.datasets.EllipticBitcoinDataset" href="mlx_graphs.datasets.EllipticBitcoinDataset.html" />
+    <link rel="prev" title="mlx_graphs.datasets.SuperPixelDataset" href="mlx_graphs.datasets.SuperPixelDataset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.4 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.4 documentation - Home"/>`);</script>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.5 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.5 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -191,10 +191,12 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Datasets</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.Planetoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../loaders/index.html">Loaders</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -340,7 +342,7 @@
       
       
       
-      <li><a href="../../../_sources/api/datasets/_autosummary/mlx_graphs.datasets.Planetoid.rst" target="_blank"
+      <li><a href="../../../_sources/api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.rst" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -424,7 +426,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>mlx_graphs.datasets.Planetoid</h1>
+    <h1>mlx_graphs.datasets.OGBDataset</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -434,11 +436,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid"><code class="docutils literal notranslate"><span class="pre">Planetoid</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid.download"><code class="docutils literal notranslate"><span class="pre">Planetoid.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid.process"><code class="docutils literal notranslate"><span class="pre">Planetoid.process()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.OGBDataset"><code class="docutils literal notranslate"><span class="pre">OGBDataset</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -450,80 +448,56 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mlx-graphs-datasets-planetoid">
-<h1>mlx_graphs.datasets.Planetoid<a class="headerlink" href="#mlx-graphs-datasets-planetoid" title="Link to this heading">#</a></h1>
+  <section id="mlx-graphs-datasets-ogbdataset">
+<h1>mlx_graphs.datasets.OGBDataset<a class="headerlink" href="#mlx-graphs-datasets-ogbdataset" title="Link to this heading">#</a></h1>
 <dl class="py class">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Planetoid">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.datasets.</span></span><span class="sig-name descname"><span class="pre">Planetoid</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'cora'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'citeseer'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'pubmed'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'public'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'full'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'geom-gcn'</span></span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">'public'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">without_self_loops</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.Planetoid" title="Link to this definition">#</a></dt>
+<dt class="sig sig-object py" id="mlx_graphs.datasets.OGBDataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.datasets.</span></span><span class="sig-name descname"><span class="pre">OGBDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'ogbn-products'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbn-proteins'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbn-arxiv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbn-papers100M'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbl-ppa'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbl-collab'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbl-ddi'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbl-citation2'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbl-vessel'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbg-molhiv'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbg-molpcba'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbg-ppa'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'ogbg-code2'</span></span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">split</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'train'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'val'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'test'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.OGBDataset" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset" title="mlx_graphs.datasets.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a></p>
-<p>The citation network datasets <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CiteSeer&quot;</span></code> and
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;PubMed&quot;</span></code> from the <a class="reference external" href="https://arxiv.org/abs/1603.08861">“Revisiting Semi-Supervised Learning with Graph
-Embeddings”</a> paper.
-Nodes represent documents and edges represent citation links.
-Training, validation and test splits are given by binary masks.</p>
-<p>This dataset follows a similar implementation as in <a class="reference external" href="https://pytorch-geometric.readthedocs.io/en/latest/generated/torch_geometric.datasets.Planetoid.html">PyG</a>.</p>
+<p>Datasets from the <a class="reference external" href="https://ogb.stanford.edu">Open Graph Benchmark (OGB)</a>
+collection of realistic, large-scale, and diverse benchmark datasets for machine
+learning on graphs.</p>
+<p>Datasets belongs to three fundamental graph machine learning task categories:
+predicting the properties of nodes, links, and graphs.
+Node property prediction datasets consist of a single graph with three additional
+properties: <cite>train_mask</cite>, <cite>val_mask</cite> and <cite>test_mask</cite> specifying the masks for the
+train, validation and test splits.
+Link property prediction datasets also consist of a single graphs with three
+additional properties: <cite>train_edge_index</cite>, <cite>val_edge_index</cite> and <cite>test_edge_index</cite>,
+specifying the edges to be considered for training, validation and testing.
+Graph property prediction datasets consists of multiple graphs. The desired split
+can be specified via the <cite>split</cite> arg.</p>
+<p>See <a class="reference external" href="https://ogb.stanford.edu/docs/dataset_overview/">here</a> for further details
+and a list of the available datasets with their descriptions</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'cora'</span></code>, <code class="docutils literal notranslate"><span class="pre">'citeseer'</span></code>, <code class="docutils literal notranslate"><span class="pre">'pubmed'</span></code>]</span>) – The name of the dataset (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CiteSeer&quot;</span></code>,
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;PubMed&quot;</span></code>).</p></li>
-<li><p><strong>split</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><em>str</em></a><em>, </em><em>optional</em>) – <p>The type of dataset split (<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;public&quot;</span></code>,
-<code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;geom-gcn&quot;</span></code>).
-If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;public&quot;</span></code>, the split will be the public fixed split
-from the <a class="reference external" href="https://arxiv.org/abs/1603.08861">“Revisiting Semi-Supervised Learning with Graph
-Embeddings”</a> paper.
-If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;full&quot;</span></code>, all nodes except those in the validation
-and test sets will be used for training (as in the
-<a class="reference external" href="https://arxiv.org/abs/1801.10247">“FastGCN: Fast Learning with Graph Convolutional Networks via
-Importance Sampling”</a> paper).
-If set to <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;geom-gcn&quot;</span></code>, the 10 public fixed splits from the
-<a class="reference external" href="https://openreview.net/forum?id=S1e2agrFvS">“Geom-GCN: Geometric Graph Convolutional Networks”</a> paper are given.</p>
-</p></li>
-<li><p><strong>without_self_loops</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to remove self loops. Default to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p></li>
+<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'ogbn-products'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbn-proteins'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbn-arxiv'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbn-papers100M'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbl-ppa'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbl-collab'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbl-ddi'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbl-citation2'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbl-vessel'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbg-molhiv'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbg-molpcba'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbg-ppa'</span></code>, <code class="docutils literal notranslate"><span class="pre">'ogbg-code2'</span></code>]</span>) – Name of the dataset</p></li>
+<li><p><strong>split</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Literal</span></code></a>[<code class="docutils literal notranslate"><span class="pre">'train'</span></code>, <code class="docutils literal notranslate"><span class="pre">'val'</span></code>, <code class="docutils literal notranslate"><span class="pre">'test'</span></code>]]</span>) – Split of the dataset to load. Thi parameter has effect only on graph
+property prediction dataset. If <cite>None</cite>, the entire dataset is loaded.
+Defaults to <cite>None</cite>.</p></li>
 <li><p><strong>base_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Directory where to store dataset files. Default is
 in the local directory <code class="docutils literal notranslate"><span class="pre">.mlx_graphs_data/</span></code>.</p></li>
 </ul>
 </dd>
 </dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><cite>ogb</cite> needs to be installed to use this dataset</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The ogbn-mag, ogbl-wikikg2 and igbl-biokg and the graphs belonging to the
+largs-scale challenge category are currently not available as
+they require heterogenous graphs which are not yet supported by <cite>mlx-graphs</cite></p>
+</div>
 <p>Example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlx_graphs.datasets</span> <span class="kn">import</span> <span class="n">Planetoid</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mlx_graphs.datasets.ogb_dataset</span> <span class="kn">import</span> <span class="n">OGBDataset</span>
 
-<span class="n">dataset</span> <span class="o">=</span> <span class="n">Planetoid</span><span class="p">(</span><span class="s2">&quot;cora&quot;</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">cora</span><span class="p">(</span><span class="n">num_graphs</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">GraphData</span><span class="p">(</span>
-        <span class="n">edge_index</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">10556</span><span class="p">),</span> <span class="n">int32</span><span class="p">)</span>
-        <span class="n">node_features</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2708</span><span class="p">,</span> <span class="mi">1433</span><span class="p">),</span> <span class="n">float32</span><span class="p">)</span>
-        <span class="n">node_labels</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2708</span><span class="p">,),</span> <span class="n">int32</span><span class="p">)</span>
-        <span class="n">train_mask</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2708</span><span class="p">,),</span> <span class="nb">bool</span><span class="p">)</span>
-        <span class="n">val_mask</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2708</span><span class="p">,),</span> <span class="nb">bool</span><span class="p">)</span>
-        <span class="n">test_mask</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">2708</span><span class="p">,),</span> <span class="nb">bool</span><span class="p">))</span>
+<span class="n">ds</span> <span class="o">=</span> <span class="n">OGBDataset</span><span class="p">(</span><span class="s2">&quot;ogbg-molhiv&quot;</span><span class="p">,</span> <span class="n">split</span><span class="o">=</span><span class="s2">&quot;train&quot;</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">ogbg</span><span class="o">-</span><span class="n">molhiv</span><span class="p">(</span><span class="n">num_graphs</span><span class="o">=</span><span class="mi">32901</span><span class="p">)</span>
 </pre></div>
 </div>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Planetoid.download" title="mlx_graphs.datasets.Planetoid.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a>()</p></td>
-<td><p>Download the dataset at <cite>self.raw_path</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Planetoid.process" title="mlx_graphs.datasets.Planetoid.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>()</p></td>
-<td><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Planetoid.download">
-<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.Planetoid.download" title="Link to this definition">#</a></dt>
-<dd><p>Download the dataset at <cite>self.raw_path</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Planetoid.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.Planetoid.process" title="Link to this definition">#</a></dt>
-<dd><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -540,20 +514,20 @@ in the local directory <code class="docutils literal notranslate"><span class="p
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="mlx_graphs.datasets.KarateClubDataset.html"
+       href="mlx_graphs.datasets.SuperPixelDataset.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mlx_graphs.datasets.KarateClubDataset</p>
+        <p class="prev-next-title">mlx_graphs.datasets.SuperPixelDataset</p>
       </div>
     </a>
     <a class="right-next"
-       href="mlx_graphs.datasets.QM7bDataset.html"
+       href="mlx_graphs.datasets.EllipticBitcoinDataset.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mlx_graphs.datasets.QM7bDataset</p>
+        <p class="prev-next-title">mlx_graphs.datasets.EllipticBitcoinDataset</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -573,11 +547,7 @@ in the local directory <code class="docutils literal notranslate"><span class="p
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid"><code class="docutils literal notranslate"><span class="pre">Planetoid</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid.download"><code class="docutils literal notranslate"><span class="pre">Planetoid.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Planetoid.process"><code class="docutils literal notranslate"><span class="pre">Planetoid.process()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.OGBDataset"><code class="docutils literal notranslate"><span class="pre">OGBDataset</span></code></a></li>
 </ul>
   </nav></div>
 

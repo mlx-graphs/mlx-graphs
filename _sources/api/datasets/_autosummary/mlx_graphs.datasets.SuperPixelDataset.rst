@@ -4,17 +4,4 @@
 .. currentmodule:: mlx_graphs.datasets
 
 .. autoclass:: SuperPixelDataset
-	:members:
 	:show-inheritance:
-
-	
-
-	
-	.. rubric:: Methods
-
-	.. autosummary::
-	
-	     ~SuperPixelDataset.download
-	     ~SuperPixelDataset.process
-	
-	

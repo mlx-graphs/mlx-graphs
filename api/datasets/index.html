@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Datasets &#8212; mlx-graphs 0.0.4 documentation</title>
+    <title>Datasets &#8212; mlx-graphs 0.0.5 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../_static/documentation_options.js?v=dfd84850"></script>
+    <script src="../../_static/documentation_options.js?v=6424ca4d"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.4 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.4 documentation - Home"/>`);</script>
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.5 documentation - Home"/>
+    <script>document.write(`<img src="../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.5 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -191,10 +191,12 @@
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Datasets</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Planetoid.html">mlx_graphs.datasets.Planetoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../loaders/index.html">Loaders</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -440,23 +442,33 @@ document.write(`
 <span id="id1"></span><h1>Datasets<a class="headerlink" href="#datasets" title="Link to this heading">#</a></h1>
 <table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset" title="mlx_graphs.datasets.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a>(name[, base_dir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset" title="mlx_graphs.datasets.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a>(name[, base_dir, transform])</p></td>
 <td><p>Base dataset class.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.KarateClubDataset.html#mlx_graphs.datasets.KarateClubDataset" title="mlx_graphs.datasets.KarateClubDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KarateClubDataset</span></code></a>()</p></td>
+</tbody>
+</table>
+<table class="autosummary longtable table autosummary">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.KarateClubDataset.html#mlx_graphs.datasets.KarateClubDataset" title="mlx_graphs.datasets.KarateClubDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KarateClubDataset</span></code></a>()</p></td>
 <td><p>Zachary's Karate Club netowork dataset from <a class="reference external" href="https://www.jstor.org/stable/3629752">An Information Flow Model for    Conflict and Fission in Small Groups</a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Planetoid.html#mlx_graphs.datasets.Planetoid" title="mlx_graphs.datasets.Planetoid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Planetoid</span></code></a>(name[, split, without_self_loops, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.PlanetoidDataset.html#mlx_graphs.datasets.PlanetoidDataset" title="mlx_graphs.datasets.PlanetoidDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PlanetoidDataset</span></code></a>(name[, split, ...])</p></td>
 <td><p>The citation network datasets <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;Cora&quot;</span></code>, <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;CiteSeer&quot;</span></code> and <code class="xref py py-obj docutils literal notranslate"><span class="pre">&quot;PubMed&quot;</span></code> from the <a class="reference external" href="https://arxiv.org/abs/1603.08861">&quot;Revisiting Semi-Supervised Learning with Graph Embeddings&quot;</a> paper.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.QM7bDataset.html#mlx_graphs.datasets.QM7bDataset" title="mlx_graphs.datasets.QM7bDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QM7bDataset</span></code></a>([base_dir])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.QM7bDataset.html#mlx_graphs.datasets.QM7bDataset" title="mlx_graphs.datasets.QM7bDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QM7bDataset</span></code></a>([base_dir])</p></td>
 <td><p>QM7b dataset from the <a class="reference external" href="https://arxiv.org/abs/1703.00564">&quot;MoleculeNet: A Benchmark for Molecular Machine Learning&quot;</a> paper, consisting of 7,211 molecules with 14 regression targets.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.TUDataset.html#mlx_graphs.datasets.TUDataset" title="mlx_graphs.datasets.TUDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TUDataset</span></code></a>(name[, cleaned, base_dir])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.TUDataset.html#mlx_graphs.datasets.TUDataset" title="mlx_graphs.datasets.TUDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TUDataset</span></code></a>(name[, cleaned, base_dir])</p></td>
 <td><p>A collection of over 120 benchmark datasets for graph classification and regression, made available by TU Dortmund University.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.SuperPixelDataset.html#mlx_graphs.datasets.SuperPixelDataset" title="mlx_graphs.datasets.SuperPixelDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a>(name, split[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.SuperPixelDataset.html#mlx_graphs.datasets.SuperPixelDataset" title="mlx_graphs.datasets.SuperPixelDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a>(name, split[, ...])</p></td>
 <td><p>MNIST and CIFAR10 superpixel datasets for graph classification tasks converted fromt the original MINST and CIFAR10 images.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.OGBDataset.html#mlx_graphs.datasets.OGBDataset" title="mlx_graphs.datasets.OGBDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">OGBDataset</span></code></a>(name[, split, base_dir])</p></td>
+<td><p>Datasets from the <a class="reference external" href="https://ogb.stanford.edu">Open Graph Benchmark (OGB)</a> collection of realistic, large-scale, and diverse benchmark datasets for machine learning on graphs.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html#mlx_graphs.datasets.EllipticBitcoinDataset" title="mlx_graphs.datasets.EllipticBitcoinDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EllipticBitcoinDataset</span></code></a>([base_dir])</p></td>
+<td><p>The Elliptic Bitcoin dataset of Bitcoin transactions from the <a class="reference external" href="https://arxiv.org/abs/1908.02591">&quot;Anti-Money Laundering in Bitcoin: Experimenting with Graph Convolutional Networks for Financial Forensics&quot;</a> paper.</p></td>
 </tr>
 </tbody>
 </table>

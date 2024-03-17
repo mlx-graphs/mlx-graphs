@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.datasets.SuperPixelDataset &#8212; mlx-graphs 0.0.4 documentation</title>
+    <title>mlx_graphs.datasets.SuperPixelDataset &#8212; mlx-graphs 0.0.5 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=dfd84850"></script>
+    <script src="../../../_static/documentation_options.js?v=6424ca4d"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -46,7 +46,7 @@
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Loaders" href="../../loaders/index.html" />
+    <link rel="next" title="mlx_graphs.datasets.OGBDataset" href="mlx_graphs.datasets.OGBDataset.html" />
     <link rel="prev" title="mlx_graphs.datasets.TUDataset" href="mlx_graphs.datasets.TUDataset.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -136,8 +136,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.4 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.4 documentation - Home"/>`);</script>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.5 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.5 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -191,10 +191,12 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Datasets</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Planetoid.html">mlx_graphs.datasets.Planetoid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 </ul>
 </li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../loaders/index.html">Loaders</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
@@ -434,11 +436,7 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset.download"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset.process"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset.process()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a></li>
 </ul>
             </nav>
         </div>
@@ -471,29 +469,6 @@ Defaults to False.</p></li>
 </ul>
 </dd>
 </dl>
-<p class="rubric">Methods</p>
-<table class="autosummary longtable table autosummary">
-<tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.SuperPixelDataset.download" title="mlx_graphs.datasets.SuperPixelDataset.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a>()</p></td>
-<td><p>Download the dataset at <cite>self.raw_path</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.SuperPixelDataset.process" title="mlx_graphs.datasets.SuperPixelDataset.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>()</p></td>
-<td><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p></td>
-</tr>
-</tbody>
-</table>
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.SuperPixelDataset.download">
-<span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.SuperPixelDataset.download" title="Link to this definition">#</a></dt>
-<dd><p>Download the dataset at <cite>self.raw_path</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.SuperPixelDataset.process">
-<span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.datasets.SuperPixelDataset.process" title="Link to this definition">#</a></dt>
-<dd><p>Process the dataset and possibly save it at <cite>self.processed_path</cite></p>
-</dd></dl>
-
 </dd></dl>
 
 </section>
@@ -519,11 +494,11 @@ Defaults to False.</p></li>
       </div>
     </a>
     <a class="right-next"
-       href="../../loaders/index.html"
+       href="mlx_graphs.datasets.OGBDataset.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Loaders</p>
+        <p class="prev-next-title">mlx_graphs.datasets.OGBDataset</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -543,11 +518,7 @@ Defaults to False.</p></li>
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset.download"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset.process"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset.process()</span></code></a></li>
-</ul>
-</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.SuperPixelDataset"><code class="docutils literal notranslate"><span class="pre">SuperPixelDataset</span></code></a></li>
 </ul>
   </nav></div>
 
