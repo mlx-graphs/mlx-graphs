@@ -7,12 +7,12 @@ import pytest
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets import EllipticBitcoinDataset
 from mlx_graphs.loaders import Dataloader
-from mlx_graphs.transforms import NormalizeFeatures
+from mlx_graphs.transforms import FeaturesNormalizedTransform
 
 
 def test_normalize_features():
-    transform = NormalizeFeatures()
-    assert str(transform) == "NormalizeFeatures()"
+    transform = FeaturesNormalizedTransform()
+    assert str(transform) == "FeaturesNormalizedTransform()"
 
     node_features = mx.array([[1.0, 0.0, 1.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]])
     data = GraphData(node_features=node_features)
@@ -32,7 +32,9 @@ def test_transform():
     path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
     shutil.rmtree(path, ignore_errors=True)
 
-    dataset = EllipticBitcoinDataset(base_dir=path, transform=NormalizeFeatures())
+    dataset = EllipticBitcoinDataset(
+        base_dir=path, transform=FeaturesNormalizedTransform()
+    )
     dataset_torch = EllipticBitcoinDataset_torch(
         path, transform=NormalizeFeatures_torch()
     )

@@ -6,13 +6,25 @@ from mlx_graphs.data import GraphData, GraphDataBatch
 from mlx_graphs.transforms import BaseTransform
 
 
-class NormalizeFeatures(BaseTransform):
+class FeaturesNormalizedTransform(BaseTransform):
     def __init__(self, attributes: List[str] = ["node_features"]):
         self.attributes = attributes
 
     def process(
         self, data: Union[GraphData, GraphDataBatch]
     ) -> Union[GraphData, GraphDataBatch]:
+        """Normalizes the attributes given in the
+            attributes to sum up to one
+
+        Args:
+            data (Union[GraphData, GraphDataBatch]):
+            A GraphData object with node/edge features
+
+        Returns:
+            Union[GraphData, GraphDataBatch]:
+            A GraphData object with normalized features (either edges/node
+            features unless specified in the transform)
+        """
         if isinstance(data, GraphData):
             for attribute in self.attributes:
                 array = getattr(data, attribute)
