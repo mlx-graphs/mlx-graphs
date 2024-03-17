@@ -1,4 +1,4 @@
-from typing import Optional
+from typing import Callable, Optional
 
 import mlx.core as mx
 import numpy as np
@@ -27,10 +27,15 @@ class EllipticBitcoinDataset(Dataset):
     Args:
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
+        transforms (callable, Optional): A function/transform that
+            takes in a graphData object and returns a transformed version
+            The data object will be transformed before every access
     """
 
-    def __init__(self, base_dir: Optional[str] = None):
-        super().__init__(name="ellipticBitcoin", base_dir=base_dir)
+    def __init__(
+        self, base_dir: Optional[str] = None, transform: Optional[Callable] = None
+    ):
+        super().__init__(name="ellipticBitcoin", base_dir=base_dir, transform=transform)
 
     @property
     def raw_file_names(self):
