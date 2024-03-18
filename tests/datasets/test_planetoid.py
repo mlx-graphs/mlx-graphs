@@ -1,6 +1,3 @@
-import os
-import shutil
-
 import mlx.core as mx
 import pytest
 
@@ -19,15 +16,12 @@ from mlx_graphs.loaders import Dataloader
         ("pubmed", "public"),
     ],
 )
-def test_planetoid_cora_dataset(dataset_name, split):
+def test_planetoid_cora_dataset(tmp_path, dataset_name, split):
     from torch_geometric.datasets import Planetoid as Planetoid_torch
     from torch_geometric.loader import DataLoader
 
-    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    shutil.rmtree(path, ignore_errors=True)
-
-    dataset = PlanetoidDataset(dataset_name, base_dir=path, split=split)
-    dataset_torch = Planetoid_torch(path, dataset_name, split=split)
+    dataset = PlanetoidDataset(dataset_name, base_dir=tmp_path, split=split)
+    dataset_torch = Planetoid_torch(tmp_path, dataset_name, split=split)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
@@ -61,5 +55,3 @@ def test_planetoid_cora_dataset(dataset_name, split):
             assert mx.array_equal(
                 mx.array(batch_pyg.val_mask.tolist()), batch_mxg.val_mask
             ), "Two arrays between PyG and mxg are different"
-
-    shutil.rmtree(path)

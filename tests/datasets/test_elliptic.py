@@ -1,6 +1,3 @@
-import os
-import shutil
-
 import mlx.core as mx
 import pytest
 
@@ -9,17 +6,14 @@ from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow
-def test_elliptic_bitcoin_dataset():
+def test_elliptic_bitcoin_dataset(tmp_path):
     from torch_geometric.datasets import (
         EllipticBitcoinDataset as EllipticBitcoinDataset_torch,
     )
     from torch_geometric.loader import DataLoader
 
-    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    shutil.rmtree(path, ignore_errors=True)
-
-    dataset = EllipticBitcoinDataset(base_dir=path)
-    dataset_torch = EllipticBitcoinDataset_torch(path)
+    dataset = EllipticBitcoinDataset(base_dir=tmp_path)
+    dataset_torch = EllipticBitcoinDataset_torch(tmp_path)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
@@ -48,5 +42,3 @@ def test_elliptic_bitcoin_dataset():
             assert mx.array_equal(
                 mx.array(batch_pyg.test_mask.tolist()), batch_mxg.test_mask
             ), "Two arrays between PyG and mxg are different"
-
-    shutil.rmtree(path)
