@@ -17,13 +17,21 @@ class FeaturesNormalizedTransform(BaseTransform):
             attributes to sum up to one
 
         Args:
-            data (Union[GraphData, GraphDataBatch]):
-            A GraphData object with node/edge features
+            data: A GraphData object with node/edge features
 
         Returns:
-            Union[GraphData, GraphDataBatch]:
             A GraphData object with normalized features (either edges/node
             features unless specified in the transform)
+
+        Example:
+
+        .. code-block:: python
+
+            from mlx_graphs.datasets import EllipticBitcoinDataset
+            from mlx_graphs.transforms import FeaturesNormalizedTransform
+
+            dataset = EllipticBitcoinDataset(transform=FeaturesNormalizedTransform())
+            # All the node features (if present) for this graph are normalized
         """
         if isinstance(data, GraphData):
             for attribute in self.attributes:
