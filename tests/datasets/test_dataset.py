@@ -1,6 +1,5 @@
 import os
 import pickle
-import shutil
 
 import mlx.core as mx
 import numpy as np
@@ -17,21 +16,18 @@ def test_fake_dataset():
         pass
 
     with pytest.raises(TypeError):
-        _ = FakeDataset("fake_dataset")
+        _ = FakeDataset("fake_dataset")  # type: ignore
 
 
-def test_dataset_properties():
+def test_dataset_properties(tmp_path):
     data = GraphData(
         node_features=mx.ones((10, 5)),
         edge_labels=mx.ones((10, 1)),
     )
 
-    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    shutil.rmtree(path, ignore_errors=True)
-
     class Dataset1(Dataset):
         def __init__(self):
-            super().__init__("test_dataset", path)
+            super().__init__("test_dataset", base_dir=tmp_path)
 
         def download(self):
             pass
@@ -73,16 +69,15 @@ def test_dataset_properties():
     assert dataset.num_graph_classes == 0
 
     # test saved files
-    processed_file_name = os.path.join(path, "test_dataset/processed/graphs.pkl")
+    processed_file_name = os.path.join(tmp_path, "test_dataset/processed/graphs.pkl")
     assert os.path.exists(processed_file_name)
 
     with open(processed_file_name, "rb") as f:
         saved_graphs = pickle.load(f)
         assert mx.array_equal(saved_graphs[0].node_features, data.node_features)
-    shutil.rmtree(path)
 
 
-def test_dataset_transform():
+def test_dataset_transform(tmp_path):
     data_list = [
         GraphData(node_features=mx.ones((10, 5)), edge_labels=mx.ones((10, 1)))
         for _ in range(3)
@@ -92,12 +87,9 @@ def test_dataset_transform():
         graph.feat = "test_transform"
         return graph
 
-    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    shutil.rmtree(path, ignore_errors=True)
-
     class Dataset1(Dataset):
         def __init__(self, transform):
-            super().__init__("test_dataset", path, transform=transform)
+            super().__init__("test_dataset", tmp_path, transform=transform)
 
         def download(self):
             pass
@@ -109,5 +101,3 @@ def test_dataset_transform():
 
     for i in range(len(dataset)):
         assert dataset[i].feat == "test_transform"
-
-    shutil.rmtree(path)
