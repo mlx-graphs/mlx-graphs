@@ -33,10 +33,10 @@ def test_transform():
     shutil.rmtree(path, ignore_errors=True)
 
     dataset = EllipticBitcoinDataset(
-        base_dir=path, transform=FeaturesNormalizedTransform()
+        base_dir=path, pre_transform=FeaturesNormalizedTransform()
     )
     dataset_torch = EllipticBitcoinDataset_torch(
-        path, transform=NormalizeFeatures_torch()
+        path, pre_transform=NormalizeFeatures_torch()
     )
 
     train_loader = Dataloader(dataset, 10, shuffle=False)

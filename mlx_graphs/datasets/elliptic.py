@@ -27,15 +27,27 @@ class EllipticBitcoinDataset(Dataset):
     Args:
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
+        pre_transform (callable, Optional): A function/transform which
+            takes in a GraphData object and returns a transformed
+            version. The data will be transformed before saving to
+            the disk.
         transforms (callable, Optional): A function/transform that
             takes in a graphData object and returns a transformed version
             The data object will be transformed before every access
     """
 
     def __init__(
-        self, base_dir: Optional[str] = None, transform: Optional[Callable] = None
+        self,
+        base_dir: Optional[str] = None,
+        pre_transform: Optional[Callable] = None,
+        transform: Optional[Callable] = None,
     ):
-        super().__init__(name="ellipticBitcoin", base_dir=base_dir, transform=transform)
+        super().__init__(
+            name="ellipticBitcoin",
+            base_dir=base_dir,
+            pre_transform=pre_transform,
+            transform=transform,
+        )
 
     @property
     def raw_file_names(self):
@@ -104,4 +116,5 @@ class EllipticBitcoinDataset(Dataset):
         )
         graph.train_mask = train_mask
         graph.test_mask = test_mask
+
         self.graphs = [graph]
