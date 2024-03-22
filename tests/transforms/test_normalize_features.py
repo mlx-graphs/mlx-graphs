@@ -1,6 +1,3 @@
-import os
-import shutil
-
 import mlx.core as mx
 import pytest
 
@@ -22,21 +19,18 @@ def test_normalize_features():
 
 
 @pytest.mark.slow
-def test_transform():
+def test_transform(tmp_path):
     from torch_geometric.datasets import (
         EllipticBitcoinDataset as EllipticBitcoinDataset_torch,
     )
     from torch_geometric.loader import DataLoader as DataLoader_torch
     from torch_geometric.transforms import NormalizeFeatures as NormalizeFeatures_torch
 
-    path = os.path.join("/".join(__file__.split("/")[:-1]), ".tests/")
-    shutil.rmtree(path, ignore_errors=True)
-
     dataset = EllipticBitcoinDataset(
-        base_dir=path, pre_transform=FeaturesNormalizedTransform()
+        base_dir=tmp_path, pre_transform=FeaturesNormalizedTransform()
     )
     dataset_torch = EllipticBitcoinDataset_torch(
-        path, pre_transform=NormalizeFeatures_torch()
+        tmp_path, pre_transform=NormalizeFeatures_torch()
     )
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
@@ -56,5 +50,3 @@ def test_transform():
             assert mx.array_equal(
                 mx.array(batch_pyg.y.tolist()), batch_mxg.node_labels
             ), "Two arrays(labels) between PyG and mxg are different"
-
-    shutil.rmtree(path)
