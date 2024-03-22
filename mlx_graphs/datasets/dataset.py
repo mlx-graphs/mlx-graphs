@@ -38,12 +38,13 @@ class Dataset(ABC):
         self,
         name: str,
         base_dir: Optional[str] = None,
+        pre_transform: Optional[Callable] = None,
         transform: Optional[Callable] = None,
     ):
         self._name = name
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
-
+        self.pre_transform = pre_transform
         self.graphs: list[GraphData] = []
         self._load()
 
@@ -134,6 +135,14 @@ class Dataset(ABC):
             self.download()
             print("Done")
 
+    def _process(self):
+        self.process()
+
+        if self.pre_transform:
+            print(f"Applying pre-transform to {self.name} data ...", end=" ")
+            self.graphs = [self.pre_transform(graph) for graph in self.graphs]
+            print("Done")
+
     def _save(self):
         if self._base_dir is not None and self.processed_path is not None:
             if not os.path.exists(self.processed_path):
@@ -152,7 +161,7 @@ class Dataset(ABC):
         except FileNotFoundError:
             self._download()
             print(f"Processing {self.name} raw data ...", end=" ")
-            self.process()
+            self._process()
             print("Done")
             self._save()
 
