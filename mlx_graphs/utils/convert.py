@@ -1,4 +1,7 @@
+from collections import defaultdict
 from typing import Any
+
+import mlx.core as mx
 
 from mlx_graphs.data import GraphData
 
@@ -34,15 +37,63 @@ def to_networkx(
 
     G = nx.DiGraph()
 
+    if data.graph_features:
+        G.graph["graph_features"] = data.graph_features.tolist()
+
+    if data.graph_labels:
+        G.graph["graph_labels"] = data.graph_labels.tolist()
+
     if data.num_nodes is None:
         return G
 
-    G.add_nodes_from(range(data.num_nodes))
+    # G.add_nodes_from(range(data.num_nodes))
 
-    for v, w in data.edge_index.T.tolist():
+    node_features_present = data.node_features is not None
+    node_labels_present = data.node_labels is not None
+
+    node_attrs = {}
+    for i in range(data.num_nodes):
+        if node_features_present:
+            node_attrs["features"] = data.node_features[i].tolist()
+        if node_labels_present:
+            node_attrs["label"] = data.node_labels[i].item()
+        G.add_node(i, **node_attrs)
+
+    edge_features_present = data.edge_features is not None
+    edge_attrs = {}
+    for i, (v, w) in enumerate(data.edge_index.T.tolist()):
         if remove_self_loops and v == w:
             continue
-
-        G.add_edge(v, w)
+        if edge_features_present:
+            edge_attrs["features"] = data.edge_features[i].tolist()
+        G.add_edge(v, w, **edge_attrs)
 
     return G
+
+
+def from_networkx(data: Any) -> GraphData:
+    data_dict = defaultdict(list)
+
+    edge_index = mx.array(list(data.edges())).T
+    data_dict["edge_index"] = edge_index
+
+    for attr in ["features", "label"]:
+        for entity in ["edge", "node", "graph"]:
+            key = f"{entity}_{attr}"
+            values = []
+
+            if entity == "edge":
+                for _, _, feat_dict in data.edges(data=True):
+                    if attr in feat_dict:
+                        values.append(feat_dict[attr])
+            elif entity == "node":
+                for _, feat_dict in data.nodes(data=True):
+                    if attr in feat_dict:
+                        values.append(feat_dict[attr])
+            elif entity == "graph" and attr in data.graph:
+                values = [data.graph[attr]]
+
+            if values:
+                data_dict[key] = mx.array(values)
+
+    return GraphData(**data_dict)
