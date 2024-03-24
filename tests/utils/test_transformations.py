@@ -171,6 +171,7 @@ def test_add_self_loops():
 def test_remove_self_loops():
     edge_index = mx.array([[0, 0, 1, 1], [0, 1, 0, 2]])
     edge_features = mx.random.normal([4, 2])
+    edge_labels = mx.array([0, 1, 2, 3])
 
     # just index
     x = remove_self_loops(edge_index)
@@ -183,6 +184,24 @@ def test_remove_self_loops():
     expected_y = edge_features[1:]
     assert mx.array_equal(y, expected_y)
     assert mx.array_equal(x, expected_x)
+
+    # index and edges
+    x, y = remove_self_loops(edge_index, edge_labels=edge_labels)
+    expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
+    expected_y = edge_labels[1:]
+    assert mx.array_equal(y, expected_y)
+    assert mx.array_equal(x, expected_x)
+
+    # index and features and edges
+    x, y, z = remove_self_loops(
+        edge_index, edge_features=edge_features, edge_labels=edge_labels
+    )
+    expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
+    expected_y = edge_features[1:]
+    expected_z = edge_labels[1:]
+    assert mx.array_equal(y, expected_y)
+    assert mx.array_equal(x, expected_x)
+    assert mx.array_equal(z, expected_z)
 
     # inactive on graph with no self loops
     edge_index = mx.array([[0, 1, 1], [1, 0, 2]])

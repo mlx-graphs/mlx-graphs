@@ -307,6 +307,7 @@ def remove_self_loops(
 def remove_self_loops(
     edge_index: mx.array,
     edge_features: Optional[mx.array] = None,
+    edge_labels: Optional[mx.array] = None,
 ) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
     Removes self-loops from the given graph represented by edge_index and edge_features.
@@ -316,9 +317,12 @@ def remove_self_loops(
             of each edge
         edge_features: Optional tensor representing features associated with each edge,
             with shape [num_edges, num_edge_features]
+        edge_labels: Optional tensor representing labels associated with each edge,
+            with shape [num_edges, num_classes]
 
     Returns:
-        A tuple containing the updated edge_index and edge_features without self-loops.
+        A tuple containing the updated edge_index, edge_features and edge_labels
+        without self-loops.
 
     """
     num_nodes = (mx.max(edge_index) + 1).item()
@@ -330,12 +334,16 @@ def remove_self_loops(
     if len(preserved_idx) != 0:
         no_self_loop_index = edge_index[:, preserved_idx]
 
-    if edge_features is not None:
-        no_self_loop_features = mx.array([[]])
-        if len(preserved_idx) != 0:
-            no_self_loop_features = edge_features[preserved_idx]
-        return no_self_loop_index, no_self_loop_features
-    return no_self_loop_index
+    results = [no_self_loop_index]
+    for attribute in [edge_features, edge_labels]:
+        if attribute is not None:
+            no_self_loop_attribute = mx.array([[]])
+            if len(preserved_idx) != 0:
+                no_self_loop_attribute = attribute[preserved_idx]
+
+            results.append(no_self_loop_attribute)
+
+    return tuple(results) if len(results) > 1 else results[0]
 
 
 @overload
