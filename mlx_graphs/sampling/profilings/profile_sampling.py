@@ -4,7 +4,7 @@ import os
 import time
 
 from mlx_graphs.datasets import PlanetoidDataset
-from mlx_graphs.sampling.neighbor_sampler import sampler
+from mlx_graphs.sampling import sample_neighbors
 
 logging.basicConfig(
     level=logging.INFO,
@@ -32,7 +32,7 @@ def main():
 
     start_time = time.time()
 
-    subgraphs = sampler(graph, input_nodes, NUM_NEIGHBORS, BATCH_SIZE)
+    subgraphs = sample_neighbors(graph, NUM_NEIGHBORS, BATCH_SIZE, input_nodes)
 
     end_time = time.time()
 

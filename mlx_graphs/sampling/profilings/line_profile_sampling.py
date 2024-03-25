@@ -4,7 +4,8 @@ import time
 from line_profiler import LineProfiler
 
 from mlx_graphs.datasets import PlanetoidDataset
-from mlx_graphs.sampling.neighbor_sampler import sample_nodes, sampler
+from mlx_graphs.sampling import sample_neighbors
+from mlx_graphs.sampling.neighbor_sampler import sample_nodes
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,7 +31,7 @@ num_edges = graph.edge_index.shape[1]
 def main():
     start_time = time.time()
 
-    sampler(graph, input_nodes, NUM_NEIGHBORS, BATCH_SIZE)
+    sample_neighbors(graph, NUM_NEIGHBORS, BATCH_SIZE, input_nodes)
 
     end_time = time.time()
 
@@ -41,7 +42,7 @@ def main():
 if __name__ == "__main__":
     lp = LineProfiler()
 
-    lp.add_function(sampler)
+    lp.add_function(sample_neighbors)
 
     lp.add_function(sample_nodes)
 
