@@ -40,6 +40,72 @@ def sample_neighbors(
     Returns:
         A list of subgraphs, where each subgraph contains the sampled nodes, with
         a variying size depending on ``batch_size`` and ``num_neighbors``.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 0, 1, 1, 2, 3, 4], [2, 3, 3, 4, 5, 6, 7]])
+        graph = GraphData(edge_index=edge_index)
+
+        #  Sample nodes 0 and 1 with two neighbors
+        subgraphs = sample_neighbors(
+            graph=graph, num_neighbors=[-1], input_nodes=[0, 1]
+        )
+        >>> [
+            GraphData(
+                edge_index(shape=(2, 4), int64)
+                n_id(shape=(6,), int64)
+                e_id(shape=(2,), int32)
+                input_nodes(shape=(), int32))
+            ]
+
+        subgraphs[0].edge_index
+        >>> array([[0, 0, 1, 1],
+                   [2, 3, 3, 4]], dtype=int64)
+
+
+        #  Sample all nodes with only one neighbor
+        subgraphs = sample_neighbors(
+            graph=graph, num_neighbors=[1]
+        )
+        >>> [
+            GraphData(
+                edge_index(shape=(2, 5), int64)
+                n_id(shape=(13,), int64)
+                e_id(shape=(0,), float32)
+                input_nodes(shape=(), int32))
+            ]
+
+        subgraphs[0].edge_index
+        >>> array([[0, 1, 2, 3, 4],
+                   [2, 4, 5, 6, 7]], dtype=int64)
+
+
+        #  Same process, but we batch 3 graphs together instead of all graphs
+        subgraphs = sample_neighbors(
+            graph=graph, num_neighbors=[1], batch_size=3,
+        )
+        >>> [
+            GraphData(
+                edge_index(shape=(2, 3), int64)
+                n_id(shape=(6,), int64)
+                e_id(shape=(1,), int32)
+                input_nodes(shape=(), int32)),
+            GraphData(
+                edge_index(shape=(2, 2), int64)
+                n_id(shape=(5,), int64)
+                e_id(shape=(0,), float32)
+                input_nodes(shape=(), int32))
+            ]
+
+        subgraphs[0].edge_index
+        >>> array([[0, 1, 2],
+                   [3, 3, 5]], dtype=int64)
+
+        subgraphs[1].edge_index
+        >>> array([[3, 4],
+                   [6, 7]], dtype=int64)
     """
 
     if not isinstance(num_neighbors, Sequence) or len(num_neighbors) == 0:
