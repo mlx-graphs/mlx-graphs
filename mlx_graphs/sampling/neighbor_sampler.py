@@ -159,7 +159,7 @@ def sample_neighbors(
                 input_nodes=mx.array(input_node),
             )
             if graph.node_features is not None:
-                graph.node_features = graph.node_features[mx.array(batch_n_id)]
+                subgraph.node_features = graph.node_features[mx.array(batch_n_id)]
 
             batched_graphs.append(subgraph)
 
