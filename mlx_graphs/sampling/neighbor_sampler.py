@@ -48,6 +48,23 @@ def sample_neighbors(
         edge_index = mx.array([[0, 0, 1, 1, 2, 3, 4], [2, 3, 3, 4, 5, 6, 7]])
         graph = GraphData(edge_index=edge_index)
 
+        #  Sample nodes 0 and 1 with two neighbors
+        subgraphs = sample_neighbors(
+            graph=graph, num_neighbors=[-1], input_nodes=[0, 1]
+        )
+        >>> [
+            GraphData(
+                edge_index(shape=(2, 4), int64)
+                n_id(shape=(6,), int64)
+                e_id(shape=(2,), int32)
+                input_nodes(shape=(), int32))
+            ]
+
+        subgraphs[0].edge_index
+        >>> array([[0, 0, 1, 1],
+                   [2, 3, 3, 4]], dtype=int64)
+
+
         #  Sample all nodes with only one neighbor
         subgraphs = sample_neighbors(
             graph=graph, num_neighbors=[1]
@@ -89,24 +106,6 @@ def sample_neighbors(
         subgraphs[1].edge_index
         >>> array([[3, 4],
                    [6, 7]], dtype=int64)
-
-
-        #  Sample nodes 0 and 1 by keeping all their neighbors
-        subgraphs = sample_neighbors(
-            graph=graph, num_neighbors=[-1], input_nodes=[0, 1]
-        )
-        >>> [
-            GraphData(
-                edge_index(shape=(2, 4), int64)
-                n_id(shape=(6,), int64)
-                e_id(shape=(2,), int32)
-                input_nodes(shape=(), int32))
-            ]
-
-        subgraphs[0].edge_index
-        >>> array([[0, 0, 1, 1],
-                   [2, 3, 3, 4]], dtype=int64)
-
     """
 
     if not isinstance(num_neighbors, Sequence) or len(num_neighbors) == 0:
@@ -152,16 +151,17 @@ def sample_neighbors(
             batch_e_id.extend(e_id)
             batch_input_node.append(input_node)
 
-        subgraph = GraphData(
-            edge_index=mx.array(batch_sampled_edges),
-            n_id=mx.array(batch_n_id),
-            e_id=mx.array(e_id),
-            input_nodes=mx.array(input_node),
-        )
-        if graph.node_features is not None:
-            graph.node_features = graph.node_features[mx.array(batch_n_id)]
+        if batch_sampled_edges.any():
+            subgraph = GraphData(
+                edge_index=mx.array(batch_sampled_edges),
+                n_id=mx.array(batch_n_id),
+                e_id=mx.array(e_id),
+                input_nodes=mx.array(input_node),
+            )
+            if graph.node_features is not None:
+                graph.node_features = graph.node_features[mx.array(batch_n_id)]
 
-        batched_graphs.append(subgraph)
+            batched_graphs.append(subgraph)
 
     return batched_graphs
 
