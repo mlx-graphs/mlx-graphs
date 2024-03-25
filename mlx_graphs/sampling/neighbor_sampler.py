@@ -85,14 +85,14 @@ def sample_neighbors(
             batch_e_id.extend(e_id)
             batch_input_node.append(input_node)
 
-        subgraph_node_features = graph.node_features[mx.array(batch_n_id)]
         subgraph = GraphData(
             edge_index=mx.array(batch_sampled_edges),
-            node_features=subgraph_node_features,
             n_id=mx.array(batch_n_id),
             e_id=mx.array(e_id),
             input_nodes=mx.array(input_node),
         )
+        if graph.node_features is not None:
+            graph.node_features = graph.node_features[mx.array(batch_n_id)]
 
         batched_graphs.append(subgraph)
 
