@@ -20,8 +20,8 @@ class GINConv(MessagePassing):
     a custom neural network provided by the user and :math:`\epsilon` is an epsilon
     value either fixed or learned.
 
-    Setting `edge_features_dim` will result in a `GINEConv`, where `edge_features` are
-    expected to be passed in the forward. In this case, edge features are first
+    Setting ``edge_features_dim`` produces a `GINEConv` model, where `edge_features`
+    are expected to be passed in the forward. In this case, edge features are first
     projected onto the same dimension as node embeddings and are summed, then passed to
     a relu activation.
     To use `GINEConv`, setting `node_features_dim` is also required.
