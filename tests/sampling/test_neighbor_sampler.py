@@ -121,6 +121,16 @@ def test_sample_nodes_edge_cases():
 
 
 def test_sample_neighbors():
+    # Default args
+    edge_index = mx.array([[0, 0, 1, 1, 2, 3, 4], [2, 3, 3, 4, 5, 6, 7]])
+    first_subgraph_edge_index = mx.array([[0, 0, 1, 1], [2, 3, 3, 4]])
+    graph = GraphData(edge_index=edge_index)
+    subgraphs = sample_neighbors(graph=graph, num_neighbors=[-1], input_nodes=[0, 1])
+    assert len(subgraphs) == 1
+    assert mx.array_equal(
+        mx.sort(subgraphs[0].edge_index), mx.sort(first_subgraph_edge_index)
+    )
+
     # Test for batch_size 1 and 2 seed nodes
     edge_index = mx.array([[0, 0, 1, 1, 2, 3, 4], [2, 3, 3, 4, 5, 6, 7]])
     node_features = mx.array([[1], [1], [1], [1], [1], [1], [1], [1]])
