@@ -13,8 +13,8 @@ from mlx_graphs.datasets import LazyDataset
 
 class LazyDataLoader(ABC):
     """
-    Base class for building a lazy loader.
-    This loader aims to load lazily parts of a ``LazyDataset``.
+    Base class for building a lazy loader, used to lazily load parts
+    of a ``LazyDataset``.
 
     A working ``LazyDataset`` contains files on disk where each file represent
     a graph that may be merged with other graphs/files.
@@ -52,6 +52,7 @@ class LazyDataLoader(ABC):
         from mlx_graphs.data.data import GraphData
         from mlx_graphs.datasets.lazy_dataset import LazyDataset
         from mlx_graphs.loaders import LazyDataLoader
+
 
         graphs = [GraphData(
             edge_index=mx.random.randint(0, 10, (2, 100)),
@@ -99,6 +100,7 @@ class LazyDataLoader(ABC):
                     len(self._all_sorted_snapshots)
                 )
                 return self.dataset[start: end]
+
 
         dataset = Dataset1()
         >>> test_dataset(num_graphs=100)

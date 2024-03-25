@@ -12,7 +12,7 @@ from mlx_graphs.datasets.dataset import Dataset
 
 class LazyDataset(Dataset):
     """
-    ``LazyDataset`` can be used to handle the access to very large datasets.
+    This dataset is designed to handle very large datasets stored on disk.
     Unlike ``Dataset`` that loads the entire data from the dataset into memory at once,
     this dataset only loads the requested parts of the dataset into memory.
     This paradigm enables to work on arbitrary large datasets, given that enough storage
@@ -45,6 +45,9 @@ class LazyDataset(Dataset):
     Example:
 
     .. code-block:: python
+
+        from mlx_graphs.datasets import LANLDataset, Planetoid
+
 
         # A traditional Dataset:
         cora = Planetoid("cora")  # all data are into memory

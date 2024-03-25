@@ -11,6 +11,7 @@ Datasets
 	:template: dataset-class-template.rst
 
 	Dataset
+	LazyDataset
 
 
 .. autosummary::
@@ -24,3 +25,4 @@ Datasets
 	SuperPixelDataset
 	OGBDataset
 	EllipticBitcoinDataset
+	LANLDataset

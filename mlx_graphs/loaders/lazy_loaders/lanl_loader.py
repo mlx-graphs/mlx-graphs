@@ -63,37 +63,42 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
     has been successfully used in papers [1, 2].
 
     On the first iteration on the loader:
+
         - reads ``batch_size`` csv files from the provided ``dataset``
         - builds a large graph from the concatenated csv files
         - compresses the graph into a smaller graph without any duplicate edges
-            This graph is a ``GraphData``, with the following attributes:
-            edge features: an mx.array with shape (num_edges, 6) and the features
-                [#edges, #successes, #failures, #src_type_user,
-                    #src_type_computer, #src_type_anonymous])
-            edge_labels: an mx.array with shape (num_edges,) with the label of each
-                edge (1 for attack, 0 for benign). A malicious label will be assigned
-                to an edge if 1 or more malicious edge is included in the compressed
-                edge.
-                Multiple edges compressed into
-            node_features: an mx.array with shape (num_nodes, num_nodes) with
-                one-hot encoded vectors for each node.
+          This graph is a ``GraphData``, with the following attributes:
+
+          - ``edge_index``: an mx.array with shape (2, num_edges), the graph structure
+          - ``edge_features``: an mx.array with shape (num_edges, 6) and the features
+            [#edges, #successes, #failures, #src_type_user,
+            #src_type_computer, #src_type_anonymous])
+          - ``edge_labels``: an mx.array with shape (num_edges,) with the label of each
+            edge (1 for attack, 0 for benign). A malicious label will be assigned
+            to an edge if 1 or more malicious edge is included in the compressed
+            edge.
+          - ``node_features``: an mx.array with shape (num_nodes, num_nodes) with
+            one-hot encoded vectors for each node.
             Note: the ``edge_timestamps`` from LANLDataset are not included anymore
             as they become incompatible with the compression of the edges.
             By default, the features are standardized using min-max standardization
             (see ``_standardize_edge_feats``).
+
         - saves the compressed ``GraphData`` on disk as `.pkl` for later reuse
 
     On the second iteration:
+
         - the compressed graphs already exist on disk, so they are directly loaded
         - if one wants to overwrite existing graphs, set ``force_process=True``
 
     References:
         [1] `Euler: Detecting Network Lateral Movement via Scalable Temporal Link \
-        Prediction \
-        <https://www.ndss-symposium.org/wp-content/uploads/2022-107A-paper.pdf>`_
+            Prediction \
+            <https://www.ndss-symposium.org/wp-content/uploads/2022-107A-paper.pdf>`_
+
         [2] `Understanding and Bridging the Gap Between Unsupervised Network \
-        Representation Learning and Security Analytics \
-        <https://c0ldstudy.github.io/commons/papers/SP2024_paper118.pdf>`_
+            Representation Learning and Security Analytics \
+            <https://c0ldstudy.github.io/commons/papers/SP2024_paper118.pdf>`_
 
     Args:
         dataset: An instance of a ``LANLDataset`` dataset
@@ -123,32 +128,33 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             stored on disk will be directly loaded at the next iteration instead
             of re-computing the same graphs. Default to ``False``.
 
-        Example:
+    Example:
 
-        .. code-block:: python
+    .. code-block:: python
 
-            from mlx_graphs.datasets import LANLDataset
-            from mlx_graphs.loaders import LANLDataLoader
+        from mlx_graphs.datasets import LANLDataset
+        from mlx_graphs.loaders import LANLDataLoader
 
-            dataset = LANLDataset()
+        dataset = LANLDataset()
 
-            # Each iteration will yield a 60min compressed graph
-            loader = LANLDataLoader(dataset, split="train", batch_size=60)
+        # Each iteration yields a 60min compressed graph
+        loader = LANLDataLoader(dataset, split="train", batch_size=60)
 
-            next(graph)
-            >>> GraphData(
-                edge_index(shape=(2, 2758), int32)
-                node_features(shape=(13184, 13184), float32)
-                edge_features(shape=(2758, 10), float32)
-                edge_labels(shape=(2758,), int32))
+        next(graph)
+        >>> GraphData(
+            edge_index(shape=(2, 2758), int32)
+            node_features(shape=(13184, 13184), float32)
+            edge_features(shape=(2758, 10), float32)
+            edge_labels(shape=(2758,), int32))
 
-            for graph in loader:
-                print(graph)
-            >>> GraphData(
-                edge_index(shape=(2, 2739), int32)
-                node_features(shape=(13184, 13184), float32)
-                edge_features(shape=(2739, 10), float32)
-                edge_labels(shape=(2739,), int32))
+        for graph in loader:
+            print(graph)
+
+        >>> GraphData(
+            edge_index(shape=(2, 2739), int32)
+            node_features(shape=(13184, 13184), float32)
+            edge_features(shape=(2739, 10), float32)
+            edge_labels(shape=(2739,), int32))
     """
 
     def __init__(

@@ -53,12 +53,15 @@ class LANLDataset(LazyDataset):
 
     The version of the LANL dataset proposed within mlx-graphs is already
     preprocessed to only include data required to build the graphs along with
-    2 default edge features extracted from the raw dataset.
+    2 default edge features extracted from the raw dataset. Consequently,
+    this class will by default download a 340MB archive instead of the original
+    files that represent more than 7GB compressed.
 
     The 2 provided edge features are:
-        - success/failure: 1 if the authentication was a success, 0 if it was a failure
-        - logon type: identifies the type of the source user that initiated the
-            authentication (user -> 1, computer -> 2, anonymous -> 3)
+    (i) success/failure: 1 if the authentication succeeded, 0 if it failed
+    (ii) logon type: identifies the type of the source user that initiated the
+    authentication (user -> 1, computer -> 2, anonymous -> 3)
+
     The LANL dataset doesn't come with many features. However, one can supplement
     these features with hand-crafted ones such as centrality-based features.
 
@@ -87,6 +90,7 @@ class LANLDataset(LazyDataset):
         from mlx_graphs.datasets import LANLDataset
         from mlx_graphs.loaders import LANLDataLoader
 
+
         dataset = LANLDataset()  # Each of the 83519 graphs contains 1min of data
         >>> LANL(num_graphs=83519)
 
@@ -104,8 +108,8 @@ class LANLDataset(LazyDataset):
             edge_labels(shape=(762125,), int64)
             edge_timestamps(shape=(762125,), int64))
 
-        dataset[[0, 1, 2]]  # Computes a graph for the first 3 minutes
-        (with array indexing)
+        dataset[[0, 1, 2]]  # Computes a graph for the first 3 minutes \
+(with array indexing)
         >>> dataset[[0, 1, 2]]
             GraphData(
                 edge_index(shape=(2, 768), int64)
@@ -117,7 +121,7 @@ class LANLDataset(LazyDataset):
         #  reduce the size of the graphs with graph compression
         loader = LANLDataLoader(
             dataset, split="train", remove_self_loops=False, use_compress_graph=True, \
-                batch_size=60,
+batch_size=60,
         )
         next(loader)
         >>> GraphData(
