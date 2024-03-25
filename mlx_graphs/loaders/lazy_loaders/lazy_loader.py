@@ -138,7 +138,6 @@ class LazyDataLoader(ABC):
     ):
         self.dataset = deepcopy(dataset)
         self.force_process = force_process
-        self.processed_path = dataset.processed_path
         self._batch_size = batch_size
         self._start_range = ranges[0]
         self._end_range = ranges[1]
@@ -150,6 +149,7 @@ class LazyDataLoader(ABC):
         self._nb_batches = self._get_nb_batches()
 
         self.dataset.range_indices = range_indices
+        os.makedirs(self.processed_path, exist_ok=True)
 
     @abstractmethod
     def process_graph(self) -> GraphData:
@@ -161,6 +161,18 @@ class LazyDataLoader(ABC):
             The graph that corresponds to the current state of the loader.
         """
         pass
+
+    @property
+    def processed_path(self) -> str:
+        """
+        Every `LazyDataLoader` has its own folder on disk to store its
+        processed graphs.
+
+        Returns:
+            The path to the folder where the loader's files are located.
+        """
+        unique_id = f"loader_{self._start_range}_{self._end_range}_{self._batch_size}"
+        return os.path.join(self.dataset.processed_path, unique_id)
 
     def save_processed_graph(self, graph: GraphData):
         """

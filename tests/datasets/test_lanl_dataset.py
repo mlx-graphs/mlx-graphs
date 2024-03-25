@@ -35,8 +35,13 @@ def test_lanl_dataset(tmp_path):
         assert graph.edge_labels.shape == (2758,)
         assert graph.node_features.shape == (13184, 13184)
 
+    # Without force_process (should store the results in a new folder)
     loader = LANLDataLoader(
-        dataset, split="valid", remove_self_loops=False, force_process=True
+        dataset,
+        split="valid",
+        remove_self_loops=False,
+        use_compress_graph=True,
+        batch_size=60,
     )
     graph = next(loader)
     assert graph.edge_index.shape == (2, 10064)
