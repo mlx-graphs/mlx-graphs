@@ -1,22 +1,10 @@
 import hashlib
 import os
-import pickle
 import warnings
 from typing import Optional
 
 import requests
 from tqdm import tqdm
-
-from mlx_graphs.data.data import GraphData
-
-
-def save_graphs(path: str, data: list[GraphData], file_name: Optional[str] = None):
-    if file_name is None:
-        file_name = "data.pkl"
-    if not os.path.exists(path):
-        os.makedirs(path)
-    with open(os.path.join(path, file_name), "wb") as f:
-        pickle.dump(data, f)
 
 
 def download(
@@ -50,10 +38,9 @@ def download(
     """
     if path is None:
         fname = url.split("/")[-1]
-        # Empty filenames are invalid
         assert fname, (
-            "Can't construct file-name from this URL. "
-            "Please set the `path` option manually."
+            """Can't construct file-name from this URL."""
+            """Please set the `path` option manually."""
         )
     else:
         path = os.path.expanduser(path)
@@ -77,46 +64,54 @@ def download(
         dirname = os.path.dirname(os.path.abspath(os.path.expanduser(fname)))
         if not os.path.exists(dirname):
             os.makedirs(dirname)
-        while retries + 1 > 0:
-            # Disable pyling too broad Exception
-            # pylint: disable=W0703
+
+        session = requests.Session()
+        while retries > 0:
             try:
                 if log:
-                    print("Downloading %s from %s..." % (fname, url))
-                r = requests.get(url, stream=True, verify=verify_ssl)
-                if r.status_code != 200:
-                    raise RuntimeError("Failed downloading url %s" % url)
-                # Sizes in bytes.
-                total_size = int(r.headers.get("content-length", 0))
-                block_size = 1024
+                    print(f"Downloading {fname} from {url}...")
+                with session.get(url, stream=True, verify=verify_ssl) as r:
+                    r.raise_for_status()  # This raises an HTTPError if status != 200
+                    total_size = int(r.headers.get("content-length", 0))
+                    chunk_size = 1024 * 1024 * 1  # 1 MB
 
-                with tqdm(total=total_size, unit="B", unit_scale=True) as progress_bar:
-                    with open(fname, "wb") as f:
-                        for chunk in r.iter_content(chunk_size=block_size):
-                            progress_bar.update(len(chunk))
-                            if chunk:  # filter out keep-alive new chunks
+                    with tqdm(
+                        total=total_size, unit="B", unit_scale=True
+                    ) as progress_bar:
+                        with open(fname, "wb") as f:
+                            for chunk in r.iter_content(chunk_size=chunk_size):
+                                progress_bar.update(len(chunk))
                                 f.write(chunk)
+
                 if sha1_hash and not check_sha1(fname, sha1_hash):
                     raise UserWarning(
-                        "File {} is downloaded but the content hash does not match."
-                        " The repo may be outdated or download may be incomplete. "
-                        'If the "repo_url" is overridden, consider switching to '
-                        "the default repo.".format(fname)
+                        "File downloaded but the content hash does not match."
                     )
-                break
+                break  # Exit the loop if download was successful
             except Exception as e:
                 retries -= 1
-                if retries <= 0:
-                    raise e
-                else:
-                    if log:
-                        print(
-                            "download failed, retrying, {} attempt{} left".format(
-                                retries, "s" if retries > 1 else ""
-                            )
-                        )
-
+                if retries == 0:
+                    raise RuntimeError(
+                        f"Failed downloading after multiple retries: {e}"
+                    ) from e
+                if log:
+                    print(f"Download failed, retrying, {retries} attempts left.")
     return fname
+
+
+def download_file_from_google_drive(
+    id: str,
+    path: str,
+):
+    """
+    Downloads the content of a Google Drive ID to a specific folder.
+
+    Args:
+        id: The ID of the file located on Google Drive.
+        path: The desination path to store the file.
+    """
+    url = f"https://drive.usercontent.google.com/download?id={id}&confirm=t"
+    return download(url, path)
 
 
 def check_sha1(filename: str, sha1_hash: str) -> bool:

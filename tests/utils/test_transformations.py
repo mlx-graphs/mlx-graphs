@@ -179,23 +179,21 @@ def test_remove_self_loops():
     assert mx.array_equal(x, expected_x)
 
     # index and features
-    x, y = remove_self_loops(edge_index, edge_features)
+    x, y = remove_self_loops(edge_index, [edge_features])
     expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
     expected_y = edge_features[1:]
     assert mx.array_equal(y, expected_y)
     assert mx.array_equal(x, expected_x)
 
     # index and edges
-    x, y = remove_self_loops(edge_index, edge_labels=edge_labels)
+    x, y = remove_self_loops(edge_index, [edge_labels])
     expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
     expected_y = edge_labels[1:]
     assert mx.array_equal(y, expected_y)
     assert mx.array_equal(x, expected_x)
 
     # index and features and edges
-    x, y, z = remove_self_loops(
-        edge_index, edge_features=edge_features, edge_labels=edge_labels
-    )
+    x, y, z = remove_self_loops(edge_index, [edge_features, edge_labels])
     expected_x = mx.array([[0, 1, 1], [1, 0, 2]])
     expected_y = edge_features[1:]
     expected_z = edge_labels[1:]
