@@ -1,7 +1,8 @@
 from collections import defaultdict
-from typing import Any
+from typing import Any, Union
 
 import mlx.core as mx
+import networkx as nx
 
 from mlx_graphs.data import GraphData
 
@@ -33,14 +34,13 @@ def to_networkx(
         OutEdgeView([(0, 0), (0, 1), (1, 0), (1, 2), (2, 1), (2, 3), (3, 2)])
 
     """
-    import networkx as nx
 
     G = nx.DiGraph()
 
-    if data.graph_features:
+    if data.graph_features is not None:
         G.graph["graph_features"] = data.graph_features.tolist()
 
-    if data.graph_labels:
+    if data.graph_labels is not None:
         G.graph["graph_labels"] = data.graph_labels.tolist()
 
     if data.num_nodes is None:
@@ -71,7 +71,36 @@ def to_networkx(
     return G
 
 
-def from_networkx(data: Any) -> GraphData:
+def from_networkx(data: Union[nx.Graph]) -> GraphData:
+    """Converts a :obj:`networkx.Graph` or :obj:`networkx.DiGraph` to a
+    :class:`mlx_graphs.data.GraphData` instance.
+
+    Args:
+        data (Union[nx.Graph]): A networkx graph
+
+    Returns:
+        GraphData: A GraphData object of type mlx_graphs.GraphData
+
+    Examples:
+        >>> from mlx_graphs.utils.convert import from_networkx
+        >>> import networkx as nx
+        >>> G = nx.Graph()
+        >>> G.add_node(1)
+        >>> G.add_node(2)
+        >>> G.add_node(3)
+        >>> G.add_node(4)
+        >>> G.add_edge(1, 2)
+        >>> G.add_edge(1, 3)
+        >>> G.add_edge(2, 3)
+        >>> G.add_edge(3, 4)
+        >>> mlx_dataset = from_networkx(G)
+        >>> mlx_dataset
+        GraphData(
+                edge_index(shape=(2, 4), int32))
+        >>> mlx_dataset.num_nodes
+        4
+
+    """
     data_dict = defaultdict(list)
 
     edge_index = mx.array(list(data.edges())).T

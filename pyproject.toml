@@ -20,7 +20,6 @@ dependencies = [
     "mlx==0.7.*; sys_platform == 'darwin'",
     "numpy==1.26.3",
     "requests==2.31.0",
-    "networkx",
     "fsspec==2024.2.0",
     "tqdm==4.66.1",
 ]
@@ -32,6 +31,7 @@ dev = [
 test = [
   "pytest==7.4.4",
   "scipy==1.12.0",
+  "networkx",
 ]
 docs = [
   "ipython==8.21.0",

@@ -52,16 +52,27 @@ def test_to_networkx():
     assert networkx_graph.number_of_edges() == 0
 
 
+@pytest.mark.skipif(not networkx_installed, reason="networkx is not installed")
 def test_from_networkx():
     karate_club_dataset = KarateClubDataset()
     karate_club_networkx_graph = to_networkx(karate_club_dataset.graphs[0])
     restored_karate_club_dataset = from_networkx(karate_club_networkx_graph)
 
+    assert (
+        restored_karate_club_dataset.num_nodes
+        == karate_club_networkx_graph.number_of_nodes()
+    ), "Number of nodes are not equal"
+
+    assert (
+        restored_karate_club_dataset.num_edges
+        == karate_club_networkx_graph.number_of_edges()
+    ), "Number of edges are not equal"
+
     assert mx.array_equal(
         restored_karate_club_dataset.node_features,
-        karate_club_dataset.graphs[0].node_features,
+        karate_club_dataset[0].node_features,
     ), "Node features are not equal"
     assert (
         restored_karate_club_dataset.edge_index.shape[1]
-        == karate_club_dataset.graphs[0].edge_index.shape[1]
+        == karate_club_dataset[0].edge_index.shape[1]
     ), "Edge index shapes are not equal"
