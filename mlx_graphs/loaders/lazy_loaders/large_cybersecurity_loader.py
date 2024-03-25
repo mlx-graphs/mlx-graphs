@@ -2,7 +2,16 @@ from abc import abstractmethod
 from typing import Literal
 
 import numpy as np
-import pandas as pd
+
+try:
+    import pandas as pd
+except ImportError as e:
+    raise ImportError(
+        (
+            "pandas is required to use this feature. "
+            "Install it with `pip install pandas pyarrow`"
+        )
+    ) from e
 from joblib import Parallel, delayed
 
 from mlx_graphs.data import GraphData

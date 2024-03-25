@@ -4,7 +4,16 @@ from typing import Optional
 
 import mlx.core as mx
 import numpy as np
-import pandas as pd
+
+try:
+    import pandas as pd
+except ImportError as e:
+    raise ImportError(
+        (
+            "pandas is required to use this feature. "
+            "Install it with `pip install pandas pyarrow`"
+        )
+    ) from e
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.utils import (
@@ -76,6 +85,7 @@ class LANLDataset(LazyDataset):
     .. code-block:: python
 
         from mlx_graphs.datasets import LANLDataset
+        from mlx_graphs.loaders import LANLDataLoader
 
         dataset = LANLDataset()  # Each of the 83519 graphs contains 1min of data
         >>> LANL(num_graphs=83519)
@@ -103,8 +113,18 @@ class LANLDataset(LazyDataset):
                 edge_labels(shape=(768,), int64)
                 edge_timestamps(shape=(768,), int64))
 
-        loader = LargeCybersecurityDataLoader(dataset, split="train", \
-            remove_self_loops=False, force_process=True)
+        #  LANLDataLoader can be used to easily iterate over LANL, and is useful to
+        #  reduce the size of the graphs with graph compression
+        loader = LANLDataLoader(
+            dataset, split="train", remove_self_loops=False, use_compress_graph=True, \
+                batch_size=60,
+        )
+        next(loader)
+        >>> GraphData(
+            edge_index(shape=(2, 10064), int64)
+            node_features(shape=(13184, 13184), float32)
+            edge_features(shape=(10064, 6), float32)
+            edge_labels(shape=(10064,), int64))
     """
 
     _url = "https://csr.lanl.gov/data-fence/1711123950/6SZMOJi6hdg8xDqDbFiB9QrZqAA=/cyber1/"
