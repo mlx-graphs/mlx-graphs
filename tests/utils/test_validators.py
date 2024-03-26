@@ -7,7 +7,7 @@ from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index,
     validate_edge_index_and_features,
-    validate_pandas_package,
+    validate_package,
 )
 
 
@@ -96,11 +96,11 @@ def test_validate_edge_index_and_features(x, f, expected_exception):
         ), "Input with valid edge_index and features failed"
 
 
-def test_validate_pandas_package():
+def test_validate_package():
     pandas_spec = importlib.util.find_spec("pandas")
     pandas_installed = pandas_spec is not None
 
-    @validate_pandas_package
+    @validate_package("pandas")
     def foo():
         return True
 

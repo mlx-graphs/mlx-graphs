@@ -14,7 +14,7 @@ from mlx_graphs.datasets.utils import (
     extract_archive,
 )
 from mlx_graphs.datasets.utils.lanl_preprocessing import split
-from mlx_graphs.utils.validators import validate_pandas_package
+from mlx_graphs.utils.validators import validate_package
 
 # Preprocessed auth csv file fields
 LANL_TS = 0
@@ -231,7 +231,7 @@ batch_size=60,
                 file_extension="csv",
             )
 
-    @validate_pandas_package
+    @validate_package("pandas")
     def load_lazily(self, file_path: str, as_pandas_df: bool = False) -> GraphData:
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"Warning: file not found: {file_path}")
@@ -305,7 +305,7 @@ batch_size=60,
             edge_timestamps=mx.array(df_adj[LANL_TS].to_numpy()),
         )
 
-    @validate_pandas_package
+    @validate_package("pandas")
     def _preprocess_one_snapshot(self, df: "DataFrame") -> "DataFrame":  # noqa: F821
         import pandas as pd
 

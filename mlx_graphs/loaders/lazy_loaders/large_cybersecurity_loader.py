@@ -7,7 +7,7 @@ from joblib import Parallel, delayed
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets import LazyDataset
 from mlx_graphs.utils import remove_self_loops
-from mlx_graphs.utils.validators import validate_pandas_package
+from mlx_graphs.utils.validators import validate_package
 
 from .lazy_loader import LazyDataLoader
 
@@ -159,7 +159,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
 
         return graph
 
-    @validate_pandas_package
+    @validate_package("pandas")
     def _load_chunk_of_snapshots(
         self, files: list[str]
     ) -> tuple[np.ndarray, np.ndarray]:
@@ -194,7 +194,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             edge_feats,
         )
 
-    @validate_pandas_package
+    @validate_package("pandas")
     def _merge_workers_output_compressed(self, all_df_adj, all_edge_feats):
         """
         Concatenates the result of all workers for compressed graphs.
