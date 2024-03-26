@@ -63,9 +63,9 @@ def validate_edge_index_and_features(func):
 
 
 def validate_package(package: str):
-    def decorator(func):
-        """Decorator function to check if a package is present in the env"""
+    """Decorator function to check if a package is present in the env"""
 
+    def decorator(func):
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             pandas_spec = importlib.util.find_spec(package)
