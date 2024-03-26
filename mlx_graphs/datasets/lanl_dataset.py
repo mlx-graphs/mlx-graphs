@@ -6,6 +6,7 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import GraphData
+from mlx_graphs.datasets.lazy_dataset import LazyDataset
 from mlx_graphs.datasets.utils import (
     compress_and_remove_files,
     download,
@@ -14,8 +15,6 @@ from mlx_graphs.datasets.utils import (
 )
 from mlx_graphs.datasets.utils.lanl_preprocessing import split
 from mlx_graphs.utils.validators import validate_pandas_package
-
-from .lazy_dataset import LazyDataset
 
 # Preprocessed auth csv file fields
 LANL_TS = 0
@@ -27,7 +26,8 @@ LANL_SRC_USER_TYPE = 5
 LANL_SRC_USER = 6
 LANL_DST_USER = 7
 
-LANL_NUM_NODES = 13184  # Num nodes for the first 14 days
+# Num nodes for the overall 58 days
+LANL_NUM_NODES = 17685
 
 
 class LANLDataset(LazyDataset):
@@ -70,7 +70,7 @@ class LANLDataset(LazyDataset):
             ``True``.
         num_nodes: The number of nodes in the dataset. This number is required to
             compute the one-hot encoding of nodes as node features. Default to
-            ``13184``.
+            ``17685``.
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
 
@@ -117,7 +117,7 @@ batch_size=60,
         next(loader)
         >>> GraphData(
             edge_index(shape=(2, 10064), int64)
-            node_features(shape=(13184, 13184), float32)
+            node_features(shape=(17685, 17685), float32)
             edge_features(shape=(10064, 6), float32)
             edge_labels(shape=(10064,), int64))
     """

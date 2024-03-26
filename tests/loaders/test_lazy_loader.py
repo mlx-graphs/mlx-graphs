@@ -101,6 +101,3 @@ def test_lazy_loader():
     with pytest.raises(AssertionError):
         loader = Loader1(dataset, ranges=(50, 100), batch_size=60)
         graph = next(loader)
-
-
-test_lazy_loader()

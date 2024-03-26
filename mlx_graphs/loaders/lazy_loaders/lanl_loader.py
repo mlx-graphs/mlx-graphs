@@ -15,13 +15,8 @@ from mlx_graphs.datasets.lanl_dataset import (
 from .large_cybersecurity_loader import LargeCybersecurityDataLoader
 
 """
-By default, we use a train/eval/test splits that span on a 14 days period instead
-of the original 58 days, done in ``Understanding and Bridging the Gap Between
-Unsupervised Network Representation Learning and Security Analytics``.
-
 For custom splits to leverage the overall dataset, just change the values provided in
-``LANL_TIMES_RANGES``. The range should not exceed 83518, the total number of files
-(minutes).
+``time_range``. The range should not exceed 83518, the total number of files (minutes).
 """
 
 LANL_BATCH_SIZE = 60  # Each graph yielded by the loader contains 60min of data
@@ -32,21 +27,13 @@ LANL_FIRST_ATTACK_FILE = 2513
 # snapshots of 60 files, and no less.
 LANL_TRAIN_END = LANL_FIRST_ATTACK_FILE - 4 * LANL_BATCH_SIZE + 7
 LANL_VALID_END = LANL_FIRST_ATTACK_FILE - LANL_BATCH_SIZE + 7
-LANL_TEST_END = 20160  # 14 days
+LANL_TEST_END = 83518  # 58 days
 
-# NOTE: In case one wants to use the full dataset comprising 58 days instead of 14 days,
-# uncomment this:
-# LANL_NUM_NODES = 17685
-# LANL_TEST_END = 83518
-# TODO(tristan): make default to all dataset.
-
-# Split ranges for train/eval/test sets. The range is defined in number of files
-# (i.e. number of minutes)
 LANL_TIME_RANGES = {
     "TRAIN": (0, LANL_TRAIN_END),  # 38 hours
     "VALID": (LANL_TRAIN_END + 1, LANL_VALID_END),  # 3 hours
-    "TEST": (LANL_VALID_END + 1, LANL_TEST_END),  # 295 hours
-    "ALL": (0, LANL_TEST_END),  # 336 hours
+    "TEST": (LANL_VALID_END + 1, LANL_TEST_END),  # ~56 days
+    "ALL": (0, LANL_TEST_END),  # 58 days
 }
 
 
@@ -109,8 +96,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             all the benign activity before any attack. "valid" contains the 3 hours
             after the "train" activity, also comprising benign activity only.
             "test" contains all the activity after "valid", comprising both benign
-            and malicious events. By default, the test set id bounded to not exceed
-            14 days.
+            and malicious events and lasting for roughly 46 days.
         batch_size: The duration of a snapshot graph. Default to 60 min per graph.
         nb_processes: The number of processes to spawn to load each snapshot. Default
             to ``1``, without using any multiprocessing.
@@ -143,7 +129,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         next(graph)
         >>> GraphData(
             edge_index(shape=(2, 2758), int32)
-            node_features(shape=(13184, 13184), float32)
+            node_features(shape=(17685, 17685), float32)
             edge_features(shape=(2758, 10), float32)
             edge_labels(shape=(2758,), int32))
 
@@ -152,7 +138,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
 
         >>> GraphData(
             edge_index(shape=(2, 2739), int32)
-            node_features(shape=(13184, 13184), float32)
+            node_features(shape=(17685, 17685), float32)
             edge_features(shape=(2739, 10), float32)
             edge_labels(shape=(2739,), int32))
     """
