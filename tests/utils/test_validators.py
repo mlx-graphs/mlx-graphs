@@ -1,3 +1,5 @@
+import importlib
+
 import mlx.core as mx
 import pytest
 
@@ -5,6 +7,7 @@ from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index,
     validate_edge_index_and_features,
+    validate_pandas_package,
 )
 
 
@@ -91,3 +94,18 @@ def test_validate_edge_index_and_features(x, f, expected_exception):
         assert (
             foo(edge_index=x, edge_features=f) is True
         ), "Input with valid edge_index and features failed"
+
+
+def test_validate_pandas_package():
+    pandas_spec = importlib.util.find_spec("pandas")
+    pandas_installed = pandas_spec is not None
+
+    @validate_pandas_package
+    def foo():
+        return True
+
+    if pandas_installed:
+        assert foo()
+    else:
+        with pytest.raises(ImportError):
+            foo()

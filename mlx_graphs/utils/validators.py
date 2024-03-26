@@ -1,4 +1,5 @@
 import functools
+import importlib
 
 import mlx.core as mx
 
@@ -57,5 +58,26 @@ def validate_edge_index_and_features(func):
                     f"and {edge_features.shape[0]} features)",
                 )
         return func(edge_index, edge_features, *args, **kwargs)
+
+    return wrapper
+
+
+def validate_pandas_package(func):
+    """Decorator function to check if the pandas package is present in the env"""
+
+    @functools.wraps(func)
+    def wrapper(*args, **kwargs):
+        pandas_spec = importlib.util.find_spec("pandas")
+        pandas_installed = pandas_spec is not None
+
+        if not pandas_installed:
+            raise ImportError(
+                (
+                    "pandas is required to use this feature. "
+                    "Install it with `pip install pandas pyarrow`"
+                )
+            )
+
+        return func(*args, **kwargs)
 
     return wrapper

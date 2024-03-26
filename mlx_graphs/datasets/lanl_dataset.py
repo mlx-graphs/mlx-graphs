@@ -5,16 +5,6 @@ from typing import Optional
 import mlx.core as mx
 import numpy as np
 
-try:
-    import pandas as pd
-except ImportError as e:
-    raise ImportError(
-        (
-            "pandas is required to use this feature. "
-            "Install it with `pip install pandas pyarrow`"
-        )
-    ) from e
-
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.utils import (
     compress_and_remove_files,
@@ -23,6 +13,7 @@ from mlx_graphs.datasets.utils import (
     extract_archive,
 )
 from mlx_graphs.datasets.utils.lanl_preprocessing import split
+from mlx_graphs.utils.validators import validate_pandas_package
 
 from .lazy_dataset import LazyDataset
 
@@ -240,9 +231,12 @@ batch_size=60,
                 file_extension="csv",
             )
 
+    @validate_pandas_package
     def load_lazily(self, file_path: str, as_pandas_df: bool = False) -> GraphData:
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"Warning: file not found: {file_path}")
+
+        import pandas as pd
 
         # If gzip compression, we read the csv while decompressing it.
         compression = "gzip" if self._use_gzip else "infer"
@@ -299,7 +293,7 @@ batch_size=60,
             node_features=items[0].node_features,
         )
 
-    def to_graphdata(self, df_adj: pd.DataFrame, edge_feats: np.array) -> GraphData:
+    def to_graphdata(self, df_adj: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
         return GraphData(
             edge_index=mx.array(
                 np.stack(
@@ -311,7 +305,10 @@ batch_size=60,
             edge_timestamps=mx.array(df_adj[LANL_TS].to_numpy()),
         )
 
-    def _preprocess_one_snapshot(self, df: pd.DataFrame) -> pd.DataFrame:
+    @validate_pandas_package
+    def _preprocess_one_snapshot(self, df: "DataFrame") -> "DataFrame":  # noqa: F821
+        import pandas as pd
+
         # Normalization raises an unwanted warning.
         pd.set_option("mode.chained_assignment", None)
 
