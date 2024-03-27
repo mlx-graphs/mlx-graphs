@@ -36,11 +36,11 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         nb_processes: The number of processes to spawn to process each snapshot.
             This affects only the processing of the graphs, not the loading
             from disk. Default to ``1``, without using any multiprocessing.
-        use_compress_graph: Whether to compress the resulting graph.
+        compress_edges: Whether to merge the edges of the resulting graph.
             If ``True``, all duplicate edges will be removed to keep only one edge,
             with additional edge features. If ``False``,
             the graph simply concatenates all snapshots into a single graph.
-            Default to ``True``.
+            Default to ``False``.
         remove_self_loops: Whether to remove the self-loops in the graph.
             Default to ``True``.
         force_processing: Whether to force the loader to process the raw csv files of
@@ -62,12 +62,17 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         time_range: dict[str, tuple[int]],
         batch_size: int,
         nb_processes: int = 1,
-        use_compress_graph: bool = True,
+        compress_edges: bool = False,
         remove_self_loops: bool = True,
         force_processing: bool = False,
         save_on_disk: bool = True,
         **kwargs,
     ):
+        self._nb_processes = nb_processes
+        self._remove_self_loops = remove_self_loops
+        self._compress_edges = compress_edges
+        self._save_on_disk = save_on_disk
+
         ranges = time_range[split.upper()]
         super().__init__(
             dataset=dataset,
@@ -75,11 +80,6 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             batch_size=batch_size,
             force_processing=force_processing,
         )
-
-        self._nb_processes = nb_processes
-        self._remove_self_loops = remove_self_loops
-        self._use_compress_graph = use_compress_graph
-        self._save_on_disk = save_on_disk
 
     @abstractmethod
     def compress_graph(self, df: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
@@ -145,7 +145,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             all_df_adj, all_edge_feats
         )
 
-        if self._use_compress_graph:
+        if self._compress_edges:
             graph = self.compress_graph(df_adj, edge_feats)
         else:
             graph = self.dataset.to_graphdata(df_adj, edge_feats)
@@ -247,3 +247,14 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         if len(results) == 4:
             graph.edge_timestamps = results[-1]
         return graph
+
+    def __hash__(self):
+        """We want to re-process graphs if one of those attributes is changed"""
+
+        return hash(
+            (
+                super().__hash__(),
+                self._compress_edges,
+                self._remove_self_loops,
+            )
+        )

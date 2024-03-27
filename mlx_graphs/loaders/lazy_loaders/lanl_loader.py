@@ -46,9 +46,9 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
     """
     This loader can be used to iterate over the ``LANLDataset``.
     By default, it yields a snapshot graph of 60 minutes of data (i.e. 60 files).
-    This duration can be changed by setting ``batch_size``.
+    This duration can be changed by setting ``batch_size`` accordingly.
 
-    For each snapshot, all 60 files are read and a large graph is built and compressed
+    If ``compress_edges=True``, the yielded graph is compressed
     in such a way that all duplicate edges are compressed into a single edge with
     additional edge features like the count of edges, the count of success auth, etc.
     This compression is used to drastically reduce the size of the graph. This approach
@@ -58,8 +58,9 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
 
         - reads ``batch_size`` csv files from the provided ``dataset``
         - builds a large graph from the concatenated csv files
-        - compresses the graph into a smaller graph without any duplicate edges
-          This graph is a ``GraphData``, with the following attributes:
+        - if ``compress_edges=True``, compresses the graph into a smaller graph without
+          any duplicate edges.
+          This graph is a ``GraphData`` with the following attributes:
 
           - ``edge_index``: an mx.array with shape (2, num_edges), the graph structure
           - ``edge_features``: an mx.array with shape (num_edges, 6) and the features
@@ -76,12 +77,12 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             By default, the features are standardized using min-max standardization
             (see ``_standardize_edge_feats``).
 
-        - saves the compressed ``GraphData`` on disk as a `.pkl` for later reuse
+        - saves the ``GraphData`` on disk as a `.pkl` for later reuse
           in the future iterations on the loader.
 
     On the second iteration:
 
-        - the compressed graphs already exist on disk, so they are directly loaded.
+        - the processed graphs already exist on disk, so they are directly loaded.
           If the underlying LANL dataset is modified or the ``batch_size`` and
           ``transform`` args of the loader are changed, the graphs are automatically
           re-processed instead of loading them from disk.
@@ -110,11 +111,11 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         batch_size: The duration of a snapshot graph. Default to 60 min per graph.
         nb_processes: The number of processes to spawn to load each snapshot. Default
             to ``1``, without using any multiprocessing.
-        use_compress_graph: Whether to compress the resulting graph.
+        compress_edges: Whether to merge the edges of the resulting graph.
             If ``True``, all duplicate edges will be removed to keep only one edge,
             with additional edge features. If ``False``,
             the graph simply concatenates all snapshots into a single graph.
-            Default to ``True``.
+            Default to ``False``.
         remove_self_loops: Whether to remove the self-loops in the graph.
             Default to ``True``.
         force_processing: Whether to force the loader to process the raw csv files of
@@ -164,7 +165,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         time_range: dict[str, tuple[int]] = LANL_TIME_RANGES,
         batch_size: int = LANL_BATCH_SIZE,
         nb_processes: int = 1,
-        use_compress_graph: bool = True,
+        compress_edges: bool = False,
         remove_self_loops: bool = True,
         force_processing: bool = False,
         save_on_disk: bool = True,
@@ -176,7 +177,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             time_range=time_range,
             batch_size=batch_size,
             nb_processes=nb_processes,
-            use_compress_graph=use_compress_graph,
+            compress_edges=compress_edges,
             remove_self_loops=remove_self_loops,
             force_processing=force_processing,
             save_on_disk=save_on_disk,

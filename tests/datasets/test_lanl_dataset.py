@@ -40,7 +40,7 @@ def test_lanl_dataset(tmp_path):
         dataset,
         split="valid",
         remove_self_loops=False,
-        use_compress_graph=True,
+        compress_edges=True,
         batch_size=60,
     )
     graph = next(loader)
@@ -64,7 +64,7 @@ def test_lanl_dataset(tmp_path):
         split="train",
         remove_self_loops=False,
         force_processing=True,
-        use_compress_graph=False,
+        compress_edges=False,
     )
     graph = next(loader)
     assert graph.edge_index.shape == (2, 14618)
@@ -79,7 +79,7 @@ def test_lanl_dataset(tmp_path):
         split="train",
         remove_self_loops=True,
         force_processing=True,
-        use_compress_graph=False,
+        compress_edges=False,
     )
     graph = next(loader)
     assert graph.edge_index.shape == (2, 11671)
@@ -94,7 +94,7 @@ def test_lanl_dataset(tmp_path):
         split="train",
         remove_self_loops=False,
         force_processing=True,
-        use_compress_graph=False,
+        compress_edges=False,
         nb_processes=4,
     )
     graph = next(loader)
@@ -110,7 +110,7 @@ def test_lanl_dataset(tmp_path):
         split="train",
         remove_self_loops=False,
         force_processing=True,
-        use_compress_graph=False,
+        compress_edges=False,
         batch_size=120,
     )
     graph = next(loader)
@@ -127,7 +127,7 @@ def test_lanl_dataset(tmp_path):
         split="train",
         remove_self_loops=False,
         force_processing=False,
-        use_compress_graph=False,
+        compress_edges=False,
         batch_size=120,
     )
     graph = next(loader)

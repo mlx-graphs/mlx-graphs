@@ -115,7 +115,7 @@ class LANLDataset(LazyDataset):
         #  LANLDataLoader can be used to easily iterate over LANL, and is useful to
         #  reduce the size of the graphs with graph compression
         loader = LANLDataLoader(
-            dataset, split="train", remove_self_loops=False, use_compress_graph=True, \
+            dataset, split="train", remove_self_loops=False, compress_edges=True, \
 batch_size=60,
         )
         next(loader)
