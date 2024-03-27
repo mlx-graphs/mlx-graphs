@@ -184,5 +184,5 @@ class GraphData:
         return np.unique(edge_index.reshape(-1)).size < num_nodes
 
     def has_self_loops(self) -> bool:
-        """Returns a boolean of whether the graph contains self loops"""
+        """Returns a boolean of whether the graph contains self loops."""
         return ((self.edge_index[0] == self.edge_index[1]).sum() > 0).item()
