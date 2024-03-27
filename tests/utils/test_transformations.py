@@ -4,6 +4,7 @@ import pytest
 from mlx_graphs.utils.transformations import (
     add_self_loops,
     get_unique_edge_indices,
+    mask_isolated_nodes,
     remove_duplicate_directed_edges,
     remove_self_loops,
     to_adjacency_matrix,
@@ -208,3 +209,20 @@ def test_remove_duplicated_directed_edges():
     expected_index = mx.array([[0, 0, 2, 2], [1, 2, 1, 2]])
     new_index = remove_duplicate_directed_edges(edge_index)
     assert mx.array_equal(new_index, expected_index)
+
+
+def test_mask_isolated_nodes():
+    edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
+    mask = mask_isolated_nodes(edge_index, 2)
+    expected_mask = mx.array([True, True])
+    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+
+    edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
+    mask = mask_isolated_nodes(edge_index, 3)
+    expected_mask = mx.array([True, True, False])
+    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+
+    edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
+    mask = mask_isolated_nodes(edge_index, 3)
+    expected_mask = mx.array([True, False, True])
+    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
