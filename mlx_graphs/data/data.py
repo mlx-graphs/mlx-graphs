@@ -177,8 +177,8 @@ class GraphData:
         return None
 
     def has_isolated_nodes(self) -> bool:
-        """Returns a boolean of whether the graph has isolated nodes or not.
-        (ie: nodes that does not have an edge with any other nodes )"""
+        """Returns a boolean of whether the graph has isolated nodes or not
+        (i.e., nodes that don't have a link to any other nodes)"""
         return has_isolated_nodes(self.edge_index, self.num_nodes)
 
     def has_self_loops(self) -> bool:
