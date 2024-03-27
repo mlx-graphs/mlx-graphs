@@ -42,7 +42,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             the graph simply concatenates all snapshots into a single graph.
             Default to ``False``.
         remove_self_loops: Whether to remove the self-loops in the graph.
-            Default to ``True``.
+            Setting this arg to ``True`` may be extremly slow. Default to ``False``.
         force_processing: Whether to force the loader to process the raw csv files of
             the dataset. If set to ``True``, all csv files will be processed and
             the generated graphs will be saved on disk. If set to ``False``, the
@@ -63,7 +63,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         batch_size: int,
         nb_processes: int = 1,
         compress_edges: bool = False,
-        remove_self_loops: bool = True,
+        remove_self_loops: bool = False,
         force_processing: bool = False,
         save_on_disk: bool = True,
         **kwargs,

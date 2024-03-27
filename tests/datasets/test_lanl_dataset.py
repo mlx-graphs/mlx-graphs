@@ -27,7 +27,11 @@ def test_lanl_dataset(tmp_path):
     # With loader + graph compression
     for split in ["train", "all"]:
         loader = LANLDataLoader(
-            dataset, split=split, remove_self_loops=False, force_processing=True
+            dataset,
+            split=split,
+            remove_self_loops=False,
+            force_processing=True,
+            compress_edges=True,
         )
         graph = next(loader)
         assert graph.edge_index.shape == (2, 2758)
@@ -50,7 +54,11 @@ def test_lanl_dataset(tmp_path):
     assert graph.node_features.shape == (17685, 17685)
 
     loader = LANLDataLoader(
-        dataset, split="test", remove_self_loops=False, force_processing=True
+        dataset,
+        split="test",
+        remove_self_loops=False,
+        force_processing=True,
+        compress_edges=True,
     )
     graph = next(loader)
     assert graph.edge_index.shape == (2, 7794)

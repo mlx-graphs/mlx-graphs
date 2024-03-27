@@ -184,7 +184,7 @@ class LazyDataLoader(ABC):
         Args:
             graph: Graph to store on disk.
         """
-        path = self.graph_path_at_index(self.current_batch)
+        path = self.current_graph_path
         os.makedirs(os.path.dirname(path), exist_ok=True)
 
         with open(path, "wb") as f:
@@ -197,7 +197,7 @@ class LazyDataLoader(ABC):
         Returns:
             The graph stored into memory.
         """
-        path = self.graph_path_at_index(self.current_batch)
+        path = self.current_graph_path
         with open(path, "rb") as f:
             graph = pickle.load(f)
 
@@ -220,10 +220,7 @@ class LazyDataLoader(ABC):
             raise StopIteration
 
         graph = None
-        if (
-            os.path.exists(self.graph_path_at_index(self.current_batch))
-            and not self.force_processing
-        ):
+        if os.path.exists(self.current_graph_path) and not self.force_processing:
             graph = self.load_processed_graph()
         else:
             graph = self.process_graph()
@@ -301,6 +298,11 @@ class LazyDataLoader(ABC):
     def graph_path_at_index(self, idx: int) -> str:
         """Returns the path to a processed graph stored on disk"""
         return os.path.join(self.processed_path, f"{idx}.pkl")
+
+    @property
+    def current_graph_path(self) -> str:
+        """Returns the path to the current graph on disk"""
+        return self.graph_path_at_index(self.current_batch + self._start_range)
 
     def __hash__(self):
         """
