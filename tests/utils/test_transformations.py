@@ -214,15 +214,18 @@ def test_remove_duplicated_directed_edges():
 def test_mask_isolated_nodes():
     edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
     mask = mask_isolated_nodes(edge_index, 2)
-    expected_mask = mx.array([True, True])
+    expected_mask = mx.array([0, 1], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
 
     edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
     mask = mask_isolated_nodes(edge_index, 3)
-    expected_mask = mx.array([True, True, False])
+    expected_mask = mx.array([0, 1], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
 
     edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
     mask = mask_isolated_nodes(edge_index, 3)
-    expected_mask = mx.array([True, False, True])
+    expected_mask = mx.array([0, 2], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+
+
+test_mask_isolated_nodes()

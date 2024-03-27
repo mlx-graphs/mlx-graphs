@@ -445,7 +445,8 @@ def mask_isolated_nodes(edge_index: mx.array, num_nodes: int) -> mx.array:
         mx.array([True, False, True])
     """
     edge_index = remove_self_loops(edge_index)
-    mask = mx.zeros(num_nodes, dtype=mx.bool_)
+    mask = mx.zeros(num_nodes, dtype=mx.uint32)
     mask[edge_index.reshape(-1)] = 1
+    mask = np.unique(mx.arange(num_nodes) * mask)
 
-    return mask
+    return mx.array(mask, dtype=mx.uint32)
