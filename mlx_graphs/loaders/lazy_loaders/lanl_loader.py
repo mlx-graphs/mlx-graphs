@@ -71,12 +71,16 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             By default, the features are standardized using min-max standardization
             (see ``_standardize_edge_feats``).
 
-        - saves the compressed ``GraphData`` on disk as `.pkl` for later reuse
+        - saves the compressed ``GraphData`` on disk as a `.pkl` for later reuse
+          in the future iterations on the loader.
 
     On the second iteration:
 
-        - the compressed graphs already exist on disk, so they are directly loaded
-        - if one wants to overwrite existing graphs, set ``force_process=True``
+        - the compressed graphs already exist on disk, so they are directly loaded.
+          If the underlying LANL dataset is modified or the ``batch_size`` and
+          ``transform`` args of the loader are changed, the graphs are automatically
+          re-processed instead of loading them from disk.
+        - if one wants to overwrite existing graphs, set ``force_processing=True``
 
     References:
         [1] `Euler: Detecting Network Lateral Movement via Scalable Temporal Link \
@@ -89,7 +93,8 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
 
     Args:
         dataset: An instance of a ``LANLDataset`` dataset
-        split: The portion of the dataset to iterate on ("train" | "valid" | "test").
+        split: The portion of the dataset to iterate on
+            ("all" | "train" | "valid" | "test"). Default to "all".
         time_range: A dictionnary indicating the range in minutes for each set.
             The ``time_range`` contains the ranges that will be used by ``split``.
             By default: "train" contains the range between 0 and 38 hours, comprising
@@ -107,12 +112,16 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             Default to ``True``.
         remove_self_loops: Whether to remove the self-loops in the graph.
             Default to ``True``.
-        force_process: Whether to force the loader to process the raw csv files of
+        force_processing: Whether to force the loader to process the raw csv files of
             the dataset. If set to ``True``, all csv files will be processed and
-            the generated graphs will be saved on disk. If set to ``False``, the
-            csv files will be processed only once and stored on disk, then the version
-            stored on disk will be directly loaded at the next iteration instead
-            of re-computing the same graphs. Default to ``False``.
+            the generated graphs will be saved on disk if ``save_on_disk`` is set
+            to `True`. If set to ``False``, the csv files will be processed only
+            once and stored on disk, then the version stored on disk will be directly
+            loaded at the next iteration instead of re-computing the same graphs.
+            Default to ``False``.
+        save_on_disk: Whether to save the graphs on disk when processed a first time.
+            If set to `True`, the first iteration on the loader processes the graphs
+            and saves them on disk, and future iterations simply load the saved graphs.
 
     Example:
 
@@ -146,13 +155,14 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
     def __init__(
         self,
         dataset: LazyDataset,
-        split: Literal["train", "valid", "test"],
+        split: Literal["all", "train", "valid", "test"] = "all",
         time_range: dict[str, tuple[int]] = LANL_TIME_RANGES,
         batch_size: int = LANL_BATCH_SIZE,
         nb_processes: int = 1,
         use_compress_graph: bool = True,
         remove_self_loops: bool = True,
-        force_process: bool = False,
+        force_processing: bool = False,
+        save_on_disk: bool = True,
         **kwargs,
     ):
         super().__init__(
@@ -163,11 +173,12 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             nb_processes=nb_processes,
             use_compress_graph=use_compress_graph,
             remove_self_loops=remove_self_loops,
-            force_process=force_process,
+            force_processing=force_processing,
+            save_on_disk=save_on_disk,
             **kwargs,
         )
 
-    def compress_graph(self, df, edge_feats) -> GraphData:
+    def compress_graph(self, df: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
         df_adj = df[[LANL_SRC, LANL_DST, LANL_LABEL]]
 
         nb_e_feats = 6
@@ -232,7 +243,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         )
         return graph
 
-    def _standardize_edge_feats(self, edge_feats):
+    def _standardize_edge_feats(self, edge_feats: np.array):
         """For categorical features with
         0s, we want to compute the statistics only on the non-0 values.
         We also want to update only the non-0 features.

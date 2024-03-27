@@ -33,8 +33,9 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             The end of the range is included, e.g. a range (0, 10)
             iterates over 11 graphs.
         batch_size: The duration of a snapshot graph.
-        nb_processes: The number of processes to spawn to load each snapshot. Default
-            to ``1``, without using any multiprocessing.
+        nb_processes: The number of processes to spawn to process each snapshot.
+            This affects only the processing of the graphs, not the loading
+            from disk. Default to ``1``, without using any multiprocessing.
         use_compress_graph: Whether to compress the resulting graph.
             If ``True``, all duplicate edges will be removed to keep only one edge,
             with additional edge features. If ``False``,
@@ -42,24 +43,29 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             Default to ``True``.
         remove_self_loops: Whether to remove the self-loops in the graph.
             Default to ``True``.
-        force_process: Whether to force the loader to process the raw csv files of
+        force_processing: Whether to force the loader to process the raw csv files of
             the dataset. If set to ``True``, all csv files will be processed and
             the generated graphs will be saved on disk. If set to ``False``, the
             csv files will be processed only once and stored on disk, then the version
             stored on disk will be directly loaded at the next iteration instead
             of re-computing the same graphs. Default to ``False``.
+        save_on_disk: Whether to save the graphs on disk when processed a first time.
+            If set to `True`, the first iteration on the loader processes the graphs
+            and saves them on disk, and future iterations simply load the saved graphs.
+            Default to ``True``.
     """
 
     def __init__(
         self,
         dataset: LazyDataset,
-        split: Literal["train", "valid", "test"],
+        split: Literal["all", "train", "valid", "test"],
         time_range: dict[str, tuple[int]],
         batch_size: int,
         nb_processes: int = 1,
         use_compress_graph: bool = True,
         remove_self_loops: bool = True,
-        force_process: bool = False,
+        force_processing: bool = False,
+        save_on_disk: bool = True,
         **kwargs,
     ):
         ranges = time_range[split.upper()]
@@ -67,12 +73,13 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             dataset=dataset,
             ranges=ranges,
             batch_size=batch_size,
-            force_process=force_process,
+            force_processing=force_processing,
         )
 
         self._nb_processes = nb_processes
         self._remove_self_loops = remove_self_loops
         self._use_compress_graph = use_compress_graph
+        self._save_on_disk = save_on_disk
 
     @abstractmethod
     def compress_graph(self, df: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
@@ -146,7 +153,8 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             graph = self._rm_self_loops(graph)
 
         # Save on disk
-        self.save_processed_graph(graph)
+        if self._save_on_disk:
+            self.save_processed_graph(graph)
 
         # Add the node features after saving on disk to save storage
         graph = self.dataset.add_one_hot_node_features(graph)

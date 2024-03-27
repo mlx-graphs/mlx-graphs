@@ -37,10 +37,14 @@ class LANLDataset(LazyDataset):
 
     It is made up of 58 consecutive days of data gathered from
     the Los Alamos National Laboratory’s internal
-    computer network. A typical APT campaign produced 1,648,275,307
-    auth events across 17,684 Windows machines, including 305 compromised computers
-    and 749 harmful events. With this dataset, graphs can be built from
-    authentication events.
+    computer network. This version of the dataset comprises 49,341,086 auth events
+    from a typical APT campaign across 17,685 Windows machines, including
+    705 malicious events. Graphs can be constructed from authentication events,
+    where an edge represents an authentication action and a node represents
+    a machine within the network.
+    Each edge is associated with either a benign or malicious label, making this
+    dataset suitable for edge prediction/detection tasks, as well as node-based
+    tasks, where the machine at the origin of malicious activity can be identified.
 
     The version of the LANL dataset proposed within mlx-graphs is already
     preprocessed to only include data required to build the graphs along with

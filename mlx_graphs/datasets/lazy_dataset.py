@@ -248,3 +248,17 @@ class LazyDataset(Dataset):
 
         graph.node_features = self._eye
         return graph
+
+    def __hash__(self):
+        """
+        Computes a unique hash that will yields a different value if
+        one of these attributes is changed.
+        Useful to generate a unique id of this object for saving on disk.
+        """
+        return hash(
+            (
+                self.name,
+                self.num_nodes,
+                self.transform,
+            )
+        )

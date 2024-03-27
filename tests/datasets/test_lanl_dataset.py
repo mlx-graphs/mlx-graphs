@@ -27,7 +27,7 @@ def test_lanl_dataset(tmp_path):
     # With loader + graph compression
     for split in ["train", "all"]:
         loader = LANLDataLoader(
-            dataset, split=split, remove_self_loops=False, force_process=True
+            dataset, split=split, remove_self_loops=False, force_processing=True
         )
         graph = next(loader)
         assert graph.edge_index.shape == (2, 2758)
@@ -35,7 +35,7 @@ def test_lanl_dataset(tmp_path):
         assert graph.edge_labels.shape == (2758,)
         assert graph.node_features.shape == (17685, 17685)
 
-    # Without force_process (should store the results in a new folder)
+    # Without force_processing (should store the results in a new folder)
     loader = LANLDataLoader(
         dataset,
         split="valid",
@@ -50,7 +50,7 @@ def test_lanl_dataset(tmp_path):
     assert graph.node_features.shape == (17685, 17685)
 
     loader = LANLDataLoader(
-        dataset, split="test", remove_self_loops=False, force_process=True
+        dataset, split="test", remove_self_loops=False, force_processing=True
     )
     graph = next(loader)
     assert graph.edge_index.shape == (2, 7794)
@@ -63,7 +63,7 @@ def test_lanl_dataset(tmp_path):
         dataset,
         split="train",
         remove_self_loops=False,
-        force_process=True,
+        force_processing=True,
         use_compress_graph=False,
     )
     graph = next(loader)
@@ -78,7 +78,7 @@ def test_lanl_dataset(tmp_path):
         dataset,
         split="train",
         remove_self_loops=True,
-        force_process=True,
+        force_processing=True,
         use_compress_graph=False,
     )
     graph = next(loader)
@@ -93,7 +93,7 @@ def test_lanl_dataset(tmp_path):
         dataset,
         split="train",
         remove_self_loops=False,
-        force_process=True,
+        force_processing=True,
         use_compress_graph=False,
         nb_processes=4,
     )
@@ -109,7 +109,7 @@ def test_lanl_dataset(tmp_path):
         dataset,
         split="train",
         remove_self_loops=False,
-        force_process=True,
+        force_processing=True,
         use_compress_graph=False,
         batch_size=120,
     )
@@ -121,12 +121,12 @@ def test_lanl_dataset(tmp_path):
     assert graph.edge_timestamps.shape == truth.edge_timestamps.shape
     assert graph.node_features.shape == truth.node_features.shape
 
-    # With loader + without force_process
+    # With loader + without force_processing
     loader = LANLDataLoader(
         dataset,
         split="train",
         remove_self_loops=False,
-        force_process=False,
+        force_processing=False,
         use_compress_graph=False,
         batch_size=120,
     )

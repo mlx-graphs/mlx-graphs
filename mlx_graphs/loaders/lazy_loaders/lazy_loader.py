@@ -37,9 +37,9 @@ class LazyDataLoader(ABC):
             to iterate on. The end of the range is included, e.g. a range (0, 10)
             iterates over 11 graphs.
         batch_size: Number of graphs to merge into a single graph.
-        force_process: Whether to force re-processing all files from the dataset.
+        force_processing: Whether to force re-processing all files from the dataset.
             By default, the processed graphs are stored on disk and reused in future
-            iterations. This behavior can be removed by setting ``force_process=True``.
+            iterations. This behavior can be removed with ``force_processing=True``.
 
     Example:
 
@@ -135,14 +135,14 @@ class LazyDataLoader(ABC):
         dataset: LazyDataset,
         ranges: tuple[int, int],
         batch_size: int = None,
-        force_process: bool = False,
+        force_processing: bool = False,
         **kwargs,
     ):
         self.dataset = deepcopy(dataset)
-        self.force_process = force_process
         self._batch_size = batch_size
         self._start_range = ranges[0]
         self._end_range = ranges[1]
+        self.force_processing = force_processing
 
         self.current_batch = 0
         self.progress_bar = None
@@ -173,7 +173,7 @@ class LazyDataLoader(ABC):
         Returns:
             The path to the folder where the loader's files are located.
         """
-        unique_id = f"loader_{self._start_range}_{self._end_range}_{self._batch_size}"
+        unique_id = str(hash(self))
         return os.path.join(self.dataset.processed_path, unique_id)
 
     def save_processed_graph(self, graph: GraphData):
@@ -183,10 +183,10 @@ class LazyDataLoader(ABC):
         Args:
             graph: Graph to store on disk.
         """
-        path = self.processed_path
-        os.makedirs(path, exist_ok=True)
+        path = self.graph_path_at_index(self.current_batch)
+        os.makedirs(os.path.dirname(path), exist_ok=True)
 
-        with open(os.path.join(path, f"{self.current_batch}.pkl"), "wb") as f:
+        with open(path, "wb") as f:
             pickle.dump(graph, f)
 
     def load_processed_graph(self) -> GraphData:
@@ -196,8 +196,8 @@ class LazyDataLoader(ABC):
         Returns:
             The graph stored into memory.
         """
-        path = self.processed_path
-        with open(os.path.join(path, f"{self.current_batch}.pkl"), "rb") as f:
+        path = self.graph_path_at_index(self.current_batch)
+        with open(path, "rb") as f:
             graph = pickle.load(f)
 
         return graph
@@ -220,9 +220,9 @@ class LazyDataLoader(ABC):
 
         graph = None
         if (
-            os.path.exists(self.processed_path)
-            and len(os.listdir(self.processed_path)) > 0
-        ) and not self.force_process:
+            os.path.exists(self.graph_path_at_index(self.current_batch))
+            and not self.force_processing
+        ):
             graph = self.load_processed_graph()
         else:
             graph = self.process_graph()
@@ -296,3 +296,20 @@ class LazyDataLoader(ABC):
     @property
     def nb_batches(self):
         return self._nb_batches
+
+    def graph_path_at_index(self, idx: int) -> str:
+        """Returns the path to a processed graph stored on disk"""
+        return os.path.join(self.processed_path, f"{idx}.pkl")
+
+    def __hash__(self):
+        """
+        Computes a unique hash that will yields a different value if
+        one of these attributes is changed.
+        Useful to generate a unique id of this object for saving on disk.
+        """
+        return hash(
+            (
+                self.dataset,
+                self._batch_size,
+            )
+        )
