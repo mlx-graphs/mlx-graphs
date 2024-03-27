@@ -217,14 +217,24 @@ def test_mask_isolated_nodes():
     expected_mask = mx.array([0, 1], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
 
-    edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
+    edge_index = mx.array([[1, 2], [2, 1]])
     mask = mask_isolated_nodes(edge_index, 3)
-    expected_mask = mx.array([0, 1], dtype=mx.uint32)
+    expected_mask = mx.array([1, 2], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
 
     edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
     mask = mask_isolated_nodes(edge_index, 3)
     expected_mask = mx.array([0, 2], dtype=mx.uint32)
+    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+
+    edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
+    mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
+    expected_mask = mx.array([1], dtype=mx.uint32)
+    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+
+    edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
+    mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
+    expected_mask = mx.array([2], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
 
 
