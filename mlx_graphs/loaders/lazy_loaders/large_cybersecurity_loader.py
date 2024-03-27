@@ -11,6 +11,11 @@ from mlx_graphs.utils.validators import validate_package
 
 from .lazy_loader import LazyDataLoader
 
+try:
+    import pandas as pd
+except ImportError:
+    raise ImportError("Install pandas to use the LANLDataLoader")
+
 
 class LargeCybersecurityDataLoader(LazyDataLoader):
     """
@@ -82,7 +87,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         )
 
     @abstractmethod
-    def compress_graph(self, df: "DataFrame", edge_feats: np.ndarray) -> GraphData:  # noqa: F821
+    def compress_graph(self, df: pd.DataFrame, edge_feats: np.ndarray) -> GraphData:
         """
         Removes all duplicate edges and replaces them by a single edge with
         additinal edge features. This is used to reduce drastically the size
@@ -168,7 +173,6 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
 
         return graph
 
-    @validate_package("pandas")
     def _load_chunk_of_snapshots(
         self, files: list[str]
     ) -> tuple[np.ndarray, np.ndarray]:
@@ -183,8 +187,6 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             dataframe
             edge features
         """
-        import pandas as pd
-
         all_df_adjs, all_edge_feats = [], []
 
         for file in files:
@@ -203,7 +205,6 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             edge_feats,
         )
 
-    @validate_package("pandas")
     def _merge_workers_output_compressed(self, all_df_adj, all_edge_feats):
         """
         Concatenates the result of all workers for compressed graphs.
@@ -212,7 +213,6 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             all_df_adjs: array of dataframes
             all_edge_feats: array of edge feat arrays
         """
-        import pandas as pd
 
         all_df_adj = pd.concat(all_df_adj, axis=0).reset_index()
         all_edge_feats = np.concatenate((all_edge_feats), axis=0)

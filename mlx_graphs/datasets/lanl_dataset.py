@@ -1,6 +1,6 @@
 import os
 import shutil
-from typing import Optional
+from typing import Optional, Union
 
 import mlx.core as mx
 import numpy as np
@@ -14,7 +14,11 @@ from mlx_graphs.datasets.utils import (
     extract_archive,
 )
 from mlx_graphs.datasets.utils.lanl_preprocessing import split
-from mlx_graphs.utils.validators import validate_package
+
+try:
+    import pandas as pd
+except ImportError:
+    raise ImportError("Install pandas to use the LANLDataLoader")
 
 # Preprocessed auth csv file fields
 LANL_TS = 0
@@ -235,12 +239,11 @@ batch_size=60,
                 file_extension="csv",
             )
 
-    @validate_package("pandas")
-    def load_lazily(self, file_path: str, as_pandas_df: bool = False) -> GraphData:
+    def load_lazily(
+        self, file_path: str, as_pandas_df: bool = False
+    ) -> Union[GraphData, tuple[pd.DataFrame, np.ndarray]]:
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"Warning: file not found: {file_path}")
-
-        import pandas as pd
 
         # If gzip compression, we read the csv while decompressing it.
         compression = "gzip" if self._use_gzip else "infer"
@@ -297,7 +300,7 @@ batch_size=60,
             node_features=items[0].node_features,
         )
 
-    def to_graphdata(self, df_adj: "DataFrame", edge_feats: np.ndarray) -> GraphData:  # noqa: F821
+    def to_graphdata(self, df_adj: pd.DataFrame, edge_feats: np.ndarray) -> GraphData:
         return GraphData(
             edge_index=mx.array(
                 np.stack(
@@ -309,8 +312,7 @@ batch_size=60,
             edge_timestamps=mx.array(df_adj[LANL_TS].to_numpy()),
         )
 
-    @validate_package("pandas")
-    def _preprocess_one_snapshot(self, df: "DataFrame") -> "DataFrame":  # noqa: F821
+    def _preprocess_one_snapshot(self, df: pd.DataFrame) -> pd.DataFrame:
         import pandas as pd
 
         # Normalization raises an unwanted warning.
