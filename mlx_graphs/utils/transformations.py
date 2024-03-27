@@ -456,3 +456,17 @@ def mask_isolated_nodes(
         return mx.array(indices)
 
     return mx.array(np.setdiff1d(np.arange(num_nodes), indices))
+
+
+@validate_edge_index
+def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
+    """Returns a boolean of whether the graph has isolated nodes or not.
+    (ie: nodes that does not have an edge with any other nodes )"""
+    edge_index = remove_self_loops(edge_index)
+    return np.unique(edge_index.reshape(-1)).size < num_nodes
+
+
+@validate_edge_index
+def has_self_loops(edge_index: mx.array) -> bool:
+    """Returns a boolean of whether the graph contains self loops"""
+    return ((edge_index[0] == edge_index[1]).sum() > 0).item()

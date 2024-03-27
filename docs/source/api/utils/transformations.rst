@@ -20,3 +20,5 @@ Transformations
 	remove_duplicate_directed_edges
 	coalesce
 	mask_isolated_nodes
+	has_isolated_nodes
+	has_self_loops
