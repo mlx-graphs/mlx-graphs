@@ -1,5 +1,4 @@
 from collections import defaultdict
-from typing import Any
 
 import mlx.core as mx
 
@@ -17,7 +16,7 @@ from mlx_graphs.data import GraphData
 def to_networkx(
     data: GraphData,
     remove_self_loops: bool = False,
-) -> Any:
+) -> nx.DiGraph:
     r"""Converts a :class:`mlx_graphs.data.GraphData` instance to a
     a directed :obj:`networkx.DiGraph` otherwise.
 
