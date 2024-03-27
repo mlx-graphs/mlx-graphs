@@ -19,3 +19,4 @@ Transformations
 	to_undirected
 	remove_duplicate_directed_edges
 	coalesce
+	mask_isolated_nodes
