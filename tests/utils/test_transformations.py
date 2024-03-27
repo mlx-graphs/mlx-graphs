@@ -236,6 +236,3 @@ def test_mask_isolated_nodes():
     mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
     expected_mask = mx.array([2], dtype=mx.uint32)
     assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
-
-
-test_mask_isolated_nodes()
