@@ -59,7 +59,7 @@ def to_networkx(
     for i in range(data.num_nodes):
         if data.node_features is not None:
             node_attrs["features"] = data.node_features[i].tolist()
-        if data.node_labels:
+        if data.node_labels is not None:
             node_attrs["label"] = data.node_labels[i].item()
         G.add_node(i, **node_attrs)
 
