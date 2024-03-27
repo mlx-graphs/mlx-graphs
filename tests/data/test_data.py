@@ -106,29 +106,3 @@ def test_data_num_features():
     assert data.num_node_features == 0, "GraphData num_features failed"
     assert data.num_edge_features == 0, "GraphData num_features failed"
     assert data.num_graph_features == 0, "GraphData num_features failed"
-
-
-def test_data_has_isolated_nodes():
-    data = GraphData(
-        edge_index=mx.array([[0, 1, 0], [1, 0, 0]]),
-        node_features=mx.array([[1], [1], [1], [1]]),
-    )
-    assert data.has_isolated_nodes() is True, "GraphData has_isolated_nodes failed"
-
-    data = GraphData(edge_index=mx.array([[0, 1, 0], [1, 0, 0]]))
-    assert data.has_isolated_nodes() is False, "GraphData has_isolated_nodes failed"
-
-    data = GraphData(
-        edge_index=mx.array([[0, 1, 0], [1, 0, 0]]), node_features=mx.array([[1], [1]])
-    )
-    assert data.has_isolated_nodes() is False, "GraphData has_isolated_nodes failed"
-
-
-def test_data_has_self_loops():
-    data = GraphData(edge_index=mx.array([[0, 1, 0], [1, 0, 0]]))
-
-    assert data.has_self_loops() is True, "GraphData has_self_loops failed"
-
-    data = GraphData(edge_index=mx.array([[0, 1], [1, 0]]))
-
-    assert data.has_self_loops() is False, "GraphData has_self_loops failed"
