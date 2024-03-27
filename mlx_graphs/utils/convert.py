@@ -1,8 +1,15 @@
 from collections import defaultdict
-from typing import Any, Union
+from typing import Any
 
 import mlx.core as mx
-import networkx as nx
+
+try:
+    import networkx as nx
+except ImportError:
+    raise ImportError(
+        "networkx is required to convert from nextworkx graphs",
+        "run `pip install networkx`",
+    )
 
 from mlx_graphs.data import GraphData
 
@@ -48,30 +55,26 @@ def to_networkx(
 
     # G.add_nodes_from(range(data.num_nodes))
 
-    node_features_present = data.node_features is not None
-    node_labels_present = data.node_labels is not None
-
     node_attrs = {}
     for i in range(data.num_nodes):
-        if node_features_present:
+        if data.node_features is not None:
             node_attrs["features"] = data.node_features[i].tolist()
-        if node_labels_present:
+        if data.node_labels:
             node_attrs["label"] = data.node_labels[i].item()
         G.add_node(i, **node_attrs)
 
-    edge_features_present = data.edge_features is not None
     edge_attrs = {}
     for i, (v, w) in enumerate(data.edge_index.T.tolist()):
         if remove_self_loops and v == w:
             continue
-        if edge_features_present:
+        if data.edge_features is not None:
             edge_attrs["features"] = data.edge_features[i].tolist()
         G.add_edge(v, w, **edge_attrs)
 
     return G
 
 
-def from_networkx(data: Union[nx.Graph]) -> GraphData:
+def from_networkx(data: nx.Graph) -> GraphData:
     """Converts a :obj:`networkx.Graph` or :obj:`networkx.DiGraph` to a
     :class:`mlx_graphs.data.GraphData` instance.
 
