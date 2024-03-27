@@ -98,6 +98,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         """
         pass
 
+    @validate_package("joblib")
     def process_graph(self) -> GraphData:
         start = self.current_batch * self._batch_size
         end = min(
