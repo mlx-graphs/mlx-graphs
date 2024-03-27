@@ -177,10 +177,12 @@ class GraphData:
         return None
 
     def has_isolated_nodes(self) -> bool:
-        """Returns a boolean of wether the graph has isolated nodes or not"""
+        """Returns a boolean of whether the graph has isolated nodes or not.
+        (ie: nodes that does not have an edge with any other nodes )"""
         edge_index, num_nodes = self.edge_index, self.num_nodes
         edge_index = remove_self_loops(edge_index)
         return np.unique(edge_index.reshape(-1)).size < num_nodes
 
     def has_self_loops(self) -> bool:
-        return (self.edge_index[0] == self.edge_index[1]).sum().item() > 0
+        """Returns a boolean of whether the graph contains self loops"""
+        return ((self.edge_index[0] == self.edge_index[1]).sum() > 0).item()

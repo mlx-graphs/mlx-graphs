@@ -433,20 +433,20 @@ def mask_isolated_nodes(
     """Returns a mask with isolated nodes set to ``False`` to filter them out if needed.
 
     Args:
-        edge_index : edge index from which to remove isolated nodes.
-        num_nodes : number of nodes of the graph.
-        filter_isolated : wether to filter isolated or non isolated nodes.
+        edge_index : Edge index from which to remove isolated nodes.
+        num_nodes : Number of nodes of the graph.
+        filter_isolated : Wether to filter isolated or non isolated nodes.
 
     Returns:
-        a boolean mask of size ``num_nodes`` where ``True`` means the node isn't
-        isolated and ``false``means it is.
+        A boolean mask of size ``num_nodes`` where ``True`` means the node isn't
+        isolated and ``False``means it is.
 
     Example :
         >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        >>> mask = remove_isolated_nodes(edge_index, 3)
+        >>> mask = mask_isolated_nodes(edge_index, 3)
         >>> mask
         mx.array([0,2])
-        >>> mask = remove_isolated_nodes(edge_index, 3, filter_isolated=False)
+        >>> mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
         >>> mask
         mx.array([1])
     """
