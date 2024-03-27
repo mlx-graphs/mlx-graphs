@@ -3,10 +3,10 @@ import pytest
 
 from mlx_graphs.utils.transformations import (
     add_self_loops,
+    get_isolated_nodes_mask,
     get_unique_edge_indices,
     has_isolated_nodes,
     has_self_loops,
-    mask_isolated_nodes,
     remove_duplicate_directed_edges,
     remove_self_loops,
     to_adjacency_matrix,
@@ -215,29 +215,29 @@ def test_remove_duplicated_directed_edges():
 
 def test_mask_isolated_nodes():
     edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
-    mask = mask_isolated_nodes(edge_index, 2)
+    mask = get_isolated_nodes_mask(edge_index, 2)
     expected_mask = mx.array([0, 1], dtype=mx.uint32)
-    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+    assert mx.array_equal(mask, expected_mask), "get_isolated_nodes_mask failed"
 
     edge_index = mx.array([[1, 2], [2, 1]])
-    mask = mask_isolated_nodes(edge_index, 3)
+    mask = get_isolated_nodes_mask(edge_index, 3)
     expected_mask = mx.array([1, 2], dtype=mx.uint32)
-    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+    assert mx.array_equal(mask, expected_mask), "get_isolated_nodes_mask failed"
 
     edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-    mask = mask_isolated_nodes(edge_index, 3)
+    mask = get_isolated_nodes_mask(edge_index, 3)
     expected_mask = mx.array([0, 2], dtype=mx.uint32)
-    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+    assert mx.array_equal(mask, expected_mask), "get_isolated_nodes_mask failed"
 
     edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-    mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
+    mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
     expected_mask = mx.array([1], dtype=mx.uint32)
-    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+    assert mx.array_equal(mask, expected_mask), "get_isolated_nodes_mask failed"
 
     edge_index = mx.array([[0, 1, 0], [1, 0, 0]])
-    mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
+    mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
     expected_mask = mx.array([2], dtype=mx.uint32)
-    assert mx.array_equal(mask, expected_mask), "mask_isolated_nodes failed"
+    assert mx.array_equal(mask, expected_mask), "get_isolated_nodes_mask failed"
 
 
 def test_has_isolated_nodes():

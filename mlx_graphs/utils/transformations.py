@@ -427,15 +427,15 @@ def coalesce(edge_index: mx.array) -> mx.array:
 
 
 @validate_edge_index
-def mask_isolated_nodes(
-    edge_index: mx.array, num_nodes: int, filter_isolated: bool = True
+def get_isolated_nodes_mask(
+    edge_index: mx.array, num_nodes: int, complement: bool = True
 ) -> mx.array:
     """Returns a mask with isolated nodes set to ``False`` to filter them out if needed.
 
     Args:
         edge_index : Edge index from which to remove isolated nodes.
         num_nodes : Number of nodes of the graph.
-        filter_isolated : Wether to filter isolated or non isolated nodes.
+        complement : Wether to filter isolated or non isolated nodes.
 
     Returns:
         A boolean mask of size ``num_nodes`` where ``True`` means the node isn't
@@ -443,16 +443,16 @@ def mask_isolated_nodes(
 
     Example :
         >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        >>> mask = mask_isolated_nodes(edge_index, 3)
+        >>> mask = get_isolated_nodes_mask(edge_index, 3)
         >>> mask
         mx.array([0,2])
-        >>> mask = mask_isolated_nodes(edge_index, 3, filter_isolated=False)
+        >>> mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
         >>> mask
         mx.array([1])
     """
     edge_index = remove_self_loops(edge_index)
     indices = np.unique(edge_index.reshape(-1))
-    if filter_isolated:
+    if complement:
         return mx.array(indices)
 
     return mx.array(np.setdiff1d(np.arange(num_nodes), indices))

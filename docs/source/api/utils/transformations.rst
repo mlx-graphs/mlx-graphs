@@ -19,6 +19,6 @@ Transformations
 	to_undirected
 	remove_duplicate_directed_edges
 	coalesce
-	mask_isolated_nodes
+	get_isolated_nodes_mask
 	has_isolated_nodes
 	has_self_loops
