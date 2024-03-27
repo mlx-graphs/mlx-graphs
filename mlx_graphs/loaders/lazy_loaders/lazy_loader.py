@@ -4,7 +4,6 @@ import pickle
 import re
 from abc import ABC, abstractmethod
 from copy import deepcopy
-from typing import Optional
 
 from tqdm import tqdm
 
@@ -135,7 +134,7 @@ class LazyDataLoader(ABC):
         self,
         dataset: LazyDataset,
         ranges: tuple[int, int],
-        batch_size: Optional[int] = None,
+        batch_size: int,
         force_processing: bool = False,
         **kwargs,
     ):

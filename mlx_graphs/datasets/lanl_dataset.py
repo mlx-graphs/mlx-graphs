@@ -297,7 +297,7 @@ batch_size=60,
             node_features=items[0].node_features,
         )
 
-    def to_graphdata(self, df_adj: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
+    def to_graphdata(self, df_adj: "DataFrame", edge_feats: np.ndarray) -> GraphData:  # noqa: F821
         return GraphData(
             edge_index=mx.array(
                 np.stack(

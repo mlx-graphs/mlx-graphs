@@ -82,7 +82,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         )
 
     @abstractmethod
-    def compress_graph(self, df: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
+    def compress_graph(self, df: "DataFrame", edge_feats: np.ndarray) -> GraphData:  # noqa: F821
         """
         Removes all duplicate edges and replaces them by a single edge with
         additinal edge features. This is used to reduce drastically the size
