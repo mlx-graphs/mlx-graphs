@@ -19,5 +19,5 @@ Loaders
 .. autosummary::
     :toctree: _autosummary_lazy
 
-    LazyDataLoader
+	LazyDataLoader
 	LANLDataLoader

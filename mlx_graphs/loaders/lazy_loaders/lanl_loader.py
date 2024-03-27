@@ -14,6 +14,11 @@ from mlx_graphs.datasets.lanl_dataset import (
 
 from .large_cybersecurity_loader import LargeCybersecurityDataLoader
 
+try:
+    import pandas as pd
+except ImportError:
+    raise ImportError("Install pandas to use the LANLDataLoader")
+
 """
 For custom splits to leverage the overall dataset, just change the values provided in
 ``time_range``. The range should not exceed 83518, the total number of files (minutes).
@@ -178,7 +183,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             **kwargs,
         )
 
-    def compress_graph(self, df: "DataFrame", edge_feats: np.array) -> GraphData:  # noqa: F821
+    def compress_graph(self, df: pd.DataFrame, edge_feats: np.ndarray) -> GraphData:
         df_adj = df[[LANL_SRC, LANL_DST, LANL_LABEL]]
 
         nb_e_feats = 6
@@ -243,7 +248,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         )
         return graph
 
-    def _standardize_edge_feats(self, edge_feats: np.array):
+    def _standardize_edge_feats(self, edge_feats: np.ndarray):
         """For categorical features with
         0s, we want to compute the statistics only on the non-0 values.
         We also want to update only the non-0 features.
