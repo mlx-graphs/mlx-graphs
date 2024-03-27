@@ -2,7 +2,7 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-autodoc_mock_imports = ["mlx"]
+autodoc_mock_imports = ["mlx", "pandas"]
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -59,6 +59,7 @@ html_theme_options = {
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
+    "pandas": ("https://pandas.pydata.org/docs", None),
 }
 
 html_css_files = [
