@@ -1,17 +1,10 @@
-import importlib.util
-
 import mlx.core as mx
-import pytest
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets import KarateClubDataset
 from mlx_graphs.utils.convert import from_networkx, to_networkx
 
-networkx_spec = importlib.util.find_spec("networkx")
-networkx_installed = networkx_spec is not None
 
-
-@pytest.mark.skipif(not networkx_installed, reason="networkx is not installed")
 def test_to_networkx():
     # GraphData with edge_index and node_features
     edge_index = mx.array([[0, 0, 1, 1, 2, 2, 3], [0, 1, 0, 2, 1, 3, 2]])
@@ -52,7 +45,6 @@ def test_to_networkx():
     assert networkx_graph.number_of_edges() == 0
 
 
-@pytest.mark.skipif(not networkx_installed, reason="networkx is not installed")
 def test_from_networkx():
     karate_club_dataset = KarateClubDataset()
     karate_club_networkx_graph = to_networkx(karate_club_dataset.graphs[0])
