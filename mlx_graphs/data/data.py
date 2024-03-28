@@ -3,6 +3,8 @@ from typing import Literal, Optional, Union
 import mlx.core as mx
 import numpy as np
 
+from mlx_graphs.utils import has_isolated_nodes, has_self_loops
+
 
 class GraphData:
     """
@@ -173,3 +175,12 @@ class GraphData:
         if "index" in key:
             return self.num_nodes
         return None
+
+    def has_isolated_nodes(self) -> bool:
+        """Returns a boolean of whether the graph has isolated nodes or not
+        (i.e., nodes that don't have a link to any other nodes)"""
+        return has_isolated_nodes(self.edge_index, self.num_nodes)
+
+    def has_self_loops(self) -> bool:
+        """Returns a boolean of whether the graph contains self loops."""
+        return has_self_loops(self.edge_index)
