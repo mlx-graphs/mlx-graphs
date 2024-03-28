@@ -34,6 +34,7 @@ test = [
   "pandas==2.2.0",
   "pyarrow==15.0.2",
   "joblib==1.3.2",
+  "networkx==3.2.1",
 ]
 docs = [
   "ipython==8.21.0",

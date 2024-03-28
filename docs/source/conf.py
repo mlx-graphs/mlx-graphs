@@ -2,7 +2,9 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-autodoc_mock_imports = ["mlx", "pandas", "joblib"]
+
+autodoc_mock_imports = ["mlx", "pandas", "joblib", "networkx"]
+
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
@@ -61,6 +63,7 @@ intersphinx_mapping = {
     "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
     "pandas": ("https://pandas.pydata.org/docs", None),
     "joblib": ("https://joblib.readthedocs.io/en/stable", None),
+    "networkx": ("https://networkx.org/documentation/stable", None),
 }
 
 html_css_files = [
