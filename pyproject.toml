@@ -31,6 +31,7 @@ dev = [
 test = [
   "pytest==7.4.4",
   "scipy==1.12.0",
+  "networkx==3.2.1",
 ]
 docs = [
   "ipython==8.21.0",
