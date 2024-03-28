@@ -6,7 +6,7 @@ try:
     import networkx as nx
 except ImportError:
     raise ImportError(
-        "networkx is required to convert from nextworkx graphs",
+        "networkx is required to convert to/from nextworkx graphs",
         "run `pip install networkx`",
     )
 
@@ -25,19 +25,26 @@ def to_networkx(
         remove_self_loops: If set to :obj:`True`, will not
             include self-loops in the resulting graph. (default: :obj:`False`)
 
+    Returns:
+        A networkx graph
+
     Examples:
-        >>> import mlx.core as mx
-        >>> edge_index = mx.array(
-        ...     [
-        ...         [0, 1, 1, 2, 2, 3],
-        ...         [1, 0, 2, 1, 3, 2],
-        ...     ]
-        ... )
-        >>> node_features = mx.array([[1], [1], [1], [1]])
-        >>> data = GraphData(node_features=node_features, edge_index=edge_index)
-        >>> G = to_networkx(data)
-        >>> G.edges
-        OutEdgeView([(0, 0), (0, 1), (1, 0), (1, 2), (2, 1), (2, 3), (3, 2)])
+
+    .. code-block:: python
+
+        import mlx.core as mx
+
+        edge_index = mx.array(
+            [
+                [0, 1, 1, 2, 2, 3],
+                [1, 0, 2, 1, 3, 2],
+            ]
+        )
+        node_features = mx.array([[1], [1], [1], [1]])
+        data = GraphData(node_features=node_features, edge_index=edge_index)
+        G = to_networkx(data)
+        print(G.edges)
+        >>> OutEdgeView([(0, 0), (0, 1), (1, 0), (1, 2), (2, 1), (2, 3), (3, 2)])
 
     """
 
@@ -51,8 +58,6 @@ def to_networkx(
 
     if data.num_nodes is None:
         return G
-
-    # G.add_nodes_from(range(data.num_nodes))
 
     node_attrs = {}
     for i in range(data.num_nodes):
@@ -78,29 +83,32 @@ def from_networkx(data: nx.Graph) -> GraphData:
     :class:`mlx_graphs.data.GraphData` instance.
 
     Args:
-        data (Union[nx.Graph]): A networkx graph
+        data: A networkx graph
 
     Returns:
-        GraphData: A GraphData object of type mlx_graphs.GraphData
+        A GraphData object
 
     Examples:
-        >>> from mlx_graphs.utils.convert import from_networkx
-        >>> import networkx as nx
-        >>> G = nx.Graph()
-        >>> G.add_node(1)
-        >>> G.add_node(2)
-        >>> G.add_node(3)
-        >>> G.add_node(4)
-        >>> G.add_edge(1, 2)
-        >>> G.add_edge(1, 3)
-        >>> G.add_edge(2, 3)
-        >>> G.add_edge(3, 4)
-        >>> mlx_dataset = from_networkx(G)
-        >>> mlx_dataset
-        GraphData(
-                edge_index(shape=(2, 4), int32))
-        >>> mlx_dataset.num_nodes
-        4
+
+    .. code-block:: python
+
+        import networkx as nx
+        from mlx_graphs.utils.convert import from_networkx
+
+        G = nx.Graph()
+        G.add_node(1)
+        G.add_node(2)
+        G.add_node(3)
+        G.add_node(4)
+        G.add_edge(1, 2)
+        G.add_edge(1, 3)
+        G.add_edge(2, 3)
+        G.add_edge(3, 4)
+        mlx_dataset = from_networkx(G)
+        print(mlx_dataset)
+        >>> GraphData(edge_index(shape=(2, 4), int32))
+        print(mlx_dataset.num_nodes)
+        >>> 4
 
     """
     data_dict = defaultdict(list)
