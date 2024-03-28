@@ -11,3 +11,13 @@ Loaders
 	:toctree: _autosummary
 
 	Dataloader
+
+
+.. currentmodule:: mlx_graphs.loaders.lazy_loaders
+
+
+.. autosummary::
+    :toctree: _autosummary_lazy
+
+	LazyDataLoader
+	LANLDataLoader

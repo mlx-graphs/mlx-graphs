@@ -25,7 +25,7 @@ class Dataset(ABC):
     is typically done within the overridden ``process`` method.
 
     Args:
-        name: name of the dataset
+        name: Name of the dataset
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
         transform: A function/transform that takes in a ``GraphData`` object and returns

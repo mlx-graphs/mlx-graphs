@@ -1,4 +1,5 @@
 import functools
+import importlib
 
 import mlx.core as mx
 
@@ -59,3 +60,27 @@ def validate_edge_index_and_features(func):
         return func(edge_index, edge_features, *args, **kwargs)
 
     return wrapper
+
+
+def validate_package(package: str):
+    """Decorator function to check if a package is present in the env"""
+
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args, **kwargs):
+            pandas_spec = importlib.util.find_spec(package)
+            pandas_installed = pandas_spec is not None
+
+            if not pandas_installed:
+                raise ImportError(
+                    (
+                        f"Package {package} is required to use this feature. "
+                        "Please install it in your environment."
+                    )
+                )
+
+            return func(*args, **kwargs)
+
+        return wrapper
+
+    return decorator
