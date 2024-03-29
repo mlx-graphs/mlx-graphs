@@ -259,6 +259,7 @@ def add_self_loops(
         A tuple containing the updated edge_index and edge_features with self-loops.
 
     """
+    # TODO: add option to create self-loops only for the nodes present in the edge index
     if num_nodes is not None:
         if mx.max(edge_index) > num_nodes - 1:
             raise ValueError(
@@ -279,9 +280,12 @@ def add_self_loops(
 
     if edge_features is not None:
         # add self loops to features
-        self_loop_features = (
-            mx.ones([self_loop_index.shape[1], edge_features.shape[1]]) * fill_value
+        features_shape = (
+            (self_loop_index.shape[1], edge_features.shape[1])
+            if edge_features.ndim > 1
+            else (self_loop_index.shape[1],)
         )
+        self_loop_features = mx.ones(features_shape) * fill_value
         full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
         return full_edge_index, full_edge_features
     return full_edge_index
