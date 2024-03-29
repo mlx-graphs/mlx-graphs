@@ -11,8 +11,9 @@ from mlx_graphs.datasets.lanl_dataset import (
     LANL_LABEL,
     LANL_SRC,
 )
-
-from .large_cybersecurity_loader import LargeCybersecurityDataLoader
+from mlx_graphs.loaders.lazy_loaders.large_cybersecurity_loader import (
+    LargeCybersecurityDataLoader,
+)
 
 try:
     import pandas as pd

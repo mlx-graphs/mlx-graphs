@@ -303,6 +303,10 @@ class LazyDataLoader(ABC):
         """Returns the path to the current graph on disk"""
         return self.graph_path_at_index(self.current_batch + self._start_range)
 
+    def __len__(self):
+        """The length of a loader is its number of batches"""
+        return self.nb_batches
+
     def __hash__(self):
         """
         Computes a unique hash that will yields a different value if
