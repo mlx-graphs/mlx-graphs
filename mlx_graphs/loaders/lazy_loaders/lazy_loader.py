@@ -40,6 +40,8 @@ class LazyDataLoader(ABC):
         force_processing: Whether to force re-processing all files from the dataset.
             By default, the processed graphs are stored on disk and reused in future
             iterations. This behavior can be removed with ``force_processing=True``.
+        tqdm_bar: Whether to show a tqdm progression bar when iterating over the
+            loader. Default to ``True``.
 
     Example:
 
@@ -136,6 +138,7 @@ class LazyDataLoader(ABC):
         ranges: tuple[int, int],
         batch_size: int,
         force_processing: bool = False,
+        tqdm_bar: bool = True,
         **kwargs,
     ):
         self.dataset = deepcopy(dataset)
@@ -143,6 +146,7 @@ class LazyDataLoader(ABC):
         self._start_range = ranges[0]
         self._end_range = ranges[1]
         self.force_processing = force_processing
+        self._tqdm_bar = tqdm_bar
 
         self.current_batch = 0
         self.progress_bar = None
@@ -204,7 +208,8 @@ class LazyDataLoader(ABC):
 
     def __iter__(self):
         self.current_batch = 0
-        self.progress_bar = tqdm(total=self._nb_batches)
+        if self._tqdm_bar:
+            self.progress_bar = tqdm(total=self._nb_batches)
         return self
 
     def __next__(self) -> GraphData:

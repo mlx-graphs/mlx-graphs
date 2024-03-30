@@ -84,6 +84,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             ranges=ranges,
             batch_size=batch_size,
             force_processing=force_processing,
+            **kwargs,
         )
 
     @abstractmethod
