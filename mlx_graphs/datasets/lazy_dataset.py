@@ -8,6 +8,7 @@ import numpy as np
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.utils import hash_string
 
 
 class LazyDataset(Dataset):
@@ -257,8 +258,8 @@ class LazyDataset(Dataset):
         """
         return hash(
             (
-                self.name,
+                hash_string(self.name),
                 self.num_nodes,
-                self.transform,
+                hash_string(str(self.transform)),
             )
         )

@@ -13,3 +13,4 @@ from .transformations import (
     has_self_loops,  # noqa
 )
 from .array_ops import expand, broadcast, one_hot, pairwise_distances, index_to_mask  # noqa
+from .misc import hash_string  # noqa
