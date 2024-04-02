@@ -13,7 +13,7 @@ from mlx_graphs.datasets.utils import (
     download_file_from_google_drive,
     extract_archive,
 )
-from mlx_graphs.datasets.utils.lanl_preprocessing import split
+from mlx_graphs.datasets.utils.lanl_preprocessing import split, split_flows
 
 try:
     import pandas as pd
@@ -24,11 +24,13 @@ except ImportError:
 LANL_TS = 0
 LANL_SRC = 1
 LANL_DST = 2
-LANL_LABEL = 3
-LANL_SUCCESS = 4
-LANL_SRC_USER_TYPE = 5
-LANL_SRC_USER = 6
-LANL_DST_USER = 7
+LANL_SRC_USER = 3
+LANL_DST_USER = 4
+LANL_AUTH_TYPE = 5
+LANL_LOGON_TYPE = 6
+LANL_AUTH_ORIENT = 7
+LANL_SUCCESS = 8
+LANL_LABEL = 9
 
 # Num nodes for the overall 58 days
 LANL_NUM_NODES = 17685
@@ -143,6 +145,7 @@ batch_size=60,
     ):
         self.auth_file = "auth.txt.gz"
         self.redteam_file = "redteam.txt.gz"
+        self.flows_file = "flows.txt.gz"
         self.tmp_archive_file = "LANL.zip"
 
         self._use_gzip = use_gzip
@@ -166,8 +169,20 @@ batch_size=60,
         Returns:
             The path to the folder that contains original files.
         """
-        root = "/".join(self.raw_path.split("/")[:-1])
+        root = "/".join(super(self.__class__, self).raw_path.split("/")[:-1])
         return os.path.join(root, "original")
+
+    @property
+    def raw_auth_path(self) -> str:
+        return os.path.join(super(self.__class__, self).raw_path, "auth")
+
+    @property
+    def raw_flows_path(self) -> str:
+        return os.path.join(super(self.__class__, self).raw_path, "flows")
+
+    @property
+    def raw_path(self) -> str:
+        return self.raw_auth_path
 
     def download(self):
         """
@@ -224,18 +239,30 @@ batch_size=60,
         large `auth.txt.gz` file occurs, and csv files are written to
         ``self.raw_path``.
         """
+        os.makedirs(self.raw_auth_path, exist_ok=True)
+        os.makedirs(self.raw_flows_path, exist_ok=True)
+
         if self.process_original_files:
             print("Processing all authentication logs...")
             split(
                 auth_file=os.path.join(self.original_path, self.auth_file),
                 redteam_file=os.path.join(self.original_path, self.redteam_file),
-                dst_path=self.raw_path,
-                graph_path_at_index_fn=self.graph_path_at_index,
+                dst_path=self.raw_auth_path,
+            )
+            split_flows(
+                flows_path=os.path.join(self.original_path, self.flows_file),
+                redteam_file=os.path.join(self.original_path, self.redteam_file),
+                dst_path=self.raw_flows_path,
+                auth_path=self.raw_auth_path,
             )
 
             print("Compressing all files to .gz...")
             compress_and_remove_files(
-                folder_path=self.raw_path,
+                folder_path=self.raw_auth_path,
+                file_extension="csv",
+            )
+            compress_and_remove_files(
+                folder_path=self.raw_flows_path,
                 file_extension="csv",
             )
 
@@ -249,20 +276,25 @@ batch_size=60,
         compression = "gzip" if self._use_gzip else "infer"
 
         # Reads the csv and assign an int to each column index.
+        # ts, src, dst, src_user, dst_user, auth_type, logon_type,
+        # auth_orientation, success, label
+
         df = pd.read_csv(
             file_path,
             index_col=False,
             header=None,
-            names=range(LANL_TS, LANL_DST_USER + 1),
+            names=range(LANL_TS, LANL_LABEL + 1),
             dtype={
                 LANL_TS: str,
                 LANL_SRC: int,
                 LANL_DST: int,
-                LANL_LABEL: int,
+                LANL_SRC_USER: int,
+                LANL_DST_USER: int,
+                LANL_AUTH_TYPE: int,
+                LANL_LOGON_TYPE: int,
+                LANL_AUTH_ORIENT: int,
                 LANL_SUCCESS: int,
-                LANL_SRC_USER_TYPE: int,
-                LANL_SRC_USER: str,
-                LANL_DST_USER: str,
+                LANL_LABEL: int,
             },
             compression=compression,
         )
@@ -274,7 +306,9 @@ batch_size=60,
         df_adj = df[
             [LANL_SRC, LANL_DST, LANL_TS, LANL_LABEL, LANL_SRC_USER, LANL_DST_USER]
         ]
-        edge_feats = df[[LANL_SUCCESS, LANL_SRC_USER_TYPE]].to_numpy()
+        edge_feats = df[
+            [LANL_SUCCESS, LANL_LOGON_TYPE, LANL_AUTH_TYPE, LANL_AUTH_ORIENT]
+        ].to_numpy()
 
         # If called from a loader, we usually return the df for further preprocessing
         if as_pandas_df:
@@ -320,4 +354,7 @@ batch_size=60,
 
         df[LANL_TS] = pd.to_numeric(df[LANL_TS])
         df.fillna(0, inplace=True)
+
+        # remove self-loops
+        df = df[df[LANL_SRC] != df[LANL_DST]]
         return df
