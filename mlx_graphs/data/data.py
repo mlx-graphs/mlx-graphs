@@ -4,6 +4,7 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.utils import has_isolated_nodes, has_self_loops
+from mlx_graphs.utils.topology import is_undirected
 
 
 class GraphData:
@@ -184,3 +185,11 @@ class GraphData:
     def has_self_loops(self) -> bool:
         """Returns a boolean of whether the graph contains self loops."""
         return has_self_loops(self.edge_index)
+
+    def is_undirected(self) -> bool:
+        """Returns a boolean of whether the graph is undirected or not."""
+        return is_undirected(self.edge_index, self.edge_features)
+
+    def is_directed(self) -> bool:
+        """Returns a boolean of whether the graph is directed or not."""
+        return not self.is_undirected()
