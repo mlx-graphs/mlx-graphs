@@ -1,28 +1,27 @@
 import mlx.core as mx
 import numpy as np
-import pytest
 
 from mlx_graphs.datasets import LANLDataset
 from mlx_graphs.loaders import LANLDataLoader
 
 
-@pytest.mark.slow
+# @pytest.mark.slow
 def test_lanl_dataset(tmp_path):
     dataset = LANLDataset(base_dir=tmp_path)
 
     # Attributes
-    assert dataset[0].edge_index.shape == (2, 224)
-    assert dataset[0].edge_features.shape == (224, 2)
-    assert dataset[0].edge_labels.shape == (224,)
-    assert dataset[0].edge_timestamps.shape == (224,)
+    assert dataset[0].edge_index.shape == (2, 158)
+    assert dataset[0].edge_features.shape == (158, 4)
+    assert dataset[0].edge_labels.shape == (158,)
+    assert dataset[0].edge_timestamps.shape == (158,)
     assert dataset[0].node_features.shape == (17685, 17685)
 
     # Indexing
-    assert dataset[range(10)].edge_index.shape == (2, 2544)
-    assert dataset[[0, 1, 2]].edge_index.shape == (2, 768)
-    assert dataset[np.array([0, 1, 2])].edge_index.shape == (2, 768)
-    assert dataset[mx.array([0, 1, 2])].edge_index.shape == (2, 768)
-    assert dataset[:3].edge_index.shape == (2, 768)
+    assert dataset[range(10)].edge_index.shape == (2, 1975)
+    assert dataset[[0, 1, 2]].edge_index.shape == (2, 552)
+    assert dataset[np.array([0, 1, 2])].edge_index.shape == (2, 552)
+    assert dataset[mx.array([0, 1, 2])].edge_index.shape == (2, 552)
+    assert dataset[:3].edge_index.shape == (2, 552)
 
     # With loader + graph compression
     for split in ["train", "all"]:
@@ -34,9 +33,9 @@ def test_lanl_dataset(tmp_path):
             compress_edges=True,
         )
         graph = next(loader)
-        assert graph.edge_index.shape == (2, 2758)
-        assert graph.edge_features.shape == (2758, 6)
-        assert graph.edge_labels.shape == (2758,)
+        assert graph.edge_index.shape == (2, 2708)
+        assert graph.edge_features.shape == (2708, 13)
+        assert graph.edge_labels.shape == (2708,)
         assert graph.node_features.shape == (17685, 17685)
 
     # Without force_processing (should store the results in a new folder)
@@ -48,9 +47,9 @@ def test_lanl_dataset(tmp_path):
         batch_size=60,
     )
     graph = next(loader)
-    assert graph.edge_index.shape == (2, 10064)
-    assert graph.edge_features.shape == (10064, 6)
-    assert graph.edge_labels.shape == (10064,)
+    assert graph.edge_index.shape == (2, 9917)
+    assert graph.edge_features.shape == (9917, 13)
+    assert graph.edge_labels.shape == (9917,)
     assert graph.node_features.shape == (17685, 17685)
 
     loader = LANLDataLoader(
@@ -61,9 +60,9 @@ def test_lanl_dataset(tmp_path):
         compress_edges=True,
     )
     graph = next(loader)
-    assert graph.edge_index.shape == (2, 7794)
-    assert graph.edge_features.shape == (7794, 6)
-    assert graph.edge_labels.shape == (7794,)
+    assert graph.edge_index.shape == (2, 7662)
+    assert graph.edge_features.shape == (7662, 13)
+    assert graph.edge_labels.shape == (7662,)
     assert graph.node_features.shape == (17685, 17685)
 
     # With loader - graph compression
@@ -75,10 +74,10 @@ def test_lanl_dataset(tmp_path):
         compress_edges=False,
     )
     graph = next(loader)
-    assert graph.edge_index.shape == (2, 14618)
-    assert graph.edge_features.shape == (14618, 2)
-    assert graph.edge_labels.shape == (14618,)
-    assert graph.edge_timestamps.shape == (14618,)
+    assert graph.edge_index.shape == (2, 11624)
+    assert graph.edge_features.shape == (11624, 4)
+    assert graph.edge_labels.shape == (11624,)
+    assert graph.edge_timestamps.shape == (11624,)
     assert graph.node_features.shape == (17685, 17685)
 
     # With loader + remove self loops
@@ -90,10 +89,10 @@ def test_lanl_dataset(tmp_path):
         compress_edges=False,
     )
     graph = next(loader)
-    assert graph.edge_index.shape == (2, 11671)
-    assert graph.edge_features.shape == (11671, 2)
-    assert graph.edge_labels.shape == (11671,)
-    assert graph.edge_timestamps.shape == (11671,)
+    assert graph.edge_index.shape == (2, 11624)
+    assert graph.edge_features.shape == (11624, 4)
+    assert graph.edge_labels.shape == (11624,)
+    assert graph.edge_timestamps.shape == (11624,)
     assert graph.node_features.shape == (17685, 17685)
 
     # With loader + nb_processes
@@ -106,10 +105,10 @@ def test_lanl_dataset(tmp_path):
         nb_processes=4,
     )
     graph = next(loader)
-    assert graph.edge_index.shape == (2, 14618)
-    assert graph.edge_features.shape == (14618, 2)
-    assert graph.edge_labels.shape == (14618,)
-    assert graph.edge_timestamps.shape == (14618,)
+    assert graph.edge_index.shape == (2, 11624)
+    assert graph.edge_features.shape == (11624, 4)
+    assert graph.edge_labels.shape == (11624,)
+    assert graph.edge_timestamps.shape == (11624,)
     assert graph.node_features.shape == (17685, 17685)
 
     # With loader + batch_size

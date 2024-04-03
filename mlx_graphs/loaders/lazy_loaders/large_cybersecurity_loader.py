@@ -143,6 +143,9 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
             for i in range(workers)
         )
 
+        return self._process_results(results)
+
+    def _process_results(self, results):
         all_df_adj = [r[0] for r in results]
         all_edge_feats = [r[1] for r in results]
 
@@ -191,7 +194,7 @@ class LargeCybersecurityDataLoader(LazyDataLoader):
         all_df_adjs, all_edge_feats = [], []
 
         for file in files:
-            df_adj, edge_feats = self.dataset.load_lazily(file, as_pandas_df=True)
+            df_adj, edge_feats = self.dataset.load_lazily(file, from_loader=True)
             all_df_adjs.append(df_adj)
             all_edge_feats.append(edge_feats)
 

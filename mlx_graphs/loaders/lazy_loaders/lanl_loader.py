@@ -8,6 +8,11 @@ from mlx_graphs.data import GraphData
 from mlx_graphs.datasets import LazyDataset
 from mlx_graphs.datasets.lanl_dataset import (
     LANL_DST,
+    LANL_FLOW_BYTE_COUNT,
+    LANL_FLOW_DST,
+    LANL_FLOW_DUR,
+    LANL_FLOW_PKT_COUNT,
+    LANL_FLOW_SRC,
     LANL_LABEL,
     LANL_SRC,
 )
@@ -43,6 +48,20 @@ LANL_TIME_RANGES = {
 }
 
 
+def standardize_euler_argus(edge_features: np.ndarray) -> np.ndarray:
+    def sigmoid(x):
+        return 1.0 / (1.0 + np.exp(-x))
+
+    res = np.zeros(edge_features.shape)
+    for i in range(edge_features.shape[1]):
+        x = edge_features[:, i]
+        x = x.astype(np.float32)
+        x = (x.astype(np.int64) / (x.std() + 1e-6)).astype(np.int64)
+        x = sigmoid(x)
+        res[:, i] = x
+    return res
+
+
 class LANLDataLoader(LargeCybersecurityDataLoader):
     """
     This loader can be used to iterate over the ``LANLDataset``.
@@ -55,6 +74,9 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
     This compression is used to drastically reduce the size of the graph. This approach
     has been successfully used in papers [1, 2].
 
+    If compression is used, additional features extracted from flows are also added
+    as edge features.
+
     On the first iteration on the loader:
 
         - reads ``batch_size`` csv files from the provided ``dataset``
@@ -64,9 +86,11 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
           This graph is a ``GraphData`` with the following attributes:
 
           - ``edge_index``: an mx.array with shape (2, num_edges), the graph structure
-          - ``edge_features``: an mx.array with shape (num_edges, 6) and the features
+          - ``edge_features``: an mx.array with shape (num_edges, 13) and the features
             [#edges, #successes, #failures, #src_type_user,
-            #src_type_computer, #src_type_anonymous])
+            #src_type_computer, #src_type_anonymous, #num_flows, mean_flow_duration,
+            std_flow_duration, mean_pkt_count, std_pkt_count, mean_byte_count,
+            std_byte_count])
           - ``edge_labels``: an mx.array with shape (num_edges,) with the label of each
             edge (1 for attack, 0 for benign). A malicious label will be assigned
             to an edge if 1 or more malicious edge is included in the compressed
@@ -75,8 +99,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             one-hot encoded vectors for each node.
             Note: the ``edge_timestamps`` from LANLDataset are not included anymore
             as they become incompatible with the compression of the edges.
-            By default, the features are standardized using min-max standardization
-            (see ``_standardize_edge_feats``).
+            By default, the features are standardized using min-max standardization.
 
         - saves the ``GraphData`` on disk as a `.pkl` for later reuse
           in the future iterations on the loader.
@@ -185,16 +208,28 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             **kwargs,
         )
 
-    def compress_graph(self, df: pd.DataFrame, edge_feats: np.ndarray) -> GraphData:
+    def compress_graph(
+        self, df: pd.DataFrame, edge_feats: np.ndarray, df_flows: pd.DataFrame
+    ) -> GraphData:
         df_adj = df[[LANL_SRC, LANL_DST, LANL_LABEL]]
 
-        nb_e_feats = 6
+        NUM_AUTH_FEATURES = 6
+        NUM_FLOW_FEATURES = 7
+        nb_e_feats = NUM_AUTH_FEATURES + NUM_FLOW_FEATURES
+
         edge_to_feats = defaultdict(lambda: np.zeros((nb_e_feats,)))
         edge_to_labels = defaultdict(int)
-        edge_to_count = defaultdict(int)
+        edge_to_auth_count = defaultdict(int)
+        edge_to_flow_count = defaultdict(int)
+
+        # Flow features (but only present in 2% of edges)
+        edge_to_pkt_count = defaultdict(list)
+        edge_to_byte_count = defaultdict(list)
+        edge_to_duration = defaultdict(list)
 
         df_adj = df_adj.to_dict()
 
+        # Auth
         for i, (src, dst, y) in enumerate(
             zip(
                 df_adj[LANL_SRC].values(),
@@ -220,14 +255,58 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
                 edge_to_feats[edge][5] += 1
 
             edge_to_labels[edge] = max(edge_to_labels[edge], y)
-            edge_to_count[edge] += 1
+            edge_to_auth_count[edge] += 1
+
+        # Flows
+        df_flows = df_flows.to_dict()
+        if len(df_flows) > 0:
+            for i, (src, dst, dur, pkt_count, byte_count) in enumerate(
+                zip(
+                    df_flows[LANL_FLOW_SRC].values(),
+                    df_flows[LANL_FLOW_DST].values(),
+                    df_flows[LANL_FLOW_DUR].values(),
+                    df_flows[LANL_FLOW_PKT_COUNT].values(),
+                    df_flows[LANL_FLOW_BYTE_COUNT].values(),
+                )
+            ):
+                edge = (src, dst)
+                edge_to_flow_count[edge] += 1
+                edge_to_pkt_count[edge].append(pkt_count)
+                edge_to_byte_count[edge].append(byte_count)
+                edge_to_duration[edge].append(dur)
+
+        def mean_or_zero(x):
+            return 0.0 if len(x) == 0 else np.mean(x)
+
+        def std_or_zero(x):
+            return 0.0 if len(x) == 0 else np.std(x)
 
         # convert to np arrays
         edge_index, labels, e_feats = [], [], []
         for edge, feats in edge_to_feats.items():
-            feats[0] = edge_to_count[
+            feats[0] = edge_to_auth_count[
                 edge
             ]  # add the total number of edges between two nodes.
+            feats[6] = edge_to_flow_count[edge]  # add the total number of flows.
+            feats[7] = mean_or_zero(
+                edge_to_duration[edge]
+            )  # add the mean of duration, as in argus.
+            feats[8] = std_or_zero(
+                edge_to_duration[edge]
+            )  # add the std of duration, as in argus.
+            feats[9] = mean_or_zero(
+                edge_to_pkt_count[edge]
+            )  # add the mean of packet count, as in argus.
+            feats[10] = std_or_zero(
+                edge_to_pkt_count[edge]
+            )  # add the std of packet count, as in argus.
+            feats[11] = mean_or_zero(
+                edge_to_byte_count[edge]
+            )  # add the mean of byte count, as in argus.
+            feats[12] = std_or_zero(
+                edge_to_byte_count[edge]
+            )  # add the std of byte count, as in argus.
+
             edge_index.append(edge)
             e_feats.append(feats)
             labels.append(edge_to_labels[edge])
@@ -240,8 +319,7 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
         edge_index = np.array([edge_index[:, 0], edge_index[:, 1]])
 
         # Standardize all features along the 1-axis.
-        for i in range(nb_e_feats):
-            e_feats[:, i] = self._standardize_edge_feats(e_feats[:, i])
+        e_feats = standardize_euler_argus(e_feats)
 
         graph = GraphData(
             edge_index=mx.array(edge_index, dtype=mx.int64),
@@ -249,6 +327,72 @@ class LANLDataLoader(LargeCybersecurityDataLoader):
             edge_features=mx.array(e_feats, dtype=mx.float32),
         )
         return graph
+
+    def _process_results(self, results):
+        all_df_adj = [r[0] for r in results]
+        all_edge_feats = [r[1] for r in results]
+        all_flows = [r[2] for r in results]
+
+        # Merge the results from all workers.
+        df_adj, edge_feats, flows = self._merge_workers_output_compressed(
+            all_df_adj,
+            all_edge_feats,
+            all_flows,
+        )
+
+        if self._compress_edges:
+            graph = self.compress_graph(df_adj, edge_feats, flows)
+        else:
+            graph = self.dataset.to_graphdata(df_adj, edge_feats)
+
+        if self._remove_self_loops:
+            graph = self._rm_self_loops(graph)
+
+        # Save on disk
+        if self._save_on_disk:
+            self.save_processed_graph(graph)
+
+        # Add the node features after saving on disk to save storage
+        graph = self.dataset.add_one_hot_node_features(graph)
+
+        return graph
+
+    def _load_chunk_of_snapshots(
+        self, files: list[str]
+    ) -> tuple[np.ndarray, np.ndarray]:
+        all_df_adjs, all_edge_feats, all_flows = [], [], []
+
+        for file in files:
+            df_adj, edge_feats, flows = self.dataset.load_lazily(file, from_loader=True)
+            all_df_adjs.append(df_adj)
+            all_edge_feats.append(edge_feats)
+            all_flows.append(flows)
+
+        # Concatenate the dataframes from chunk.
+        df_adj = pd.concat(all_df_adjs, ignore_index=True)
+
+        # Concatenate edge features in the same way.
+        edge_feats = np.concatenate((all_edge_feats), axis=0)
+
+        # Concat flows
+        flows = pd.concat(all_flows, ignore_index=True)
+
+        return (
+            df_adj,
+            edge_feats,
+            flows,
+        )
+
+    def _merge_workers_output_compressed(self, all_df_adj, all_edge_feats, all_flows):
+        all_df_adj = pd.concat(all_df_adj, axis=0).reset_index()
+        all_edge_feats = np.concatenate((all_edge_feats), axis=0)
+        all_flows = pd.concat(all_flows, axis=0, ignore_index=True)
+
+        return (
+            all_df_adj,
+            all_edge_feats,
+            all_flows,
+        )
 
     def _standardize_edge_feats(self, edge_feats: np.ndarray):
         """For categorical features with

@@ -1,7 +1,6 @@
 import math
 import os
 import pickle
-import re
 from abc import ABC, abstractmethod
 from copy import deepcopy
 
@@ -9,6 +8,7 @@ from tqdm import tqdm
 
 from mlx_graphs.data import GraphData
 from mlx_graphs.datasets import LazyDataset
+from mlx_graphs.datasets.utils.io import get_index_from_filename
 
 
 class LazyDataLoader(ABC):
@@ -253,23 +253,20 @@ class LazyDataLoader(ABC):
         """
         all_snapshots = self.dataset.all_files()
 
-        def get_sc_from_filename(x):
-            return int(re.findall(r"\d+(?=[^\d]*$)", x)[0])
-
         all_sorted_snapshots = sorted(
-            all_snapshots, key=lambda x: get_sc_from_filename(x)
+            all_snapshots, key=lambda x: get_index_from_filename(x)
         )
 
         start_index = [
             i
             for i, sc in enumerate(all_sorted_snapshots)
-            if get_sc_from_filename(sc) == self._start_range
+            if get_index_from_filename(sc) == self._start_range
         ]
 
         end_index = [
             i
             for i, sc in enumerate(all_sorted_snapshots)
-            if get_sc_from_filename(sc) == self._end_range
+            if get_index_from_filename(sc) == self._end_range
         ]
 
         assert (
@@ -282,7 +279,7 @@ class LazyDataLoader(ABC):
         end_index = end_index[0]
 
         snapshots = all_sorted_snapshots[start_index : end_index + 1]
-        indices = [get_sc_from_filename(sc) for sc in snapshots]
+        indices = [get_index_from_filename(sc) for sc in snapshots]
 
         return snapshots, indices
 

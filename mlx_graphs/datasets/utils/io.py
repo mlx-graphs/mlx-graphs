@@ -1,6 +1,7 @@
 import glob
 import gzip
 import os
+import re
 from typing import Optional
 
 import mlx.core as mx
@@ -60,3 +61,14 @@ def compress_and_remove_files(
                 f_out.writelines(f_in)
 
         os.remove(file)
+
+
+def get_index_from_filename(x):
+    """
+    Returns the number within the filename in a path
+
+    Example:
+        get_index_from_filename("/users/user01/path03/to/file0.csv")
+        >>> 0
+    """
+    return int(re.findall(r"\d+(?=[^\d]*$)", x)[0])

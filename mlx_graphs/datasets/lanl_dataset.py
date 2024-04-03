@@ -1,5 +1,4 @@
 import os
-import shutil
 from typing import Optional, Union
 
 import mlx.core as mx
@@ -13,6 +12,7 @@ from mlx_graphs.datasets.utils import (
     download_file_from_google_drive,
     extract_archive,
 )
+from mlx_graphs.datasets.utils.io import get_index_from_filename
 from mlx_graphs.datasets.utils.lanl_preprocessing import split, split_flows
 
 try:
@@ -35,6 +35,18 @@ LANL_LABEL = 9
 # Num nodes for the overall 58 days
 LANL_NUM_NODES = 17685
 
+# Flow file fields
+LANL_FLOW_TS = 0
+LANL_FLOW_SRC = 1
+LANL_FLOW_DST = 2
+LANL_FLOW_SRC_PORT = 3
+LANL_FLOW_DST_PORT = 4
+LANL_FLOW_PROTO = 5
+LANL_FLOW_DUR = 6
+LANL_FLOW_PKT_COUNT = 7
+LANL_FLOW_BYTE_COUNT = 8
+LANL_FLOW_LABEL = 9
+
 
 class LANLDataset(LazyDataset):
     """
@@ -54,14 +66,16 @@ class LANLDataset(LazyDataset):
 
     The version of the LANL dataset proposed within mlx-graphs is already
     preprocessed to only include data required to build the graphs along with
-    2 default edge features extracted from the raw dataset. Consequently,
-    this class will by default download a 340MB archive instead of the original
+    4 default edge features extracted from the raw dataset. Consequently,
+    this class will by default download a 1.09GB archive instead of the original
     files that represent more than 7GB compressed.
 
-    The 2 provided edge features are:
+    The 4 provided edge features are:
     (i) success/failure: 1 if the authentication succeeded, 0 if it failed
     (ii) logon type: identifies the type of the source user that initiated the
-    authentication (user -> 1, computer -> 2, anonymous -> 3)
+        authentication (user -> 1, computer -> 2, anonymous -> 3)
+    (iii) authentication type
+    (iv) authentication orientation
 
     The LANL dataset doesn't come with many features. However, one can supplement
     these features with hand-crafted ones such as centrality-based features.
@@ -133,7 +147,7 @@ batch_size=60,
     """
 
     _url = "https://csr.lanl.gov/data-fence/1711123950/6SZMOJi6hdg8xDqDbFiB9QrZqAA=/cyber1/"
-    _preprocessed_drive_id = "11rSBKagmOzmC-Xru4mUyTfep6P7FGmcO"
+    _preprocessed_drive_id = "19pd4OOK60bkurGiHdCRCYP2O_oc9DqHu"
 
     def __init__(
         self,
@@ -181,8 +195,16 @@ batch_size=60,
         return os.path.join(super(self.__class__, self).raw_path, "flows")
 
     @property
+    def raw_root_path(self) -> str:
+        return super(self.__class__, self).raw_path
+
+    @property
     def raw_path(self) -> str:
         return self.raw_auth_path
+
+    def flow_path_at_index(self, idx: int) -> str:
+        path = os.path.join(self.raw_flows_path, "flows")
+        return f"{path}_{idx}.{self.raw_file_extension}"
 
     def download(self):
         """
@@ -195,25 +217,14 @@ batch_size=60,
         the files in "LANL.zip".
         """
         if not self.process_original_files:
+            archive_path = os.path.join(self.raw_root_path, self.tmp_archive_file)
+
             download_file_from_google_drive(
                 id=self._preprocessed_drive_id,
-                path=os.path.join(self.raw_path, self.tmp_archive_file),
+                path=archive_path,
             )
-            extract_archive(
-                os.path.join(self.raw_path, self.tmp_archive_file), self.raw_path
-            )
-
-            # "LANL" is the name of the folder after decompression
-            extracted_folder = os.path.join(self.raw_path, "LANL")
-            files = os.listdir(extracted_folder)
-
-            for file in files:
-                source_file = os.path.join(extracted_folder, file)
-                destination_file = os.path.join(self.raw_path, file)
-
-                shutil.move(source_file, destination_file)
-
-            shutil.rmtree(extracted_folder, ignore_errors=True)
+            extract_archive(archive_path, self.raw_root_path)
+            os.remove(archive_path)
 
         else:
             # NOTE: This downloads the 7.6GB auth.txt.gz file from LANL.
@@ -228,6 +239,12 @@ batch_size=60,
                 download(
                     url=os.path.join(self._url, self.redteam_file),
                     path=os.path.join(self.original_path, self.redteam_file),
+                )
+
+            if not os.path.exists(os.path.join(self.original_path, self.flows_file)):
+                download(
+                    url=os.path.join(self._url, self.flows_file),
+                    path=os.path.join(self.original_path, self.flows_file),
                 )
 
     def process(self):
@@ -267,7 +284,7 @@ batch_size=60,
             )
 
     def load_lazily(
-        self, file_path: str, as_pandas_df: bool = False
+        self, file_path: str, from_loader: bool = False
     ) -> Union[GraphData, tuple[pd.DataFrame, np.ndarray]]:
         if not os.path.isfile(file_path):
             raise FileNotFoundError(f"Warning: file not found: {file_path}")
@@ -311,10 +328,39 @@ batch_size=60,
         ].to_numpy()
 
         # If called from a loader, we usually return the df for further preprocessing
-        if as_pandas_df:
+        if from_loader:
+            # Flows
+            snapshot_index = str(get_index_from_filename(file_path))
+            flow_file = self.flow_path_at_index(snapshot_index)
+
+            # Only read non-empty snapshots to avoid error.
+            if os.path.exists(flow_file) and os.path.getsize(flow_file) > 0:
+                flow_df = pd.read_csv(
+                    flow_file,
+                    index_col=False,
+                    header=None,
+                    names=range(LANL_FLOW_TS, LANL_FLOW_LABEL + 1),
+                    dtype={
+                        LANL_FLOW_TS: int,
+                        LANL_FLOW_SRC: int,
+                        LANL_FLOW_DST: int,
+                        LANL_FLOW_SRC_PORT: int,
+                        LANL_FLOW_DST_PORT: int,
+                        LANL_FLOW_PROTO: int,
+                        LANL_FLOW_DUR: int,
+                        LANL_FLOW_PKT_COUNT: int,
+                        LANL_FLOW_BYTE_COUNT: int,
+                        LANL_FLOW_LABEL: int,
+                    },
+                    compression=compression,
+                )
+            else:
+                flow_df = pd.DataFrame()
+
             return (
                 df_adj,
                 edge_feats,
+                flow_df,
             )
 
         # By default, the dataset returns a GraphData with node features

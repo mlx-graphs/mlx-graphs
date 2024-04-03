@@ -70,7 +70,7 @@ def save_map(m, fname, dst_path):
 
     with open(os.path.join(dst_path, fname), "wb") as f:
         pickle.dump(m_rev, f, protocol=pickle.HIGHEST_PROTOCOL)
-        print(dst_path + fname + " saved")
+        print(os.path.join(dst_path, fname) + " saved")
 
 
 def get_or_add(n, m, id):
@@ -281,7 +281,10 @@ def split_flows(
         if ts >= cur_time + duration_per_file:
             f_out.close()
             cur_time += duration_per_file
-            f_out = open(os.path.join(dst_path, f"flows_{cur_time}.csv"), "w")
+            f_out = open(
+                os.path.join(dst_path, f"flows_{cur_time // duration_per_file}.csv"),
+                "w",
+            )
 
         f_out.write(line_l)
         line = f_in.readline().decode()
@@ -291,8 +294,3 @@ def split_flows(
 
     save_map(port_map, "pomap.pkl", dst_path)
     save_map(proto_map, "prmap.pkl", dst_path)
-
-
-if __name__ == "__main__":
-    split()
-    split_flows()
