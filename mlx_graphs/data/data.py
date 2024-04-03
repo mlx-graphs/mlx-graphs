@@ -30,7 +30,7 @@ class GraphData:
 
     def __init__(
         self,
-        edge_index: Optional[mx.array] = None,
+        edge_index: mx.array,
         node_features: Optional[mx.array] = None,
         edge_features: Optional[mx.array] = None,
         graph_features: Optional[mx.array] = None,
@@ -72,23 +72,18 @@ class GraphData:
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     @property
-    def num_nodes(self) -> Union[int, None]:
+    def num_nodes(self) -> int:
         """Number of nodes in the graph."""
         if self.node_features is not None:
             return self.node_features.shape[0]
-
-        # NOTE: This may be slow for large graphs
-        elif self.edge_index is not None:
-            return np.unique(self.edge_index).size
-        return None
+        else:
+            # NOTE: This may be slow for large graphs
+            return np.unique(np.array(self.edge_index, copy=False)).size
 
     @property
-    def num_edges(self) -> Union[int, None]:
+    def num_edges(self) -> int:
         """Number of edges in the graph"""
-        if self.edge_index is not None:
-            return self.edge_index.shape[1]
-
-        return None
+        return self.edge_index.shape[1]
 
     @property
     def num_node_classes(self) -> int:

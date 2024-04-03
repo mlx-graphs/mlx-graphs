@@ -1,9 +1,11 @@
+import mlx.core as mx
+
 from mlx_graphs.data import GraphData
 from mlx_graphs.loaders import Dataloader
 
 
 def test_dataloader():
-    data = [GraphData(), GraphData(), GraphData(), GraphData()]
+    data = [GraphData(edge_index=mx.array([[0], [0]]))] * 4
 
     # test batch 1
     dl = Dataloader(data, batch_size=1)

@@ -37,13 +37,6 @@ def test_to_networkx():
     assert networkx_graph.number_of_nodes() == 2
     assert networkx_graph.number_of_edges() == 2
 
-    # Empty GraphData
-    graph = GraphData()
-    networkx_graph = to_networkx(graph)
-
-    assert networkx_graph.number_of_nodes() == 0
-    assert networkx_graph.number_of_edges() == 0
-
 
 def test_from_networkx():
     karate_club_dataset = KarateClubDataset()

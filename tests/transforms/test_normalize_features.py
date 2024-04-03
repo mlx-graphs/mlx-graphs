@@ -12,7 +12,9 @@ def test_normalize_features():
     assert str(transform) == "FeaturesNormalizedTransform()"
 
     node_features = mx.array([[1.0, 0.0, 1.0], [0.0, 1.0, 0.0], [0.0, 0.0, 0.0]])
-    data = GraphData(node_features=node_features)
+    data = GraphData(
+        edge_index=mx.array([[0, 1, 2], [1, 2, 0]]), node_features=node_features
+    )
 
     norm_data = transform(data)
     assert norm_data.node_features.tolist() == [[0.5, 0, 0.5], [0, 1, 0], [0, 0, 0]]
