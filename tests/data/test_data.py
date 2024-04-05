@@ -106,3 +106,40 @@ def test_data_num_features():
     assert data.num_node_features == 0, "GraphData num_features failed"
     assert data.num_edge_features == 0, "GraphData num_features failed"
     assert data.num_graph_features == 0, "GraphData num_features failed"
+
+
+def test_data_topology():
+    directed_edge_index = mx.array([[2, 1, 0, 2, 0, 2], [1, 0, 2, 0, 1, 2]])
+    undirected_edge_index = mx.array([[2, 1, 0, 2, 0, 1], [1, 0, 2, 0, 1, 2]])
+    directed_edge_features = mx.array([5, 1, 2, 2, 1, 6])
+    undirected_edge_features = mx.array([5, 1, 2, 2, 1, 5])
+
+    data = GraphData(edge_index=directed_edge_index)
+    assert data.is_undirected() is False
+    assert data.is_directed() is True
+
+    data = GraphData(edge_index=undirected_edge_index)
+    assert data.is_undirected() is True
+    assert data.is_directed() is False
+
+    data = GraphData(
+        edge_index=directed_edge_index, edge_features=directed_edge_features
+    )
+    assert data.is_undirected() is False
+    assert data.is_directed() is True
+    data = GraphData(
+        edge_index=directed_edge_index, edge_features=undirected_edge_features
+    )
+    assert data.is_undirected() is False
+    assert data.is_directed() is True
+
+    data = GraphData(
+        edge_index=undirected_edge_index, edge_features=undirected_edge_features
+    )
+    assert data.is_undirected() is True
+    assert data.is_directed() is False
+    data = GraphData(
+        edge_index=undirected_edge_index, edge_features=directed_edge_features
+    )
+    assert data.is_undirected() is False
+    assert data.is_directed() is True
