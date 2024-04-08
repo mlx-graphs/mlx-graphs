@@ -6,14 +6,14 @@ import mlx.nn as nn
 
 class BatchNormalization(nn.Module):
     """Applies batch normalization over a batch of features as described in
-    the `"Batch Normalization: Accelerating Deep Network Training by
-    Reducing Internal Covariate Shift" <https://arxiv.org/abs/1502.03167>`_
-    paper.
+    the `Batch Normalization: Accelerating Deep Network Training by \
+    Reducing Internal Covariate Shift <https://arxiv.org/abs/1502.03167>`_ paper.
 
     .. math::
-        \\mathbf{x}^{\\prime}_i = \frac{\\mathbf{x} -
-        \textrm{E}[\\mathbf{x}]}{\\sqrt{\textrm{Var}[\\mathbf{x}] + \\epsilon}}
-        \\odot \\gamma + \beta
+
+        \\mathbf{x}^{\\prime}_i = \\frac{\\mathbf{x} -
+        \\textrm{E}[\\mathbf{x}]}{\\sqrt{\\textrm{Var}[\\mathbf{x}] + \\epsilon}}
+        \\odot \\gamma + \\beta
 
     The mean and standard-deviation are calculated per-dimension over all nodes
     inside the mini-batch.
@@ -25,7 +25,7 @@ class BatchNormalization(nn.Module):
         momentum : The value used for the running mean and
             running variance computation. (default: :obj:`0.1`)
         affine (bool, optional): If set to :obj:`True`, this module has
-            learnable affine parameters :math:`\\gamma` and :math:`\beta`.
+            learnable affine parameters :math:`\\gamma` and :math:`\\beta`.
             (default: :obj:`True`)
         track_running_stats : If set to :obj:`True`, this
             module tracks the running mean and variance, and when set to

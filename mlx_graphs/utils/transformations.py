@@ -439,7 +439,7 @@ def get_isolated_nodes_mask(
 
     Returns:
         A boolean mask of size ``num_nodes`` where ``True`` means the node isn't
-        isolated and ``False``means it is.
+        isolated and ``False`` means it is.
 
     Example :
         >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
