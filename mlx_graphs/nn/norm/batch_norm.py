@@ -1,31 +1,29 @@
-from typing import Optional
-
 import mlx.core as mx
 import mlx.nn as nn
 
 
 class BatchNormalization(nn.Module):
     """Applies batch normalization over a batch of features as described in
-    the `Batch Normalization: Accelerating Deep Network Training by \
-    Reducing Internal Covariate Shift <https://arxiv.org/abs/1502.03167>`_ paper.
+    the `Batch Normalization: Accelerating Deep Network Training by
+    Reducing Internal Covariate Shift" <https://arxiv.org/abs/1502.03167>`_
+    paper.
 
     .. math::
-
-        \\mathbf{x}^{\\prime}_i = \\frac{\\mathbf{x} -
-        \\textrm{E}[\\mathbf{x}]}{\\sqrt{\\textrm{Var}[\\mathbf{x}] + \\epsilon}}
-        \\odot \\gamma + \\beta
+        \\mathbf{x}^{\\prime}_i = \frac{\\mathbf{x} -
+        \textrm{E}[\\mathbf{x}]}{\\sqrt{\textrm{Var}[\\mathbf{x}] + \\epsilon}}
+        \\odot \\gamma + \beta
 
     The mean and standard-deviation are calculated per-dimension over all nodes
     inside the mini-batch.
 
     Args:
         in_channels : Size of each input sample.
-        eps (float, optional): A value added to the denominator for numerical
+        eps : A value added to the denominator for numerical
             stability. (default: :obj:`1e-5`)
         momentum : The value used for the running mean and
             running variance computation. (default: :obj:`0.1`)
-        affine (bool, optional): If set to :obj:`True`, this module has
-            learnable affine parameters :math:`\\gamma` and :math:`\\beta`.
+        affine : If set to :obj:`True`, this module has
+            learnable affine parameters :math:`\\gamma` and :math:`\beta`.
             (default: :obj:`True`)
         track_running_stats : If set to :obj:`True`, this
             module tracks the running mean and variance, and when set to
@@ -42,7 +40,7 @@ class BatchNormalization(nn.Module):
         self,
         num_features: int,
         eps: float = 1e-5,
-        momentum: Optional[float] = 0.1,
+        momentum: float = 0.1,
         affine: bool = True,
         track_running_stats: bool = True,
         allow_single_element: bool = False,
@@ -66,7 +64,6 @@ class BatchNormalization(nn.Module):
 
     def __call__(self, x: mx.array):
         if self.allow_single_element and x.shape[0] <= 1:
-            print(self.module.running_mean, self.module.running_var)
             x = (x - self.module.running_mean) * mx.rsqrt(
                 self.module.running_var + self.module.eps
             )

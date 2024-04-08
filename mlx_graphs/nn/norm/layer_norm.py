@@ -1,4 +1,4 @@
-from typing import Any, Optional
+from typing import Any, Literal, Optional
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -22,7 +22,7 @@ class LayerNormalization(nn.Module):
 
     Args:
         in_channels : Size of each input sample.
-        eps (float, optional): A value added to the denominator for numerical
+        eps : A value added to the denominator for numerical
             stability. (default: :obj:`1e-5`)
         affine : If set to :obj:`True`, this module has
             learnable affine parameters :math:`\\gamma` and :math:`\\beta`.
@@ -37,9 +37,9 @@ class LayerNormalization(nn.Module):
     def __init__(
         self,
         num_features: int,
-        eps: Optional[float] = 1e-5,
+        eps: float = 1e-5,
         affine: bool = True,
-        mode: str = "graph",
+        mode: Literal["graph", "node"] = "graph",
     ):
         super().__init__()
         self.num_features = num_features

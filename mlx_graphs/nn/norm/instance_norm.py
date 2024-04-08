@@ -77,7 +77,6 @@ class InstanceNormalization(nn.Module):
 
         mean = var = unbiased_var = node_features
         if self.training or not self.track_running_stats:
-            print("inside training")
             norm = mx.clip(degree(batch), a_min=1, a_max=None)
             norm = norm.reshape(-1, 1)
             unbiased_norm = mx.clip(norm - 1, a_min=1, a_max=None)

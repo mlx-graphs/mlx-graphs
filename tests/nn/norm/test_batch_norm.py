@@ -10,14 +10,11 @@ def test_batch_norm():
     batch_norm = BatchNormalization(num_features=8)
     batch_norm.train()
     node_features = mx.random.uniform(0, 1, [6, 8])
-    print(node_features.shape)
     normalized = batch_norm(node_features)
-
     assert normalized.shape == (6, 8)
     mean = normalized.mean(axis=0)
     normalized_std = mx.sqrt(normalized.var(axis=0))
     assert mx.allclose(mean, mx.zeros(8), atol=1e-3)
-    print(normalized_std)
     assert mx.allclose(
         normalized_std,
         mx.ones(8),
