@@ -52,7 +52,7 @@ class GCNConv(MessagePassing):
         row, col = edge_index
 
         # Compute node degree normalization for the mean aggregation.
-        norm: mx.array = None
+        norm: Optional[mx.array] = None
         if normalize:
             deg = degree(col, node_features.shape[0], edge_weights=edge_weights)
             # NOTE : need boolean indexing in order to zero out inf values

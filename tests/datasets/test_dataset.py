@@ -21,6 +21,7 @@ def test_fake_dataset():
 
 def test_dataset_properties(tmp_path):
     data = GraphData(
+        edge_index=mx.ones((2, 10)),
         node_features=mx.ones((10, 5)),
         edge_labels=mx.ones((10, 1)),
     )
@@ -79,7 +80,11 @@ def test_dataset_properties(tmp_path):
 
 def test_dataset_transform(tmp_path):
     data_list = [
-        GraphData(node_features=mx.ones((10, 5)), edge_labels=mx.ones((10, 1)))
+        GraphData(
+            edge_index=mx.ones((2, 10)),
+            node_features=mx.ones((10, 5)),
+            edge_labels=mx.ones((10, 1)),
+        )
         for _ in range(3)
     ]
 
