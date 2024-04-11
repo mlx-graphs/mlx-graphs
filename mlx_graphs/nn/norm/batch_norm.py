@@ -9,9 +9,9 @@ class BatchNormalization(nn.Module):
     paper.
 
     .. math::
-        \\mathbf{x}^{\\prime}_i = \frac{\\mathbf{x} -
-        \textrm{E}[\\mathbf{x}]}{\\sqrt{\textrm{Var}[\\mathbf{x}] + \\epsilon}}
-        \\odot \\gamma + \beta
+        \\mathbf{x}^{\\prime}_i = \\frac{\\mathbf{x} -
+        \\textrm{E}[\\mathbf{x}]}{\\sqrt{\textrm{Var}[\\mathbf{x}] + \\epsilon}}
+        \\odot \\gamma + \\beta
 
     The mean and standard-deviation are calculated per-dimension over all nodes
     inside the mini-batch.
@@ -23,7 +23,7 @@ class BatchNormalization(nn.Module):
         momentum : The value used for the running mean and
             running variance computation. (default: :obj:`0.1`)
         affine : If set to :obj:`True`, this module has
-            learnable affine parameters :math:`\\gamma` and :math:`\beta`.
+            learnable affine parameters :math:`\\gamma` and :math:`\\beta`.
             (default: :obj:`True`)
         track_running_stats : If set to :obj:`True`, this
             module tracks the running mean and variance, and when set to
@@ -34,6 +34,7 @@ class BatchNormalization(nn.Module):
             with only a single element will work as during in evaluation.
             That is the running mean and variance will be used.
             Requires :obj:`track_running_stats=True`. (default: :obj:`False`)
+
     """
 
     def __init__(

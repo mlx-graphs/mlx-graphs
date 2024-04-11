@@ -9,7 +9,7 @@ autodoc_mock_imports = ["mlx", "networkx"]
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.5"
+release = "0.0.6"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -22,6 +22,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "nbsphinx",
     "sphinx_gallery.load_style",
+    "sphinx.ext.viewcode",
 ]
 
 napoleon_use_param = True

@@ -13,8 +13,7 @@ class FeaturesNormalizedTransform(BaseTransform):
     def process(
         self, data: Union[GraphData, GraphDataBatch]
     ) -> Union[GraphData, GraphDataBatch]:
-        """Normalizes the attributes given in the
-            attributes to sum up to one
+        """Normalizes the attributes given in the attributes to sum up to one
 
         Args:
             data: A GraphData object with node/edge features
