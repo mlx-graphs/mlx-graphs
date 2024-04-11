@@ -7,15 +7,15 @@ from mlx_graphs.utils import degree, scatter
 
 
 class LayerNormalization(nn.Module):
-    """Applies layer normalization over each individual example in a batch
+    r"""Applies layer normalization over each individual example in a batch
     of features as described in the `Layer Normalization <https://arxiv.org/abs/1607.06450>`_
     paper.
 
     .. math::
 
-        \\mathbf{x}^{\\prime}_i = \\frac{\\mathbf{x} -
-        \\textrm{E}[\\mathbf{x}]}{\\sqrt{\\textrm{Var}[\\mathbf{x}] + \\epsilon}}
-        \\odot \\gamma + \\beta
+        \mathbf{x}^{\prime}_i = \frac{\mathbf{x} -
+        \textrm{E}[\mathbf{x}]}{\sqrt{\textrm{Var}[\mathbf{x}] + \epsilon}}
+        \odot \gamma + \beta
 
     The mean and standard-deviation are calculated across all nodes and all
     node channels separately for each object in a mini-batch.
@@ -25,7 +25,7 @@ class LayerNormalization(nn.Module):
         eps : A value added to the denominator for numerical
             stability. (default: :obj:`1e-5`)
         affine : If set to :obj:`True`, this module has
-            learnable affine parameters :math:`\\gamma` and :math:`\\beta`.
+            learnable affine parameters :math:`\gamma` and :math:`\beta`.
             (default: :obj:`True`)
         mode : The normalization mode to use for layer
             normalization (:obj:`"graph"` or :obj:`"node"`). If :obj:`"graph"`

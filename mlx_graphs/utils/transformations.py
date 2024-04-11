@@ -447,9 +447,9 @@ def get_isolated_nodes_mask(
 
         edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
         mask = get_isolated_nodes_mask(edge_index, 3)
-        # mx.array([0,2])
+        >>> mx.array([0,2])
         mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
-        # mx.array([1])
+        >>> mx.array([1])
     """
     edge_index = remove_self_loops(edge_index)
     indices = np.unique(edge_index.reshape(-1))
@@ -476,7 +476,7 @@ def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
 
         edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
         has_self_loops(edge_index, 3)
-        # True
+        >>> True
 
     """
     edge_index = remove_self_loops(edge_index)
@@ -499,7 +499,7 @@ def has_self_loops(edge_index: mx.array) -> bool:
 
         edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
         has_self_loops(edge_index)
-        # True
+        >>> True
     """
 
     return ((edge_index[0] == edge_index[1]).sum() > 0).item()
