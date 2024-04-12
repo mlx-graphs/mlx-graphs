@@ -433,22 +433,23 @@ def get_isolated_nodes_mask(
     """Returns a mask with isolated nodes set to ``False`` to filter them out if needed.
 
     Args:
-        edge_index : Edge index from which to remove isolated nodes.
-        num_nodes : Number of nodes of the graph.
-        complement : Wether to filter isolated or non isolated nodes.
+        edge_index: Edge index from which to remove isolated nodes.
+        num_nodes: Number of nodes of the graph.
+        complement: Wether to filter isolated or non isolated nodes.
 
     Returns:
         A boolean mask of size ``num_nodes`` where ``True`` means the node isn't
         isolated and ``False`` means it is.
 
-    Example :
-        >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        >>> mask = get_isolated_nodes_mask(edge_index, 3)
-        >>> mask
-        mx.array([0,2])
-        >>> mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
-        >>> mask
-        mx.array([1])
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
+        mask = get_isolated_nodes_mask(edge_index, 3)
+        >>> mx.array([0,2])
+        mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
+        >>> mx.array([1])
     """
     edge_index = remove_self_loops(edge_index)
     indices = np.unique(edge_index.reshape(-1))
@@ -461,16 +462,22 @@ def get_isolated_nodes_mask(
 @validate_edge_index
 def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
     """Function to check for isolated nodes.
-    (i.e. : nodes that don't have a link to any other nodes )
+    (i.e. nodes that don't have a link to any other nodes )
+
     Args:
-        edge_index : Edge index on which to check for isolated nodes.
+        edge_index: Edge index on which to check for isolated nodes.
+
     Returns:
         A boolean of whether the graph has isolated nodes.
 
-    Example :
-        >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        >>> has_self_loops(edge_index, 3)
-        True
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
+        has_self_loops(edge_index, 3)
+        >>> True
+
     """
     edge_index = remove_self_loops(edge_index)
     return np.unique(edge_index.reshape(-1)).size < num_nodes
@@ -479,15 +486,20 @@ def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
 @validate_edge_index
 def has_self_loops(edge_index: mx.array) -> bool:
     """Function to check for self loops.
+
     Args:
-        edge_index : Edge index on which to check for self loops.
+        edge_index: Edge index on which to check for self loops.
+
     Returns:
         A boolean of whether the graph has self loops.
 
-    Example :
-        >>> edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        >>> has_self_loops(edge_index)
-        True
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
+        has_self_loops(edge_index)
+        >>> True
     """
 
     return ((edge_index[0] == edge_index[1]).sum() > 0).item()
