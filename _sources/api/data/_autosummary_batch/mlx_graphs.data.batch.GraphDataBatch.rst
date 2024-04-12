@@ -14,6 +14,10 @@
    .. autosummary::
    
       ~GraphDataBatch.__init__
+      ~GraphDataBatch.has_isolated_nodes
+      ~GraphDataBatch.has_self_loops
+      ~GraphDataBatch.is_directed
+      ~GraphDataBatch.is_undirected
       ~GraphDataBatch.to_dict
    
    

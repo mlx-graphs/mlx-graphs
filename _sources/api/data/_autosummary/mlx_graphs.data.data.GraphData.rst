@@ -16,6 +16,10 @@
 	
 	     ~GraphData.__cat_dim__
 	     ~GraphData.__inc__
+	     ~GraphData.has_isolated_nodes
+	     ~GraphData.has_self_loops
+	     ~GraphData.is_directed
+	     ~GraphData.is_undirected
 	     ~GraphData.to_dict
 	
 	

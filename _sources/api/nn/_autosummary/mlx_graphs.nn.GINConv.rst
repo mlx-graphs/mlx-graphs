@@ -15,5 +15,6 @@
 
 	.. autosummary::
 	
+	     ~GINConv.message
 	
 	

@@ -12,3 +12,4 @@ Convert
 	:toctree: _autosummary_convert
 
 	to_networkx
+	from_networkx

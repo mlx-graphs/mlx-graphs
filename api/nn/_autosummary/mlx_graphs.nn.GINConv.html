@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.nn.GINConv &#8212; mlx-graphs 0.0.5 documentation</title>
+    <title>mlx_graphs.nn.GINConv &#8212; mlx-graphs 0.0.6 documentation</title>
   
   
   
@@ -38,7 +38,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script src="../../../_static/documentation_options.js?v=6424ca4d"></script>
+    <script src="../../../_static/documentation_options.js?v=73504a2b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -138,8 +138,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.5 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.5 documentation - Home"/>`);</script>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.6 documentation - Home"/>
+    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.6 documentation - Home"/>`);</script>
   
   
 </a></div>
@@ -205,7 +205,12 @@
 <li class="toctree-l2"><a class="reference internal" href="../../loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
 </ul>
 </li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Neural Networks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../transforms/index.html">Transforms</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+</ul>
+</li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Neural Networks</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
@@ -215,13 +220,16 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
 </ul>
 </li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../utils/index.html">Utils</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/transformations.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../utils/index.html">Utils</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/transformations.html">Transformations</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
@@ -232,26 +240,29 @@
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/topology.html">Topology</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/topology.html">Topology</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/sorting.html">Sorting</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/sorting.html">Sorting</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/validators.html">Validators</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/validators.html">Validators</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/scatter.html">Scatter</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/scatter.html">Scatter</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
@@ -261,7 +272,7 @@
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/array_ops.html">Array ops</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/array_ops.html">Array ops</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
@@ -269,8 +280,9 @@
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
 </ul>
 </li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/convert.html">Convert</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/convert.html">Convert</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
 </ul>
 </li>
 </ul>
@@ -440,6 +452,7 @@ document.write(`
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv"><code class="docutils literal notranslate"><span class="pre">GINConv</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv.__call__"><code class="docutils literal notranslate"><span class="pre">GINConv.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv.message"><code class="docutils literal notranslate"><span class="pre">GINConv.message()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -457,7 +470,7 @@ document.write(`
 <h1>mlx_graphs.nn.GINConv<a class="headerlink" href="#mlx-graphs-nn-ginconv" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx_graphs.nn.GINConv">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.nn.</span></span><span class="sig-name descname"><span class="pre">GINConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mlp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html#mlx.nn.Module" title="(in MLX v0.7.0)"><span class="pre">mlx.nn.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#mlx_graphs.nn.GINConv" title="Link to this definition">#</a></dt>
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.nn.</span></span><span class="sig-name descname"><span class="pre">GINConv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mlp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html#mlx.nn.Module" title="(in MLX v0.10.0)"><span class="pre">mlx.nn.Module</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><span class="pre">float</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">learn_eps</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><span class="pre">bool</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_features_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_features_dim</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/conv/gin_conv.html#GINConv"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.GINConv" title="Link to this definition">#</a></dt>
 <dd><p>Bases: <a class="reference internal" href="mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.message_passing.MessagePassing"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessagePassing</span></code></a></p>
 <p>Graph Isomorphism Network convolution layer from <a class="reference external" href="https://arxiv.org/abs/1810.00826">“How Powerful are
 Graph Neural Networks?”</a> paper.</p>
@@ -468,12 +481,19 @@ Graph Neural Networks?”</a> paper.</p>
 and output embeddings of node <span class="math notranslate nohighlight">\(i\)</span>, respectively. <span class="math notranslate nohighlight">\(\text{MLP}\)</span> denotes
 a custom neural network provided by the user and <span class="math notranslate nohighlight">\(\epsilon\)</span> is an epsilon
 value either fixed or learned.</p>
+<p>Setting <code class="docutils literal notranslate"><span class="pre">edge_features_dim</span></code> produces a <cite>GINEConv</cite> model, where <cite>edge_features</cite>
+are expected to be passed in the forward. In this case, edge features are first
+projected onto the same dimension as node embeddings and are summed, then passed to
+a relu activation.
+To use <cite>GINEConv</cite>, setting <cite>node_features_dim</cite> is also required.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>mlp</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html#mlx.nn.Module" title="(in MLX v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></span>) – Callable <code class="xref py py-class docutils literal notranslate"><span class="pre">mlx.core.nn.Module</span></code> applied on the final node embeddings</p></li>
+<li><p><strong>mlp</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/nn/module.html#mlx.nn.Module" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">Module</span></code></a></span>) – Callable <code class="xref py py-class docutils literal notranslate"><span class="pre">mlx.core.nn.Module</span></code> applied on the final node embeddings</p></li>
 <li><p><strong>eps</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">float</span></code></a></span>) – Initial value of the <span class="math notranslate nohighlight">\(\epsilon\)</span> term. Default: <code class="docutils literal notranslate"><span class="pre">0</span></code></p></li>
 <li><p><strong>learn_eps</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">bool</span></code></a></span>) – Whether to learn <span class="math notranslate nohighlight">\(\epsilon\)</span> or not. Default <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
+<li><p><strong>edge_features_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Size of the edge features passed in the GINE layer</p></li>
+<li><p><strong>node_features_dim</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>]</span>) – Size of the node features (only required if GINE is used)</p></li>
 </ul>
 </dd>
 </dl>
@@ -483,6 +503,7 @@ value either fixed or learned.</p>
 <span class="kn">from</span> <span class="nn">mlx_graphs.nn</span> <span class="kn">import</span> <span class="n">GINConv</span>
 
 <span class="n">node_feat_dim</span> <span class="o">=</span> <span class="mi">16</span>
+<span class="n">edge_feat_dim</span> <span class="o">=</span> <span class="mi">10</span>
 <span class="n">out_feat_dim</span> <span class="o">=</span> <span class="mi">32</span>
 
 <span class="n">mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
@@ -490,36 +511,52 @@ value either fixed or learned.</p>
     <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span>
     <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">node_feat_dim</span> <span class="o">*</span> <span class="mi">2</span><span class="p">,</span> <span class="n">out_feat_dim</span><span class="p">),</span>
 <span class="p">)</span>
+
+<span class="c1"># original GINConv for node features</span>
+
 <span class="n">conv</span> <span class="o">=</span> <span class="n">GINConv</span><span class="p">(</span><span class="n">mlp</span><span class="p">)</span>
 
 <span class="n">edge_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">]])</span>
 <span class="n">node_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="mi">16</span><span class="p">))</span>
 
-<span class="n">h</span> <span class="o">=</span> <span class="n">conv</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">)</span>
-
-<span class="o">&gt;&gt;&gt;</span> <span class="n">h</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">conv</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">)</span>
 <span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.536501</span><span class="p">,</span> <span class="mf">0.154826</span><span class="p">,</span> <span class="mf">0.745569</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mf">0.31547</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0962588</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.108504</span><span class="p">],</span>
     <span class="p">[</span><span class="o">-</span><span class="mf">0.415889</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0498145</span><span class="p">,</span> <span class="mf">0.597379</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mf">0.194553</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.251498</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.207561</span><span class="p">],</span>
     <span class="p">[</span><span class="o">-</span><span class="mf">0.119966</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0159533</span><span class="p">,</span> <span class="mf">0.276559</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mf">0.0258303</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.194533</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.15515</span><span class="p">],</span>
     <span class="p">[</span><span class="o">-</span><span class="mf">0.21477</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.169684</span><span class="p">,</span> <span class="mf">0.485867</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="mf">0.0194768</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.145761</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.139433</span><span class="p">],</span>
     <span class="p">[</span><span class="o">-</span><span class="mf">0.133289</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0279559</span><span class="p">,</span> <span class="mf">0.358095</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0443346</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.11571</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.114396</span><span class="p">]],</span>
     <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
+
+<span class="c1"># GINEConv including edge features:</span>
+
+<span class="n">conv</span> <span class="o">=</span> <span class="n">GINConv</span><span class="p">(</span><span class="n">mlp</span><span class="p">,</span> <span class="n">edge_features_dim</span><span class="o">=</span><span class="n">edge_feat_dim</span><span class="p">,</span>
+    <span class="n">node_features_dim</span><span class="o">=</span><span class="n">node_feat_dim</span><span class="p">)</span>
+<span class="n">edge_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span> <span class="n">edge_feat_dim</span><span class="p">))</span>
+
+<span class="o">&gt;&gt;&gt;</span> <span class="n">conv</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">)</span>
+<span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="mf">0.175581</span><span class="p">,</span> <span class="mf">0.67481</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.260592</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.13234</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.631736</span><span class="p">,</span> <span class="mf">0.572239</span><span class="p">],</span>
+    <span class="p">[</span><span class="mf">0.0536669</span><span class="p">,</span> <span class="mf">0.496115</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.319334</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.165</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.573817</span><span class="p">,</span> <span class="mf">0.495315</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.0505168</span><span class="p">,</span> <span class="mf">0.102068</span><span class="p">,</span> <span class="mf">0.0221924</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.516901</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.331266</span><span class="p">,</span> <span class="mf">0.317491</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.00632942</span><span class="p">,</span> <span class="mf">0.433597</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.162906</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.957552</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.41922</span><span class="p">,</span> <span class="mf">0.670711</span><span class="p">],</span>
+    <span class="p">[</span><span class="o">-</span><span class="mf">0.119726</span><span class="p">,</span> <span class="mf">0.173545</span><span class="p">,</span> <span class="mf">0.0951687</span><span class="p">,</span> <span class="o">...</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.577839</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.244039</span><span class="p">,</span> <span class="mf">0.399055</span><span class="p">]],</span>
+    <span class="n">dtype</span><span class="o">=</span><span class="n">float32</span><span class="p">)</span>
 </pre></div>
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx_graphs.nn.GINConv.__call__">
-<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="headerlink" href="#mlx_graphs.nn.GINConv.__call__" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">edge_index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">node_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/conv/gin_conv.html#GINConv.__call__"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.GINConv.__call__" title="Link to this definition">#</a></dt>
 <dd><p>Computes the forward pass of GINConv.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>edge_index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input edge index of shape <cite>[2, num_edges]</cite></p></li>
-<li><p><strong>node_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input node features</p></li>
-<li><p><strong>edge_weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Edge weights leveraged in message passing. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>edge_index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input edge index of shape <cite>[2, num_edges]</cite></p></li>
+<li><p><strong>node_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Input node features</p></li>
+<li><p><strong>edge_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Input edge features. Defautl: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>edge_weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Edge weights leveraged in message passing. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 </ul>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.7.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
 </dd>
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>The computed node embeddings</p>
@@ -530,8 +567,33 @@ value either fixed or learned.</p>
 <p class="rubric">Methods</p>
 <table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.nn.GINConv.message" title="mlx_graphs.nn.GINConv.message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message</span></code></a>(src_features, dst_features, **kwargs)</p></td>
+<td><p>Computes messages between connected nodes.</p></td>
+</tr>
 </tbody>
 </table>
+<dl class="py method">
+<dt class="sig sig-object py" id="mlx_graphs.nn.GINConv.message">
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><span class="pre">mlx.core.array</span></a></span></span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/conv/gin_conv.html#GINConv.message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.GINConv.message" title="Link to this definition">#</a></dt>
+<dd><p>Computes messages between connected nodes.</p>
+<p>By default, returns the features of source nodes.
+Optional <code class="docutils literal notranslate"><span class="pre">edge_weights</span></code> can be directly integrated in <code class="docutils literal notranslate"><span class="pre">kwargs</span></code></p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>src_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Source node embeddings</p></li>
+<li><p><strong>dst_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Destination node embeddings</p></li>
+<li><p><strong>edge_weights</strong> – Array of scalars with shape (num_edges,) or (num_edges, 1)
+used to weigh neighbor features during aggregation. Default: <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>**kwargs</strong> – Optional args to compute messages</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p><span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.10.0)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span></p>
+</dd>
+</dl>
+</dd></dl>
+
 </dd></dl>
 
 </section>
@@ -583,6 +645,7 @@ value either fixed or learned.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv"><code class="docutils literal notranslate"><span class="pre">GINConv</span></code></a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv.__call__"><code class="docutils literal notranslate"><span class="pre">GINConv.__call__()</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.nn.GINConv.message"><code class="docutils literal notranslate"><span class="pre">GINConv.message()</span></code></a></li>
 </ul>
 </li>
 </ul>

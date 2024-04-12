@@ -90,6 +90,7 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
    api/data/index.rst
    api/datasets/index.rst
    api/loaders/index.rst
+   api/transforms/index.rst
    api/nn/index.rst
    api/utils/index.rst
 
