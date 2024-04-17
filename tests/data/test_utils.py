@@ -10,13 +10,18 @@ from mlx_graphs.data.utils import (
 @pytest.mark.parametrize(
     "x, expected_exception",
     [
-        ([GraphData()], None),  # ok
+        ([GraphData(edge_index=mx.array([[0], [1]]))], None),  # ok
         ([1, 2, 3], ValueError),  # not list of GraphData
-        ([GraphData(), 1], ValueError),  # list with spurious items
+        (
+            [GraphData(edge_index=mx.array([[0], [1]])), 1],
+            ValueError,
+        ),  # list with spurious items
         (
             [
                 GraphData(edge_index=mx.array([[0], [1]])),
-                GraphData(node_features=mx.array([[1]])),
+                GraphData(
+                    edge_index=mx.array([[0], [0]]), node_features=mx.array([[1]])
+                ),
             ],
             ValueError,
         ),  # GraphData with different attributes

@@ -2,7 +2,7 @@ import copy
 import os
 import pickle
 from abc import ABC, abstractmethod
-from typing import Literal, Optional, Sequence, Union
+from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
@@ -28,16 +28,23 @@ class Dataset(ABC):
         name: name of the dataset
         base_dir: Directory where to store dataset files. Default is
             in the local directory ``.mlx_graphs_data/``.
+        transform: A function/transform that takes in a ``GraphData`` object and returns
+            a transformed version. The transformation is applied before every access,
+            i.e., during the ``__getitem__`` call.
+            By default, no transformation is applied.
     """
 
     def __init__(
         self,
         name: str,
         base_dir: Optional[str] = None,
+        pre_transform: Optional[Callable] = None,
+        transform: Optional[Callable] = None,
     ):
         self._name = name
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
-
+        self.transform = transform
+        self.pre_transform = pre_transform
         self.graphs: list[GraphData] = []
         self._load()
 
@@ -128,6 +135,14 @@ class Dataset(ABC):
             self.download()
             print("Done")
 
+    def _process(self):
+        self.process()
+
+        if self.pre_transform:
+            print(f"Applying pre-transform to {self.name} data ...", end=" ")
+            self.graphs = [self.pre_transform(graph) for graph in self.graphs]
+            print("Done")
+
     def _save(self):
         if self._base_dir is not None and self.processed_path is not None:
             if not os.path.exists(self.processed_path):
@@ -146,7 +161,7 @@ class Dataset(ABC):
         except FileNotFoundError:
             self._download()
             print(f"Processing {self.name} raw data ...", end=" ")
-            self.process()
+            self._process()
             print("Done")
             self._save()
 
@@ -193,7 +208,12 @@ class Dataset(ABC):
             isinstance(idx, mx.array) and idx.ndim == 0  # type: ignore
         ):
             index = indices[idx]  # type:ignore - idx here is a singleton
-            return self.graphs[index]
+            data = self.graphs[index]
+
+            if self.transform is not None:
+                data = self.transform(data)
+
+            return data
 
         if isinstance(idx, slice):
             indices = indices[idx]
@@ -218,7 +238,10 @@ class Dataset(ABC):
             )
 
         dataset = copy.copy(self)
-        dataset.graphs = [self.graphs[i] for i in indices]
+        graphs = [self.graphs[i] for i in indices]
+        if self.transform is not None:
+            graphs = [self.transform(g) for g in graphs]
+        dataset.graphs = graphs
         return dataset
 
     def __repr__(self):

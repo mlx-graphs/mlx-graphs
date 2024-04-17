@@ -3,6 +3,9 @@ from typing import Literal, Optional, Union
 import mlx.core as mx
 import numpy as np
 
+from mlx_graphs.utils import has_isolated_nodes, has_self_loops
+from mlx_graphs.utils.topology import is_undirected
+
 
 class GraphData:
     """
@@ -28,7 +31,7 @@ class GraphData:
 
     def __init__(
         self,
-        edge_index: Optional[mx.array] = None,
+        edge_index: mx.array,
         node_features: Optional[mx.array] = None,
         edge_features: Optional[mx.array] = None,
         graph_features: Optional[mx.array] = None,
@@ -70,23 +73,18 @@ class GraphData:
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     @property
-    def num_nodes(self) -> Union[int, None]:
+    def num_nodes(self) -> int:
         """Number of nodes in the graph."""
         if self.node_features is not None:
             return self.node_features.shape[0]
-
-        # NOTE: This may be slow for large graphs
-        elif self.edge_index is not None:
-            return np.unique(self.edge_index).size
-        return None
+        else:
+            # NOTE: This may be slow for large graphs
+            return np.unique(np.array(self.edge_index, copy=False)).size
 
     @property
-    def num_edges(self) -> Union[int, None]:
+    def num_edges(self) -> int:
         """Number of edges in the graph"""
-        if self.edge_index is not None:
-            return self.edge_index.shape[1]
-
-        return None
+        return self.edge_index.shape[1]
 
     @property
     def num_node_classes(self) -> int:
@@ -173,3 +171,20 @@ class GraphData:
         if "index" in key:
             return self.num_nodes
         return None
+
+    def has_isolated_nodes(self) -> bool:
+        """Returns a boolean of whether the graph has isolated nodes or not
+        (i.e., nodes that don't have a link to any other nodes)"""
+        return has_isolated_nodes(self.edge_index, self.num_nodes)
+
+    def has_self_loops(self) -> bool:
+        """Returns a boolean of whether the graph contains self loops."""
+        return has_self_loops(self.edge_index)
+
+    def is_undirected(self) -> bool:
+        """Returns a boolean of whether the graph is undirected or not."""
+        return is_undirected(self.edge_index, self.edge_features)
+
+    def is_directed(self) -> bool:
+        """Returns a boolean of whether the graph is directed or not."""
+        return not self.is_undirected()

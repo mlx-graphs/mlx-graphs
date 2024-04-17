@@ -5,3 +5,4 @@ from .tu_dataset import TUDataset  # noqa
 from .planetoid import PlanetoidDataset  # noqa
 from .superpixel import SuperPixelDataset  # noqa
 from .ogb_dataset import OGBDataset  # noqa
+from .elliptic import EllipticBitcoinDataset  # noqa

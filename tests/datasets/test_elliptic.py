@@ -1,27 +1,19 @@
 import mlx.core as mx
 import pytest
 
-from mlx_graphs.datasets import PlanetoidDataset
+from mlx_graphs.datasets import EllipticBitcoinDataset
 from mlx_graphs.loaders import Dataloader
 
 
 @pytest.mark.slow
-@pytest.mark.parametrize(
-    "dataset_name, split",
-    [
-        ("cora", "public"),
-        ("cora", "full"),
-        ("cora", "geom-gcn"),
-        ("citeseer", "public"),
-        ("pubmed", "public"),
-    ],
-)
-def test_planetoid_cora_dataset(tmp_path, dataset_name, split):
-    from torch_geometric.datasets import Planetoid as Planetoid_torch
+def test_elliptic_bitcoin_dataset(tmp_path):
+    from torch_geometric.datasets import (
+        EllipticBitcoinDataset as EllipticBitcoinDataset_torch,
+    )
     from torch_geometric.loader import DataLoader
 
-    dataset = PlanetoidDataset(dataset_name, base_dir=tmp_path, split=split)
-    dataset_torch = Planetoid_torch(tmp_path, dataset_name, split=split)
+    dataset = EllipticBitcoinDataset(base_dir=tmp_path)
+    dataset_torch = EllipticBitcoinDataset_torch(tmp_path)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
@@ -49,9 +41,4 @@ def test_planetoid_cora_dataset(tmp_path, dataset_name, split):
         if batch_mxg.test_mask is not None:
             assert mx.array_equal(
                 mx.array(batch_pyg.test_mask.tolist()), batch_mxg.test_mask
-            ), "Two arrays between PyG and mxg are different"
-
-        if batch_mxg.val_mask is not None:
-            assert mx.array_equal(
-                mx.array(batch_pyg.val_mask.tolist()), batch_mxg.val_mask
             ), "Two arrays between PyG and mxg are different"

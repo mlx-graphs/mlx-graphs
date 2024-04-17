@@ -2,14 +2,14 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-autodoc_mock_imports = ["mlx"]
+autodoc_mock_imports = ["mlx", "networkx"]
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.4"
+release = "0.0.6"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -22,6 +22,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "nbsphinx",
     "sphinx_gallery.load_style",
+    "sphinx.ext.viewcode",
 ]
 
 napoleon_use_param = True
@@ -59,6 +60,7 @@ html_theme_options = {
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3", None),
     "mlx": ("https://ml-explore.github.io/mlx/build/html", None),
+    "networkx": ("https://networkx.org/documentation/stable", None),
 }
 
 html_css_files = [
