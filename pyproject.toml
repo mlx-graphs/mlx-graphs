@@ -48,6 +48,7 @@ benchmarks = [
   "dgl==2.0.0",
   "torch==2.2.0",
   "torch_geometric==2.5.0",
+  "torch_cluster==1.6.3",
 ]
 
 [project.urls]
