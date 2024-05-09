@@ -7,7 +7,7 @@ from typing import Callable, Literal, Optional, Sequence, Union
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.data import GraphData
+from mlx_graphs.data import GraphData, HeteroGraphData
 
 # Default path for downloaded datasets is the current working directory
 DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
@@ -45,7 +45,7 @@ class Dataset(ABC):
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
         self.pre_transform = pre_transform
-        self.graphs: list[GraphData] = []
+        self.graphs: list[Union[GraphData, HeteroGraphData]] = []
         self._load()
 
     @property
@@ -166,11 +166,20 @@ class Dataset(ABC):
             self._save()
 
     def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
-        flattened_labels = [
-            getattr(g, f"{task}_labels")
-            for g in self.graphs
-            if getattr(g, f"{task}_labels") is not None
-        ]
+        flattened_labels = []
+        for g in self.graphs:
+            if isinstance(g, GraphData):
+                labels = getattr(g, f"{task}_labels")
+                if labels is not None:
+                    flattened_labels.append(labels)
+            elif isinstance(g, HeteroGraphData):
+                if task == "node":
+                    labels = [v for v in g.collect(f"{task}_labels", True).values()]
+                else:
+                    labels = [getattr(g, f"{task}_labels", None)]
+                flattened_labels.extend(
+                    [label for label in labels if label is not None]
+                )
 
         if len(flattened_labels) == 0:
             return 0
@@ -185,7 +194,7 @@ class Dataset(ABC):
     def __getitem__(
         self,
         idx: Union[int, np.integer, slice, mx.array, np.ndarray, Sequence],
-    ) -> Union["Dataset", GraphData]:
+    ) -> Union["Dataset", GraphData, HeteroGraphData]:
         """
         Returns graphs from the ``Dataset`` at given indices.
 
