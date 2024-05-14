@@ -24,3 +24,4 @@ Datasets
 	SuperPixelDataset
 	OGBDataset
 	EllipticBitcoinDataset
+	MovieLens100K
