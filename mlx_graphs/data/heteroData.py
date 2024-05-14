@@ -16,37 +16,108 @@ class HeteroGraphData:
         graph_features: Optional[mx.array] = None,
         node_labels_dict: Optional[Dict[str, mx.array]] = None,
         edge_labels_dict: Optional[Dict[str, mx.array]] = None,
+        edge_labels_index_dict: Optional[Dict[str, mx.array]] = None,
         graph_labels: Optional[mx.array] = None,
+        **kwargs,
     ) -> None:
         self.edge_index_dict = edge_index_dict
         self.node_features_dict = node_features_dict
         self.edge_features_dict = edge_features_dict
         self.graph_features = graph_features
         self.node_labels_dict = node_labels_dict
+        self.edge_labels_index_dict = edge_labels_index_dict
         self.edge_labels_dict = edge_labels_dict
         self.graph_labels = graph_labels
+        for key, value in kwargs.items():
+            setattr(self, key, value)
 
     def __repr__(self) -> str:
-        strings = []
+        lines = [f"{type(self).__name__}("]
+
+        # Node features
+        if self.node_features_dict is not None:
+            node_features_lines = ["node_features("]
+            for key, value in self.node_features_dict.items():
+                node_features_lines.append(
+                    f"  '{key}': "
+                    + f"(shape={value.shape}, {str(value.dtype).split('.')[-1]}),"
+                )
+            node_features_lines.append(")\n edge_index(")
+            lines.extend(node_features_lines)
+        else:
+            lines.append("\n edge_index(")
+        # Edge index
+        edge_index_lines = []
+        for key, value in self.edge_index_dict.items():
+            src_node_type, edge_type, dst_node_type = key
+            edge_index_lines.append(
+                f"  '{src_node_type} -> {edge_type} -> {dst_node_type}':"
+                + f"(shape={value.shape}, {str(value.dtype).split('.')[-1]}),"
+            )
+        edge_index_lines.append(")\n edge_labels_index_dict(")
+        lines.extend(edge_index_lines)
+
+        # Edge labels index dict
+        if self.edge_labels_index_dict is not None:
+            edge_labels_index_lines = []
+            for key, value in self.edge_labels_index_dict.items():
+                src_node_type, edge_type, dst_node_type = key
+                edge_labels_index_lines.append(
+                    f"  '({src_node_type}', '{edge_type}', '{dst_node_type}')':"
+                    + f"(shape={value.shape}, {str(value.dtype).split('.')[-1]}),"
+                )
+            edge_labels_index_lines.append(")\n edge_labels_dict(")
+            lines.extend(edge_labels_index_lines)
+        else:
+            lines.append(")\n edge_labels_dict(")
+
+        # Edge labels dict
+        if self.edge_labels_dict is not None:
+            edge_labels_lines = []
+            for key, value in self.edge_labels_dict.items():
+                src_node_type, edge_type, dst_node_type = key
+                edge_labels_lines.append(
+                    f"  '({src_node_type}', '{edge_type}', '{dst_node_type}')':"
+                    + f"(shape={value.shape}, {str(value.dtype).split('.')[-1]}),"
+                )
+            edge_labels_lines.append(")")
+            lines.extend(edge_labels_lines)
+        else:
+            lines.append(")")
+
+        # Additional attributes
         for k, v in vars(self).items():
-            if v is not None and not k.startswith("_"):
+            if (
+                v is not None
+                and not k.startswith("_")
+                and k
+                not in [
+                    "node_features_dict",
+                    "edge_index_dict",
+                    "edge_labels_index_dict",
+                    "edge_labels_dict",
+                ]
+            ):
                 if isinstance(v, dict):
+                    attr_lines = [f"{k}("]
                     for key, value in v.items():
                         if isinstance(value, mx.array):
-                            strings.append(
-                                f"{k}[{key}](shape={value.shape},{str(value.dtype).split('.')[-1]})"
+                            attr_lines.append(
+                                f"  '{key}': "
+                                + f"(shape={value.shape},"
+                                + f"{str(value.dtype).split('.')[-1]}),"
                             )
                         else:
-                            strings.append(f"{k}[{key}]={value}")
+                            attr_lines.append(f"  '{key}': {value},")
+                    attr_lines.append(")")
+                    lines.extend(attr_lines)
                 elif isinstance(v, mx.array):
-                    strings.append(
-                        f"{k}(shape={v.shape}, {str(v.dtype).split('.')[-1]})"
-                    )
+                    lines.append(f"{k}(shape={v.shape}, {str(v.dtype).split('.')[-1]})")
                 else:
-                    strings.append(f"{k}={v}")
+                    lines.append(f"{k}={v}")
 
-        prefix = "\n\t"
-        return f"{type(self).__name__}({prefix + prefix.join(strings)})"
+        lines.append(")")
+        return "\n".join(lines)
 
     def to_dict(self) -> dict:
         """Converts the Data object to a dictionary.
@@ -76,7 +147,7 @@ class HeteroGraphData:
         return num_nodes
 
     @property
-    def num_edges_dict(self) -> Dict[str, int]:
+    def num_edges(self) -> Dict[str, int]:
         """Dictionary of number of edges for each edge type in the graph."""
         return {
             edge_type: edge_index.shape[1]
@@ -84,7 +155,7 @@ class HeteroGraphData:
         }
 
     @property
-    def num_node_classes_dict(self) -> Dict[str, int]:
+    def num_node_classes(self) -> Dict[str, int]:
         """
         Returns a dictionary of the number of node classes
         for each node type in the current graph.
@@ -95,7 +166,7 @@ class HeteroGraphData:
         }
 
     @property
-    def num_edge_classes_dict(self) -> Dict[str, int]:
+    def num_edge_classes(self) -> Dict[str, int]:
         """
         Returns a dictionary of the number of edge classes
         for each edge type in the current graph.
@@ -106,7 +177,7 @@ class HeteroGraphData:
         }
 
     @property
-    def num_node_features_dict(self) -> Dict[str, int]:
+    def num_node_features(self) -> Dict[str, int]:
         """Returns a dictionary of the number of node features for each node type."""
         num_node_features_dict = {}
         if self.node_features_dict is not None:
@@ -117,7 +188,7 @@ class HeteroGraphData:
         return num_node_features_dict
 
     @property
-    def num_edge_features_dict(self) -> Dict[str, int]:
+    def num_edge_features(self) -> Dict[str, int]:
         """Returns a dictionary of the number of edge features for each edge type."""
         num_edge_features_dict = {}
         if self.edge_features_dict is not None:

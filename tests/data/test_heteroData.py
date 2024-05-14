@@ -31,9 +31,9 @@ def test_hetero_graph_data():
         ("author", "writes", "paper"): 2,
         ("paper", "cites", "paper"): 2,
     }
-    assert hetero_data.num_edges_dict == expected_num_edges_dict
+    assert hetero_data.num_edges == expected_num_edges_dict
     expected_num_edge_classes_dict = {
         ("author", "writes", "paper"): 2,
         ("paper", "cites", "paper"): 2,
     }
-    assert hetero_data.num_edge_classes_dict == expected_num_edge_classes_dict
+    assert hetero_data.num_edge_classes == expected_num_edge_classes_dict

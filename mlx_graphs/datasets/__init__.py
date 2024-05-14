@@ -6,3 +6,4 @@ from .planetoid import PlanetoidDataset  # noqa
 from .superpixel import SuperPixelDataset  # noqa
 from .ogb_dataset import OGBDataset  # noqa
 from .elliptic import EllipticBitcoinDataset  # noqa
+from .movie_lens_100k import MovieLens100K  # noqa
