@@ -306,7 +306,7 @@ class HeteroGraphData:
         """Converts the Data object to a dictionary.
 
         Returns:
-            A dictionary with all attributes of the `GraphData` object.
+            A dictionary with all attributes of the `HeteroGraphData` object.
         """
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
