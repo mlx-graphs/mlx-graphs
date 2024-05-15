@@ -11,6 +11,28 @@ from mlx_graphs.datasets.utils import download, extract_archive
 
 
 class MovieLens100K(Dataset):
+    """
+    The MovieLens 100K heterogeneous rating dataset, assembled by GroupLens
+    Research from the `MovieLens web site <https://movielens.org>`__,
+    consisting of movies (1,682 nodes) and users (943 nodes) with 100K
+    ratings between them.
+    User ratings for movies are available as ground truth labels.
+    Features of users and movies are encoded according to the `"Inductive
+    Matrix Completion Based on Graph Neural Networks"
+    <https://arxiv.org/abs/1904.12058>`__ paper.
+
+    Args:
+        base_dir (str): Directory where to store dataset files.
+        transform (callable, optional): A function/transform that takes in an
+            :obj:`HeteroGraphData` object and returns a
+            transformed version. The data object will be transformed before
+            every access. (default: :obj:`None`)
+        pre_transform (callable, optional): A function/transform that takes in
+            an `HeteroGraphData` object and returns a
+            transformed version. The data object will be transformed before
+            being saved to disk. (default: :obj:`None`)
+    """
+
     file_id = "1ggYlYf2_kTyi7oF9g07oTNn3VDhjl7so"
 
     def __init__(
