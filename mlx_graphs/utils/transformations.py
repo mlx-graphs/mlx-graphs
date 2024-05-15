@@ -259,6 +259,7 @@ def add_self_loops(
         A tuple containing the updated edge_index and edge_features with self-loops.
 
     """
+    # TODO: add option to create self-loops only for the nodes present in the edge index
     if num_nodes is not None:
         if mx.max(edge_index) > num_nodes - 1:
             raise ValueError(
@@ -279,9 +280,12 @@ def add_self_loops(
 
     if edge_features is not None:
         # add self loops to features
-        self_loop_features = (
-            mx.ones([self_loop_index.shape[1], edge_features.shape[1]]) * fill_value
+        features_shape = (
+            (self_loop_index.shape[1], edge_features.shape[1])
+            if edge_features.ndim > 1
+            else (self_loop_index.shape[1],)
         )
+        self_loop_features = mx.ones(features_shape) * fill_value
         full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
         return full_edge_index, full_edge_features
     return full_edge_index
@@ -303,22 +307,24 @@ def remove_self_loops(
     ...
 
 
-@validate_edge_index_and_features
+@validate_edge_index
 def remove_self_loops(
     edge_index: mx.array,
-    edge_features: Optional[mx.array] = None,
+    edge_attributes: Optional[list[mx.array]] = [],
 ) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
-    Removes self-loops from the given graph represented by edge_index and edge_features.
+    Removes self-loops from the given graph represented by edge_index and optional
+    edge attributes such as edge labels and edge features.
 
     Args:
         edge_index: a [2, num_edges] array representing the source and target nodes
             of each edge
-        edge_features: Optional tensor representing features associated with each edge,
-            with shape [num_edges, num_edge_features]
+        edge_attributes: Optional list of arrays representing edge-based attributes
+            with shape [num_edges, ...]
 
     Returns:
-        A tuple containing the updated edge_index and edge_features without self-loops.
+        A tuple containing the updated edge_index, and optional edge attributes
+        without self-loops.
 
     """
     num_nodes = (mx.max(edge_index) + 1).item()
@@ -330,12 +336,16 @@ def remove_self_loops(
     if len(preserved_idx) != 0:
         no_self_loop_index = edge_index[:, preserved_idx]
 
-    if edge_features is not None:
-        no_self_loop_features = mx.array([[]])
-        if len(preserved_idx) != 0:
-            no_self_loop_features = edge_features[preserved_idx]
-        return no_self_loop_index, no_self_loop_features
-    return no_self_loop_index
+    results = [no_self_loop_index]
+    for attribute in edge_attributes:
+        if attribute is not None:
+            no_self_loop_attribute = mx.array([[]])
+            if len(preserved_idx) != 0:
+                no_self_loop_attribute = attribute[preserved_idx]
+
+            results.append(no_self_loop_attribute)
+
+    return tuple(results) if len(results) > 1 else results[0]
 
 
 @overload

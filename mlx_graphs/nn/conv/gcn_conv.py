@@ -22,7 +22,7 @@ class GCNConv(MessagePassing):
         node_features_dim: int,
         out_features_dim: int,
         bias: bool = True,
-        add_self_loops: bool = False,
+        add_self_loops: bool = True,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
@@ -47,17 +47,21 @@ class GCNConv(MessagePassing):
         node_features = self.linear(node_features)
 
         if self._add_self_loops:
-            edge_index = add_self_loops(edge_index)
+            edge_index = add_self_loops(edge_index, edge_features=edge_weights)
+            if edge_weights is not None:
+                edge_index, edge_weights = edge_index
 
         row, col = edge_index
 
         # Compute node degree normalization for the mean aggregation.
         norm: Optional[mx.array] = None
         if normalize:
-            deg = degree(col, node_features.shape[0], edge_weights=edge_weights)
+            deg = degree(row, node_features.shape[0], edge_weights=edge_weights)
             # NOTE : need boolean indexing in order to zero out inf values
             deg_inv_sqrt = invert_sqrt_degree(deg)
             norm = deg_inv_sqrt[row] * deg_inv_sqrt[col]
+            if edge_weights is not None:
+                norm = norm * edge_weights
 
         # Compute messages and aggregate them with sum and norm.
         node_features = self.propagate(
