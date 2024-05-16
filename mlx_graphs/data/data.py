@@ -392,6 +392,13 @@ class HeteroGraphData:
         return num_nodes
 
     @property
+    def num_graph_features(self) -> int:
+        """Returns the number of graph features."""
+        if self.graph_features is None:
+            return 0
+        return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
+
+    @property
     def num_edges(self) -> dict[str, int]:
         """dictionary of number of edges for each edge type in the graph."""
         return {
@@ -454,54 +461,6 @@ class HeteroGraphData:
             return np.unique(np.array(labels)).size
         return labels.shape[-1]
 
-    def __cat_dim__(self, key: str, *args, **kwargs) -> int:
-        """
-        This method can be overriden when batching is used with custom
-        attributes. Given the name of a custom attribute `key`, returns
-        the dimension where the concatenation happens during batching.
-
-        By default, all attribute names containing "index" will be
-        concatenated on axis 1, e.g. `edge_index_dict`. Other attributes are
-        concatenated on axis 0,
-        e.g. node features.
-
-        Args:
-            key: Name of the attribute on which change the default
-                concatenation dimension while using batching.
-
-        Returns:
-            The dimension where concatenation will happen when batching.
-        """
-        if "index" in key:
-            return 1
-        return 0
-
-    def __inc__(self, key: str, type_key: str, *args, **kwargs) -> Union[int, None]:
-        """
-        This method can be overriden when batching is used with custom
-        attributes.Given the name of a custom attribute `key` and its type
-        `type_key`, returns an integer indicating the incrementing value to
-        apply to the elements of the attribute.
-
-        By default, all attribute names containing "index" will be incremented
-        based on the number of nodes of the corresponding node type in previous
-        batches to avoid duplicate nodes in the index, e.g. `edge_index_dict`.
-        Other attributes are not incremented and keep their original values,
-        e.g. node features. If incrementation is not used, the return value
-        should be set to `None`.
-
-        Args:
-            key: Name of the attribute on which change the default
-            incrementation behavior while using batching.
-            type_key: Type of the attribute (e.g., node type or edge type).
-
-        Returns:
-            Incrementing value for the given attribute or None.
-        """
-        if "index" in key:
-            return self.num_nodes[type_key]
-        return None
-
     def has_isolated_nodes(self, node_type: str) -> bool:
         """Returns a boolean of whether the graph has isolated nodes of the
         given type
@@ -514,29 +473,41 @@ class HeteroGraphData:
                     return True
         return False
 
-    def has_self_loops(self, edge_type: str) -> bool:
+    def has_self_loops(self) -> bool:
         """
         Returns a boolean of whether the graph
         contains self loops for the given edge type.
         """
-        return has_self_loops(self.edge_index_dict[edge_type])
 
-    def is_undirected(self, edge_type: str) -> bool:
-        """
-        Returns a boolean of whether the
-        given edge type is undirected or not.
-        """
-        edge_index = self.edge_index_dict[edge_type]
-        edge_features = (
-            self.edge_features_dict.get(edge_type, None)
-            if self.edge_features_dict
-            else None
+        return all(
+            has_self_loops(
+                self.edge_index_dict[edge_type] for edge_type in self.edge_index_dict
+            )
         )
-        return is_undirected(edge_index, edge_features)
 
-    def is_directed(self, edge_type: str) -> bool:
+    def is_undirected(self) -> bool:
         """
-        Returns a boolean of whether the given
-        edge type is directed or not.
+        Returns a boolean indicating whether all edge types in the graph are undirected.
         """
-        return not self.is_undirected(edge_type)
+        return all(
+            is_undirected(
+                self.edge_index_dict[edge_type],
+                (
+                    self.edge_features_dict.get(edge_type, None)
+                    if self.edge_features_dict
+                    else None
+                ),
+            )
+            for edge_type in self.edge_index_dict
+        )
+
+    def is_directed(self) -> bool:
+        """
+        Returns a boolean of whether all
+        edges are directed or not.
+        """
+        return all(
+            not is_undirected(
+                self.edge_index_dict[edge_type] for edge_type in self.edge_index_dict
+            )
+        )

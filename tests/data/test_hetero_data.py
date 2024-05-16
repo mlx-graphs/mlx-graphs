@@ -37,3 +37,36 @@ def test_hetero_graph_data():
         ("paper", "cites", "paper"): 2,
     }
     assert hetero_data.num_edge_classes == expected_num_edge_classes_dict
+
+    expected_num_nodes = {"author": 3, "paper": 3}
+    assert (
+        hetero_data.num_nodes == expected_num_nodes
+    ), "Expected number of nodes do not match"
+    assert (
+        hetero_data.num_node_classes["author"] == 3
+    ), "Number of authors are different"
+    assert (
+        hetero_data.num_edge_features[("author", "writes", "paper")] == 2
+    ), "edge_features are different"
+
+    assert (
+        hetero_data.num_edge_features[("paper", "cites", "paper")] == 2
+    ), "edge_features for paper are different"
+
+    assert (
+        hetero_data.num_node_classes["author"] == 3
+    ), "node classes for author are different"
+
+    assert (
+        hetero_data.num_node_classes["paper"] == 3
+    ), "node classes for paper are different"
+
+    heteroGraphDict = hetero_data.to_dict()
+
+    assert (
+        heteroGraphDict["edge_index_dict"][("author", "writes", "paper")].shape[0] == 2
+    ), "The edge dictionary is different"
+
+    assert (
+        heteroGraphDict["edge_index_dict"][("paper", "cites", "paper")].shape[0] == 2
+    ), "The edge dictionary is different"
