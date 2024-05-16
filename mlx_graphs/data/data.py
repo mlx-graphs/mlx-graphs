@@ -194,55 +194,38 @@ class HeteroGraphData:
     """
     Represents a graph structure with multiple node and edge types
 
-    Attributes:
-        edge_index_dict (Dict[str, mx.array]): A dictionary mapping edge types
+    Args:
+        edge_index_dict: A dictionary mapping edge types
             to their corresponding edge indices. The edge indices are
             represented as a 2D array of shape `[2, num_edges]`, where the
             first row contains the source node indices and the second row
             contains the destination node indices.
-        node_features_dict (Optional[Dict[str, mx.array]]): A dictionary
+        node_features_dict: A dictionary
             mapping node types to their corresponding node feature. Each node
             feature has shape `[num_nodes, num_features]`.
-        edge_features_dict (Optional[Dict[str, mx.array]]): A dictionary
+        edge_features_dict: A dictionary
             mapping edge types to their corresponding edge feature matrices.
             Each edge feature matrix has shape `[num_edges, num_features]`.
-        graph_features (Optional[mx.array]): A 1D array containing graph-level
+        graph_features: A 1D array containing graph-level
             features.
-        node_labels_dict (Optional[Dict[str, mx.array]]): A dictionary mapping
+        node_labels_dict: A dictionary mapping
             node types to their corresponding node label arrays.
             Each node label array has shape `[num_nodes]`.
-        edge_labels_dict (Optional[Dict[str, mx.array]]): A dictionary mapping
+        edge_labels_dict: A dictionary mapping
             edge types to their corresponding edge label arrays.
             Each edge label array has shape `[num_edges]`.
-        edge_labels_index_dict (Optional[Dict[str, mx.array]]): A dictionary
+        edge_labels_index_dict: A dictionary
             mapping edge types to their corresponding edge label index arrays.
             The edge label indices indicate the edges for which labels are
             available.
-        graph_labels (Optional[mx.array]): A 1D array containing graph-level
+        graph_labels: A 1D array containing graph-level
             labels.
         **kwargs: Additional keyword arguments to store custom attributes.
 
-    Methods:
-        __repr__(): Returns a string representation of the `HeteroGraphData`
-            object.
-        to_dict(): Converts the `HeteroGraphData` object to a dictionary.
-
-    Properties:
-        num_nodes (Dict[str, int]): A dictionary mapping node types to
-            the number of nodes of each type in the graph.
-        num_edges (Dict[str, int]): A dictionary mapping edge types
-            to the number of edges of each type in the graph.
-        num_node_classes (Dict[str, int]): A dictionary mapping node
-            types to the number of node classes for each type in the graph.
-        num_edge_classes (Dict[str, int]): A dictionary mapping edge types
-            to the number of edge classes for each type in the graph.
-        num_node_features (Dict[str, int]): A dictionary mapping node types
-            to the number of node features for each type in the graph.
-        num_edge_features (Dict[str, int]): A dictionary mapping edge types
-            to the number of edge features for each type in the graph.
-
     Example:
-        ```python
+
+    .. code-block:: python
+
         edge_index_dict = {
             ("user", "rates", "movie"): mx.array([[0, 1], [0, 1]]),
             ("movie", "rev_rates", "user"): mx.array([[0, 1], [0, 1]]),
@@ -251,7 +234,8 @@ class HeteroGraphData:
             "user": mx.array([[0.2], [0.8]]),
             "movie": mx.array([[0.5], [0.3]]),
         }
-        data = HeteroGraphData(edge_index_dict, node_features_dict)"""
+        data = HeteroGraphData(edge_index_dict, node_features_dict)
+    """
 
     def __init__(
         self,
@@ -480,9 +464,8 @@ class HeteroGraphData:
         """
 
         return all(
-            has_self_loops(
-                self.edge_index_dict[edge_type] for edge_type in self.edge_index_dict
-            )
+            has_self_loops(self.edge_index_dict[edge_type])
+            for edge_type in self.edge_index_dict
         )
 
     def is_undirected(self) -> bool:
@@ -507,7 +490,6 @@ class HeteroGraphData:
         edges are directed or not.
         """
         return all(
-            not is_undirected(
-                self.edge_index_dict[edge_type] for edge_type in self.edge_index_dict
-            )
+            not is_undirected(self.edge_index_dict[edge_type])
+            for edge_type in self.edge_index_dict
         )
