@@ -11,3 +11,4 @@ Data Objects
 	:template: data-class-template.rst
 
 	GraphData
+	HeteroGraphData

@@ -5,7 +5,7 @@ import mlx.core as mx
 import numpy as np
 import pytest
 
-from mlx_graphs.data.data import GraphData
+from mlx_graphs.data.data import GraphData, HeteroGraphData
 from mlx_graphs.datasets.dataset import Dataset
 
 
@@ -76,6 +76,59 @@ def test_dataset_properties(tmp_path):
     with open(processed_file_name, "rb") as f:
         saved_graphs = pickle.load(f)
         assert mx.array_equal(saved_graphs[0].node_features, data.node_features)
+
+
+def test_dataset_properties_hetero_graph_data(tmp_path):
+    hetero_data = HeteroGraphData(
+        edge_index_dict={
+            ("author", "writes", "paper"): mx.array([[0, 1], [1, 2]]),
+            ("paper", "cites", "paper"): mx.array([[0, 1], [1, 2]]),
+        },
+        node_features_dict={
+            "author": mx.array([[1, 2], [3, 4], [5, 6]]),
+            "paper": mx.array([[7, 8], [9, 10], [11, 12]]),
+        },
+        edge_features_dict={
+            ("author", "writes", "paper"): mx.array([[13, 14], [15, 16]]),
+            ("paper", "cites", "paper"): mx.array([[17, 18], [19, 20]]),
+        },
+        node_labels_dict={"author": mx.array([0, 1, 2]), "paper": mx.array([0, 1, 2])},
+        edge_labels_dict={
+            ("author", "writes", "paper"): mx.array([0, 1]),
+            ("paper", "cites", "paper"): mx.array([1, 0]),
+        },
+        graph_features=mx.array([21, 22]),
+        graph_labels=mx.array([1]),
+    )
+
+    class HeteroGraphDataSet(Dataset):
+        def __init__(self):
+            super().__init__("HeteroGraphDataSet", base_dir=tmp_path)
+
+        def download(self):
+            pass
+
+        def process(self):
+            self.graphs = [hetero_data]
+
+    heteroGraphDataSet = HeteroGraphDataSet()
+    assert heteroGraphDataSet.num_node_features["author"] == 2
+    assert heteroGraphDataSet.num_graph_features == 1
+    assert heteroGraphDataSet.num_edge_classes[("author", "writes", "paper")] == 2
+    assert heteroGraphDataSet.num_node_classes["author"] == 3
+
+    processed_file_name = os.path.join(
+        tmp_path, "HeteroGraphDataSet/processed/graphs.pkl"
+    )
+    assert os.path.exists(processed_file_name)
+
+    with open(processed_file_name, "rb") as f:
+        saved_graphs = pickle.load(f)
+        print(saved_graphs[0])
+        assert mx.array_equal(
+            saved_graphs[0].node_features_dict["author"],
+            heteroGraphDataSet.graphs[0].node_features_dict["author"],
+        )
 
 
 def test_dataset_transform(tmp_path):

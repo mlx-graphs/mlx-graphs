@@ -7,7 +7,7 @@ from typing import Callable, Literal, Optional, Sequence, Union
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.data import GraphData
+from mlx_graphs.data import GraphData, HeteroGraphData
 
 # Default path for downloaded datasets is the current working directory
 DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
@@ -45,7 +45,7 @@ class Dataset(ABC):
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
         self.pre_transform = pre_transform
-        self.graphs: list[GraphData] = []
+        self.graphs: list[Union[GraphData, HeteroGraphData]] = []
         self._load()
 
     @property
@@ -76,17 +76,17 @@ class Dataset(ABC):
         return len(self)
 
     @property
-    def num_node_classes(self) -> int:
+    def num_node_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of node classes to predict."""
         return self._num_classes("node")
 
     @property
-    def num_edge_classes(self) -> int:
+    def num_edge_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of edge classes to predict."""
         return self._num_classes("edge")
 
     @property
-    def num_graph_classes(self) -> int:
+    def num_graph_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of graph classes to predict."""
         return self._num_classes("graph")
 
@@ -165,18 +165,56 @@ class Dataset(ABC):
             print("Done")
             self._save()
 
-    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> int:
-        flattened_labels = [
-            getattr(g, f"{task}_labels")
-            for g in self.graphs
-            if getattr(g, f"{task}_labels") is not None
-        ]
+    def _num_classes(
+        self, task: Literal["node", "edge", "graph"]
+    ) -> Union[int, dict[str, int]]:
+        flattened_labels = []
+        num_classes_dict = {}
+        for g in self.graphs:
+            if isinstance(g, GraphData):
+                labels = getattr(g, f"{task}_labels")
+                if labels is not None:
+                    flattened_labels.append(labels)
+            elif isinstance(g, HeteroGraphData):
+                if task == "node":
+                    labels_dict = g.node_labels_dict
+                    if labels_dict is not None:
+                        for node_type, labels in labels_dict.items():
+                            if node_type not in num_classes_dict:
+                                num_classes_dict[node_type] = []
+                            num_classes_dict[node_type].append(labels)
+                elif task == "edge":
+                    labels_dict = g.edge_labels_dict
+                    if labels_dict is not None:
+                        for edge_type, labels in labels_dict.items():
+                            if edge_type not in num_classes_dict:
+                                num_classes_dict[edge_type] = []
+                            num_classes_dict[edge_type].append(labels)
+                else:  # task == "graph"
+                    labels = g.graph_labels
+                    if labels is not None:
+                        if None not in num_classes_dict:
+                            num_classes_dict[None] = []
+                        num_classes_dict[None].append(labels)
 
-        if len(flattened_labels) == 0:
+        if len(flattened_labels) == 0 and len(num_classes_dict) == 0:
             return 0
-
-        flattened_labels = np.concatenate(flattened_labels)
-        return np.unique(flattened_labels).size
+        else:
+            if len(flattened_labels) > 0:
+                flattened_labels = np.concatenate(flattened_labels)
+                return np.unique(flattened_labels).size
+            else:
+                if task == "node" or task == "edge":
+                    return {
+                        key: np.unique(np.concatenate(labels)).size
+                        for key, labels in num_classes_dict.items()
+                    }
+                else:  # task == "graph"
+                    graph_labels = num_classes_dict.get(None)
+                    if graph_labels is not None:
+                        return np.unique(np.concatenate(graph_labels)).size
+                    else:
+                        return 0
 
     def __len__(self):
         """Number of examples in the dataset"""
@@ -185,7 +223,7 @@ class Dataset(ABC):
     def __getitem__(
         self,
         idx: Union[int, np.integer, slice, mx.array, np.ndarray, Sequence],
-    ) -> Union["Dataset", GraphData]:
+    ) -> Union["Dataset", GraphData, HeteroGraphData]:
         """
         Returns graphs from the ``Dataset`` at given indices.
 

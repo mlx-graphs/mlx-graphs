@@ -1,6 +1,5 @@
 """Borrowed from PyG (https://github.com/pyg-team/pytorch_geometric/blob/b812cffc9dc4cd2b901377305f5cb716fa31e5fd/torch_geometric/io/fs.py)"""
 
-
 import os.path as osp
 import sys
 from typing import Any, Dict
