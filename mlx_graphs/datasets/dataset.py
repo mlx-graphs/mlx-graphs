@@ -2,7 +2,7 @@ import copy
 import os
 import pickle
 from abc import ABC, abstractmethod
-from typing import Callable, Dict, Literal, Optional, Sequence, Union
+from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
@@ -76,17 +76,17 @@ class Dataset(ABC):
         return len(self)
 
     @property
-    def num_node_classes(self) -> int:
+    def num_node_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of node classes to predict."""
         return self._num_classes("node")
 
     @property
-    def num_edge_classes(self) -> int:
+    def num_edge_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of edge classes to predict."""
         return self._num_classes("edge")
 
     @property
-    def num_graph_classes(self) -> int:
+    def num_graph_classes(self) -> Union[int, dict[str, int]]:
         """Returns the number of graph classes to predict."""
         return self._num_classes("graph")
 
@@ -167,7 +167,7 @@ class Dataset(ABC):
 
     def _num_classes(
         self, task: Literal["node", "edge", "graph"]
-    ) -> Union[int, Dict[str, int]]:
+    ) -> Union[int, dict[str, int]]:
         flattened_labels = []
         num_classes_dict = {}
         for g in self.graphs:
