@@ -61,6 +61,8 @@ def test_hetero_graph_data():
         hetero_data.num_node_classes["paper"] == 3
     ), "node classes for paper are different"
 
+    assert hetero_data.is_directed() is True, "Graph is not directed"
+
     heteroGraphDict = hetero_data.to_dict()
 
     assert (

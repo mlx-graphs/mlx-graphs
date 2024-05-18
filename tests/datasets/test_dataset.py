@@ -92,6 +92,11 @@ def test_dataset_properties_hetero_graph_data(tmp_path):
             ("author", "writes", "paper"): mx.array([[13, 14], [15, 16]]),
             ("paper", "cites", "paper"): mx.array([[17, 18], [19, 20]]),
         },
+        node_labels_dict={"author": mx.array([0, 1, 2]), "paper": mx.array([0, 1, 2])},
+        edge_labels_dict={
+            ("author", "writes", "paper"): mx.array([0, 1]),
+            ("paper", "cites", "paper"): mx.array([1, 0]),
+        },
         graph_features=mx.array([21, 22]),
         graph_labels=mx.array([1]),
     )
@@ -109,7 +114,8 @@ def test_dataset_properties_hetero_graph_data(tmp_path):
     heteroGraphDataSet = HeteroGraphDataSet()
     assert heteroGraphDataSet.num_node_features["author"] == 2
     assert heteroGraphDataSet.num_graph_features == 1
-    assert heteroGraphDataSet.num_edge_classes == 0
+    assert heteroGraphDataSet.num_edge_classes[("author", "writes", "paper")] == 2
+    assert heteroGraphDataSet.num_node_classes["author"] == 3
 
     processed_file_name = os.path.join(
         tmp_path, "HeteroGraphDataSet/processed/graphs.pkl"
