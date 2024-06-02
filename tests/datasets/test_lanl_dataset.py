@@ -5,7 +5,7 @@ from mlx_graphs.datasets import LANLDataset
 from mlx_graphs.loaders import LANLDataLoader
 
 
-# @pytest.mark.slow
+@pytest.mark.slow
 def test_lanl_dataset(tmp_path):
     dataset = LANLDataset(base_dir=tmp_path)
 
