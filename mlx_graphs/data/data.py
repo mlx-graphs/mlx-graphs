@@ -239,7 +239,7 @@ class HeteroGraphData:
 
     def __init__(
         self,
-        edge_index_dict: dict[str, mx.array],
+        edge_index_dict: dict[tuple[str, str, str], mx.array],
         node_features_dict: Optional[dict[str, mx.array]] = None,
         edge_features_dict: Optional[dict[str, mx.array]] = None,
         graph_features: Optional[mx.array] = None,

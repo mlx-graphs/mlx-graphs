@@ -68,7 +68,6 @@ class IMDB(Dataset):
         path = download(url=url, path=self.raw_path)
         new_path = path.split("?")[-2]
         os.rename(path, new_path)
-        print("path is ", path)
         extract_archive(new_path, self.raw_path)
         os.remove(new_path)
 
@@ -77,19 +76,23 @@ class IMDB(Dataset):
             import scipy.sparse as sp
         except ImportError:
             raise ImportError("scipy is required to download and process the raw data")
-        data = HeteroGraphData(
-            edge_index_dict={},
-            node_features_dict={},
-            edge_features_dict={},
-            node_labels_dict={},
-        )
+
+        node_features_dict = {}
         node_types = ["movie", "director", "actor"]
         for i, node_type in enumerate(node_types):
             nodes = sp.load_npz(osp.join(self.raw_path, f"features_{i}.npz"))
-            data.node_features_dict[node_type] = mx.array(nodes.todense())
+            node_features_dict[node_type] = mx.array(nodes.todense())
 
+        node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
-        data.node_labels_dict["movies"] = mx.array(y)
+        node_labels_dict["movies"] = mx.array(y)
+
+        data = HeteroGraphData(
+            edge_index_dict={},
+            node_features_dict=node_features_dict,
+            edge_features_dict={},
+            node_labels_dict=node_labels_dict,
+        )
 
         split = np.load(osp.join(self.raw_path, "train_val_test_idx.npz"))
         for name in ["train", "val", "test"]:

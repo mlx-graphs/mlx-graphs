@@ -69,7 +69,6 @@ class DBLP(Dataset):
         path = download(url=url, path=self.raw_path)
         new_path = path.split("?")[-2]
         os.rename(path, new_path)
-        print("path is ", path)
         extract_archive(new_path, self.raw_path)
         os.remove(new_path)
 
@@ -78,19 +77,14 @@ class DBLP(Dataset):
             import scipy.sparse as sp
         except ImportError:
             raise ImportError("scipy is required to download and process the raw data")
-        data = HeteroGraphData(
-            edge_index_dict={},
-            node_features_dict={},
-            edge_features_dict={},
-            node_labels_dict={},
-        )
         node_types = ["author", "paper", "term", "conference"]
+        node_features_dict = {}
         for i, node_type in enumerate(node_types[:2]):
             nodes = sp.load_npz(osp.join(self.raw_path, f"features_{i}.npz"))
-            data.node_features_dict[node_type] = mx.array(nodes.todense())
+            node_features_dict[node_type] = mx.array(nodes.todense())
 
         term = np.load(osp.join(self.raw_path, "features_2.npy"))
-        data.node_features_dict["term"] = mx.array(term).astype(mx.float32)
+        node_features_dict["term"] = mx.array(term).astype(mx.float32)
 
         node_type_idx = np.load(osp.join(self.raw_path, "node_types.npy"))
         node_type_idx = mx.array(node_type_idx).astype(mx.int32)
@@ -104,8 +98,16 @@ class DBLP(Dataset):
         conference_nodes = int((node_type_idx == 3).sum().item())
         print(conference_nodes)
 
+        node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
-        data.node_labels_dict["author"] = mx.array(y)
+        node_labels_dict["author"] = mx.array(y)
+
+        data = HeteroGraphData(
+            edge_index_dict={},
+            node_features_dict=node_features_dict,
+            edge_features_dict={},
+            node_labels_dict=node_labels_dict,
+        )
 
         split = np.load(osp.join(self.raw_path, "train_val_test_idx.npz"))
         for name in ["train", "val", "test"]:
