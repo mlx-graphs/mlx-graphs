@@ -86,17 +86,14 @@ class DBLP(Dataset):
         term = np.load(osp.join(self.raw_path, "features_2.npy"))
         node_features_dict["term"] = mx.array(term).astype(mx.float32)
 
-        node_type_idx = np.load(osp.join(self.raw_path, "node_types.npy"))
-        node_type_idx = mx.array(node_type_idx).astype(mx.int32)
+        node_type_idx_ = np.load(osp.join(self.raw_path, "node_types.npy"))
+        node_type_idx = mx.array(node_type_idx_).astype(mx.int32)
 
-        """
-        Conference nodes don't have features and hence adding
-        it explicitly to a dictionary will not make sense.
-        Either override the property in the class or set attribute separately
-        for conference
-        """
+        # Conference nodes don't have features and hence adding
+        # it explicitly to a dictionary will not make sense.
+        # Either override the property in the class or set attribute separately
+        # for conference
         conference_nodes = int((node_type_idx == 3).sum().item())
-        print(conference_nodes)
 
         node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
