@@ -8,3 +8,4 @@ from .ogb_dataset import OGBDataset  # noqa
 from .elliptic import EllipticBitcoinDataset  # noqa
 from .movie_lens_100k import MovieLens100K  # noqa
 from .imdb import IMDB  # noqa
+from .dblp import DBLP  # noqa
