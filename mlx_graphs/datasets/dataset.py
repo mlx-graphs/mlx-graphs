@@ -45,7 +45,7 @@ class Dataset(ABC):
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
         self.pre_transform = pre_transform
-        self.graphs: list[Union[GraphData, HeteroGraphData]] = []
+        self.graphs: Union[list[GraphData], list[HeteroGraphData]] = []
         self._load()
 
     @property
