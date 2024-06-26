@@ -25,3 +25,5 @@ Datasets
 	OGBDataset
 	EllipticBitcoinDataset
 	MovieLens100K
+	IMDB
+	DBLP
