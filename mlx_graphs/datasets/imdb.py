@@ -7,11 +7,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.datasets import HeteroGraphDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class IMDB(Dataset):
+class IMDB(HeteroGraphDataset):
     """
     A subset of the Internet Movie Database (IMDB), as collected in the
     `"MAGNN: Metapath Aggregated Graph Neural Network for Heterogeneous Graph

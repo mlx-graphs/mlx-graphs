@@ -7,11 +7,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.datasets import HeteroGraphDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class DBLP(Dataset):
+class DBLP(HeteroGraphDataset):
     """
     A subset of the DBLP computer science bibliography website, as
     collected in the `"MAGNN: Metapath Aggregated Graph Neural Network for
