@@ -25,12 +25,12 @@ class DBLP(HeteroGraphDataset):
     keywords.
 
     Args:
-        base_dir (str): directory where the dataset should be saved.
-        transform (callable, optional): A function/transform that takes in an
+        base_dir: directory where the dataset should be saved.
+        transform: A function/transform that takes in an
             :obj:`HeteroGraphData` object and returns a
             transformed version. The data object will be transformed before
             every access. (default: :obj:`None`)
-        pre_transform (callable, optional): A function/transform that takes in
+        pre_transform: A function/transform that takes in
             an `HeteroGraphData` object and returns a
             transformed version. The data object will be transformed before
             being saved to disk. (default: :obj:`None`)
@@ -38,7 +38,7 @@ class DBLP(HeteroGraphDataset):
 
     def __init__(
         self,
-        base_dir: str,
+        base_dir: Optional[str] = None,
         transform: Optional[Callable] = None,
         pre_transform: Optional[Callable] = None,
     ):
