@@ -1,17 +1,17 @@
 import copy
 import os
-from typing import Callable, Optional, Sequence, Union
+from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets import Dataset
+from mlx_graphs.datasets import BaseDataset
 
 DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 
-class HeteroGraphDataset(Dataset):
+class HeteroGraphDataset(BaseDataset):
     def __init__(
         self,
         name: str,
@@ -60,6 +60,41 @@ class HeteroGraphDataset(Dataset):
     def num_edges(self) -> dict[str, int]:
         """Returns a dictionary of the number of edges for each edge type."""
         return self.graphs[0].num_edges
+
+    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> dict[str, int]:
+        num_classes_dict = {}
+        for g in self.graphs:
+            if task == "node":
+                labels_dict = g.node_labels_dict
+                if labels_dict is not None:
+                    for node_type, labels in labels_dict.items():
+                        if node_type not in num_classes_dict:
+                            num_classes_dict[node_type] = []
+                        num_classes_dict[node_type].append(labels)
+            elif task == "edge":
+                labels_dict = g.edge_labels_dict
+                if labels_dict is not None:
+                    for edge_type, labels in labels_dict.items():
+                        if edge_type not in num_classes_dict:
+                            num_classes_dict[edge_type] = []
+                        num_classes_dict[edge_type].append(labels)
+            else:  # task == "graph"
+                labels = g.graph_labels
+                if labels is not None:
+                    if None not in num_classes_dict:
+                        num_classes_dict[None] = []
+                    num_classes_dict[None].append(labels)
+        if task == "node" or task == "edge":
+            return {
+                key: np.unique(np.concatenate(labels)).size
+                for key, labels in num_classes_dict.items()
+            }
+        else:  # task == "graph"
+            graph_labels = num_classes_dict.get(None)
+            if graph_labels is not None:
+                return np.unique(np.concatenate(graph_labels)).size
+            else:
+                return 0
 
     def __getitem__(
         self,

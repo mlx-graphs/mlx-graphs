@@ -1,3 +1,4 @@
+from .base_dataset import BaseDataset  # noqa
 from .dataset import Dataset  # noqa
 from .heteroGraphDataset import HeteroGraphDataset  # noqa
 from .karate_club import KarateClubDataset  # noqa

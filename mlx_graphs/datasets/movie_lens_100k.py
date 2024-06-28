@@ -6,11 +6,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.datasets import HeteroGraphDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class MovieLens100K(Dataset):
+class MovieLens100K(HeteroGraphDataset):
     """
     The MovieLens 100K heterogeneous rating dataset, assembled by GroupLens
     Research from the `MovieLens web site <https://movielens.org>`__,

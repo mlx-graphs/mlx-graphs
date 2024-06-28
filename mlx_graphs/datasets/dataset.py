@@ -1,19 +1,18 @@
 import copy
 import os
-import pickle
-from abc import ABC, abstractmethod
 from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
 
-from mlx_graphs.data import GraphData, HeteroGraphData
+from mlx_graphs.data import GraphData
+from mlx_graphs.datasets import BaseDataset
 
 # Default path for downloaded datasets is the current working directory
 DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 
-class Dataset(ABC):
+class Dataset(BaseDataset):
     """
     Base dataset class. ``download`` and ``process`` methods must be
     implemented by children classes. The ``save`` and ``load`` methods save and load
@@ -45,23 +44,8 @@ class Dataset(ABC):
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
         self.pre_transform = pre_transform
-        self.graphs: Union[list[GraphData], list[HeteroGraphData]] = []
+        self.graphs: list[GraphData] = []
         self._load()
-
-    @property
-    def name(self) -> str:
-        """
-        Name of the dataset
-        """
-        return self._name
-
-    @property
-    def raw_path(self) -> str:
-        """
-        The path where raw files are stored. Defaults at `<base_dir>/<name>/raw`
-
-        """
-        return os.path.expanduser(os.path.join(self._base_dir, self.name, "raw"))
 
     @property
     def processed_path(self) -> str:
@@ -105,97 +89,15 @@ class Dataset(ABC):
         """Returns the number of graph features."""
         return self.graphs[0].num_graph_features
 
-    @abstractmethod
-    def download(self):
-        """Download the dataset at `self.raw_path`."""
-        pass
-
-    @abstractmethod
-    def process(self):
-        """Process the dataset and store graphs in ``self.graphs``"""
-        pass
-
-    def save(self):
-        """Save the processed dataset"""
-        with open(os.path.join(self.processed_path, "graphs.pkl"), "wb") as f:
-            pickle.dump(self.graphs, f)
-
-    def load(self):
-        """Load the processed dataset"""
-        with open(os.path.join(self.processed_path, "graphs.pkl"), "rb") as f:
-            obj = pickle.load(f)
-            self.graphs = obj
-
-    def _download(self):
-        if self._base_dir is not None and self.raw_path is not None:
-            if os.path.exists(self.raw_path):
-                return
-            os.makedirs(self.raw_path, exist_ok=True)
-            print(f"Downloading {self.name} raw data ...", end=" ")
-            self.download()
-            print("Done")
-
-    def _process(self):
-        self.process()
-
-        if self.pre_transform:
-            print(f"Applying pre-transform to {self.name} data ...", end=" ")
-            self.graphs = [self.pre_transform(graph) for graph in self.graphs]
-            print("Done")
-
-    def _save(self):
-        if self._base_dir is not None and self.processed_path is not None:
-            if not os.path.exists(self.processed_path):
-                os.makedirs(self.processed_path, exist_ok=True)
-        print(f"Saving processed {self.name} data ...", end=" ")
-        self.save()
-        print("Done")
-
-    def _load(self):
-        # try to load the already processed dataset, if unavailable download
-        # and process the raw data and save the processed one
-        try:
-            print(f"Loading {self.name} data ...", end=" ")
-            self.load()
-            print("Done")
-        except FileNotFoundError:
-            self._download()
-            print(f"Processing {self.name} raw data ...", end=" ")
-            self._process()
-            print("Done")
-            self._save()
-
     def _num_classes(
         self, task: Literal["node", "edge", "graph"]
     ) -> Union[int, dict[str, int]]:
         flattened_labels = []
         num_classes_dict = {}
         for g in self.graphs:
-            if isinstance(g, GraphData):
-                labels = getattr(g, f"{task}_labels")
-                if labels is not None:
-                    flattened_labels.append(labels)
-            elif isinstance(g, HeteroGraphData):
-                if task == "node":
-                    labels_dict = g.node_labels_dict
-                    if labels_dict is not None:
-                        for node_type, labels in labels_dict.items():
-                            if node_type not in num_classes_dict:
-                                num_classes_dict[node_type] = []
-                            num_classes_dict[node_type].append(labels)
-                elif task == "edge":
-                    labels_dict = g.edge_labels_dict
-                    if labels_dict is not None:
-                        for edge_type, labels in labels_dict.items():
-                            if edge_type not in num_classes_dict:
-                                num_classes_dict[edge_type] = []
-                            num_classes_dict[edge_type].append(labels)
-                else:  # task == "graph"
-                    labels = g.graph_labels
-                    if labels is not None:
-                        if None not in num_classes_dict:
-                            num_classes_dict[None] = []
-                        num_classes_dict[None].append(labels)
+            labels = getattr(g, f"{task}_labels")
+            if labels is not None:
+                flattened_labels.append(labels)
 
         if len(flattened_labels) == 0 and len(num_classes_dict) == 0:
             return 0
@@ -223,7 +125,7 @@ class Dataset(ABC):
     def __getitem__(
         self,
         idx: Union[int, np.integer, slice, mx.array, np.ndarray, Sequence],
-    ) -> Union["Dataset", GraphData, HeteroGraphData]:
+    ) -> Union["Dataset", GraphData]:
         """
         Returns graphs from the ``Dataset`` at given indices.
 

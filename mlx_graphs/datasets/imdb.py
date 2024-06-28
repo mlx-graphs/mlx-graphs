@@ -81,7 +81,7 @@ class IMDB(HeteroGraphDataset):
         node_types = ["movie", "director", "actor"]
         for i, node_type in enumerate(node_types):
             nodes = sp.load_npz(osp.join(self.raw_path, f"features_{i}.npz"))
-            node_features_dict[node_type] = mx.array(nodes.todense())
+            node_features_dict[node_type] = mx.array(nodes.todense()).astype(mx.float32)
 
         node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))

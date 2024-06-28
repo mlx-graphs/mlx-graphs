@@ -81,7 +81,7 @@ class DBLP(HeteroGraphDataset):
         node_features_dict = {}
         for i, node_type in enumerate(node_types[:2]):
             nodes = sp.load_npz(osp.join(self.raw_path, f"features_{i}.npz"))
-            node_features_dict[node_type] = mx.array(nodes.todense())
+            node_features_dict[node_type] = mx.array(nodes.todense()).astype(mx.float32)
 
         term = np.load(osp.join(self.raw_path, "features_2.npy"))
         node_features_dict["term"] = mx.array(term).astype(mx.float32)
