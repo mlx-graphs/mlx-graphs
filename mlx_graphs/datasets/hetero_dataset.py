@@ -1,6 +1,6 @@
 import copy
 import os
-from typing import Callable, Literal, Optional, Sequence, Union
+from typing import Any, Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
@@ -11,7 +11,7 @@ from mlx_graphs.datasets import BaseDataset
 DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 
-class HeteroGraphDataset(BaseDataset):
+class HeteroDataset(BaseDataset):
     def __init__(
         self,
         name: str,
@@ -23,7 +23,7 @@ class HeteroGraphDataset(BaseDataset):
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
         self.pre_transform = pre_transform
-        self.graphs: Union[list[HeteroGraphData]] = []
+        self.graphs: list[HeteroGraphData] = []
         self._load()
 
     @property
@@ -47,7 +47,7 @@ class HeteroGraphDataset(BaseDataset):
         return self.graphs[0].num_node_classes
 
     @property
-    def num_edge_classes(self) -> dict[str, int]:
+    def num_edge_classes(self) -> dict[Any, int]:
         """Returns a dictionary of the number of edge classes for each edge type."""
         return self.graphs[0].num_edge_classes
 
@@ -57,11 +57,13 @@ class HeteroGraphDataset(BaseDataset):
         return self.graphs[0].num_nodes
 
     @property
-    def num_edges(self) -> dict[str, int]:
+    def num_edges(self) -> dict[Any, int]:
         """Returns a dictionary of the number of edges for each edge type."""
         return self.graphs[0].num_edges
 
-    def _num_classes(self, task: Literal["node", "edge", "graph"]) -> dict[str, int]:
+    def _num_classes(
+        self, task: Literal["node", "edge", "graph"]
+    ) -> Union[dict[str, int], int]:
         num_classes_dict = {}
         for g in self.graphs:
             if task == "node":
@@ -99,7 +101,7 @@ class HeteroGraphDataset(BaseDataset):
     def __getitem__(
         self,
         idx: Union[int, np.integer, slice, mx.array, np.ndarray, Sequence],
-    ) -> Union["HeteroGraphDataset", HeteroGraphData]:
+    ) -> Union["HeteroDataset", HeteroGraphData]:
         indices = range(len(self))
 
         if isinstance(idx, (int, np.integer)) or (

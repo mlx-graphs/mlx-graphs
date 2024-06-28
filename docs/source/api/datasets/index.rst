@@ -11,6 +11,7 @@ Datasets
 	:template: dataset-class-template.rst
 
 	Dataset
+	HeteroDataset
 
 
 .. autosummary::

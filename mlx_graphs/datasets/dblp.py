@@ -7,11 +7,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets import HeteroGraphDataset
+from mlx_graphs.datasets import HeteroDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class DBLP(HeteroGraphDataset):
+class DBLP(HeteroDataset):
     """
     A subset of the DBLP computer science bibliography website, as
     collected in the `"MAGNN: Metapath Aggregated Graph Neural Network for
@@ -93,7 +93,7 @@ class DBLP(HeteroGraphDataset):
         # it explicitly to a dictionary will not make sense.
         # Either override the property in the class or set attribute separately
         # for conference
-        conference_nodes = int((node_type_idx == 3).sum().item())
+        conference_nodes = int((node_type_idx == 3).sum().item())  # type: ignore
 
         node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
@@ -110,7 +110,7 @@ class DBLP(HeteroGraphDataset):
         for name in ["train", "val", "test"]:
             idx = split[f"{name}_idx"]
             idx = mx.array(idx, dtype=mx.int64)
-            mask = mx.zeros(data.num_nodes["author"], dtype=mx.bool_)
+            mask = mx.zeros(data.num_nodes["author"], dtype=mx.bool_)  # type: ignore
             mask[idx] = True
             setattr(data, f"author_{name}_mask", mask)
 

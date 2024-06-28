@@ -6,11 +6,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets import HeteroGraphDataset
+from mlx_graphs.datasets import HeteroDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class MovieLens100K(HeteroGraphDataset):
+class MovieLens100K(HeteroDataset):
     """
     The MovieLens 100K heterogeneous rating dataset, assembled by GroupLens
     Research from the `MovieLens web site <https://movielens.org>`__,
@@ -64,8 +64,6 @@ class MovieLens100K(HeteroGraphDataset):
         os.remove(path)
 
     def process(self):
-        data = HeteroGraphData(edge_index_dict={})
-
         self.raw_paths = [
             osp.join(f"{self.raw_path}/{self.data_path}", self.raw_file_names[i])
             for i in range(len(self.raw_file_names))
@@ -76,7 +74,7 @@ class MovieLens100K(HeteroGraphDataset):
         )
         movie_mapping = {idx: i for i, idx in enumerate(df[:, 0].astype(int))}
         x = df[:, 6:].astype(float)
-        data.node_features_dict = {"movie": mx.array(x, dtype=mx.float32)}
+        node_features_dict = {"movie": mx.array(x, dtype=mx.float32)}
 
         df = np.loadtxt(
             self.raw_paths[1], delimiter="|", dtype=str, encoding="ISO-8859-1"
@@ -97,40 +95,45 @@ class MovieLens100K(HeteroGraphDataset):
         ]
         occupation = mx.array(occupation, mx.float32)
 
-        data.node_features_dict["user"] = mx.concatenate(
-            [age, gender, occupation], axis=-1
-        )
+        node_features_dict["user"] = mx.concatenate([age, gender, occupation], axis=-1)
 
         df = np.loadtxt(self.raw_paths[2], delimiter="\t")
 
         src = [user_mapping[idx] for idx in df[:, 0]]
         dst = [movie_mapping[idx] for idx in df[:, 1]]
         edge_index = mx.array([src, dst], mx.int64)
-        data.edge_index_dict[("user", "rates", "movie")] = edge_index
+        edge_index_dict = {
+            ("user", "rates", "movie"): edge_index,
+            ("movie", "rated_by", "user"): mx.array([dst, src], mx.int64),
+        }
 
         rating = mx.array(df[:, 2], dtype=mx.int64)
-        data.user_rates_movie_rating = rating
+        user_rates_movie_rating = rating
 
         time = mx.array(df[:, 3], dtype=mx.int64)
-        data.user_rates_movie_time = time
+        user_rates_movie_time = time
 
-        data.edge_index_dict[("movie", "rated_by", "user")] = mx.array(
-            [dst, src], mx.int64
-        )
-        data.movie_rated_by_user_time = time
+        movie_rated_by_user_time = time
 
         df = np.loadtxt(self.raw_paths[3], delimiter="\t")
 
         src = [user_mapping[idx] for idx in df[:, 0]]
         dst = [movie_mapping[idx] for idx in df[:, 1]]
         edge_label_index = mx.array([src, dst], mx.int64)
-        data.edge_labels_index_dict = {}
-        data.edge_labels_index_dict[("user", "rates", "movie")] = edge_label_index
+        edge_labels_index_dict = {("user", "rates", "movie"): edge_label_index}
 
         edge_label = mx.array(df[:, 2], mx.float32)
-        data.edge_labels_dict = {}
-        data.edge_labels_dict[("user", "rates", "movie")] = edge_label
+        edge_labels_dict = {("user", "rates", "movie"): edge_label}
 
+        data = HeteroGraphData(
+            node_features_dict=node_features_dict,
+            edge_index_dict=edge_index_dict,
+            edge_labels_index_dict=edge_labels_index_dict,
+            edge_labels_dict=edge_labels_dict,
+            user_rates_movie_rating=user_rates_movie_rating,
+            user_rates_movie_time=user_rates_movie_time,
+            movie_rated_by_user_time=movie_rated_by_user_time,
+        )
         if self.pre_transform is not None:
             data = self.pre_transform(data)
 
