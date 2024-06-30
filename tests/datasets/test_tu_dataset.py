@@ -13,7 +13,7 @@ def test_tu_dataset(tmp_path):
     dataset_name = "ENZYMES"
 
     dataset = TUDataset(dataset_name, base_dir=tmp_path)
-    dataset_torch = TUDataset_torch(tmp_path, dataset_name)
+    dataset_torch = TUDataset_torch(tmp_path, dataset_name, use_node_attr=True)
 
     train_loader = Dataloader(dataset, 10, shuffle=False)
     train_loader_torch = DataLoader(dataset_torch, 10, shuffle=False)
@@ -26,11 +26,6 @@ def test_tu_dataset(tmp_path):
         if batch_mxg.node_features is not None:
             assert mx.array_equal(
                 mx.array(batch_pyg.x.tolist()), batch_mxg.node_features
-            ), "Two arrays between PyG and mxg are different"
-
-        if batch_mxg.graph_labels is not None:
-            assert mx.array_equal(
-                mx.array(batch_pyg.y.tolist()), batch_mxg.graph_labels
             ), "Two arrays between PyG and mxg are different"
 
         if batch_mxg.graph_labels is not None:

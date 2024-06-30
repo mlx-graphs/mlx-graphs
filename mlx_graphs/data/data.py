@@ -1,4 +1,4 @@
-from typing import Literal, Optional, Union
+from typing import Any, Literal, Optional, Union
 
 import mlx.core as mx
 import numpy as np
@@ -239,13 +239,13 @@ class HeteroGraphData:
 
     def __init__(
         self,
-        edge_index_dict: dict[tuple[str, str, str], mx.array],
+        edge_index_dict: dict[Any, mx.array],
         node_features_dict: Optional[dict[str, mx.array]] = None,
-        edge_features_dict: Optional[dict[str, mx.array]] = None,
+        edge_features_dict: Optional[dict[Any, mx.array]] = None,
         graph_features: Optional[mx.array] = None,
         node_labels_dict: Optional[dict[str, mx.array]] = None,
-        edge_labels_dict: Optional[dict[str, mx.array]] = None,
-        edge_labels_index_dict: Optional[dict[str, mx.array]] = None,
+        edge_labels_dict: Optional[dict[Any, mx.array]] = None,
+        edge_labels_index_dict: Optional[dict[Any, mx.array]] = None,
         graph_labels: Optional[mx.array] = None,
         **kwargs,
     ) -> None:
@@ -363,7 +363,7 @@ class HeteroGraphData:
             for node_type, node_features in self.node_features_dict.items():
                 num_nodes[node_type] = node_features.shape[0]
         else:
-            for edge_type, edge_index in self.edge_index_dict:
+            for edge_type, edge_index in self.edge_index_dict.items():
                 src_node_type, _, dst_node_type = edge_type
                 if src_node_type not in num_nodes:
                     num_nodes[src_node_type] = np.unique(
@@ -383,7 +383,7 @@ class HeteroGraphData:
         return 1 if self.graph_features.ndim == 1 else self.graph_features.shape[-1]
 
     @property
-    def num_edges(self) -> dict[str, int]:
+    def num_edges(self) -> dict[Any, int]:
         """dictionary of number of edges for each edge type in the graph."""
         return {
             edge_type: edge_index.shape[1]
@@ -404,7 +404,7 @@ class HeteroGraphData:
         return None
 
     @property
-    def num_edge_classes(self) -> dict[str, int]:
+    def num_edge_classes(self) -> dict[Any, int]:
         """
         Returns a dictionary of the number of edge classes
         for each edge type in the current graph.
@@ -436,7 +436,7 @@ class HeteroGraphData:
                 )
         return num_edge_features_dict
 
-    def _num_classes(self, task: Literal["node", "edge"], type_key: str) -> int:
+    def _num_classes(self, task: Literal["node", "edge"], type_key: Any) -> int:
         labels_dict = getattr(self, f"{task}_labels_dict")
         if labels_dict is None or type_key not in labels_dict:
             return 0
@@ -476,7 +476,7 @@ class HeteroGraphData:
             is_undirected(
                 self.edge_index_dict[edge_type],
                 (
-                    self.edge_features_dict.get(edge_type, None)
+                    self.edge_features_dict.get(edge_type, None)  # type: ignore
                     if self.edge_features_dict
                     else None
                 ),
