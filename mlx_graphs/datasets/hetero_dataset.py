@@ -1,17 +1,30 @@
 import copy
-import os
 from typing import Any, Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets import BaseDataset
-
-DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
+from mlx_graphs.datasets.base_dataset import DEFAULT_BASE_DIR, BaseDataset
 
 
 class HeteroDataset(BaseDataset):
+    """
+    A dataset class for handling heterogeneous graph data.
+
+    Args:
+        name: name of the dataset
+        base_dir: Directory where to store dataset files. Default is
+            in the local directory ``.mlx_graphs_data/``.
+        pre_transform: A function/transform that takes in a ``HeteroGraphData`` object
+            and returns a transformed version. The transformation is applied before
+            the first access.
+        transform: A function/transform that takes in a ``HeteroGraphData`` object and
+            returns a transformed version. The transformation is applied before every
+            access, i.e., during the ``__getitem__`` call.
+            By default, no transformation is applied.
+    """
+
     def __init__(
         self,
         name: str,

@@ -7,13 +7,26 @@ DEFAULT_BASE_DIR = os.path.join(os.getcwd(), ".mlx_graphs_data/")
 
 
 class BaseDataset(ABC):
+    """
+    Abstract base class for datasets.
+
+    Args:
+        name: The name of the dataset.
+        base_dir: The base directory where the dataset is stored.
+            Default is in the local directory ``.mlx_graphs_data/``.
+        pre_transform: A function to apply as a pre-transform to each graph in the
+            dataset. Defaults to None.
+        transform : A function to apply as a transform to each graph in the dataset.
+            Defaults to None.
+    """
+
     def __init__(
         self,
         name: str,
         base_dir: Optional[str] = None,
         pre_transform: Optional[Callable] = None,
         transform: Optional[Callable] = None,
-    ) -> None:
+    ):
         self._name = name
         self._base_dir = base_dir if base_dir else DEFAULT_BASE_DIR
         self.transform = transform
