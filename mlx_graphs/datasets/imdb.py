@@ -7,11 +7,11 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.datasets import HeteroDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 
-class IMDB(Dataset):
+class IMDB(HeteroDataset):
     """
     A subset of the Internet Movie Database (IMDB), as collected in the
     `"MAGNN: Metapath Aggregated Graph Neural Network for Heterogeneous Graph
@@ -81,7 +81,7 @@ class IMDB(Dataset):
         node_types = ["movie", "director", "actor"]
         for i, node_type in enumerate(node_types):
             nodes = sp.load_npz(osp.join(self.raw_path, f"features_{i}.npz"))
-            node_features_dict[node_type] = mx.array(nodes.todense())
+            node_features_dict[node_type] = mx.array(nodes.todense()).astype(mx.float32)
 
         node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
@@ -98,7 +98,7 @@ class IMDB(Dataset):
         for name in ["train", "val", "test"]:
             idx = split[f"{name}_idx"]
             idx = mx.array(idx, dtype=mx.int64)
-            mask = mx.zeros(data.num_nodes["movie"], dtype=mx.bool_)
+            mask = mx.zeros(data.num_nodes["movie"], dtype=mx.bool_)  # type: ignore
             mask[idx] = True
             setattr(data, f"movie_{name}_mask", mask)
         s = {}

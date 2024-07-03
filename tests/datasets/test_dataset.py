@@ -6,7 +6,7 @@ import numpy as np
 import pytest
 
 from mlx_graphs.data.data import GraphData, HeteroGraphData
-from mlx_graphs.datasets.dataset import Dataset
+from mlx_graphs.datasets import Dataset, HeteroDataset
 
 
 def test_fake_dataset():
@@ -101,7 +101,7 @@ def test_dataset_properties_hetero_graph_data(tmp_path):
         graph_labels=mx.array([1]),
     )
 
-    class HeteroGraphDataSet(Dataset):
+    class HeteroGraphDataSet(HeteroDataset):
         def __init__(self):
             super().__init__("HeteroGraphDataSet", base_dir=tmp_path)
 
