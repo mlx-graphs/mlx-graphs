@@ -107,7 +107,6 @@ class Node2Vec(nn.Module):
         for j in range(num_walks_per_rw):
             walks.append(rw[:, j : j + self.context_size])
         walks = mx.concatenate(walks, 0)
-
         return walks
 
     def neg_sample(
@@ -124,7 +123,6 @@ class Node2Vec(nn.Module):
         for j in range(num_walks_per_rw):
             walks.append(rw[:, j : j + self.context_size])
         walks = mx.concatenate(walks, 0)
-
         return walks
 
     def dataloader(self, batch_size):
