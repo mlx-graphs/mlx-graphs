@@ -21,18 +21,18 @@ class Node2Vec(nn.Module):
     are learned via negative sampling optimization
 
     Args:
-        edge_index (mx.array): The edge indices.
-        embedding_dim (int): The size of each embedding vector.
-        walk_length (int): The walk length.
-        context_size (int): The actual context size which is considered for
+        edge_index : The edge indices.
+        embedding_dim : The size of each embedding vector.
+        walk_length : The walk length.
+        context_size : The actual context size which is considered for
             positive samples. This parameter increases the effective sampling
             rate by reusing samples across different source nodes.
-        num_nodes (int): Number of nodes in a graph
-        walks_per_node (int, optional): The number of walks to sample for each
+        num_nodes : Number of nodes in a graph
+        walks_per_node : The number of walks to sample for each
             node. (default: :obj:`1`)
-        p (float, optional): Likelihood of immediately revisiting a node in the
+        p : Likelihood of immediately revisiting a node in the
             walk. (default: :obj:`1`)
-        q (float, optional): Control parameter to interpolate between
+        q : Control parameter to interpolate between
             breadth-first strategy and depth-first strategy (default: :obj:`1`)
         num_negative_samples (int, optional): The number of negative samples to
             use for each positive sample. (default: :obj:`1`)
