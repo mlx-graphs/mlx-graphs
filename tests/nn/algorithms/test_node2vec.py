@@ -1,6 +1,6 @@
 import mlx.core as mx
 
-from mlx_graphs.nn.models import Node2Vec
+from mlx_graphs.nn.algorithms import Node2Vec
 
 mx.random.seed(42)
 
