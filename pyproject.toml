@@ -17,11 +17,12 @@ classifiers = [
     "Programming Language :: Python",
 ]
 dependencies = [
-    "mlx==0.15.*; sys_platform == 'darwin'",
+    "mlx==0.18.*; sys_platform == 'darwin'",
     "numpy==1.26.3",
     "requests==2.31.0",
     "fsspec==2024.2.0",
     "tqdm==4.66.1",
+    "mlx_cluster==0.0.4"
 ]
 
 [project.optional-dependencies]
