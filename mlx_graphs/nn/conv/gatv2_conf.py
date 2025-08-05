@@ -9,7 +9,32 @@ from mlx_graphs.utils import get_src_dst_features, scatter
 
 class GATv2Conv(MessagePassing):
     """Graph Attention Network convolution layer with dynamic attention. 
+
+    Modification of GATConv based off of "How Attentive are Graph Attention Networks"
     
+    Args:
+        node_features_dim: Size of input node features
+        out_features_dim: Size of output node embeddings
+        heads: Number of attention heads
+        concat: Whether to use concat of heads or mean reduction
+        bias: Whether to use bias in the node projection
+        negative_slope: Slope for the leaky relu
+        dropout: Probability p for dropout
+        edge_features_dim: Size of edge features
+
+    Example:
+
+    .. code-block:: python
+
+        conv = GATConv(16, 32, heads=2, concat=True)
+        edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
+        node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
+
+        h = conv(edge_index, node_features)
+
+        >>> h.shape
+        [5, 64]
+
     """
 
     def __init__(
@@ -32,9 +57,11 @@ class GATv2Conv(MessagePassing):
         self.concat = concat
         self.negative_slope = negative_slope
 
+        # Weights 
         self.W_src = Linear(node_features_dim, heads * out_features_dim, bias = False)
         self.W_dst = Linear(node_features_dim, heads * out_features_dim, bias = False)
 
+        # Attention is applied in message() during message passing stage. 
         glorot_init = nn.init.glorot_uniform()
         self.att = glorot_init(mx.zeros((1, heads, out_features_dim)))
 
@@ -108,14 +135,14 @@ class GATv2Conv(MessagePassing):
         edge_features: Optional[mx.array] = None, 
     ) -> mx.array:
 
+        # Collect alpha before applying non-linearity 
         alpha = src + dst 
-
         if edge_features is not None: 
             alpha_edge = self._compute_edge_features(edge_features)
             alpha = alpha + alpha_edge
 
         alpha = nn.leaky_relu(alpha, self.negative_slope)
-        # Apply attention after non-linearity 
+        # Apply attention after non-linearity to get dynamic attention 
         alpha = (alpha * self.att).sum(-1)
 
         alpha = scatter(alpha, index, self.num_nodes, aggr = "softmax")
