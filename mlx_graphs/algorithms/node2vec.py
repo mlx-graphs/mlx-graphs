@@ -18,7 +18,11 @@ class Node2Vec(nn.Module):
     `"node2vec: Scalable Feature Learning for Networks"
     <https://arxiv.org/abs/1607.00653>`_ paper where random walks of
     length :obj:`walk_length` are sampled in a given graph, and node embeddings
-    are learned via negative sampling optimization
+    are learned via negative sampling optimization.
+
+    .. note::
+        This feature is experimental and requires `mlx_cluster` to be installed which
+        currently requires mlx 0.18.
 
     Args:
         edge_index : The edge indices.

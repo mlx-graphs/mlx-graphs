@@ -11,7 +11,8 @@ from mlx_graphs.utils import get_src_dst_features, scatter
 class GATv2Conv(MessagePassing):
     """Graph Attention Network convolution layer with dynamic attention.
 
-    Modification of GATConv based off of "How Attentive are Graph Attention Networks"
+    Modification of GATConv based off of `"How Attentive are Graph Attention
+    Networks?" <https://arxiv.org/abs/2105.14491>`_ paper.
 
     Args:
         node_features_dim: Size of input node features

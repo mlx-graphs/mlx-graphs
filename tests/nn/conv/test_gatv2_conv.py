@@ -1,6 +1,6 @@
 import mlx.core as mx
 
-from mlx_graphs.nn.conv.gatv2_conf import GATv2Conv
+from mlx_graphs.nn.conv.gatv2_conv import GATv2Conv
 
 mx.random.seed(42)
 
