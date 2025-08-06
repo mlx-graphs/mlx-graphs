@@ -1,12 +1,14 @@
 import itertools
 import math
 import random
+from multiprocessing import Process, Queue
 from typing import Iterator
 
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
 import numpy as np
+from tqdm import tqdm
 
 from mlx_graphs.nn import GATConv, GATv2Conv
 
@@ -135,6 +137,14 @@ def eval_fn(model, X: tuple[mx.array, mx.array]):
     return pred, true
 
 
+def worker(queue, args):
+    """
+    A worker function that trains a model and puts the results in a queue.
+    """
+    for acc in handle_model(**args):
+        queue.put({"name": args["name"], "acc": acc})
+
+
 def handle_model(
     model,
     train_graphs: list,
@@ -143,6 +153,8 @@ def handle_model(
     batch_size: int = 256,
     learning_rate: float = 0.001,
     warmup_steps: int = 40,
+    name: str = "",
+    position: int = 0,
 ) -> Iterator[float]:
     mx.eval(model.parameters())
 
@@ -154,12 +166,20 @@ def handle_model(
 
     optimizer = optim.Adam(learning_rate=lr_schedule)
     loss_and_grad_fn = nn.value_and_grad(model, loss_fn)
-    for _ in range(epochs):
+    pbar = tqdm(range(epochs), desc=name, position=position * 2)
+    for _ in pbar:
         # Train Step
-        for i in range(0, len(train_graphs), batch_size):
+        losses = []
+        for i in tqdm(
+            range(0, len(train_graphs), batch_size),
+            desc=f"{name} training",
+            leave=False,
+            position=position * 2 + 1,
+        ):
             loss, grads = loss_and_grad_fn(model, train_graphs[i : i + batch_size])
             optimizer.update(model, grads)
             mx.eval(model.parameters(), optimizer.state)
+            losses.append(loss.item())
 
         # Eval Step
         preds = []
@@ -174,6 +194,7 @@ def handle_model(
         trues = mx.concat(trues, axis=0)
 
         acc = (preds == trues).sum() / preds.shape[0]
+        pbar.set_postfix({"acc": f"{acc.item():.3f}", "loss": f"{np.mean(losses):.3f}"})
         yield acc
 
 
@@ -188,33 +209,88 @@ def run_example():
 
     dataset = DictionaryLookupDataset(k)
 
-    modelv1 = Model(k, dynamic_attention=False)
-    modelv2 = Model(k, dynamic_attention=True)
-
     graphs = dataset.get_graphs()
     random.shuffle(graphs)
 
     train = graphs[: int(len(graphs) * train_size)]
     test = graphs[int(len(graphs) * train_size) :]
 
-    i = 1
-    accuracies = []
-    for accv1, accv2 in zip(
-        handle_model(modelv1, train, test, epochs, batch_size),
-        handle_model(modelv2, train, test, epochs, batch_size),
-    ):
-        print("Epoch {}: GATv1: {:0.2%} GATv2: {:0.2%}".format(i, accv1, accv2))
-        accuracies.append(accv2)
+    process_queue = Queue()
+    processes = []
+    accuracies = {"GATv1": [], "GATv2": []}
 
-        if math.isclose(accv2, 1.0):
-            print("GATv2 reached maximum accuracy in {} epochs".format(i))
-            break
+    models_args = [
+        {
+            "name": "GATv1",
+            "model": Model(k, dynamic_attention=False),
+            "position": 0,
+        },
+        {
+            "name": "GATv2",
+            "model": Model(k, dynamic_attention=True),
+            "position": 1,
+        },
+    ]
 
-        # Early stopping if no improvement
-        if len(accuracies) >= 10 and np.all(np.diff(np.array(accuracies[-10:])) <= 0):
-            print("Stopping due to no accuracy improvements")
-            break
-        i += 1
+    for args in models_args:
+        args.update(
+            {
+                "train_graphs": train,
+                "test_graphs": test,
+                "epochs": epochs,
+                "batch_size": batch_size,
+            }
+        )
+        p = Process(target=worker, args=(process_queue, args))
+        p.start()
+        processes.append(p)
+
+    num_epochs = 0
+    num_models = len(models_args)
+    with tqdm(total=0, position=num_models * 2, bar_format="{desc}") as pbar:
+        while any(p.is_alive() for p in processes):
+            try:
+                # block for 1 second
+                res = process_queue.get(timeout=1)
+                model_name = res["name"]
+                acc = res["acc"]
+                accuracies[model_name].append(acc)
+
+                if (
+                    len(accuracies["GATv1"]) > num_epochs
+                    and len(accuracies["GATv2"]) > num_epochs
+                ):
+                    num_epochs += 1
+                    pbar.set_description_str(
+                        "Epoch {}: GATv1: {:0.2%} GATv2: {:0.2%}".format(
+                            num_epochs, accuracies["GATv1"][-1], accuracies["GATv2"][-1]
+                        )
+                    )
+                    # Early stopping if no improvement
+                    if len(accuracies["GATv2"]) >= 10 and np.all(
+                        np.diff(np.array(accuracies["GATv2"][-10:])) <= 0
+                    ):
+                        pbar.set_description_str(
+                            "Stopping due to no accuracy improvements"
+                        )
+                        for p in processes:
+                            p.terminate()
+                        break
+
+                if math.isclose(acc, 1.0):
+                    pbar.set_description_str(
+                        f"{model_name} reached maximum accuracy in {num_epochs} epochs"
+                    )
+                    for p in processes:
+                        p.terminate()
+                    break
+
+            except Exception:
+                # When queue is empty after timeout
+                pass
+
+    for p in processes:
+        p.join()
 
 
 if __name__ == "__main__":
