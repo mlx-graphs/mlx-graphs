@@ -128,17 +128,16 @@ def handle_model(
         model, 
         train_graphs: list, 
         test_graphs: list, 
-        epochs: int = 5,
+        epochs: int = 1000,
         batch_size: int = 256,
-        learning_rate = 0.001) -> Iterator[float]:
+        learning_rate: float = 0.001, 
+        warmup_steps: int = 40) -> Iterator[float]:
     mx.eval(model.parameters())
-
-    warmup_steps = int(epochs * 0.1)
 
     step_size = int(len(train_graphs) / batch_size)
 
     warmup = optim.linear_schedule(0, learning_rate, steps = warmup_steps * step_size)
-    decay = optim.cosine_decay(learning_rate, epochs * step_size)
+    decay = optim.step_decay(learning_rate, 0.95, step_size * 20)
     lr_schedule = optim.join_schedules([warmup, decay], [warmup_steps * step_size])
 
     optimizer = optim.Adam(learning_rate = lr_schedule)
@@ -169,6 +168,9 @@ def handle_model(
             
 
 def run_example(): 
+    np.random.seed(42)
+    mx.random.seed(42)
+
     k = 12
     train_size = 0.8 
     epochs = 1000 
@@ -186,12 +188,24 @@ def run_example():
     test = graphs[int(len(graphs) * train_size):]
 
     i = 1 
+    accuracies = [] 
     for accv1, accv2 in zip(
             handle_model(modelv1, train, test, epochs, batch_size), 
             handle_model(modelv2, train, test, epochs, batch_size)):
         
         print("Epoch {}: GATv1: {:0.2%} GATv2: {:0.2%}".format(i, accv1, accv2))
+        accuracies.append(accv2)
+
+        if math.isclose(accv2, 1.0):
+            print("GATv2 reached maximum accuracy in {} epochs".format(i))
+            break
+        
+        # Early stopping if no improvement 
+        if len(accuracies) >= 10 and np.all(np.diff(np.array(accuracies[-10:])) <= 0): 
+            print("Stopping due to no accuracy improvements")
+            break 
         i += 1
+
 
 if __name__ == "__main__":
     run_example()
