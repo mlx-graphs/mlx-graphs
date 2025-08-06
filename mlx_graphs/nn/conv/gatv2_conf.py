@@ -27,7 +27,7 @@ class GATv2Conv(MessagePassing):
 
     .. code-block:: python
 
-        conv = GATConv(16, 32, heads=2, concat=True)
+        conv = GATv2Conv(16, 32, heads=2, concat=True)
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
         node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
 
