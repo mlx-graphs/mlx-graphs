@@ -15,6 +15,7 @@ Neural Networks
 	GraphNetworkBlock
 	SimpleConv
 	GATConv
+	GATv2Conv
 	GCNConv
 	GINConv
 	SAGEConv
