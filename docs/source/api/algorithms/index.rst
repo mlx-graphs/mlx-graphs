@@ -1,4 +1,4 @@
-.. _datasetslgorithms:
+.. _algorithms:
 
 Algorithms
 ==========

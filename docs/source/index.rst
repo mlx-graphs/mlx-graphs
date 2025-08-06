@@ -80,6 +80,7 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
    tutorials/quickstart.rst
    tutorials/notebooks/graph_classification.ipynb
    tutorials/notebooks/benchmark_pyg_dgl_mxg.ipynb
+   tutorials/notebooks/node2vec.ipynb
    tutorials/examples/index.rst
 
 
