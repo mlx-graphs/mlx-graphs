@@ -93,8 +93,8 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
    api/loaders/index.rst
    api/transforms/index.rst
    api/nn/index.rst
-   api/algorithms/index.rst
    api/utils/index.rst
+   api/algorithms/index.rst
 
 
 

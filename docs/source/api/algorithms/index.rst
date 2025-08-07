@@ -10,4 +10,4 @@ Algorithms
 	:toctree: _autosummary
 	:template: custom-class-template.rst
 
-	Node2Vec
+	.. Node2Vec
