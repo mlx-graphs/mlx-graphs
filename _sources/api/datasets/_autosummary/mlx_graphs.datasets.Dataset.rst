@@ -14,10 +14,6 @@
 
 	.. autosummary::
 	
-	     ~Dataset.download
-	     ~Dataset.load
-	     ~Dataset.process
-	     ~Dataset.save
 	
 	
 
@@ -33,6 +29,7 @@
 	  ~Dataset.num_graph_classes
 	  ~Dataset.num_graph_features
 	  ~Dataset.num_graphs
+	  ~Dataset.num_items
 	  ~Dataset.num_node_classes
 	  ~Dataset.num_node_features
 	  ~Dataset.processed_path

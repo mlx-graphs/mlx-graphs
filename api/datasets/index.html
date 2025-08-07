@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Datasets &#8212; mlx-graphs 0.0.7 documentation</title>
+    <title>Datasets &#8212; mlx-graphs 0.0.8 documentation</title>
   
   
   
@@ -16,30 +16,33 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=96440fcd" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../_static/documentation_options.js?v=c8acc836"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/documentation_options.js?v=820a49c8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -50,6 +53,7 @@
     <link rel="prev" title="mlx_graphs.data.utils.validate_list_of_graph_data" href="../data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -65,19 +69,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -85,7 +78,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -93,8 +85,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -110,7 +102,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -139,22 +132,18 @@
       
     
     
-    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.7 documentation - Home"/>
-    <script>document.write(`<img src="../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.7 documentation - Home"/>`);</script>
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
@@ -166,6 +155,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
@@ -194,6 +184,7 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Datasets</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
@@ -221,6 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
@@ -292,6 +284,7 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../algorithms/index.html">Algorithms</a></li>
 </ul>
 
     </div>
@@ -300,9 +293,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -414,24 +412,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 
 </div></div>
       
@@ -459,15 +449,18 @@ document.write(`
                   
   <section id="datasets">
 <span id="id1"></span><h1>Datasets<a class="headerlink" href="#datasets" title="Link to this heading">#</a></h1>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset" title="mlx_graphs.datasets.Dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Dataset</span></code></a>(name[, base_dir, pre_transform, ...])</p></td>
-<td><p>Base dataset class.</p></td>
+<td><p>A dataset class for graph data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset" title="mlx_graphs.datasets.HeteroDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HeteroDataset</span></code></a>(name[, base_dir, ...])</p></td>
+<td><p>A dataset class for handling heterogeneous graph data.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.KarateClubDataset.html#mlx_graphs.datasets.KarateClubDataset" title="mlx_graphs.datasets.KarateClubDataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KarateClubDataset</span></code></a>()</p></td>
 <td><p>Zachary's Karate Club netowork dataset from <a class="reference external" href="https://www.jstor.org/stable/3629752">An Information Flow Model for    Conflict and Fission in Small Groups</a>.</p></td>
@@ -497,8 +490,7 @@ document.write(`
 <td><p>A subset of the Internet Movie Database (IMDB), as collected in the <a class="reference external" href="https://arxiv.org/abs/2002.01680">&quot;MAGNN: Metapath Aggregated Graph Neural Network for Heterogeneous Graph Embedding&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.datasets.DBLP.html#mlx_graphs.datasets.DBLP" title="mlx_graphs.datasets.DBLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DBLP</span></code></a>([base_dir, transform, pre_transform])</p></td>
-<td><p><p>A subset of the DBLP computer science bibliography website, as collected in the <a class="reference external" href="https://arxiv.org/abs/2002.01680">&quot;MAGNN: Metapath Aggregated Graph Neural Network for Heterogeneous Graph Embedding&quot;</a> paper.</p>
-</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -584,8 +576,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

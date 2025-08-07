@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.datasets.Dataset &#8212; mlx-graphs 0.0.7 documentation</title>
+    <title>mlx_graphs.datasets.Dataset &#8212; mlx-graphs 0.0.8 documentation</title>
   
   
   
@@ -16,40 +16,44 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="../../../_static/documentation_options.js?v=c8acc836"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/documentation_options.js?v=820a49c8"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/datasets/_autosummary/mlx_graphs.datasets.Dataset';</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mlx_graphs.datasets.KarateClubDataset" href="mlx_graphs.datasets.KarateClubDataset.html" />
+    <link rel="next" title="mlx_graphs.datasets.HeteroDataset" href="mlx_graphs.datasets.HeteroDataset.html" />
     <link rel="prev" title="Datasets" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -65,19 +69,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -85,7 +78,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -93,8 +85,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -110,7 +102,8 @@
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -139,22 +132,18 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.7 documentation - Home"/>
-    <script>document.write(`<img src="../../../_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.7 documentation - Home"/>`);</script>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
@@ -166,6 +155,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
@@ -194,6 +184,7 @@
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Datasets</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
@@ -221,6 +212,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
@@ -292,6 +284,7 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms/index.html">Algorithms</a></li>
 </ul>
 
     </div>
@@ -300,9 +293,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -414,24 +412,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 <label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <span class="fa-solid fa-list"></span>
 </label>
@@ -456,9 +446,6 @@ document.write(`
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.download"><code class="docutils literal notranslate"><span class="pre">Dataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.load"><code class="docutils literal notranslate"><span class="pre">Dataset.load()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.name"><code class="docutils literal notranslate"><span class="pre">Dataset.name</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_edge_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_edge_classes</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_edge_features"><code class="docutils literal notranslate"><span class="pre">Dataset.num_edge_features</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_graph_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_graph_classes</span></code></a></li>
@@ -466,10 +453,7 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_graphs"><code class="docutils literal notranslate"><span class="pre">Dataset.num_graphs</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_node_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_node_classes</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_node_features"><code class="docutils literal notranslate"><span class="pre">Dataset.num_node_features</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.process"><code class="docutils literal notranslate"><span class="pre">Dataset.process()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.processed_path"><code class="docutils literal notranslate"><span class="pre">Dataset.processed_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.raw_path"><code class="docutils literal notranslate"><span class="pre">Dataset.raw_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.save"><code class="docutils literal notranslate"><span class="pre">Dataset.save()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -487,22 +471,25 @@ document.write(`
 <h1>mlx_graphs.datasets.Dataset<a class="headerlink" href="#mlx-graphs-datasets-dataset" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.datasets.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.12)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset" title="Link to this definition">#</a></dt>
-<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/abc.html#abc.ABC" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">ABC</span></code></a></p>
-<p>Base dataset class. <code class="docutils literal notranslate"><span class="pre">download</span></code> and <code class="docutils literal notranslate"><span class="pre">process</span></code> methods must be
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.datasets.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataset</span></code></p>
+<p>A dataset class for graph data. <code class="docutils literal notranslate"><span class="pre">download</span></code> and <code class="docutils literal notranslate"><span class="pre">process</span></code> methods must be
 implemented by children classes. The <code class="docutils literal notranslate"><span class="pre">save</span></code> and <code class="docutils literal notranslate"><span class="pre">load</span></code> methods save and load
 only the processed <code class="docutils literal notranslate"><span class="pre">self.graphs</span></code> attribute by default. You may want to
 override them to store/load additional processed attributes.</p>
 <p>Graph data within the dataset should be stored in <code class="docutils literal notranslate"><span class="pre">self.graphs</span></code> as
-a List[GraphData]. The creation and preprocessing of this list of graphs
+a <cite>list[GraphData]</cite>. The creation and preprocessing of this list of graphs
 is typically done within the overridden <code class="docutils literal notranslate"><span class="pre">process</span></code> method.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – name of the dataset</p></li>
-<li><p><strong>base_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Directory where to store dataset files. Default is
+<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – name of the dataset</p></li>
+<li><p><strong>base_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Directory where to store dataset files. Default is
 in the local directory <code class="docutils literal notranslate"><span class="pre">.mlx_graphs_data/</span></code>.</p></li>
-<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.12)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]</span>) – A function/transform that takes in a <code class="docutils literal notranslate"><span class="pre">GraphData</span></code> object and returns
+<li><p><strong>pre_transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]</span>) – A function/transform that takes in a <code class="docutils literal notranslate"><span class="pre">GraphData</span></code> object and
+returns a transformed version. The transformation is applied before
+the first access.</p></li>
+<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]</span>) – A function/transform that takes in a <code class="docutils literal notranslate"><span class="pre">GraphData</span></code> object and returns
 a transformed version. The transformation is applied before every access,
 i.e., during the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> call.
 By default, no transformation is applied.</p></li>
@@ -510,27 +497,15 @@ By default, no transformation is applied.</p></li>
 </dd>
 </dl>
 <p class="rubric">Methods</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.download" title="mlx_graphs.datasets.Dataset.download"><code class="xref py py-obj docutils literal notranslate"><span class="pre">download</span></code></a>()</p></td>
-<td><p>Download the dataset at <cite>self.raw_path</cite>.</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.load" title="mlx_graphs.datasets.Dataset.load"><code class="xref py py-obj docutils literal notranslate"><span class="pre">load</span></code></a>()</p></td>
-<td><p>Load the processed dataset</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.process" title="mlx_graphs.datasets.Dataset.process"><code class="xref py py-obj docutils literal notranslate"><span class="pre">process</span></code></a>()</p></td>
-<td><p>Process the dataset and store graphs in <code class="docutils literal notranslate"><span class="pre">self.graphs</span></code></p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.save" title="mlx_graphs.datasets.Dataset.save"><code class="xref py py-obj docutils literal notranslate"><span class="pre">save</span></code></a>()</p></td>
-<td><p>Save the processed dataset</p></td>
-</tr>
 </tbody>
 </table>
 </div>
 <p class="rubric">Attributes</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.name" title="mlx_graphs.datasets.Dataset.name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></p></td>
 <td><p>Name of the dataset</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_edge_classes" title="mlx_graphs.datasets.Dataset.num_edge_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_edge_classes</span></code></a></p></td>
@@ -548,103 +523,70 @@ By default, no transformation is applied.</p></li>
 <tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_graphs" title="mlx_graphs.datasets.Dataset.num_graphs"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_graphs</span></code></a></p></td>
 <td><p>Returns the number of graphs in the dataset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_node_classes" title="mlx_graphs.datasets.Dataset.num_node_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_classes</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_items</span></code></p></td>
+<td><p>Returns the number of items in the dataset.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_node_classes" title="mlx_graphs.datasets.Dataset.num_node_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_classes</span></code></a></p></td>
 <td><p>Returns the number of node classes to predict.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_node_features" title="mlx_graphs.datasets.Dataset.num_node_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_features</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.num_node_features" title="mlx_graphs.datasets.Dataset.num_node_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_features</span></code></a></p></td>
 <td><p>Returns the number of node features.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.processed_path" title="mlx_graphs.datasets.Dataset.processed_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processed_path</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.processed_path" title="mlx_graphs.datasets.Dataset.processed_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">processed_path</span></code></a></p></td>
 <td><p>The path where raw files are stored.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.Dataset.raw_path" title="mlx_graphs.datasets.Dataset.raw_path"><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_path</span></code></a></p></td>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_path</span></code></p></td>
 <td><p>The path where raw files are stored.</p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.download">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">download</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset.download"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset.download" title="Link to this definition">#</a></dt>
-<dd><p>Download the dataset at <cite>self.raw_path</cite>.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.load">
-<span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset.load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset.load" title="Link to this definition">#</a></dt>
-<dd><p>Load the processed dataset</p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.name">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">name</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.name" title="Link to this definition">#</a></dt>
-<dd><p>Name of the dataset</p>
-</dd></dl>
-
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_edge_classes">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_edge_classes" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_edge_classes" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of edge classes to predict.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_edge_features">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_edge_features" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_edge_features" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of edge features.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_graph_classes">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graph_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graph_classes" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graph_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graph_classes" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of graph classes to predict.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_graph_features">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graph_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graph_features" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graph_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graph_features" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of graph features.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_graphs">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graphs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graphs" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graphs</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_graphs" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of graphs in the dataset.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_node_classes">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.12)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_node_classes" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_node_classes" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of node classes to predict.</p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.num_node_features">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.12)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_node_features" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.num_node_features" title="Link to this definition">#</a></dt>
 <dd><p>Returns the number of node features.</p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.process">
-<em class="property"><span class="pre">abstract</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">process</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset.process"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset.process" title="Link to this definition">#</a></dt>
-<dd><p>Process the dataset and store graphs in <code class="docutils literal notranslate"><span class="pre">self.graphs</span></code></p>
 </dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.processed_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">processed_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.processed_path" title="Link to this definition">#</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">processed_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.processed_path" title="Link to this definition">#</a></dt>
 <dd><p>The path where raw files are stored. Defaults at <cite>&lt;base_dir&gt;/&lt;name&gt;/processed</cite></p>
-</dd></dl>
-
-<dl class="py property">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.raw_path">
-<em class="property"><span class="pre">property</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">raw_path</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.12)"><span class="pre">str</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.Dataset.raw_path" title="Link to this definition">#</a></dt>
-<dd><p>The path where raw files are stored. Defaults at <cite>&lt;base_dir&gt;/&lt;name&gt;/raw</cite></p>
-</dd></dl>
-
-<dl class="py method">
-<dt class="sig sig-object py" id="mlx_graphs.datasets.Dataset.save">
-<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/dataset.html#Dataset.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.Dataset.save" title="Link to this definition">#</a></dt>
-<dd><p>Save the processed dataset</p>
 </dd></dl>
 
 </dd></dl>
@@ -672,11 +614,11 @@ By default, no transformation is applied.</p></li>
       </div>
     </a>
     <a class="right-next"
-       href="mlx_graphs.datasets.KarateClubDataset.html"
+       href="mlx_graphs.datasets.HeteroDataset.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mlx_graphs.datasets.KarateClubDataset</p>
+        <p class="prev-next-title">mlx_graphs.datasets.HeteroDataset</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -687,7 +629,8 @@ By default, no transformation is applied.</p></li>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -697,9 +640,6 @@ By default, no transformation is applied.</p></li>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset"><code class="docutils literal notranslate"><span class="pre">Dataset</span></code></a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.download"><code class="docutils literal notranslate"><span class="pre">Dataset.download()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.load"><code class="docutils literal notranslate"><span class="pre">Dataset.load()</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.name"><code class="docutils literal notranslate"><span class="pre">Dataset.name</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_edge_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_edge_classes</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_edge_features"><code class="docutils literal notranslate"><span class="pre">Dataset.num_edge_features</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_graph_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_graph_classes</span></code></a></li>
@@ -707,10 +647,7 @@ By default, no transformation is applied.</p></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_graphs"><code class="docutils literal notranslate"><span class="pre">Dataset.num_graphs</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_node_classes"><code class="docutils literal notranslate"><span class="pre">Dataset.num_node_classes</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.num_node_features"><code class="docutils literal notranslate"><span class="pre">Dataset.num_node_features</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.process"><code class="docutils literal notranslate"><span class="pre">Dataset.process()</span></code></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.processed_path"><code class="docutils literal notranslate"><span class="pre">Dataset.processed_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.raw_path"><code class="docutils literal notranslate"><span class="pre">Dataset.raw_path</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.Dataset.save"><code class="docutils literal notranslate"><span class="pre">Dataset.save()</span></code></a></li>
 </ul>
 </li>
 </ul>
@@ -761,8 +698,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

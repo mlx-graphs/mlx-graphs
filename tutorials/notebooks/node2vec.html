@@ -1,0 +1,813 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Node2vec &#8212; mlx-graphs 0.0.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=96440fcd" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../_static/documentation_options.js?v=820a49c8"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/notebooks/node2vec';</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Examples" href="../examples/index.html" />
+    <link rel="prev" title="Benchmarking mlx-graphs" href="benchmark_pyg_dgl_mxg.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Node2vec</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/data/index.html">Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/utils.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/datasets/index.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/transformations.html">Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/validators.html">Validators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/scatter.html">Scatter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/array_ops.html">Array ops</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.pairwise_distances.html">mlx_graphs.utils.array_ops.pairwise_distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/algorithms/index.html">Algorithms</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/tutorials/notebooks/node2vec.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Node2vec</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-a-simple-neural-network-using-node2vec">Creating a simple neural network using node2vec</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Specify-hyperparameters-for-node2vec.">Specify hyperparameters for node2vec.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-a-simple-training-loop-to-train-an-embedding-model">Creating a simple training loop to train an embedding model</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Node2vec">
+<h1>Node2vec<a class="headerlink" href="#Node2vec" title="Link to this heading">#</a></h1>
+<blockquote>
+<div><p>[!WARNING] This tutorial is experimental and requires <code class="docutils literal notranslate"><span class="pre">mlx_cluster</span></code> to be installed which currently requires mlx 0.18.</p>
+</div></blockquote>
+<p><strong>Goal:</strong> This tutorial will guide you through implementing node2vec to generate vector embeddings for nodes in a simple undirected graph.</p>
+<p><strong>Concepts:</strong> <code class="docutils literal notranslate"><span class="pre">MLX</span></code>, <code class="docutils literal notranslate"><span class="pre">Node2vec</span></code></p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">defaultdict</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">PlanetoidDataset</span>
+</pre></div>
+</div>
+</div>
+<section id="Dataset">
+<h2>Dataset<a class="headerlink" href="#Dataset" title="Link to this heading">#</a></h2>
+<p>For this first tutorial, we will use the <a class="reference external" href="https://chrsmrrs.github.io/datasets/docs/datasets/">PlanetoidDataset</a> collection, which comprises of citation networks for <code class="docutils literal notranslate"><span class="pre">Cora</span></code>, <code class="docutils literal notranslate"><span class="pre">Pubmed</span></code> and <code class="docutils literal notranslate"><span class="pre">CiteSeer</span></code>.</p>
+<p>We will be using <code class="docutils literal notranslate"><span class="pre">Cora</span></code> dataset consisting of <strong>2708</strong> nodes and <strong>10,056</strong> edges. The dataset can be easily accessed via <code class="docutils literal notranslate"><span class="pre">PlanetoidDataset</span></code> class</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">PlanetoidDataset</span><span class="p">(</span><span class="s2">&quot;Cora&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Loading cora data ... Done
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+cora(num_graphs=1)
+</pre></div></div>
+</div>
+<p>We can access dataset properties directly from <code class="docutils literal notranslate"><span class="pre">dataset</span></code>object</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Some useful properties</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset attributes&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of graphs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">dataset</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of node features: </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_node_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of edge features: </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_edge_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of graph features: </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_graph_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of graph classes to predict: </span><span class="si">{</span><span class="n">dataset</span><span class="o">.</span><span class="n">num_graph_classes</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Statistics of the dataset</span>
+<span class="n">stats</span> <span class="o">=</span> <span class="n">defaultdict</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">dataset</span><span class="p">:</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Mean node degree&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">num_edges</span> <span class="o">/</span> <span class="n">g</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Mean num of nodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span>
+    <span class="n">stats</span><span class="p">[</span><span class="s2">&quot;Mean num of edges&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">num_edges</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Dataset stats&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;-&quot;</span> <span class="o">*</span> <span class="mi">20</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">stats</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">v</span><span class="p">))</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">k</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">mean</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Dataset attributes
+--------------------
+Number of graphs: 1
+Number of node features: 1433
+Number of edge features: 0
+Number of graph features: 0
+Number of graph classes to predict: 0
+
+Dataset stats
+--------------------
+Mean node degree: 3.90
+Mean num of nodes: 2708.00
+Mean num of edges: 10556.00
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+GraphData(
+        edge_index(shape=(2, 10556), int32)
+        node_features(shape=(2708, 1433), float32)
+        node_labels(shape=(2708,), int32)
+        train_mask(shape=(2708,), bool)
+        val_mask(shape=(2708,), bool)
+        test_mask(shape=(2708,), bool))
+</pre></div></div>
+</div>
+</section>
+<section id="Creating-a-simple-neural-network-using-node2vec">
+<h2>Creating a simple neural network using node2vec<a class="headerlink" href="#Creating-a-simple-neural-network-using-node2vec" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Node2Vec</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Specify-hyperparameters-for-node2vec.">
+<h2>Specify hyperparameters for node2vec.<a class="headerlink" href="#Specify-hyperparameters-for-node2vec." title="Link to this heading">#</a></h2>
+<p>The most important hyperparameters for node2vec are <code class="docutils literal notranslate"><span class="pre">p</span></code> and <code class="docutils literal notranslate"><span class="pre">q</span></code> where 1. <code class="docutils literal notranslate"><span class="pre">p</span></code> : specifies the likelihood of revisiting a node in the walk (return parameter). When this is low the algorithm is more likely to take a step back. 2. <code class="docutils literal notranslate"><span class="pre">q</span></code> : specifies likelhood of exploring nodes that are further away from the source. When this is high the algorithm is more likely to explore the neighbourhood 3. <code class="docutils literal notranslate"><span class="pre">embedding_dim</span></code>: dimemnsions of embedding model 4. <code class="docutils literal notranslate"><span class="pre">walk_length</span></code>: Number of nodes to consider in a
+walk 5. <code class="docutils literal notranslate"><span class="pre">context_size</span></code>: The actual context size which is considered for positive samples. This parameter increases the effective sampling rate by reusing samples across different source nodes.</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedding_dim</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">walk_length</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">context_size</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">walks_per_node</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">num_negative_samples</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">q</span> <span class="o">=</span> <span class="mf">3.0</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">Node2Vec</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="o">=</span><span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span>
+    <span class="n">embedding_dim</span><span class="o">=</span><span class="n">embedding_dim</span><span class="p">,</span>
+    <span class="n">walk_length</span><span class="o">=</span><span class="n">walk_length</span><span class="p">,</span>
+    <span class="n">context_size</span><span class="o">=</span><span class="n">context_size</span><span class="p">,</span>
+    <span class="n">walks_per_node</span><span class="o">=</span><span class="n">walks_per_node</span><span class="p">,</span>
+    <span class="n">num_negative_samples</span><span class="o">=</span><span class="n">num_negative_samples</span><span class="p">,</span>
+    <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span>
+    <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+    <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<p>Try and train a simple model loop</p>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mlx.optimizers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">0.001</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataloader</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[12]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="Creating-a-simple-training-loop-to-train-an-embedding-model">
+<h2>Creating a simple training loop to train an embedding model<a class="headerlink" href="#Creating-a-simple-training-loop-to-train-an-embedding-model" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[13]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">total_loss</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">dataloader</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">neg</span> <span class="ow">in</span> <span class="n">dataloader</span><span class="p">:</span>
+        <span class="n">loss</span><span class="p">,</span> <span class="n">grad</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">)(</span><span class="n">pos</span><span class="p">,</span> <span class="n">neg</span><span class="p">)</span>
+        <span class="n">total_loss</span><span class="o">+=</span><span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grad</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch : </span><span class="si">{</span><span class="n">epoch</span><span class="si">}</span><span class="s2"> batch loss : </span><span class="si">{</span><span class="n">total_loss</span><span class="o">/</span><span class="mi">32</span><span class="si">:</span><span class="s2">.5f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Epoch : 0 batch loss : 2.88000
+Epoch : 1 batch loss : 2.24894
+Epoch : 2 batch loss : 2.16864
+Epoch : 3 batch loss : 2.14403
+Epoch : 4 batch loss : 2.13199
+Epoch : 5 batch loss : 2.12255
+Epoch : 6 batch loss : 2.11843
+Epoch : 7 batch loss : 2.11297
+Epoch : 8 batch loss : 2.10973
+Epoch : 9 batch loss : 2.10481
+</pre></div></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="benchmark_pyg_dgl_mxg.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Benchmarking mlx-graphs</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../examples/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-a-simple-neural-network-using-node2vec">Creating a simple neural network using node2vec</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Specify-hyperparameters-for-node2vec.">Specify hyperparameters for node2vec.</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Creating-a-simple-training-loop-to-train-an-embedding-model">Creating a simple training loop to train an embedding model</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; mlx-graphs 0.0.7 documentation</title>
+    <title>Index &#8212; mlx-graphs 0.0.8 documentation</title>
   
   
   
@@ -15,30 +15,33 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
   </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link href="_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
-
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=a746c00c" />
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
     <link rel="stylesheet" type="text/css" href="_static/custom.css?v=96440fcd" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script src="_static/documentation_options.js?v=c8acc836"></script>
-    <script src="_static/doctools.js?v=888ff710"></script>
+    <script src="_static/documentation_options.js?v=820a49c8"></script>
+    <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
@@ -47,6 +50,7 @@
     <link rel="search" title="Search" href="search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
   </head>
   
   
@@ -62,19 +66,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -82,7 +75,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search..."
          aria-label="Search..."
          autocomplete="off"
@@ -90,8 +82,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -109,7 +101,8 @@
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -138,22 +131,18 @@
       
     
     
-    <img src="_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.7 documentation - Home"/>
-    <script>document.write(`<img src="_static/logo_dark.svg" class="logo__image only-dark" alt="mlx-graphs 0.0.7 documentation - Home"/>`);</script>
+    <img src="_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script></div>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
@@ -165,6 +154,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tutorials/quickstart.html">Quickstart</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
@@ -193,6 +183,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/datasets/index.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
@@ -220,6 +211,7 @@
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
@@ -291,6 +283,7 @@
 </details></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="api/algorithms/index.html">Algorithms</a></li>
 </ul>
 
     </div>
@@ -299,9 +292,14 @@
   
   
   <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
   </div>
-  
-  <div id="rtd-footer-container"></div>
 
 
       </div>
@@ -365,24 +363,16 @@
 
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
 
 
-<script>
-document.write(`
-  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
-  </button>
-`);
-</script>
+</button>
 
 </div></div>
       
@@ -443,6 +433,8 @@ document.write(`
 
       <ul>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATConv.html#mlx_graphs.nn.GATConv.__call__">(mlx_graphs.nn.GATConv method)</a>
+</li>
+        <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html#mlx_graphs.nn.GATv2Conv.__call__">(mlx_graphs.nn.GATv2Conv method)</a>
 </li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.GCNConv.html#mlx_graphs.nn.GCNConv.__call__">(mlx_graphs.nn.GCNConv method)</a>
 </li>
@@ -543,8 +535,6 @@ document.write(`
 </li>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html#mlx_graphs.utils.scatter.degree">degree() (in module mlx_graphs.utils.scatter)</a>
 </li>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.download">download() (mlx_graphs.datasets.Dataset method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -577,6 +567,8 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATConv.html#mlx_graphs.nn.GATConv">GATConv (class in mlx_graphs.nn)</a>
 </li>
+      <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html#mlx_graphs.nn.GATv2Conv">GATv2Conv (class in mlx_graphs.nn)</a>
+</li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.GCNConv.html#mlx_graphs.nn.GCNConv">GCNConv (class in mlx_graphs.nn)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html#mlx_graphs.nn.GeneralizedRelationalConv">GeneralizedRelationalConv (class in mlx_graphs.nn)</a>
@@ -587,10 +579,10 @@ document.write(`
 </li>
       <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html#mlx_graphs.utils.transformations.get_src_dst_features">get_src_dst_features() (in module mlx_graphs.utils.transformations)</a>
 </li>
-      <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html#mlx_graphs.utils.transformations.get_unique_edge_indices">get_unique_edge_indices() (in module mlx_graphs.utils.transformations)</a>
-</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html#mlx_graphs.utils.transformations.get_unique_edge_indices">get_unique_edge_indices() (in module mlx_graphs.utils.transformations)</a>
+</li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.GINConv.html#mlx_graphs.nn.GINConv">GINConv (class in mlx_graphs.nn)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html#mlx_graphs.nn.global_add_pool">global_add_pool (class in mlx_graphs.nn)</a>
@@ -619,8 +611,6 @@ document.write(`
         <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.has_isolated_nodes">(mlx_graphs.data.data.HeteroGraphData method)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html#mlx_graphs.utils.transformations.has_self_loops">has_self_loops() (in module mlx_graphs.utils.transformations)</a>
 
       <ul>
@@ -629,6 +619,10 @@ document.write(`
         <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.has_self_loops">(mlx_graphs.data.data.HeteroGraphData method)</a>
 </li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset">HeteroDataset (class in mlx_graphs.datasets)</a>
+</li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData">HeteroGraphData (class in mlx_graphs.data.data)</a>
 </li>
   </ul></td>
@@ -683,8 +677,6 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.Linear.html#mlx_graphs.nn.Linear">Linear (class in mlx_graphs.nn)</a>
 </li>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.load">load() (mlx_graphs.datasets.Dataset method)</a>
-</li>
   </ul></td>
 </tr></table>
 
@@ -694,6 +686,8 @@ document.write(`
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATConv.html#mlx_graphs.nn.GATConv.message">message() (mlx_graphs.nn.GATConv method)</a>
 
       <ul>
+        <li><a href="api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html#mlx_graphs.nn.GATv2Conv.message">(mlx_graphs.nn.GATv2Conv method)</a>
+</li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html#mlx_graphs.nn.GeneralizedRelationalConv.message">(mlx_graphs.nn.GeneralizedRelationalConv method)</a>
 </li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.GINConv.html#mlx_graphs.nn.GINConv.message">(mlx_graphs.nn.GINConv method)</a>
@@ -713,14 +707,14 @@ document.write(`
 <h2 id="N">N</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.name">name (mlx_graphs.datasets.Dataset property)</a>
-</li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_edge_classes">num_edge_classes (mlx_graphs.data.data.GraphData property)</a>
 
       <ul>
         <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.num_edge_classes">(mlx_graphs.data.data.HeteroGraphData property)</a>
 </li>
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_edge_classes">(mlx_graphs.datasets.Dataset property)</a>
+</li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_edge_classes">(mlx_graphs.datasets.HeteroDataset property)</a>
 </li>
       </ul></li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_edge_features">num_edge_features (mlx_graphs.data.data.GraphData property)</a>
@@ -730,11 +724,15 @@ document.write(`
 </li>
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_edge_features">(mlx_graphs.datasets.Dataset property)</a>
 </li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_edge_features">(mlx_graphs.datasets.HeteroDataset property)</a>
+</li>
       </ul></li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_edges">num_edges (mlx_graphs.data.data.GraphData property)</a>
 
       <ul>
         <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.num_edges">(mlx_graphs.data.data.HeteroGraphData property)</a>
+</li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_edges">(mlx_graphs.datasets.HeteroDataset property)</a>
 </li>
       </ul></li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_graph_classes">num_graph_classes (mlx_graphs.data.data.GraphData property)</a>
@@ -743,8 +741,6 @@ document.write(`
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_graph_classes">(mlx_graphs.datasets.Dataset property)</a>
 </li>
       </ul></li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_graph_features">num_graph_features (mlx_graphs.data.data.GraphData property)</a>
 
       <ul>
@@ -752,7 +748,11 @@ document.write(`
 </li>
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_graph_features">(mlx_graphs.datasets.Dataset property)</a>
 </li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_graph_features">(mlx_graphs.datasets.HeteroDataset property)</a>
+</li>
       </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_graphs">num_graphs (mlx_graphs.datasets.Dataset property)</a>
 </li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_node_classes">num_node_classes (mlx_graphs.data.data.GraphData property)</a>
@@ -762,6 +762,8 @@ document.write(`
 </li>
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_node_classes">(mlx_graphs.datasets.Dataset property)</a>
 </li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_node_classes">(mlx_graphs.datasets.HeteroDataset property)</a>
+</li>
       </ul></li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_node_features">num_node_features (mlx_graphs.data.data.GraphData property)</a>
 
@@ -770,9 +772,15 @@ document.write(`
 </li>
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.num_node_features">(mlx_graphs.datasets.Dataset property)</a>
 </li>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_node_features">(mlx_graphs.datasets.HeteroDataset property)</a>
+</li>
       </ul></li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html#mlx_graphs.data.data.GraphData.num_nodes">num_nodes (mlx_graphs.data.data.GraphData property)</a>
+
+      <ul>
+        <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_nodes">(mlx_graphs.datasets.HeteroDataset property)</a>
 </li>
+      </ul></li>
   </ul></td>
 </tr></table>
 
@@ -795,14 +803,10 @@ document.write(`
 </li>
       <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html#mlx_graphs.datasets.PlanetoidDataset">PlanetoidDataset (class in mlx_graphs.datasets)</a>
 </li>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.process">process() (mlx_graphs.datasets.Dataset method)</a>
-
-      <ul>
-        <li><a href="api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html#mlx_graphs.transforms.FeaturesNormalizedTransform.process">(mlx_graphs.transforms.FeaturesNormalizedTransform method)</a>
-</li>
-      </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html#mlx_graphs.transforms.FeaturesNormalizedTransform.process">process() (mlx_graphs.transforms.FeaturesNormalizedTransform method)</a>
+</li>
       <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.processed_path">processed_path (mlx_graphs.datasets.Dataset property)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing.propagate">propagate() (mlx_graphs.nn.MessagePassing method)</a>
@@ -821,12 +825,10 @@ document.write(`
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.raw_path">raw_path (mlx_graphs.datasets.Dataset property)</a>
+      <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html#mlx_graphs.utils.transformations.remove_duplicate_directed_edges">remove_duplicate_directed_edges() (in module mlx_graphs.utils.transformations)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html#mlx_graphs.utils.transformations.remove_duplicate_directed_edges">remove_duplicate_directed_edges() (in module mlx_graphs.utils.transformations)</a>
-</li>
       <li><a href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html#mlx_graphs.utils.transformations.remove_self_loops">remove_self_loops() (in module mlx_graphs.utils.transformations)</a>
 </li>
   </ul></td>
@@ -837,18 +839,16 @@ document.write(`
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html#mlx_graphs.nn.SAGEConv">SAGEConv (class in mlx_graphs.nn)</a>
 </li>
-      <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset.save">save() (mlx_graphs.datasets.Dataset method)</a>
-</li>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html#mlx_graphs.utils.scatter.scatter">scatter() (in module mlx_graphs.utils.scatter)</a>
 </li>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html#mlx_graphs.utils.scatter.scatter_add">scatter_add() (in module mlx_graphs.utils.scatter)</a>
 </li>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html#mlx_graphs.utils.scatter.scatter_max">scatter_max() (in module mlx_graphs.utils.scatter)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html#mlx_graphs.utils.scatter.scatter_mean">scatter_mean() (in module mlx_graphs.utils.scatter)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html#mlx_graphs.utils.scatter.scatter_softmax">scatter_softmax() (in module mlx_graphs.utils.scatter)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html#mlx_graphs.nn.SimpleConv">SimpleConv (class in mlx_graphs.nn)</a>
@@ -982,8 +982,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
 
   <footer class="bd-footer">
   </footer>

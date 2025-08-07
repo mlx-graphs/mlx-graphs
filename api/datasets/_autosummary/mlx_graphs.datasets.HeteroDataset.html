@@ -1,0 +1,693 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>mlx_graphs.datasets.HeteroDataset &#8212; mlx-graphs 0.0.8 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../../../_static/documentation_options.js?v=820a49c8"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset';</script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" />
+    <link rel="next" title="mlx_graphs.datasets.KarateClubDataset" href="mlx_graphs.datasets.KarateClubDataset.html" />
+    <link rel="prev" title="mlx_graphs.datasets.Dataset" href="mlx_graphs.datasets.Dataset.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../data/index.html">Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../data/utils.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">Datasets</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">mlx_graphs.datasets.HeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/transformations.html">Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/validators.html">Validators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/scatter.html">Scatter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/array_ops.html">Array ops</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.pairwise_distances.html">mlx_graphs.utils.array_ops.pairwise_distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../algorithms/index.html">Algorithms</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../../_sources/api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button>
+
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>mlx_graphs.datasets.HeteroDataset</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset"><code class="docutils literal notranslate"><span class="pre">HeteroDataset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edge_classes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edge_classes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edge_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edge_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edges"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edges</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_graph_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_graph_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_node_classes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_node_classes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_node_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_node_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_nodes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_nodes</span></code></a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mlx-graphs-datasets-heterodataset">
+<h1>mlx_graphs.datasets.HeteroDataset<a class="headerlink" href="#mlx-graphs-datasets-heterodataset" title="Link to this heading">#</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset">
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">mlx_graphs.datasets.</span></span><span class="sig-name descname"><span class="pre">HeteroDataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">base_dir</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">pre_transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">transform</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><span class="pre">Callable</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/datasets/hetero_dataset.html#HeteroDataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset" title="Link to this definition">#</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BaseDataset</span></code></p>
+<p>A dataset class for handling heterogeneous graph data.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>name</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a></span>) – name of the dataset</p></li>
+<li><p><strong>base_dir</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>]</span>) – Directory where to store dataset files. Default is
+in the local directory <code class="docutils literal notranslate"><span class="pre">.mlx_graphs_data/</span></code>.</p></li>
+<li><p><strong>pre_transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]</span>) – A function/transform that takes in a <code class="docutils literal notranslate"><span class="pre">HeteroGraphData</span></code> object
+and returns a transformed version. The transformation is applied before
+the first access.</p></li>
+<li><p><strong>transform</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Callable" title="(in Python v3.13)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Callable</span></code></a>]</span>) – A function/transform that takes in a <code class="docutils literal notranslate"><span class="pre">HeteroGraphData</span></code> object and
+returns a transformed version. The transformation is applied before every
+access, i.e., during the <code class="docutils literal notranslate"><span class="pre">__getitem__</span></code> call.
+By default, no transformation is applied.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Methods</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+</tbody>
+</table>
+</div>
+<p class="rubric">Attributes</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">name</span></code></p></td>
+<td><p>Name of the dataset</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_edge_classes" title="mlx_graphs.datasets.HeteroDataset.num_edge_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_edge_classes</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of edge classes for each edge type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_edge_features" title="mlx_graphs.datasets.HeteroDataset.num_edge_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_edge_features</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of edge features for each edge type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_edges" title="mlx_graphs.datasets.HeteroDataset.num_edges"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_edges</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of edges for each edge type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_graph_features" title="mlx_graphs.datasets.HeteroDataset.num_graph_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_graph_features</span></code></a></p></td>
+<td><p>Returns the number of graph features.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_items</span></code></p></td>
+<td><p>Returns the number of items in the dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_node_classes" title="mlx_graphs.datasets.HeteroDataset.num_node_classes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_classes</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of node classes for each node type.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_node_features" title="mlx_graphs.datasets.HeteroDataset.num_node_features"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_node_features</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of node features for each node type.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.datasets.HeteroDataset.num_nodes" title="mlx_graphs.datasets.HeteroDataset.num_nodes"><code class="xref py py-obj docutils literal notranslate"><span class="pre">num_nodes</span></code></a></p></td>
+<td><p>Returns a dictionary of the number of nodes for each node type.</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">processed_path</span></code></p></td>
+<td><p>The path where processed files are stored.</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="xref py py-obj docutils literal notranslate"><span class="pre">raw_path</span></code></p></td>
+<td><p>The path where raw files are stored.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_edge_classes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_edge_classes" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of edge classes for each edge type.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_edge_features">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edge_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_edge_features" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of edge features for each edge type.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_edges">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_edges</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Any" title="(in Python v3.13)"><span class="pre">Any</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_edges" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of edges for each edge type.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_graph_features">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_graph_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_graph_features" title="Link to this definition">#</a></dt>
+<dd><p>Returns the number of graph features.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_node_classes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_classes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/constants.html#None" title="(in Python v3.13)"><span class="pre">None</span></a></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_node_classes" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of node classes for each node type.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_node_features">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_node_features</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_node_features" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of node features for each node type.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="mlx_graphs.datasets.HeteroDataset.num_nodes">
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">num_nodes</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><span class="pre">dict</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><span class="pre">str</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><span class="pre">int</span></a><span class="p"><span class="pre">]</span></span></em><a class="headerlink" href="#mlx_graphs.datasets.HeteroDataset.num_nodes" title="Link to this definition">#</a></dt>
+<dd><p>Returns a dictionary of the number of nodes for each node type.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="mlx_graphs.datasets.Dataset.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">mlx_graphs.datasets.Dataset</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="mlx_graphs.datasets.KarateClubDataset.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">mlx_graphs.datasets.KarateClubDataset</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset"><code class="docutils literal notranslate"><span class="pre">HeteroDataset</span></code></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edge_classes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edge_classes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edge_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edge_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_edges"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_edges</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_graph_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_graph_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_node_classes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_node_classes</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_node_features"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_node_features</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#mlx_graphs.datasets.HeteroDataset.num_nodes"><code class="docutils literal notranslate"><span class="pre">HeteroDataset.num_nodes</span></code></a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
