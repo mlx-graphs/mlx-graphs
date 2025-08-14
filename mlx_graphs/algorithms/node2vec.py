@@ -53,6 +53,7 @@ class Node2Vec(nn.Module):
         p: float = 1.0,
         q: float = 1.0,
         num_negative_samples: int = 1,
+        use_gpu: bool = False,
     ):
         super().__init__()
         self.edge_index = edge_index.astype(mx.int64)
@@ -66,6 +67,7 @@ class Node2Vec(nn.Module):
         self.context_size = context_size
         self.walks_per_node = walks_per_node
         self.EPS = 1e-15
+        self.use_gpu = use_gpu
         assert walk_length >= context_size
 
         # Converting a CSC matrix to a CSR matrix
@@ -84,20 +86,25 @@ class Node2Vec(nn.Module):
 
     def pos_sample(self, batch: mx.array):
         batch = mx.repeat(batch, self.walks_per_node)
-
         rand_data = mx.random.uniform(shape=[self.num_nodes, self.walk_length])
+        self.rowptr = self.rowptr.astype(mx.int64)
+        self.col = self.col.astype(mx.int64)
+        batch = batch.astype(mx.int64)
+        mx.eval(self.rowptr, self.col, batch)
         if self.p == 1.0 and self.q == 1.0:
-            rw = random_walk(
-                self.rowptr.astype(mx.int64),
-                self.col.astype(mx.int64),
+            rw, _ = random_walk(
+                self.rowptr,
+                self.col,
                 batch,
                 rand_data,
-                stream=mx.cpu,
+                self.walk_length,
+                stream=mx.gpu if self.use_gpu else mx.cpu,
             )
         else:
-            rw = rejection_sampling(
-                self.rowptr.astype(mx.int64),
-                self.col.astype(mx.int64),
+            mx.eval(self.rowptr, self.col, batch)
+            rw, _ = rejection_sampling(
+                self.rowptr,
+                self.col,
                 batch,
                 self.walk_length,
                 self.p,

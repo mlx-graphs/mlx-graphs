@@ -22,6 +22,7 @@ dependencies = [
     "requests==2.31.0",
     "fsspec==2024.2.0",
     "tqdm==4.66.1",
+    "mlx_cluster>=0.0.5",
 ]
 
 [project.optional-dependencies]
