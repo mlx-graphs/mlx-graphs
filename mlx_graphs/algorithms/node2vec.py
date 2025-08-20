@@ -53,7 +53,7 @@ class Node2Vec(nn.Module):
         p: float = 1.0,
         q: float = 1.0,
         num_negative_samples: int = 1,
-        use_gpu: bool = False,
+        use_gpu: bool = True,
     ):
         super().__init__()
         self.edge_index = edge_index.astype(mx.int64)
