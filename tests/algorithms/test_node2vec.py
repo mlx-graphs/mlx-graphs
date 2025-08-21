@@ -1,9 +1,6 @@
 import mlx.core as mx
-import pytest
 
-pytest.importorskip("mlx_cluster")
-
-from mlx_graphs.algorithms import Node2Vec  # noqa
+from mlx_graphs.algorithms import Node2Vec
 
 mx.random.seed(42)
 
