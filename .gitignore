@@ -129,6 +129,9 @@ env.bak/
 venv.bak/
 .mise.toml
 
+#uv project dependencies
+uv.lock
+
 # Spyder project settings
 .spyderproject
 .spyproject
