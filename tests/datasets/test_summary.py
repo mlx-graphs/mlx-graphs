@@ -1,11 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #158:
-"Dataset statistics in the docs"
+Tests for Dataset.summary() method.
 
-The problem: No way to quickly see dataset statistics (num graphs,
-avg nodes/edges, feature dims, class counts).
-
-Fix: Added Dataset.summary() method that returns a formatted statistics table.
+Verifies that summary() returns a formatted statistics table with graph counts,
+average nodes/edges, feature dimensions, and class counts.
 """
 
 from mlx_graphs.datasets import KarateClubDataset

@@ -1,13 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #179:
-"fromnetworkx with labeled nodes"
+Tests for from_networkx() with non-integer node labels.
 
-The bug: from_networkx() crashed with ValueError when networkx graphs had
-non-integer node labels (e.g. strings) because mx.array(list(data.edges())).T
-fails on string tuples.
-
-Fix: Node labels are now remapped to contiguous integer indices via
-node_to_idx mapping. Node features are gathered in the correct order.
+Verifies that networkx graphs with string or other non-integer node labels
+are correctly remapped to contiguous integer indices during conversion.
 """
 
 import mlx.core as mx

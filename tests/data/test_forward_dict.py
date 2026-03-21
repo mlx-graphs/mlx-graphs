@@ -1,12 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #28:
-"Pass GraphData to functions instead of individual attributes"
+Tests for GraphData.forward_dict().
 
-The problem: Conv layers required manually unpacking edge_index,
-node_features, edge_features as separate arguments.
-
-Fix: GraphData.forward_dict() returns a dict of core attributes
-that can be unpacked directly into conv layer calls.
+Verifies that forward_dict() returns a dict of core attributes (edge_index,
+node_features, edge_features) that can be unpacked directly into conv layer calls.
 """
 
 import mlx.core as mx

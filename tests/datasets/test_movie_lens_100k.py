@@ -6,9 +6,7 @@ from mlx_graphs.datasets import MovieLens100K
 
 @pytest.mark.slow
 def test_movie_lens_100k(tmp_path):
-    from torch_geometric.datasets import (
-        MovieLens100K as MovieLens100K_torch,
-    )
+    from torch_geometric.datasets import MovieLens100K as MovieLens100K_torch
 
     dataset = MovieLens100K(base_dir=tmp_path)
     dataset_torch = MovieLens100K_torch(tmp_path)

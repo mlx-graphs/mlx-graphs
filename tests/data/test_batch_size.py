@@ -1,11 +1,7 @@
 """
-Tests proving resolution of GitHub Issue #113:
-"Handle batch_size=-1 in DataLoader"
+Tests for Dataloader batch_size=-1 support.
 
-The problem: DataLoader only handled batch_size >= 1.
-
-Fix: When batch_size=-1, it is set to len(dataset), loading the entire
-dataset as a single batch.
+Verifies that batch_size=-1 loads the entire dataset as a single batch.
 """
 
 import mlx.core as mx

@@ -1,13 +1,9 @@
 """
-Tests proving resolution of GitHub Issue #84:
-"Dataloader is missing to increment by one in a specific case"
+Tests for GraphData.num_nodes computation.
 
-The bug: num_nodes was computed as max(edge_index) instead of max(edge_index) + 1,
-causing off-by-one errors when batching graphs. Isolated nodes (not in edge_index)
-were not counted.
-
-Fix: GraphData.num_nodes now correctly returns max(edge_index) + 1 when
-node_features is not set, and node_features.shape[0] when it is.
+Verifies that num_nodes correctly returns max(edge_index) + 1 when node_features
+is not set, and node_features.shape[0] when it is. Ensures isolated nodes (not in
+edge_index) are counted properly during batching.
 """
 
 import mlx.core as mx

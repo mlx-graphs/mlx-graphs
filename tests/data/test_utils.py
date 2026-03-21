@@ -2,9 +2,7 @@ import mlx.core as mx
 import pytest
 
 from mlx_graphs.data import GraphData
-from mlx_graphs.data.utils import (
-    validate_list_of_graph_data,
-)
+from mlx_graphs.data.utils import validate_list_of_graph_data
 
 
 @pytest.mark.parametrize(

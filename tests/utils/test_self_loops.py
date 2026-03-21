@@ -1,13 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #160:
-"Add option to add only nodes present in edge_index to add_self_loops"
+Tests for add_self_loops with only_existing_nodes parameter.
 
-The problem: add_self_loops always added self-loops for ALL nodes up to
-max(edge_index)+1, including isolated nodes that don't appear in the
-edge_index. This wastes computation.
-
-Fix: Added only_existing_nodes parameter. When True, self-loops are only
-added for nodes actually present in the edge_index.
+Verifies that when only_existing_nodes=True, self-loops are only added for
+nodes actually present in the edge_index, skipping isolated nodes.
 """
 
 import mlx.core as mx

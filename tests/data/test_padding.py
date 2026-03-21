@@ -1,12 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #93:
-"Padding in batched graphs"
+Tests for batch padding (batch(graphs, pad=True)).
 
-The problem: mx.compile requires static tensor shapes, but batched graphs
-have variable node/edge counts per graph.
-
-Fix: batch(graphs, pad=True) pads all graphs to uniform node/edge counts
-with boolean masks _node_mask and _edge_mask to distinguish real from padded.
+Verifies that graphs are padded to uniform node/edge counts with boolean masks
+(_node_mask and _edge_mask) to support static tensor shapes for mx.compile.
 """
 
 import mlx.core as mx

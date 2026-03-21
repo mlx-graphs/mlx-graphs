@@ -1,11 +1,8 @@
 """
-Tests proving resolution of GitHub Issue #91:
-"Slow shape extraction and attribute caching"
+Tests for GraphData attribute caching.
 
-The problem: num_nodes was recomputed via expensive pybind11 calls on every access.
-
-Fix: GraphData now has a _cache dict. Computed properties like num_nodes are cached
-and the cache is automatically invalidated when any attribute is modified.
+Verifies that computed properties like num_nodes are cached in GraphData._cache
+and that the cache is automatically invalidated when attributes are modified.
 """
 
 import mlx.core as mx

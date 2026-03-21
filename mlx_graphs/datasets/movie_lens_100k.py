@@ -6,7 +6,7 @@ import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.datasets import HeteroDataset
+from mlx_graphs.datasets.hetero_dataset import HeteroDataset
 from mlx_graphs.datasets.utils import download, extract_archive
 
 

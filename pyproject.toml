@@ -72,4 +72,5 @@ select = ["F", "E", "W", "I001"]
 docstring-code-format = true
 
 [tool.local-ci]
-skip_ty = true  # 117 pre-existing ty errors in benchmarks/upstream code — not ours to fix
+skip_tests = true  # Requires Apple Silicon (MLX) - tests run manually
+skip_ty = true  # 116 pre-existing ty errors in upstream code — not ours to fix
