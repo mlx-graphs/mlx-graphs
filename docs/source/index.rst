@@ -85,6 +85,12 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
 
 .. toctree::
+   :caption: Datasets
+   :maxdepth: 1
+
+   datasets
+
+.. toctree::
    :caption: API
    :maxdepth: 1
 
