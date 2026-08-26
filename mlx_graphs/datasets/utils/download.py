@@ -83,7 +83,9 @@ def download(
             try:
                 if log:
                     print("Downloading %s from %s..." % (fname, url))
-                r = requests.get(url, stream=True, verify=verify_ssl)
+                r = requests.get(  # nosec B113 - timeout tuple covers connect + read
+                    url, stream=True, verify=verify_ssl, timeout=(30, 300)
+                )
                 if r.status_code != 200:
                     raise RuntimeError("Failed downloading url %s" % url)
                 # Sizes in bytes.
@@ -131,7 +133,8 @@ def check_sha1(filename: str, sha1_hash: str) -> bool:
     Returns:
         Whether the file content matches the expected hash.
     """
-    sha1 = hashlib.sha1()
+    # SHA1 used for download integrity check, not security
+    sha1 = hashlib.sha1(usedforsecurity=False)
     with open(filename, "rb") as f:
         while True:
             data = f.read(1048576)
@@ -172,7 +175,8 @@ def extract_archive(file: str, target_dir: str, overwrite=True):
                     member_path = os.path.join(path, member.name)
                     if not is_within_directory(path, member_path):
                         raise Exception("Attempted Path Traversal in Tar File")
-                tar.extractall(path, members, numeric_owner=numeric_owner)
+                # nosec B202 - members validated above by is_within_directory
+                tar.extractall(path, members, numeric_owner=numeric_owner)  # nosec B202
 
             safe_extract(archive, path=target_dir)
     elif file.endswith(".gz"):
@@ -187,6 +191,11 @@ def extract_archive(file: str, target_dir: str, overwrite=True):
         import zipfile
 
         with zipfile.ZipFile(file, "r") as archive:
-            archive.extractall(path=target_dir)
+            abs_target = os.path.abspath(target_dir)
+            for name in archive.namelist():
+                member_path = os.path.abspath(os.path.join(target_dir, name))
+                if os.path.commonpath([abs_target, member_path]) != abs_target:
+                    raise Exception("Attempted Path Traversal in Zip File")
+            archive.extractall(path=target_dir)  # nosec B202 - members validated above
     else:
         raise Exception("Unrecognized file type: " + file)

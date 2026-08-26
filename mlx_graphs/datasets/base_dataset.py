@@ -72,7 +72,7 @@ class BaseDataset(ABC):
     def load(self):
         """Load the processed dataset"""
         with open(os.path.join(self.processed_path, "graphs.pkl"), "rb") as f:
-            obj = pickle.load(f)
+            obj = pickle.load(f)  # nosec B301 - own pickle from save_graphs()
             self.graphs = obj
 
     def _download(self):
