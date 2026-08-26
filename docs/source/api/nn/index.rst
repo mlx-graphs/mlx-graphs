@@ -21,8 +21,10 @@ Neural Networks
 	SAGEConv
 	GeneralizedRelationalConv
 	BatchNormalization
+	HeteroBatchNormalization
 	InstanceNormalization
 	LayerNormalization
+	HeteroLayerNormalization
 	global_add_pool
 	global_max_pool
 	global_mean_pool
