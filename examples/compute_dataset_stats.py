@@ -5,8 +5,8 @@ This script generates useful statistics about any dataset in mlx-graphs,
 including number of graphs, nodes, edges, features, and labels.
 
 Usage:
-    python compute_dataset_stats.py                    # Stats for all available datasets
-    python compute_dataset_stats.py --dataset karate_club  # Stats for a specific dataset
+    python compute_dataset_stats.py                    # Stats for all datasets
+    python compute_dataset_stats.py --dataset karate_club  # Stats for one dataset
     python compute_dataset_stats.py --format markdown  # Output as markdown table
     python compute_dataset_stats.py --format rst       # Output as RST table
 
@@ -16,7 +16,6 @@ https://github.com/mlx-graphs/mlx-graphs/issues/158
 
 import argparse
 import sys
-from typing import Optional
 
 import mlx.core as mx
 
@@ -223,16 +222,11 @@ def main():
 
     # Import datasets lazily to avoid unnecessary downloads
     from mlx_graphs.datasets import (
-        KarateClubDataset,
-        QM7bDataset,
-        TUDataset,
-        PlanetoidDataset,
-        SuperPixelDataset,
-        OGBDataset,
         EllipticBitcoinDataset,
+        KarateClubDataset,
         MovieLens100K,
-        IMDB,
-        DBLP,
+        PlanetoidDataset,
+        QM7bDataset,
     )
 
     # Dataset registry
@@ -262,7 +256,11 @@ def main():
             ds = cls(**kwargs)
             stats = compute_dataset_stats(ds, name)
             all_stats.extend(stats)
-            print(f"  Done: {stats[0]['num_nodes']} nodes, {stats[0]['num_edges']} edges", file=sys.stderr)
+            print(
+                f"  Done: {stats[0]['num_nodes']} nodes, "
+                f"{stats[0]['num_edges']} edges",
+                file=sys.stderr,
+            )
         except Exception as e:
             print(f"  Error loading {name}: {e}", file=sys.stderr)
 
