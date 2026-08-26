@@ -191,7 +191,7 @@ class SuperPixelDataset(Dataset):
             ),
             "rb",
         ) as f:
-            labels, data = pickle.load(f)
+            labels, data = pickle.load(f)  # nosec B301 - sha1-verified dataset archive
             labels = mx.array([labels.tolist()]).T
 
         for idx, sample in enumerate(
