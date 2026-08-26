@@ -106,3 +106,75 @@ class LayerNormalization(nn.Module):
             return self.layernorm(features)
         else:
             raise ValueError(f"Unknow normalization mode: {self.mode}")
+
+
+class HeteroLayerNormalization(nn.Module):
+    r"""Applies layer normalization over each individual example in a batch
+    of heterogeneous features, as described in the `"Layer Normalization"
+    <https://arxiv.org/abs/1607.06450>`_ paper.
+
+    Compared to a standard layer norm, :class:`HeteroLayerNorm` applies
+    normalization individually for each node or edge type. Note that the
+    normalization itself (per-node mean/variance across channels) does not
+    depend on the type: only the learnable affine parameters do.
+
+    Args:
+        in_channels (int): Size of each input sample.
+        num_types (int): The number of types.
+        eps (float, optional): A value added to the denominator for
+            numerical stability. (default: :obj:`1e-5`)
+        affine (bool, optional): If set to :obj:`True`, this module has
+            learnable affine parameters :math:`\gamma` and :math:`\beta`.
+            (default: :obj:`True`)
+    """
+
+    def __init__(
+        self,
+        in_channels: int,
+        num_types: int,
+        eps: float = 1e-5,
+        affine: bool = True,
+    ):
+        super().__init__()
+
+        self.in_channels = in_channels
+        self.num_types = num_types
+        self.eps = eps
+        self.affine = affine
+
+        if self.affine:
+            self.weight = mx.ones((num_types, in_channels))
+            self.bias = mx.zeros((num_types, in_channels))
+
+        self.reset_parameters()
+
+    def reset_parameters(self):
+        r"""Resets all learnable parameters of the module."""
+        if self.affine:
+            self.weight = mx.ones_like(self.weight)
+            self.bias = mx.zeros_like(self.bias)
+
+    def __call__(self, x: mx.array, type_vec: mx.array) -> mx.array:
+        r"""Forward pass.
+
+        Args:
+            x (mx.array): The input features of shape
+                :obj:`[num_items, in_channels]`.
+            type_vec (mx.array): An integer vector of shape
+                :obj:`[num_items]` that maps each entry to a type in
+                :obj:`[0, num_types)`.
+        """
+        mean = x.mean(axis=-1, keepdims=True)
+        var = x.var(axis=-1, keepdims=True)
+        out = (x - mean) / mx.sqrt(var + self.eps)
+
+        if self.affine:
+            out = out * self.weight[type_vec] + self.bias[type_vec]
+
+        return out
+
+    def __repr__(self) -> str:
+        return (
+            f"{self.__class__.__name__}({self.in_channels}, "
+            f"num_types={self.num_types})"
+        )
