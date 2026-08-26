@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Quantum-chemical property prediction with GNNs &#8212; mlx-graphs 0.0.8 documentation</title>
+    <title>Quantum-chemical property prediction with GNNs &#8212; mlx-graphs 0.0.9 documentation</title>
   
   
   
@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
@@ -37,38 +37,45 @@
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=96440fcd" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=820a49c8"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/documentation_options.js?v=39f6cbd5"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/examples/qm9_tutorial';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Data" href="../../api/data/index.html" />
+    <link rel="next" title="Datasets" href="../../datasets.html" />
     <link rel="prev" title="Examples" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -94,7 +101,51 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -133,8 +184,8 @@
       
     
     
-    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
-    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.9 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.9 documentation - Home"/>
   
   
 </a></div>
@@ -159,6 +210,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../datasets.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
 </ul>
 </details></li>
 </ul>
@@ -219,8 +286,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
@@ -285,7 +354,10 @@
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../api/algorithms/index.html">Algorithms</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+</ul>
+</details></li>
 </ul>
 
     </div>
@@ -413,11 +485,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -445,7 +524,7 @@
                 <h2> Contents </h2>
             </div>
             <nav aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Loading-the-dataset">Loading the dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Graph-Neural-Network-module">Graph Neural Network module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-training">Model training</a></li>
@@ -474,7 +553,7 @@ properties of the molecules.</p>
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">TUDataset</span>
-<span class="n">qm9</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;QM9&quot;</span><span class="p">)</span>
+<span class="n">qm9</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"QM9"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -482,10 +561,10 @@ properties of the molecules.</p>
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of graphs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">qm9</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of node features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_node_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of edge features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_edge_features</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Number of regression tasks: </span><span class="si">{</span><span class="n">qm9</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">graph_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of graphs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">qm9</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of node features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_node_features</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of edge features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_edge_features</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of regression tasks: </span><span class="si">{</span><span class="n">qm9</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">graph_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -603,7 +682,7 @@ Number of regression tasks: 19
         <span class="n">graph_features</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="p">):</span>
         <span class="n">target_nodes</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">aggregated_edges</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">target_nodes</span><span class="p">,</span> <span class="n">out_size</span><span class="o">=</span><span class="n">node_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">)</span>
+        <span class="n">aggregated_edges</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">target_nodes</span><span class="p">,</span> <span class="n">out_size</span><span class="o">=</span><span class="n">node_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">)</span>
         <span class="n">model_input</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">node_features</span><span class="p">,</span> <span class="n">aggregated_edges</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">new_node_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
         <span class="n">new_node_features</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">new_node_features</span><span class="p">)</span>
@@ -671,7 +750,7 @@ Number of regression tasks: 19
 <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;sum&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">"sum"</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">forward_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
     <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">node_features</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">batch_indices</span><span class="p">)</span>
@@ -701,8 +780,8 @@ Number of regression tasks: 19
 <span class="n">epoch_test_losses</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
     <span class="c1"># training loop</span>
-    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_training_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tepoch</span><span class="p">:</span>
-        <span class="n">tepoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_training_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"batch"</span><span class="p">)</span> <span class="k">as</span> <span class="n">tepoch</span><span class="p">:</span>
+        <span class="n">tepoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="n">training_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tepoch</span><span class="p">):</span>
             <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">y_hat</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">loss_and_grad_fn</span><span class="p">(</span>
@@ -717,8 +796,8 @@ Number of regression tasks: 19
         <span class="n">epoch_training_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">training_loss</span><span class="o">/</span><span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
 
     <span class="c1"># testing loop</span>
-    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">test_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_test_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;batch&quot;</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">test_epoch</span><span class="p">:</span>
-        <span class="n">test_epoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Testing&quot;</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">test_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_test_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"batch"</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">test_epoch</span><span class="p">:</span>
+        <span class="n">test_epoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Testing"</span><span class="p">)</span>
         <span class="n">test_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
         <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_epoch</span><span class="p">):</span>
             <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">node_features</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">batch_indices</span><span class="p">)</span>
@@ -771,9 +850,9 @@ Epoch 20: 100%|█████████████████████�
 </pre></div>
 </div>
 <div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_training_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Training&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_test_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Test&quot;</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Loss&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_training_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Training"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_test_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Test"</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Loss"</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
@@ -814,11 +893,11 @@ Epoch 20: 100%|█████████████████████�
       </div>
     </a>
     <a class="right-next"
-       href="../../api/data/index.html"
+       href="../../datasets.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Data</p>
+        <p class="prev-next-title">Datasets</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -838,7 +917,7 @@ Epoch 20: 100%|█████████████████████�
     <i class="fa-solid fa-list"></i> Contents
   </div>
   <nav class="bd-toc-nav page-toc">
-    <ul class="visible nav section-nav flex-column">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Loading-the-dataset">Loading the dataset</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Graph-Neural-Network-module">Graph Neural Network module</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-training">Model training</a></li>
@@ -891,8 +970,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
   </footer>

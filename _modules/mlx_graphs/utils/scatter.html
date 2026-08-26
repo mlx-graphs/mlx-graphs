@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.utils.scatter &#8212; mlx-graphs 0.0.8 documentation</title>
+    <title>mlx_graphs.utils.scatter &#8212; mlx-graphs 0.0.9 documentation</title>
   
   
   
@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
@@ -35,36 +35,43 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
   
   <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../../_static/documentation_options.js?v=820a49c8"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/documentation_options.js?v=39f6cbd5"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mlx_graphs/utils/scatter';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../_static/searchtools.js"></script>
+    <script src="../../../_static/language_data.js"></script>
+    <script src="../../../searchindex.js"></script>
+  
   </head>
-  
-  
-  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
-
+  <body data-default-mode="">
   
   
   <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -90,7 +97,47 @@
 </div>
 
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
     </header>
   
 
@@ -131,8 +178,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.8 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.8 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.9 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.9 documentation - Home"/>
   
   
 </a></div>
@@ -157,6 +204,22 @@
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../datasets.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
 </ul>
 </details></li>
 </ul>
@@ -217,8 +280,10 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
@@ -283,7 +348,10 @@
 </details></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../api/algorithms/index.html">Algorithms</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+</ul>
+</details></li>
 </ul>
 
     </div>
@@ -363,11 +431,18 @@
 
 
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button>
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div>
 
 
 <button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -405,7 +480,7 @@
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils.array_ops</span><span class="w"> </span><span class="kn">import</span> <span class="n">broadcast</span>
 
-<span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="s2">&quot;softmax&quot;</span><span class="p">,</span> <span class="s2">&quot;min&quot;</span><span class="p">]</span>
+<span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"add"</span><span class="p">,</span> <span class="s2">"max"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">,</span> <span class="s2">"softmax"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">]</span>
 
 
 <div class="viewcode-block" id="scatter">
@@ -414,10 +489,10 @@
     <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
     <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
     <span class="n">out_size</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
-    <span class="n">aggr</span><span class="p">:</span> <span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="s2">&quot;add&quot;</span><span class="p">,</span>
+    <span class="n">aggr</span><span class="p">:</span> <span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
     <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Default function for performing all scattering operations.</span>
+<span class="w">    </span><span class="sd">"""Default function for performing all scattering operations.</span>
 <span class="sd">    Scatters `values` at `index` in an empty array of `out_size` elements.</span>
 
 <span class="sd">    Args:</span>
@@ -440,24 +515,24 @@
 <span class="sd">        index = mx.array([0, 0, 1, 2])</span>
 <span class="sd">        num_nodes = src.shape[0]</span>
 
-<span class="sd">        scatter(src, index, num_nodes, &quot;softmax&quot;)</span>
+<span class="sd">        scatter(src, index, num_nodes, "softmax")</span>
 <span class="sd">        &gt;&gt;&gt;  mx.array([0.5, 0.5, 1, 1])</span>
 
 <span class="sd">        num_nodes = index.max().item() + 1</span>
-<span class="sd">        scatter(src, index, num_nodes, &quot;add&quot;)</span>
+<span class="sd">        scatter(src, index, num_nodes, "add")</span>
 <span class="sd">        &gt;&gt;&gt;  mx.array([2, 1, 1])</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">aggr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="s2">&quot;Invalid aggregation function.&quot;</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;Available values are </span><span class="si">{</span><span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="s2">"Invalid aggregation function."</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">"Available values are </span><span class="si">{</span><span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="n">_out_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">out_size</span> <span class="k">if</span> <span class="n">out_size</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">&quot;softmax&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"softmax"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scatter_softmax</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">_out_size</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">&quot;mean&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"mean"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scatter_mean</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">_out_size</span><span class="p">)</span>
 
     <span class="n">out_shape</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -465,32 +540,32 @@
 
     <span class="n">empty_tensor</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">out_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">values</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">&quot;add&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"add"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scatter_add</span><span class="p">(</span><span class="n">empty_tensor</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">&quot;max&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"max"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scatter_max</span><span class="p">(</span><span class="n">empty_tensor</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">&quot;min&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"min"</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">scatter_min</span><span class="p">(</span><span class="n">empty_tensor</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">values</span><span class="p">)</span>
 
-    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Aggregation </span><span class="si">{</span><span class="n">aggr</span><span class="si">}</span><span class="s2"> not implemented yet.&quot;</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Aggregation </span><span class="si">{</span><span class="n">aggr</span><span class="si">}</span><span class="s2"> not implemented yet."</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="scatter_add">
 <a class="viewcode-back" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html#mlx_graphs.utils.scatter.scatter_add">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_add</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
+<span class="w">    </span><span class="sd">"""Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
 <span class="sd">    the sum of the values will be assigned to these index.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        src: Source array where the values will be scattered (often an empty array)</span>
-<span class="sd">        index: Array containing indices that determine the scatter of the &#39;values&#39;.</span>
+<span class="sd">        index: Array containing indices that determine the scatter of the 'values'.</span>
 <span class="sd">        values: Input array containing values to be scattered.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The resulting array after applying scatter and sum operations on the values at</span>
 <span class="sd">        duplicate indices</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">src</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
 
@@ -498,35 +573,35 @@
 <div class="viewcode-block" id="scatter_max">
 <a class="viewcode-back" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html#mlx_graphs.utils.scatter.scatter_max">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_max</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
+<span class="w">    </span><span class="sd">"""Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
 <span class="sd">    the maximum value is kept at these indices.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        src: Source array where the values will be scattered (often an empty array)</span>
-<span class="sd">        index: Array containing indices that determine the scatter of the &#39;values&#39;.</span>
+<span class="sd">        index: Array containing indices that determine the scatter of the 'values'.</span>
 <span class="sd">        values: Input array containing values to be scattered.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The resulting array after applying scatter and max operations on the values at</span>
 <span class="sd">        duplicate indices</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">src</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_min</span><span class="p">(</span><span class="n">src</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
+<span class="w">    </span><span class="sd">"""Scatters `values` at `index` within `src`. If duplicate indices are present,</span>
 <span class="sd">    the minimum value is kept at these indices.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        src: Source array where the values will be scattered (often an empty array)</span>
-<span class="sd">        index: Array containing indices that determine the scatter of the &#39;values&#39;.</span>
+<span class="sd">        index: Array containing indices that determine the scatter of the 'values'.</span>
 <span class="sd">        values: Input array containing values to be scattered.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The resulting array after applying scatter and min operations on the values at</span>
 <span class="sd">        duplicate indices</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">src</span><span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">index</span><span class="p">]</span><span class="o">.</span><span class="n">minimum</span><span class="p">(</span><span class="n">values</span><span class="p">)</span>
 
 
@@ -535,7 +610,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_mean</span><span class="p">(</span>
     <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">out_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the mean of values that are scattered along a specified axis, grouped</span>
+<span class="w">    </span><span class="sd">"""Computes the mean of values that are scattered along a specified axis, grouped</span>
 <span class="sd">    by index.</span>
 
 <span class="sd">    Args:</span>
@@ -547,8 +622,8 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        An array containing mean of `values` grouped by `index`.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">scatt_add</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">scatt_add</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"add"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
     <span class="n">out_size</span> <span class="o">=</span> <span class="n">scatt_add</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="n">axis</span><span class="p">]</span>
 
     <span class="n">degrees</span> <span class="o">=</span> <span class="n">degree</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">)</span>
@@ -564,19 +639,19 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">scatter_softmax</span><span class="p">(</span>
     <span class="n">values</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">out_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Computes the softmax of values that are scattered along a specified axis,</span>
+<span class="w">    </span><span class="sd">"""Computes the softmax of values that are scattered along a specified axis,</span>
 <span class="sd">    grouped by index.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        values: Input array containing values to be scattered. These values will</span>
 <span class="sd">            undergo a scatter and softmax operation</span>
-<span class="sd">        index: Array containing indices that determine the scatter of the &#39;values&#39;.</span>
+<span class="sd">        index: Array containing indices that determine the scatter of the 'values'.</span>
 <span class="sd">        out_size: Size of the output array</span>
 <span class="sd">        axis: Axis along which to scatter</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The resulting array after applying scatter and softmax operations on the</span>
-<span class="sd">        input &#39;values&#39;.</span>
+<span class="sd">        input 'values'.</span>
 
 <span class="sd">    Example:</span>
 
@@ -588,13 +663,13 @@
 
 <span class="sd">        scatter_softmax(src, index, num_nodes)</span>
 <span class="sd">        &gt;&gt;&gt;  mx.array([0.5, 0.5, 1, 1])</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># index = broadcast(index, values, axis) # NOTE: may be used in future.</span>
-    <span class="n">scatt_max</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">&quot;max&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">scatt_max</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"max"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
     <span class="n">scatt_max</span> <span class="o">=</span> <span class="n">scatt_max</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
     <span class="n">out</span> <span class="o">=</span> <span class="p">(</span><span class="n">values</span> <span class="o">-</span> <span class="n">scatt_max</span><span class="p">)</span><span class="o">.</span><span class="n">exp</span><span class="p">()</span>
 
-    <span class="n">scatt_sum</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">&quot;add&quot;</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="n">scatt_sum</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">out_size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"add"</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
     <span class="n">scatt_sum</span> <span class="o">=</span> <span class="n">scatt_sum</span><span class="p">[</span><span class="n">index</span><span class="p">]</span>
 
     <span class="n">eps</span> <span class="o">=</span> <span class="mf">1e-16</span>
@@ -609,7 +684,7 @@
     <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="n">edge_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Counts the number of ocurrences of each node in the given `index`.</span>
+<span class="w">    </span><span class="sd">"""Counts the number of ocurrences of each node in the given `index`.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        index: Array with node indices, usually src or dst of an `edge_index`.</span>
@@ -620,23 +695,23 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Array of length `num_nodes` with the degree of each node.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">index</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;The `degree` function requires a 1D index array, found </span><span class="si">{</span><span class="n">index</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="sa">f</span><span class="s2">"The `degree` function requires a 1D index array, found </span><span class="si">{</span><span class="n">index</span><span class="o">.</span><span class="n">ndim</span><span class="si">}</span><span class="s2">."</span>
         <span class="p">)</span>
 
     <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">num_nodes</span> <span class="k">if</span> <span class="n">num_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">index</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">+</span> <span class="mi">1</span>
     <span class="n">src</span> <span class="o">=</span> <span class="n">edge_weights</span> <span class="k">if</span> <span class="n">edge_weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">mx</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],))</span>
 
-    <span class="k">return</span> <span class="n">scatter</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="s2">&quot;add&quot;</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">scatter</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="s2">"add"</span><span class="p">)</span></div>
 
 
 
 <div class="viewcode-block" id="invert_sqrt_degree">
 <a class="viewcode-back" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html#mlx_graphs.utils.scatter.invert_sqrt_degree">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">invert_sqrt_degree</span><span class="p">(</span><span class="n">degree</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes the inverted square root of the degree array.</span>
 
 <span class="sd">    Args:</span>
@@ -645,11 +720,11 @@
 
 <span class="sd">    Returns:</span>
 <span class="sd">        Array of length `num_nodes` with the inverted square root of the degree of</span>
-<span class="sd">        each node with &#39;inf&#39; values zeroed out.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">        each node with 'inf' values zeroed out.</span>
+<span class="sd">    """</span>
     <span class="n">invert_sqrt_degree</span> <span class="o">=</span> <span class="n">degree</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
     <span class="n">invert_sqrt_degree</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-        <span class="n">invert_sqrt_degree</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">&quot;inf&quot;</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">invert_sqrt_degree</span>
+        <span class="n">invert_sqrt_degree</span> <span class="o">==</span> <span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="n">invert_sqrt_degree</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="n">invert_sqrt_degree</span></div>
 
@@ -715,8 +790,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
   </footer>
