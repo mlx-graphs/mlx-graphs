@@ -36,6 +36,22 @@ from mlx_graphs.utils import degree, invert_sqrt_degree, scatter
             "mean",
             mx.array([1, 1, 1]),
         ),
+        # Max of all-negative groups, min of all-pos groups
+        (
+              mx.array([-3.0, -1.0, -5.0]),
+              mx.array([0, 0, 1]),
+              None,
+              "max",
+              mx.array([-1, -5]),
+        ),
+        (
+              mx.array([3.0, 1.0, 5.0]),
+              mx.array([0, 0, 1]),
+              None,
+              "min",
+              mx.array([1, 5]),
+        ),
+
         # Test case for test_scatter_2D
         (
             mx.array([[1.0, 2.0], [1.0, 3.0], [1.0, 4.0], [1.0, 5.0]]),
