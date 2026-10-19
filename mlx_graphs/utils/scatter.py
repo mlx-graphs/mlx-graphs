@@ -101,7 +101,14 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
         The resulting array after applying scatter and max operations on the values at
         duplicate indices
     """
-    return src.at[index].maximum(values)
+    lowest = (
+        -float("inf")
+        if mx.issubdtype(values.dtype, mx.floating)
+        else mx.iinfo(values.dtype).min
+    )
+    out = mx.full(src.shape, lowest, dtype=values.dtype).at[index].maximum(values)
+    count = broadcast(degree(index, src.shape[0]), out, 0)
+    return mx.where(count > 0, out, src)
 
 
 def scatter_min(src: mx.array, index: mx.array, values: mx.array):
@@ -117,7 +124,14 @@ def scatter_min(src: mx.array, index: mx.array, values: mx.array):
         The resulting array after applying scatter and min operations on the values at
         duplicate indices
     """
-    return src.at[index].minimum(values)
+    highest = (
+        float("inf")
+        if mx.issubdtype(values.dtype, mx.floating)
+        else mx.iinfo(values.dtype).max
+    )
+    out = mx.full(src.shape, highest, dtype=values.dtype).at[index].minimum(values)
+    count = broadcast(degree(index, src.shape[0]), out, 0)
+    return mx.where(count > 0, out, src)
 
 
 def scatter_mean(
