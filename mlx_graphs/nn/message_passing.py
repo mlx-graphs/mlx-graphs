@@ -345,6 +345,8 @@ class MessagePassing(nn.Module):
                 # load-balanced path for high-degree nodes (mlx-cluster >= the
                 # long-row release; older CSR tuples have no such field)
                 long_rows=getattr(csr, "long_rows", None),
+                # cached transpose: the backward also runs on the CSR kernel
+                transpose=getattr(csr, "transpose", None),
             )
 
         return _spmm_coo(
