@@ -4,7 +4,7 @@ import pytest
 from mlx.utils import tree_flatten
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.loaders import HeteroNeighborLoader
+from mlx_graphs.loaders import NeighborLoader
 from mlx_graphs.nn import HeteroConv, HeteroDictLinear, SAGEConv
 
 WRITES = ("author", "writes", "paper")
@@ -119,7 +119,7 @@ def test_project_first_model_on_loader_batch():
             return self.head(h["author"])
 
     model = Model()
-    loader = HeteroNeighborLoader(data, [-1], input_nodes="author", batch_size=2)
+    loader = NeighborLoader(data, [-1], input_nodes="author", batch_size=2)
 
     def loss_fn(model, batch):
         n = batch.batch_size

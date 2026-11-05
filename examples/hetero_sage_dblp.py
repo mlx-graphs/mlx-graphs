@@ -13,7 +13,7 @@ The model:
    sum the results per node type.
 3. A linear layer predicts the research area of each author.
 
-Training uses ``HeteroNeighborLoader`` (backed by
+Training uses ``NeighborLoader`` (backed by
 ``mlx_cluster.hetero_neighbor_sample``): each mini-batch is the sampled
 ``num_layers``-hop neighborhood of ``batch_size`` training authors, and the
 loss is computed on those seed authors only.
@@ -34,7 +34,7 @@ from mlx.utils import tree_flatten
 
 from mlx_graphs.data import HeteroGraphData
 from mlx_graphs.datasets import DBLP
-from mlx_graphs.loaders import HeteroNeighborLoader
+from mlx_graphs.loaders import NeighborLoader
 from mlx_graphs.nn import HeteroConv, HeteroDictLinear, SAGEConv
 
 
@@ -129,7 +129,7 @@ def main(args, data: HeteroGraphData = None):
     eval_num_neighbors = [-1] * len(num_neighbors)
 
     def loader(mask, shuffle, fanout, batch_size):
-        return HeteroNeighborLoader(
+        return NeighborLoader(
             data,
             num_neighbors=fanout,
             input_nodes=(target, mask),

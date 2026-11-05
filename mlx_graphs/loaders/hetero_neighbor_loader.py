@@ -9,8 +9,13 @@ from mlx_graphs.data import HeteroGraphData
 EdgeType = tuple[str, str, str]
 
 
-class HeteroNeighborLoader:
-    """Mini-batch loader for node-level tasks on a single large heterogeneous graph.
+class _HeteroNeighborLoader:
+    """Heterogeneous implementation behind :class:`NeighborLoader`.
+
+    Not meant to be used directly: pass a :class:`HeteroGraphData` to
+    :class:`NeighborLoader` instead.
+
+    Mini-batch loader for node-level tasks on a single large heterogeneous graph.
 
     Uses heterogeneous neighbor sampling (``mlx_cluster.hetero_neighbor_sample``)
     to extract K-hop subgraphs around seed nodes of one node type. Each
@@ -57,10 +62,10 @@ class HeteroNeighborLoader:
     .. code-block:: python
 
         from mlx_graphs.datasets import DBLP
-        from mlx_graphs.loaders import HeteroNeighborLoader
+        from mlx_graphs.loaders import NeighborLoader
 
         data = DBLP()[0]
-        loader = HeteroNeighborLoader(
+        loader = NeighborLoader(
             data,
             num_neighbors=[10, 5],
             input_nodes=("author", data.author_train_mask),
@@ -132,7 +137,7 @@ class HeteroNeighborLoader:
         """Number of mini-batches per epoch."""
         return (len(self.input_nodes) + self.batch_size - 1) // self.batch_size
 
-    def __iter__(self) -> "HeteroNeighborLoader":
+    def __iter__(self) -> "_HeteroNeighborLoader":
         self._current_index = 0
         if self.shuffle:
             np.random.shuffle(self._indices)

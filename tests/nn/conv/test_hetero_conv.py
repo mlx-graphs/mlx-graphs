@@ -3,7 +3,7 @@ import mlx.nn as nn
 import pytest
 
 from mlx_graphs.data import HeteroGraphData
-from mlx_graphs.loaders import HeteroNeighborLoader
+from mlx_graphs.loaders import NeighborLoader
 from mlx_graphs.nn import HeteroConv, SAGEConv
 
 WRITES = ("author", "writes", "paper")
@@ -208,7 +208,7 @@ def test_two_layer_model_on_loader_batch():
             return self.head(h["author"])
 
     model = Model()
-    loader = HeteroNeighborLoader(data, [-1, -1], input_nodes="author", batch_size=2)
+    loader = NeighborLoader(data, [-1, -1], input_nodes="author", batch_size=2)
     for batch in loader:
         logits = model(batch.node_features_dict, batch.edge_index_dict)
         n = batch.batch_size
