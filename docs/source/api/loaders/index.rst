@@ -12,4 +12,3 @@ Loaders
 
 	Dataloader
 	NeighborLoader
-	HeteroNeighborLoader
