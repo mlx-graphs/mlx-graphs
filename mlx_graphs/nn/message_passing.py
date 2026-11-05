@@ -1,9 +1,181 @@
-from typing import Any, Dict, Optional, Tuple, Union, get_args
+from collections import OrderedDict
+from contextlib import contextmanager
+from typing import Any, Dict, Literal, Optional, Tuple, Union, get_args
 
 import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
+
+# Fused SpMM kernels live in mlx-cluster. They are optional: without them (or
+# with an older mlx-cluster) every layer keeps the gather-scatter path.
+try:
+    from mlx_cluster import coo_to_csr as _coo_to_csr
+    from mlx_cluster import spmm_coo as _spmm_coo
+    from mlx_cluster import spmm_csr as _spmm_csr
+
+    HAS_FUSED_KERNELS = True
+except ImportError:
+    HAS_FUSED_KERNELS = False
+
+FusedFormat = Literal["coo", "csr"]
+_FUSED_AGGRS = ("add", "mean")
+
+# Global switch, mainly for benchmarks and tests (same model, both paths).
+_fused_enabled: bool = True
+_fused_format_override: Optional[FusedFormat] = None
+
+
+def set_fused_message_passing(
+    enabled: bool, format: Optional[FusedFormat] = None
+) -> None:
+    """Globally enables/disables fused message passing.
+
+    Args:
+        enabled: if ``False``, every layer uses gather-scatter.
+        format: if given, overrides the ``format`` chosen in
+            :func:`fused_message_passing` for every layer (``"coo"`` or ``"csr"``).
+    """
+    global _fused_enabled, _fused_format_override
+    if format is not None and format not in get_args(FusedFormat):
+        raise ValueError(f"format must be 'coo' or 'csr', got {format!r}")
+    _fused_enabled = enabled
+    _fused_format_override = format
+
+
+def is_fused_message_passing_enabled() -> bool:
+    """Whether fused message passing is enabled and the kernels are available."""
+    return _fused_enabled and HAS_FUSED_KERNELS
+
+
+@contextmanager
+def fused_message_passing_mode(enabled: bool, format: Optional[FusedFormat] = None):
+    """Context manager version of :func:`set_fused_message_passing`.
+
+    .. code-block:: python
+
+        with fused_message_passing_mode(False):
+            out_reference = model(edge_index, x)  # gather-scatter
+    """
+    global _fused_enabled, _fused_format_override
+    previous = (_fused_enabled, _fused_format_override)
+    set_fused_message_passing(enabled, format)
+    try:
+        yield
+    finally:
+        _fused_enabled, _fused_format_override = previous
+
+
+class _CSRCache:
+    """Small LRU cache of COO -> CSR conversions, keyed on the edge_index array.
+
+    The cache keeps a reference to each edge_index, so its ``id`` cannot be
+    reused by another array while the entry is alive.
+    """
+
+    def __init__(self, maxsize: int = 8):
+        self.maxsize = maxsize
+        self._entries: "OrderedDict[Tuple[int, int], Tuple[mx.array, Any]]" = (
+            OrderedDict()
+        )
+
+    def get(self, edge_index: mx.array, num_rows: int):
+        key = (id(edge_index), num_rows)
+        hit = self._entries.get(key)
+        if hit is not None and hit[0] is edge_index:
+            self._entries.move_to_end(key)
+            return hit[1]
+        csr = _coo_to_csr(edge_index[1], edge_index[0], num_rows)
+        self._entries[key] = (edge_index, csr)
+        if len(self._entries) > self.maxsize:
+            self._entries.popitem(last=False)
+        return csr
+
+    def clear(self):
+        self._entries.clear()
+
+
+_csr_cache = _CSRCache()
+
+
+def clear_csr_cache() -> None:
+    """Drops all cached CSR conversions used by ``format="csr"``."""
+    _csr_cache.clear()
+
+
+def fused_message_passing(
+    cls=None,
+    *,
+    format: FusedFormat = "coo",
+    allow_message_override: bool = False,
+):
+    """Class decorator: lets a :class:`MessagePassing` layer fuse ``message``
+    and ``aggregate`` into a single sparse x dense matmul (SpMM).
+
+    With the decorator, :meth:`MessagePassing.propagate` calls
+    :meth:`MessagePassing.message_and_aggregate` instead of gathering one
+    message per edge and scattering them. This never materialises the
+    ``[num_edges, features]`` message array, which is what limits
+    gather-scatter on large graphs.
+
+    The fused path is used only when it gives the same result; otherwise the
+    layer silently falls back to gather-scatter. It falls back when:
+
+    * ``mlx_cluster`` (with ``spmm_coo``) is not installed,
+    * fused message passing is disabled (:func:`set_fused_message_passing`),
+    * ``aggr`` is not ``"add"`` or ``"mean"``,
+    * any message/aggregate kwarg other than ``edge_weights`` is set
+      (e.g. ``edge_features``), since messages are then no longer a weighted
+      sum of neighbour features.
+
+    Args:
+        format: ``"coo"`` (default) works directly on ``edge_index``.
+            ``"csr"`` sorts the graph once (cached per ``edge_index``) and uses
+            a deterministic, atomic-free kernel.
+        allow_message_override: a layer that overrides ``message()`` or
+            ``aggregate()`` is rejected by default, because the fused kernel
+            would ignore those overrides. Pass ``True`` only if the override
+            reduces to the default ``edge_weights * x_j`` / scatter whenever
+            the extra kwargs are ``None`` (e.g. ``GINConv``).
+
+    .. code-block:: python
+
+        @fused_message_passing
+        class MyConv(MessagePassing):
+            ...
+
+
+        @fused_message_passing(format="csr")
+        class MyOtherConv(MessagePassing):
+            ...
+    """
+    if format not in get_args(FusedFormat):
+        raise ValueError(f"format must be 'coo' or 'csr', got {format!r}")
+
+    def wrap(klass):
+        if not (isinstance(klass, type) and issubclass(klass, MessagePassing)):
+            raise TypeError(
+                "@fused_message_passing can only decorate MessagePassing subclasses."
+            )
+        overrides = [
+            name
+            for name in ("message", "aggregate")
+            if getattr(klass, name) is not getattr(MessagePassing, name)
+        ]
+        custom_fused = (
+            klass.message_and_aggregate is not MessagePassing.message_and_aggregate
+        )
+        if overrides and not custom_fused and not allow_message_override:
+            raise TypeError(
+                f"{klass.__name__} overrides {' and '.join(overrides)}(), which the "
+                "fused SpMM kernel would ignore. Implement message_and_aggregate(), "
+                "or pass allow_message_override=True if the override reduces to "
+                "the default when only edge_weights are given."
+            )
+        klass._fused_format = format
+        return klass
+
+    return wrap(cls) if cls is not None else wrap
 
 
 class MessagePassing(nn.Module):
@@ -22,6 +194,9 @@ class MessagePassing(nn.Module):
         [2] `Fey et al. PyG <https://pytorch-geometric.readthedocs.io/en/latest/\
     generated/torch_geometric.nn.conv.MessagePassing.html>`_
     """
+
+    # Set by the @fused_message_passing decorator; None = gather-scatter only.
+    _fused_format: Optional[FusedFormat] = None
 
     def __init__(self, aggr: ScatterAggregations = "add"):
         super().__init__()
@@ -72,11 +247,20 @@ class MessagePassing(nn.Module):
                     f"found {type(node_features)}",
                 )
 
-        src_features, dst_features = get_src_dst_features(edge_index, node_features)
-
         self.num_nodes = (
             node_features if isinstance(node_features, mx.array) else node_features[0]
         ).shape[0]
+
+        if self._can_fuse(edge_index, message_kwargs, aggregate_kwargs):
+            # shapes: (|N| -> |N|), no per-edge message array
+            aggregated = self.message_and_aggregate(
+                edge_index=edge_index,
+                node_features=node_features,
+                **message_kwargs,
+            )
+            return self.update_nodes(aggregated=aggregated, **update_kwargs)
+
+        src_features, dst_features = get_src_dst_features(edge_index, node_features)
         dst_idx = edge_index[1]
 
         # shapes: (|E| -> |E|)
@@ -100,6 +284,77 @@ class MessagePassing(nn.Module):
         )
 
         return output
+
+    def _can_fuse(
+        self,
+        edge_index: mx.array,
+        message_kwargs: Optional[Dict],
+        aggregate_kwargs: Optional[Dict],
+    ) -> bool:
+        if self._fused_format is None or not is_fused_message_passing_enabled():
+            return False
+        if self.aggr not in _FUSED_AGGRS:
+            return False
+        message_kwargs = message_kwargs or {}
+        if any(v is not None for k, v in message_kwargs.items() if k != "edge_weights"):
+            return False
+        if any(v is not None for v in (aggregate_kwargs or {}).values()):
+            return False
+        weights = message_kwargs.get("edge_weights", None)
+        if weights is not None and weights.size != edge_index.shape[1]:
+            return False  # e.g. multi-dimensional weights: not a scalar per edge
+        return True
+
+    def message_and_aggregate(
+        self,
+        edge_index: mx.array,
+        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
+        edge_weights: Optional[mx.array] = None,
+        **kwargs,
+    ) -> mx.array:
+        """Fused ``message`` + ``aggregate`` as one sparse x dense matmul.
+
+        Computes, for every node ``i``,
+        ``aggr_{j -> i} edge_weights[j -> i] * x_j``, the same result as the
+        default :meth:`message` followed by :meth:`aggregate`, without
+        building the per-edge message array. Used by layers decorated with
+        :func:`fused_message_passing`; override it to provide a custom fused
+        implementation.
+
+        Args:
+            edge_index: Graph representation of shape `[2, num_edges]`
+            node_features: Node features, or a ``(src, dst)`` tuple
+                (only the source features are used).
+            edge_weights: Optional scalar weight per edge.
+        """
+        x = node_features[0] if isinstance(node_features, tuple) else node_features
+        weights = None if edge_weights is None else edge_weights.reshape(-1)
+        reduce = "sum" if self.aggr == "add" else "mean"
+        fmt = _fused_format_override or self._fused_format
+
+        if fmt == "csr":
+            csr = _csr_cache.get(edge_index, self.num_nodes)
+            if weights is not None:
+                weights = weights[csr.perm]
+            return _spmm_csr(
+                csr.rowptr,
+                csr.col,
+                x,
+                weights,
+                reduce=reduce,
+                # load-balanced path for high-degree nodes (mlx-cluster >= the
+                # long-row release; older CSR tuples have no such field)
+                long_rows=getattr(csr, "long_rows", None),
+            )
+
+        return _spmm_coo(
+            edge_index[1],
+            edge_index[0],
+            x,
+            weights,
+            num_rows=self.num_nodes,
+            reduce=reduce,
+        )
 
     def message(
         self, src_features: mx.array, dst_features: mx.array, **kwargs

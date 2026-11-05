@@ -4,9 +4,10 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.linear import Linear
-from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
 
+@fused_message_passing(allow_message_override=True)
 class GINConv(MessagePassing):
     r"""Graph Isomorphism Network convolution layer from `"How Powerful are
     Graph Neural Networks?" <https://arxiv.org/abs/1810.00826>`_ paper.

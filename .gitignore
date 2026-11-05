@@ -169,6 +169,8 @@ cython_debug/
 # Sphinx
 docs/build
 
+*.gputrace
+*.csv
 # local data
 .local_data/
 .mlx_graphs_data/

@@ -3,10 +3,11 @@ from typing import Any, Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 from mlx_graphs.utils import add_self_loops, degree, invert_sqrt_degree
 
 
+@fused_message_passing
 class GCNConv(MessagePassing):
     """Applies a GCN convolution over input node features.
 
