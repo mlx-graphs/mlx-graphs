@@ -35,10 +35,13 @@ from dataclasses import asdict, dataclass, field
 from typing import Callable, Dict, List, Optional, Tuple
 
 import mlx.core as mx
+import mlx.nn as nn
 import numpy as np
 
 from mlx_graphs.nn import (
+    GATConv,
     GCNConv,
+    GINConv,
     SAGEConv,
     SimpleConv,
     clear_csr_cache,
@@ -100,11 +103,20 @@ LAYERS: Dict[str, Callable[[int], object]] = {
     # pure aggregation: isolates the message-passing cost
     "aggr-add": lambda d: SimpleConv(aggr="add"),
     "aggr-mean": lambda d: SimpleConv(aggr="mean"),
+    "aggr-max": lambda d: SimpleConv(aggr="max"),
+    "aggr-min": lambda d: SimpleConv(aggr="min"),
     # real layers: aggregation + linear projections + normalisation
     "gcn": lambda d: GCNConv(d, d),
     "sage": lambda d: SAGEConv(d, d),
+    "gin": lambda d: GINConv(
+        nn.Sequential(nn.Linear(d, d), nn.ReLU(), nn.Linear(d, d))
+    ),
+    # control: attention messages depend on both endpoints, so GAT is never
+    # fused; its coo/csr rows should match gather (~1.0x)
+    "gat": lambda d: GATConv(d, d, heads=1),
 }
 DEFAULT_LAYERS = ["aggr-add", "gcn", "sage"]
+NOT_FUSED = {"gat"}
 
 MODES = ["gather", "coo", "csr"]
 
@@ -128,6 +140,7 @@ class Result:
     fwd_bwd_peak_mb: Optional[float] = None
     csr_build_ms: Optional[float] = None
     max_abs_err: Optional[float] = None
+    rel_err: Optional[float] = None
     extra: Dict = field(default_factory=dict)
 
 
@@ -184,7 +197,9 @@ def run_config(
     mx.eval(x)
 
     fwd = lambda: layer(edge_index, x)  # noqa: E731
-    # value_and_grad forces the forward pass to run, like a real training step
+    # A training-like step: loss value AND gradient w.r.t. the input features.
+    # (mx.grad alone lets MLX skip the forward aggregation, which is not what
+    # happens in real training.)
     loss_and_grad = mx.value_and_grad(lambda x_: layer(edge_index, x_).sum())
     fwd_bwd = lambda: loss_and_grad(x)  # noqa: E731
 
@@ -204,6 +219,10 @@ def run_config(
                     reference = out
                 elif reference is not None:
                     r.max_abs_err = mx.abs(out - reference).max().item()
+                    # relative to the output scale: sums over hub nodes are
+                    # large, so absolute float32 differences are large too
+                    scale = max(mx.abs(reference).max().item(), 1e-12)
+                    r.rel_err = r.max_abs_err / scale
                 del out
                 r.fwd_ms = time_ms(fwd, warmup, repeats)
                 r.fwd_peak_mb = peak_mb(fwd)
@@ -226,7 +245,7 @@ def run_config(
 HEADER = (
     f"{'graph':<13} {'edges':>10} {'D':>4} {'layer':<9} {'mode':<6} "
     f"{'fwd ms':>9} {'f+b ms':>9} {'fwd MB':>9} {'f+b MB':>9} "
-    f"{'speedup':>8} {'mem x':>6} {'err':>8}"
+    f"{'speedup':>8} {'mem x':>6} {'rel err':>8}"
 )
 
 
@@ -254,7 +273,7 @@ def print_row(r: Result, siblings: List[Result]):
         f"{fmt(r.fwd_peak_mb, '9.1f')} {fmt(r.fwd_bwd_peak_mb, '9.1f')} "
         f"{fmt(speed, '7.2f') + 'x' if speed else '-':>8} "
         f"{fmt(mem, '5.1f') + 'x' if mem else '-':>6} "
-        f"{fmt(r.max_abs_err, '8.1e')}",
+        f"{fmt(r.rel_err, '8.1e')}",
         flush=True,
     )
 
@@ -302,9 +321,17 @@ def write_csv(path: str, results: List[Result], env: Dict[str, str]):
 
 
 def capture_gpu_trace(
-    path: str, graph: str, dim: int, layer_name: str, mode: str, iters: int
+    path: str,
+    graph: str,
+    dim: int,
+    layer_name: str,
+    mode: str,
+    iters: int,
+    step: str = "train",
 ):
-    """Records a Metal GPU trace of `iters` forward+backward steps."""
+    """Records a Metal GPU trace of `iters` steps of the given kind:
+    "train" = loss + gradient (forward and backward), "forward", or
+    "backward" = gradient only (MLX may skip the forward aggregation)."""
     if not path.endswith(".gputrace"):
         sys.exit("--capture path must end with .gputrace")
     if os.environ.get("MTL_CAPTURE_ENABLED") != "1":
@@ -316,17 +343,24 @@ def capture_gpu_trace(
     mx.random.seed(0)
     layer = LAYERS[layer_name](dim)
     x = mx.random.normal((num_nodes, dim), key=mx.random.key(1))
-    grad_x = mx.grad(lambda x_: layer(edge_index, x_).sum())
+    loss = lambda x_: layer(edge_index, x_).sum()  # noqa: E731
+    run = {
+        "train": mx.value_and_grad(loss),
+        "forward": lambda x_: layer(edge_index, x_),
+        "backward": mx.grad(loss),
+    }[step]
     with mode_ctx(mode):
         for _ in range(3):  # warm up: compile kernels, build CSR
-            mx.eval(grad_x(x))
+            mx.eval(run(x))
         mx.synchronize()
         mx.metal.start_capture(path)
         for _ in range(iters):
-            mx.eval(grad_x(x))
+            mx.eval(run(x))
         mx.synchronize()
         mx.metal.stop_capture()
-    print(f"Wrote {path} ({graph}, D={dim}, {layer_name}, {mode}, {iters} steps).")
+    print(
+        f"Wrote {path} ({graph}, D={dim}, {layer_name}, {mode}, {iters} {step} steps)."
+    )
     print(f"Open it with: open {path}")
 
 
@@ -339,7 +373,13 @@ def parse_args():
     p = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     p.add_argument("--graphs", nargs="+", default=DEFAULT_GRAPHS, choices=GRAPHS)
     p.add_argument("--dims", nargs="+", type=int, default=[16, 64, 256])
-    p.add_argument("--layers", nargs="+", default=DEFAULT_LAYERS, choices=LAYERS)
+    p.add_argument(
+        "--layers",
+        nargs="+",
+        default=DEFAULT_LAYERS,
+        choices=list(LAYERS) + ["all"],
+        help="layers to run, or 'all'",
+    )
     p.add_argument("--modes", nargs="+", default=MODES, choices=MODES)
     p.add_argument("--device", default="gpu", choices=["gpu", "cpu"])
     p.add_argument("--warmup", type=int, default=3)
@@ -353,6 +393,13 @@ def parse_args():
     )
     p.add_argument("--capture-iters", type=int, default=2)
     p.add_argument(
+        "--capture-step",
+        default="train",
+        choices=["train", "forward", "backward"],
+        help="what --capture records: a training step (loss + gradient, "
+        "default), the forward pass only, or the gradient only",
+    )
+    p.add_argument(
         "--cprofile",
         metavar="PATH.prof",
         help="also profile the Python side of the run with cProfile",
@@ -362,15 +409,21 @@ def parse_args():
 
 def main():
     args = parse_args()
+    if "all" in args.layers:
+        args.layers = list(LAYERS)
     mx.set_default_device(mx.gpu if args.device == "gpu" else mx.cpu)
 
     if (
         any(m != "gather" for m in args.modes)
         and not is_fused_message_passing_enabled()
     ):
+        from mlx_graphs.nn import message_passing as mp
+
         sys.exit(
-            "Fused kernels not found: install an mlx-cluster with spmm_coo "
-            "(pip install -e <path to mlx_cluster>)."
+            "Fused kernels not available: importing them from mlx_cluster failed "
+            f"with:\n  {mp.FUSED_KERNELS_IMPORT_ERROR!r}\n"
+            "Install an mlx-cluster with SpMM kernels, built against this mlx: "
+            "pip install -e <path to mlx_cluster> --no-build-isolation"
         )
 
     if args.capture:
@@ -381,6 +434,7 @@ def main():
             args.layers[0],
             args.modes[0],
             args.capture_iters,
+            args.capture_step,
         )
         return
 
@@ -422,8 +476,16 @@ def main():
     print(f"\nWrote {args.out}")
     print(
         "speedup / mem x = gather-scatter forward+backward time / peak memory "
-        "divided by the fused mode's (higher is better). err = max |fused - gather|."
+        "divided by the fused mode's (higher is better).\n"
+        "rel err = max |fused - gather| / max |gather| (both float32; see "
+        "check_accuracy.py for a comparison with exact float64)."
     )
+    controls = sorted(NOT_FUSED & set(args.layers))
+    if controls:
+        print(
+            f"{', '.join(controls)}: not fusable (falls back to gather-scatter), "
+            "so its coo/csr rows are a control and should match gather."
+        )
 
 
 if __name__ == "__main__":

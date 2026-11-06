@@ -15,11 +15,23 @@ try:
     from mlx_cluster import spmm_csr as _spmm_csr
 
     HAS_FUSED_KERNELS = True
-except ImportError:
+    FUSED_KERNELS_IMPORT_ERROR: Optional[ImportError] = None
+except ImportError as e:
+    # Kept so tools can explain *why* (e.g. mlx_cluster built against a
+    # different mlx version) instead of just "not found".
     HAS_FUSED_KERNELS = False
+    FUSED_KERNELS_IMPORT_ERROR = e
 
 FusedFormat = Literal["coo", "csr"]
-_FUSED_AGGRS = ("add", "mean")
+_FUSED_AGGRS: Tuple[str, ...] = ("add", "mean")
+if HAS_FUSED_KERNELS:
+    # max/min need an mlx-cluster with those reductions; older ones fall back
+    try:
+        from mlx_cluster.sparse import SpMMReduce as _SpMMReduce
+
+        _FUSED_AGGRS += tuple(a for a in ("max", "min") if a in get_args(_SpMMReduce))
+    except ImportError:
+        pass
 
 # Global switch, mainly for benchmarks and tests (same model, both paths).
 _fused_enabled: bool = True
@@ -123,7 +135,8 @@ def fused_message_passing(
 
     * ``mlx_cluster`` (with ``spmm_coo``) is not installed,
     * fused message passing is disabled (:func:`set_fused_message_passing`),
-    * ``aggr`` is not ``"add"`` or ``"mean"``,
+    * ``aggr`` is not ``"add"``, ``"mean"``, ``"max"`` or ``"min"`` (i.e. it
+      is ``"softmax"``; max/min also need a recent mlx-cluster),
     * any message/aggregate kwarg other than ``edge_weights`` is set
       (e.g. ``edge_features``), since messages are then no longer a weighted
       sum of neighbour features.
@@ -315,7 +328,9 @@ class MessagePassing(nn.Module):
         """Fused ``message`` + ``aggregate`` as one sparse x dense matmul.
 
         Computes, for every node ``i``,
-        ``aggr_{j -> i} edge_weights[j -> i] * x_j``, the same result as the
+        ``aggr_{j -> i} edge_weights[j -> i] * x_j`` (``aggr`` = add, mean,
+        max or min, per feature; 0 for nodes without neighbours), the same
+        result as the
         default :meth:`message` followed by :meth:`aggregate`, without
         building the per-edge message array. Used by layers decorated with
         :func:`fused_message_passing`; override it to provide a custom fused
@@ -329,7 +344,7 @@ class MessagePassing(nn.Module):
         """
         x = node_features[0] if isinstance(node_features, tuple) else node_features
         weights = None if edge_weights is None else edge_weights.reshape(-1)
-        reduce = "sum" if self.aggr == "add" else "mean"
+        reduce = "sum" if self.aggr == "add" else self.aggr  # mean / max / min
         fmt = _fused_format_override or self._fused_format
 
         if fmt == "csr":

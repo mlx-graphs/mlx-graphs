@@ -61,6 +61,8 @@ def make_layer(name):
         "sage_down": lambda: SAGEConv(DIM, 8),  # projection before propagate
         "sage_up": lambda: SAGEConv(DIM, 32),  # projection after propagate
         "simple_add": lambda: SimpleConv(aggr="add"),
+        "simple_max": lambda: SimpleConv(aggr="max"),
+        "simple_min": lambda: SimpleConv(aggr="min"),
         "simple_mean_self_loop": lambda: SimpleConv(
             aggr="mean", combine_root_func="self_loop"
         ),
@@ -74,6 +76,8 @@ LAYERS = [
     "sage_down",
     "sage_up",
     "simple_add",
+    "simple_max",
+    "simple_min",
     "simple_mean_self_loop",
     "gin",
 ]
@@ -128,10 +132,10 @@ def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
 
 def test_falls_back_for_unsupported_aggr(graph, count_fused):
     edge_index, x, _ = graph
-    out = SimpleConv(aggr="max")(edge_index, x)
+    out = SimpleConv(aggr="softmax")(edge_index, x)
     assert count_fused["n"] == 0
     with fused_message_passing_mode(False):
-        close(out, SimpleConv(aggr="max")(edge_index, x))
+        close(out, SimpleConv(aggr="softmax")(edge_index, x))
 
 
 def test_falls_back_for_edge_features(graph, count_fused):
