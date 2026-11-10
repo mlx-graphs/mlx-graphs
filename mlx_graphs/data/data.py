@@ -221,6 +221,8 @@ class HeteroGraphData:
         graph_labels: A 1D array containing graph-level
             labels.
         **kwargs: Additional keyword arguments to store custom attributes.
+            Pass ``num_nodes_dict={"node_type": count}`` to set the number of
+            nodes of node types that have no features.
 
     Example:
 
@@ -357,23 +359,105 @@ class HeteroGraphData:
         return {k: v for k, v in self.__dict__.items() if v is not None}
 
     @property
+    def node_types(self) -> list[str]:
+        """All node types: those with features, those appearing in any edge
+        type, and those listed in an optional ``num_nodes_dict`` attribute."""
+        node_types: list[str] = []
+        candidates = list((self.node_features_dict or {}).keys())
+        for src_node_type, _, dst_node_type in self.edge_index_dict.keys():
+            candidates += [src_node_type, dst_node_type]
+        candidates += list((getattr(self, "num_nodes_dict", None) or {}).keys())
+        for node_type in candidates:
+            if node_type not in node_types:
+                node_types.append(node_type)
+        return node_types
+
+    @property
     def num_nodes(self) -> dict[str, int]:
+        """Number of nodes per node type.
+
+        For each node type, the first available source is used:
+
+        1. an explicit ``num_nodes_dict`` attribute, e.g.
+           ``HeteroGraphData(..., num_nodes_dict={"conference": 20})``, for
+           node types without features;
+        2. the number of rows of its node features;
+        3. the largest node id used by any edge type touching it, plus one.
+        """
+        explicit = getattr(self, "num_nodes_dict", None) or {}
+        features = self.node_features_dict or {}
         num_nodes = {}
-        if self.node_features_dict is not None:
-            for node_type, node_features in self.node_features_dict.items():
-                num_nodes[node_type] = node_features.shape[0]
-        else:
-            for edge_type, edge_index in self.edge_index_dict.items():
-                src_node_type, _, dst_node_type = edge_type
-                if src_node_type not in num_nodes:
-                    num_nodes[src_node_type] = np.unique(
-                        np.array(edge_index[0], copy=False)
-                    ).size
-                if dst_node_type not in num_nodes:
-                    num_nodes[dst_node_type] = np.unique(
-                        np.array(edge_index[1], copy=False)
-                    ).size
+        for node_type in self.node_types:
+            if node_type in explicit:
+                num_nodes[node_type] = int(explicit[node_type])
+            elif node_type in features:
+                num_nodes[node_type] = features[node_type].shape[0]
+            else:
+                num_nodes[node_type] = self._max_node_id(node_type) + 1
         return num_nodes
+
+    def _max_node_id(self, node_type: str) -> int:
+        """Largest node id of ``node_type`` used in any edge index (-1 if none)."""
+        max_id = -1
+        for (
+            src_node_type,
+            _,
+            dst_node_type,
+        ), edge_index in self.edge_index_dict.items():
+            if edge_index.shape[1] == 0:
+                continue
+            if src_node_type == node_type:
+                max_id = max(max_id, int(edge_index[0].max().item()))
+            if dst_node_type == node_type:
+                max_id = max(max_id, int(edge_index[1].max().item()))
+        return max_id
+
+    def to_csc_dict(
+        self,
+    ) -> tuple[dict[Any, mx.array], dict[Any, mx.array], dict[Any, mx.array]]:
+        """Converts every edge type to CSC format (edges grouped by destination).
+
+        This is the input format of ``mlx_cluster.hetero_neighbor_sample``.
+
+        Returns:
+            A tuple ``(colptr_dict, row_dict, perm_dict)``, each keyed by edge
+            type ``(src, rel, dst)``:
+
+            - ``colptr_dict[et]``: ``int64`` array of length ``num_dst_nodes + 1``;
+              the incoming edges of destination node ``v`` are at positions
+              ``colptr[v]`` to ``colptr[v + 1]``.
+            - ``row_dict[et]``: ``int64`` source node of each edge, in CSC order.
+            - ``perm_dict[et]``: ``int64`` original position (column in
+              ``edge_index_dict[et]``) of each edge in CSC order, used to look up
+              edge features of sampled edges.
+        """
+        num_nodes = self.num_nodes
+        colptr_dict, row_dict, perm_dict = {}, {}, {}
+        for edge_type, edge_index in self.edge_index_dict.items():
+            src_node_type, _, dst_node_type = edge_type
+            src = np.asarray(edge_index[0]).astype(np.int64)
+            dst = np.asarray(edge_index[1]).astype(np.int64)
+            n_src = num_nodes[src_node_type]
+            n_dst = num_nodes[dst_node_type]
+            if src.size > 0 and (src.min() < 0 or src.max() >= n_src):
+                raise ValueError(
+                    f"Edge type {edge_type} has source ids outside [0, {n_src}) "
+                    f"for node type '{src_node_type}'"
+                )
+            if dst.size > 0 and (dst.min() < 0 or dst.max() >= n_dst):
+                raise ValueError(
+                    f"Edge type {edge_type} has destination ids outside [0, {n_dst}) "
+                    f"for node type '{dst_node_type}'"
+                )
+
+            order = np.argsort(dst, kind="stable")
+            colptr = np.zeros(n_dst + 1, dtype=np.int64)
+            np.cumsum(np.bincount(dst, minlength=n_dst), out=colptr[1:])
+
+            colptr_dict[edge_type] = mx.array(colptr)
+            row_dict[edge_type] = mx.array(src[order])
+            perm_dict[edge_type] = mx.array(order.astype(np.int64))
+        return colptr_dict, row_dict, perm_dict
 
     @property
     def num_graph_features(self) -> int:

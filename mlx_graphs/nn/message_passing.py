@@ -51,7 +51,9 @@ class MessagePassing(nn.Module):
             edge_index: Graph representation of shape `[2, num_edges]`
             node_features: Input node features/embeddings.
                 Can be either an array or a tuple of arrays, for distinct src and dst
-                node features.
+                node features. With a tuple ``(src, dst)``, ``edge_index[0]``
+                indexes ``src`` and ``edge_index[1]`` indexes ``dst``, and the
+                output has one row per ``dst`` node.
             message_kwargs: Arguments to pass to the `message` method
             aggregate_kwargs: Arguments to pass to the `aggregate` method
             update_kwargs: Arguments to pass to the `update_nodes` method
@@ -74,8 +76,11 @@ class MessagePassing(nn.Module):
 
         src_features, dst_features = get_src_dst_features(edge_index, node_features)
 
+        # Messages are aggregated onto destination nodes, so the output has one
+        # row per destination node. For a (src, dst) tuple (bipartite graphs,
+        # e.g. author -> paper) that is the size of the dst features.
         self.num_nodes = (
-            node_features if isinstance(node_features, mx.array) else node_features[0]
+            node_features if isinstance(node_features, mx.array) else node_features[1]
         ).shape[0]
         dst_idx = edge_index[1]
 

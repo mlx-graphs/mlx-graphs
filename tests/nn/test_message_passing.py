@@ -115,3 +115,46 @@ def test_sum_aggregation_raise():
     with pytest.raises(Exception):
         edge_index = [[0, 1, 2], [1, 2, 0], [1, 2, 0]]
         mpnn(x, edge_index, edge_weights=None)
+
+
+# ---------------------------------------------------------------------------
+# Bipartite message passing: (src_features, dst_features) tuples
+# ---------------------------------------------------------------------------
+
+
+def test_bipartite_output_has_one_row_per_dst_node():
+    """5 source nodes (e.g. authors) send messages to 2 destination nodes
+    (e.g. papers): the output must have 2 rows, not 5."""
+    mpnn = MPNN(aggr="add")
+    x_src = mx.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
+    x_dst = mx.zeros((2, 7))  # different feature size is fine
+    edge_index = mx.array([[0, 1, 4], [0, 0, 1]])  # src -> dst
+
+    out = mpnn((x_src, x_dst), edge_index, edge_weights=None)
+
+    assert out.shape == (2, 1)
+    assert mx.array_equal(out, mx.array([[3.0], [5.0]]))  # 1+2, 5
+
+
+def test_bipartite_more_dst_than_src():
+    mpnn = MPNN(aggr="add")
+    x_src = mx.array([[1.0], [2.0]])
+    x_dst = mx.zeros((4, 1))
+    edge_index = mx.array([[0, 1, 1], [3, 3, 0]])
+
+    out = mpnn((x_src, x_dst), edge_index, edge_weights=None)
+
+    assert out.shape == (4, 1)
+    assert mx.array_equal(out, mx.array([[2.0], [0.0], [0.0], [3.0]]))
+
+
+@pytest.mark.parametrize("aggr", ["add", "mean", "max"])
+def test_tuple_of_same_features_matches_single_array(aggr):
+    mpnn = MPNN(aggr=aggr)
+    x = mx.random.normal((6, 3))
+    edge_index = mx.array([[0, 1, 2, 3, 5], [1, 1, 2, 4, 0]])
+
+    out_single = mpnn(x, edge_index, edge_weights=None)
+    out_tuple = mpnn((x, x), edge_index, edge_weights=None)
+
+    assert mx.allclose(out_single, out_tuple)

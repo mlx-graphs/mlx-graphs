@@ -5,3 +5,4 @@ from .gin_conv import GINConv  # noqa
 from .sage_conv import SAGEConv  # noqa
 from .rel_conv import GeneralizedRelationalConv  # noqa
 from .simple_conv import SimpleConv  # noqa
+from .hetero_conv import HeteroConv  # noqa
