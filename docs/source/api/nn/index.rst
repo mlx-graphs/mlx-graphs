@@ -11,6 +11,7 @@ Neural Networks
 	:template: custom-class-template.rst
 
 	Linear
+	HeteroDictLinear
 	MessagePassing
 	GraphNetworkBlock
 	SimpleConv
@@ -19,6 +20,7 @@ Neural Networks
 	GCNConv
 	GINConv
 	SAGEConv
+	HeteroConv
 	GeneralizedRelationalConv
 	BatchNormalization
 	HeteroBatchNormalization

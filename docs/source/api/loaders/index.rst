@@ -11,3 +11,4 @@ Loaders
 	:toctree: _autosummary
 
 	Dataloader
+	NeighborLoader
