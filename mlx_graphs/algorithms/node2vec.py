@@ -1,7 +1,7 @@
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.utils.sorting import sort_edge_index
+from mlx_graphs.utils.sorting import index_to_ptr, sort_edge_index
 
 try:
     from mlx_cluster import random_walk, rejection_sampling
@@ -74,9 +74,7 @@ class Node2Vec(nn.Module):
         sorted_edge_index = sort_edge_index(edge_index=self.edge_index)
         row = sorted_edge_index[0][0]
         col = sorted_edge_index[0][1]
-        _, counts_mlx = np.unique(np.array(row, copy=False), return_counts=True)
-        cum_sum = counts_mlx.cumsum()
-        self.rowptr = mx.concatenate([mx.array([0]), mx.array(cum_sum)])
+        self.rowptr = index_to_ptr(row, num_nodes)
         self.col = col
 
     def __call__(self, batch):
