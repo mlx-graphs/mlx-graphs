@@ -1,9 +1,44 @@
 import mlx.core as mx
+import numpy as np
 
 from mlx_graphs.utils.validators import (
     validate_edge_index,
     validate_edge_index_and_features,
 )
+
+
+def index_to_ptr(index: mx.array, size: int) -> mx.array:
+    """Converts a vector of indices into a compressed pointer vector.
+
+    Entry ``i`` of the result is the number of elements of ``index`` that are
+    smaller than ``i``. When ``index`` is sorted, the elements equal to ``i``
+    are located at ``ptr[i]:ptr[i + 1]``.
+
+    With the sorted source row of an edge index, the result is the ``rowptr``
+    of the CSR format. With the sorted target row, it is the ``colptr`` of the
+    CSC format.
+
+    Args:
+        index: A 1D array of indices in ``[0, size)``.
+        size: Number of possible indices, e.g. the number of nodes.
+
+    Returns:
+        An int64 array of length ``size + 1``.
+
+    Example:
+
+    .. code-block:: python
+
+        >>> index = mx.array([0, 2, 2, 3])
+        >>> index_to_ptr(index, size=5)
+        array([0, 1, 1, 3, 4, 4], dtype=int64)
+    """
+    index_np = np.asarray(index).reshape(-1).astype(np.int64)
+    if index_np.size > 0 and (index_np.min() < 0 or index_np.max() >= size):
+        raise ValueError(f"index must only contain values in [0, {size})")
+    ptr = np.zeros(size + 1, dtype=np.int64)
+    np.cumsum(np.bincount(index_np, minlength=size), out=ptr[1:])
+    return mx.array(ptr)
 
 
 @validate_edge_index
