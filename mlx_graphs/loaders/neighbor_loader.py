@@ -1,14 +1,18 @@
-from typing import Optional
+from typing import Any, Optional, Union
 
 import mlx.core as mx
 import numpy as np
 from mlx_cluster import neighbor_sample
 
-from mlx_graphs.data import GraphData
+from mlx_graphs.data import GraphData, HeteroGraphData
+
+from .hetero_neighbor_loader import EdgeType, _HeteroNeighborLoader
 
 
-class NeighborLoader:
-    """Mini-batch loader for node-level tasks on a single large graph.
+class _HomogeneousNeighborLoader:
+    """Homogeneous implementation behind :class:`NeighborLoader`.
+
+    Mini-batch loader for node-level tasks on a single large graph.
 
     Uses neighbor sampling to extract K-hop subgraphs around seed nodes.
     Each iteration yields a :class:`GraphData` representing the sampled
@@ -98,7 +102,7 @@ class NeighborLoader:
         """Number of mini-batches per epoch."""
         return (len(self.input_nodes) + self.batch_size - 1) // self.batch_size
 
-    def __iter__(self) -> "NeighborLoader":
+    def __iter__(self) -> "_HomogeneousNeighborLoader":
         self._current_index = 0
         if self.shuffle:
             np.random.shuffle(self._indices)
@@ -183,3 +187,143 @@ class NeighborLoader:
             node_labels=node_labels,
             **kwargs,
         )
+
+
+class NeighborLoader:
+    """Mini-batch loader for node-level tasks on a single large graph.
+
+    Uses neighbor sampling to extract K-hop subgraphs around seed nodes.
+    Works on both homogeneous and heterogeneous graphs, following PyG's API:
+    the implementation is picked from the type of ``data``.
+
+    - :class:`GraphData`: each iteration yields a :class:`GraphData`
+      holding the sampled subgraph with locally re-indexed edges.
+    - :class:`HeteroGraphData`: each iteration yields a
+      :class:`HeteroGraphData` with edges re-indexed locally per node type
+      (sampled with ``mlx_cluster.hetero_neighbor_sample``).
+
+    The first ``batch_size`` nodes (of the seed node type, for heterogeneous
+    graphs) are always the seed nodes. During training, compute the loss
+    only on these nodes::
+
+        # homogeneous
+        out = model(batch.node_features, batch.edge_index)
+        loss = loss_fn(out[: batch.batch_size], batch.node_labels[: batch.batch_size])
+
+        # heterogeneous
+        out = model(batch.node_features_dict, batch.edge_index_dict)
+        n = batch.batch_size
+        loss = loss_fn(out["author"][:n], batch.node_labels_dict["author"][:n])
+
+    Args:
+        data: The full graph, a :class:`GraphData` or a
+            :class:`HeteroGraphData`.
+        num_neighbors: Number of neighbors to sample per hop. Its length
+            determines the number of hops; ``-1`` samples all neighbors.
+            E.g. ``[10, 5]`` samples 10 neighbors at hop-1, 5 at hop-2.
+            For heterogeneous graphs this can also be a dict mapping each
+            edge type to its own list.
+        input_nodes: The seed nodes to iterate over.
+
+            - Homogeneous: a 1-D array of node indices, or ``None`` for all
+              nodes.
+            - Heterogeneous (required): the seed node type and which of its
+              nodes to use: ``"author"`` (all authors), ``("author", indices)``
+              or ``("author", boolean_mask)``.
+        batch_size: Number of seed nodes per mini-batch.
+        shuffle: Whether to shuffle the seed nodes at the start of each epoch.
+        replace: Whether to sample neighbors with replacement.
+        directed: Whether to only include edges in the sampling direction.
+            Only ``True`` is supported for heterogeneous graphs.
+
+    Example:
+
+    .. code-block:: python
+
+        from mlx_graphs.datasets import DBLP
+        from mlx_graphs.loaders import NeighborLoader
+
+        data = DBLP()[0]
+        loader = NeighborLoader(
+            data,
+            num_neighbors=[10, 5],
+            input_nodes=("author", data.author_train_mask),
+            batch_size=128,
+            shuffle=True,
+        )
+        batch = next(iter(loader))
+    """
+
+    def __init__(
+        self,
+        data: Union[GraphData, HeteroGraphData],
+        num_neighbors: Union[list[int], dict[EdgeType, list[int]]],
+        input_nodes: Union[None, mx.array, str, tuple[str, Optional[mx.array]]] = None,
+        batch_size: int = 1,
+        shuffle: bool = False,
+        replace: bool = False,
+        directed: bool = True,
+    ):
+        if isinstance(data, HeteroGraphData):
+            if input_nodes is None or isinstance(input_nodes, mx.array):
+                raise ValueError(
+                    "For a HeteroGraphData, `input_nodes` must name the seed "
+                    "node type: 'author', ('author', indices) or "
+                    "('author', boolean_mask)."
+                )
+            if not directed:
+                raise ValueError(
+                    "`directed=False` is not supported for heterogeneous graphs."
+                )
+            self._loader = _HeteroNeighborLoader(
+                data,
+                num_neighbors,
+                input_nodes,
+                batch_size=batch_size,
+                shuffle=shuffle,
+                replace=replace,
+            )
+        elif isinstance(data, GraphData):
+            if isinstance(num_neighbors, dict):
+                raise ValueError(
+                    "A dict of `num_neighbors` per edge type is only supported "
+                    "for heterogeneous graphs; pass a list for a GraphData."
+                )
+            if isinstance(input_nodes, (str, tuple)):
+                raise ValueError(
+                    "Node types in `input_nodes` are only supported for "
+                    "heterogeneous graphs; pass an array of node indices "
+                    "for a GraphData."
+                )
+            self._loader = _HomogeneousNeighborLoader(
+                data,
+                num_neighbors,
+                input_nodes,
+                batch_size=batch_size,
+                shuffle=shuffle,
+                replace=replace,
+                directed=directed,
+            )
+        else:
+            raise TypeError(
+                "`data` must be a GraphData or a HeteroGraphData, "
+                f"got {type(data).__name__}."
+            )
+
+    def __len__(self) -> int:
+        """Number of mini-batches per epoch."""
+        return len(self._loader)
+
+    def __iter__(self) -> "NeighborLoader":
+        iter(self._loader)
+        return self
+
+    def __next__(self) -> Union[GraphData, HeteroGraphData]:
+        return next(self._loader)
+
+    def __getattr__(self, name: str) -> Any:
+        # Expose the implementation's attributes (data, input_nodes,
+        # input_type, ...). Only called when normal lookup fails.
+        if name == "_loader":
+            raise AttributeError(name)
+        return getattr(self._loader, name)

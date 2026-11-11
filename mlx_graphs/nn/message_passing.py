@@ -87,17 +87,19 @@ class _CSRCache:
 
     def __init__(self, maxsize: int = 8):
         self.maxsize = maxsize
-        self._entries: "OrderedDict[Tuple[int, int], Tuple[mx.array, Any]]" = (
+        self._entries: "OrderedDict[Tuple[int, int, int], Tuple[mx.array, Any]]" = (
             OrderedDict()
         )
 
-    def get(self, edge_index: mx.array, num_rows: int):
-        key = (id(edge_index), num_rows)
+    def get(self, edge_index: mx.array, num_rows: int, num_cols: int):
+        # num_rows = destination nodes (output rows), num_cols = source nodes
+        # (rows of x). They differ for bipartite (src, dst) inputs.
+        key = (id(edge_index), num_rows, num_cols)
         hit = self._entries.get(key)
         if hit is not None and hit[0] is edge_index:
             self._entries.move_to_end(key)
             return hit[1]
-        csr = _coo_to_csr(edge_index[1], edge_index[0], num_rows)
+        csr = _coo_to_csr(edge_index[1], edge_index[0], num_rows, num_cols=num_cols)
         self._entries[key] = (edge_index, csr)
         if len(self._entries) > self.maxsize:
             self._entries.popitem(last=False)
@@ -239,7 +241,9 @@ class MessagePassing(nn.Module):
             edge_index: Graph representation of shape `[2, num_edges]`
             node_features: Input node features/embeddings.
                 Can be either an array or a tuple of arrays, for distinct src and dst
-                node features.
+                node features. With a tuple ``(src, dst)``, ``edge_index[0]``
+                indexes ``src`` and ``edge_index[1]`` indexes ``dst``, and the
+                output has one row per ``dst`` node.
             message_kwargs: Arguments to pass to the `message` method
             aggregate_kwargs: Arguments to pass to the `aggregate` method
             update_kwargs: Arguments to pass to the `update_nodes` method
@@ -260,8 +264,11 @@ class MessagePassing(nn.Module):
                     f"found {type(node_features)}",
                 )
 
+        # Messages are aggregated onto destination nodes, so the output has one
+        # row per destination node. For a (src, dst) tuple (bipartite graphs,
+        # e.g. author -> paper) that is the size of the dst features.
         self.num_nodes = (
-            node_features if isinstance(node_features, mx.array) else node_features[0]
+            node_features if isinstance(node_features, mx.array) else node_features[1]
         ).shape[0]
 
         if self._can_fuse(edge_index, message_kwargs, aggregate_kwargs):
@@ -348,7 +355,7 @@ class MessagePassing(nn.Module):
         fmt = _fused_format_override or self._fused_format
 
         if fmt == "csr":
-            csr = _csr_cache.get(edge_index, self.num_nodes)
+            csr = _csr_cache.get(edge_index, self.num_nodes, x.shape[0])
             if weights is not None:
                 weights = weights[csr.perm]
             return _spmm_csr(
