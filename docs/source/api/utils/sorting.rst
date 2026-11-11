@@ -11,5 +11,6 @@ Sorting
 .. autosummary::
 	:toctree: _autosummary_sorting
 
+	index_to_ptr
 	sort_edge_index
 	sort_edge_index_and_features

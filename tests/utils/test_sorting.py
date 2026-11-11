@@ -1,6 +1,39 @@
 import mlx.core as mx
+import pytest
 
+from mlx_graphs.utils.sorting import index_to_ptr
 from mlx_graphs.utils.topology import sort_edge_index, sort_edge_index_and_features
+
+
+def test_index_to_ptr():
+    # Every index appears at least once.
+    ptr = index_to_ptr(mx.array([0, 0, 1, 2]), size=3)
+    assert ptr.tolist() == [0, 2, 3, 4]
+    assert ptr.dtype == mx.int64
+
+
+def test_index_to_ptr_missing_indices():
+    # Index 1 (middle) and index 4 (last) never appear.
+    index = mx.array([0, 2, 2, 3])
+    ptr = index_to_ptr(index, size=5).tolist()
+    assert ptr == [0, 1, 1, 3, 4, 4]
+    for i in range(5):
+        assert index[ptr[i] : ptr[i + 1]].tolist() == [i] * (ptr[i + 1] - ptr[i])
+
+    # Indices 0 and 1 (first) never appear.
+    assert index_to_ptr(mx.array([2, 2]), size=3).tolist() == [0, 0, 0, 2]
+
+
+def test_index_to_ptr_empty_index():
+    index = mx.array([], dtype=mx.int32)
+    assert index_to_ptr(index, size=3).tolist() == [0, 0, 0, 0]
+
+
+def test_index_to_ptr_out_of_range():
+    with pytest.raises(ValueError):
+        index_to_ptr(mx.array([0, 3]), size=3)
+    with pytest.raises(ValueError):
+        index_to_ptr(mx.array([-1, 0]), size=3)
 
 
 def test_sort_edge_index():
