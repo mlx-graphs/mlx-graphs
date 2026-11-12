@@ -317,3 +317,30 @@ def test_batching():
     assert mx.array_equal(sliced[1].node_features, node_features2) and mx.array_equal(
         sliced[1].edge_index, edge_index2
     ), "Batch slicing with list failed"
+
+
+def test_batching_with_isolated_nodes():
+    # Graph 1 has 4 nodes but node 3 is isolated, so it never appears in edge_index
+    graph1 = GraphData(edge_index=mx.array([[0, 1, 1, 2], [1, 0, 2, 1]]), num_nodes=4)
+    graph2 = GraphData(edge_index=mx.array([[0, 1], [1, 0]]), num_nodes=2)
+
+    assert graph1.num_nodes == 4
+
+    batched = batch([graph1, graph2])
+
+    expected_edge_index = mx.array([[0, 1, 1, 2, 4, 5], [1, 0, 2, 1, 5, 4]])
+    assert mx.array_equal(batched.edge_index, expected_edge_index)
+    assert mx.array_equal(batched.batch_indices, mx.array([0, 0, 0, 0, 1, 1]))
+    assert batched.num_nodes == 6
+
+    # Unbatching gives back the original edge_index and node count
+    assert mx.array_equal(batched[0].edge_index, graph1.edge_index)
+    assert batched[0].num_nodes == 4
+    assert mx.array_equal(batched[1].edge_index, graph2.edge_index)
+    assert batched[1].num_nodes == 2
+
+
+def test_num_nodes_explicit_overrides_inference():
+    edge_index = mx.array([[0, 1], [1, 0]])
+    assert GraphData(edge_index=edge_index).num_nodes == 2
+    assert GraphData(edge_index=edge_index, num_nodes=5).num_nodes == 5

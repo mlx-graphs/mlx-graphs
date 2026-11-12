@@ -74,12 +74,30 @@ class GraphData:
 
     @property
     def num_nodes(self) -> int:
-        """Number of nodes in the graph."""
+        """Number of nodes in the graph.
+
+        The first available source is used:
+
+        1. an explicit count, e.g. ``GraphData(edge_index, num_nodes=4)``;
+        2. the number of rows of ``node_features``;
+        3. the number of unique node ids in ``edge_index``.
+
+        The last fallback cannot see isolated nodes (nodes without any edge), so
+        graphs without node features that may contain isolated nodes should set
+        ``num_nodes`` explicitly. Otherwise batching offsets will be wrong.
+        """
+        explicit = getattr(self, "_num_nodes", None)
+        if explicit is not None:
+            return explicit
         if self.node_features is not None:
             return self.node_features.shape[0]
         else:
             # NOTE: This may be slow for large graphs
             return np.unique(np.array(self.edge_index, copy=False)).size
+
+    @num_nodes.setter
+    def num_nodes(self, value: Optional[int]):
+        self._num_nodes = None if value is None else int(value)
 
     @property
     def num_edges(self) -> int:
