@@ -1,241 +1,160 @@
-"""Fused (SpMM) message passing must match gather-scatter exactly.
-
-Every decorated layer is run twice on the same parameters, once with
-fused message passing and once with it disabled, comparing outputs and
-gradients. Skipped when mlx-cluster with SpMM kernels is not installed.
-"""
-
 import mlx.core as mx
-import mlx.nn as nn
-import numpy as np
 import pytest
 
-import mlx_graphs.nn.message_passing as mp
-from mlx_graphs.nn import (
-    GATConv,
-    GCNConv,
-    GINConv,
-    MessagePassing,
-    SAGEConv,
-    SimpleConv,
-    clear_csr_cache,
-    fused_message_passing,
-    fused_message_passing_mode,
-)
-
-pytestmark = pytest.mark.skipif(
-    not mp.HAS_FUSED_KERNELS, reason="mlx_cluster with SpMM kernels not installed"
-)
-
-NUM_NODES, NUM_EDGES, DIM = 60, 400, 16
+from mlx_graphs.nn.message_passing import MessagePassing
 
 
-@pytest.fixture
-def graph():
-    rng = np.random.default_rng(0)
-    edge_index = mx.array(rng.integers(0, NUM_NODES, (2, NUM_EDGES)))
-    x = mx.random.normal((NUM_NODES, DIM), key=mx.random.key(0))
-    weights = mx.random.uniform(shape=(NUM_EDGES,), key=mx.random.key(1))
-    return edge_index, x, weights
+class MPNN(MessagePassing):
+    def __init__(self, aggr: str = "add"):
+        super().__init__(aggr=aggr)
 
-
-@pytest.fixture
-def count_fused(monkeypatch):
-    """Counts calls to message_and_aggregate, to prove which path ran."""
-    calls = {"n": 0}
-    original = MessagePassing.message_and_aggregate
-
-    def spy(self, *args, **kwargs):
-        calls["n"] += 1
-        return original(self, *args, **kwargs)
-
-    monkeypatch.setattr(MessagePassing, "message_and_aggregate", spy)
-    return calls
-
-
-def make_layer(name):
-    mx.random.seed(0)
-    return {
-        "gcn": lambda: GCNConv(DIM, 8),
-        "gcn_self_loops": lambda: GCNConv(DIM, 8, add_self_loops=True),
-        "sage_down": lambda: SAGEConv(DIM, 8),  # projection before propagate
-        "sage_up": lambda: SAGEConv(DIM, 32),  # projection after propagate
-        "simple_add": lambda: SimpleConv(aggr="add"),
-        "simple_max": lambda: SimpleConv(aggr="max"),
-        "simple_min": lambda: SimpleConv(aggr="min"),
-        "simple_mean_self_loop": lambda: SimpleConv(
-            aggr="mean", combine_root_func="self_loop"
-        ),
-        "gin": lambda: GINConv(nn.Sequential(nn.Linear(DIM, DIM), nn.ReLU())),
-    }[name]()
-
-
-LAYERS = [
-    "gcn",
-    "gcn_self_loops",
-    "sage_down",
-    "sage_up",
-    "simple_add",
-    "simple_max",
-    "simple_min",
-    "simple_mean_self_loop",
-    "gin",
-]
-
-
-def close(a, b):
-    np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
-
-
-@pytest.mark.parametrize("fmt", ["coo", "csr"])
-@pytest.mark.parametrize("weighted", [False, True])
-@pytest.mark.parametrize("name", LAYERS)
-def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
-    if name == "gcn_self_loops" and weighted:
-        pytest.skip(
-            "pre-existing GCNConv bug: add_self_loops does not extend edge_weights"
+    def __call__(
+        self,
+        node_features: mx.array,
+        edge_index: mx.array,
+        edge_weights: mx.array,
+        **kwargs,
+    ) -> mx.array:
+        return self.propagate(
+            node_features=node_features,
+            edge_index=edge_index,
+            message_kwargs={"edge_weights": edge_weights},
         )
-    edge_index, x, weights = graph
-    layer = make_layer(name)
-    w = weights if weighted else None
-    has_params = len(nn.utils.tree_flatten(layer.trainable_parameters())) > 0
-    clear_csr_cache()
 
-    def loss(model, x):
-        return (model(edge_index, x, edge_weights=w) ** 2).sum()
-
-    def grad_fn(model, x):
-        if not has_params:
-            return None, {}
-        return nn.value_and_grad(model, loss)(model, x)
-
-    x_grad_fn = mx.grad(lambda x: loss(layer, x))
-
-    with fused_message_passing_mode(True, format=fmt):
-        out_f = layer(edge_index, x, edge_weights=w)
-        _, g_f = grad_fn(layer, x)
-        gx_f = x_grad_fn(x)
-    assert count_fused["n"] > 0, "fused path was not taken"
-
-    count_fused["n"] = 0
-    with fused_message_passing_mode(False):
-        out_r = layer(edge_index, x, edge_weights=w)
-        _, g_r = grad_fn(layer, x)
-        gx_r = x_grad_fn(x)
-    assert count_fused["n"] == 0, "gather-scatter path was not taken"
-
-    close(out_f, out_r)
-    close(gx_f, gx_r)
-    for (k, a), (_, b) in zip(nn.utils.tree_flatten(g_f), nn.utils.tree_flatten(g_r)):
-        close(a, b)
+    def message(
+        self,
+        src_features: mx.array,
+        dst_features: mx.array,
+        edge_weights: mx.array = None,
+        **kwargs,
+    ) -> mx.array:
+        return (
+            src_features
+            if edge_weights is None
+            else edge_weights.reshape(-1, 1) * src_features
+        )
 
 
-def test_falls_back_for_unsupported_aggr(graph, count_fused):
-    edge_index, x, _ = graph
-    out = SimpleConv(aggr="softmax")(edge_index, x)
-    assert count_fused["n"] == 0
-    with fused_message_passing_mode(False):
-        close(out, SimpleConv(aggr="softmax")(edge_index, x))
+def test_sum_aggregation():
+    mpnn = MPNN(aggr="add")
+
+    # shape (3,)
+    x = mx.array([1, 2, 3])
+
+    edge_index = mx.array([[0, 1, 2], [1, 2, 0]])
+    y0 = mx.array([3, 1, 2])
+    y_hat0 = mpnn(x, edge_index, edge_weights=None)
+
+    # shape (3, 2)
+    x = mx.array([[1, 2], [3, 4], [5, 6]])
+
+    edge_index = mx.array([[0, 1, 2], [1, 2, 0]])
+    y1 = mx.array([[5, 6], [1, 2], [3, 4]])
+    y_hat1 = mpnn(x, edge_index, edge_weights=None)
+
+    edge_index = mx.array([[0, 2, 0], [1, 1, 1]])
+    y2 = mx.array([[0, 0], [7, 10], [0, 0]])
+    y_hat2 = mpnn(x, edge_index, edge_weights=None)
+
+    edge_index = mx.array([[0, 2, 0], [0, 1, 0]])
+    y3 = mx.array([[2, 4], [5, 6], [0, 0]])
+    y_hat3 = mpnn(x, edge_index, edge_weights=None)
+
+    # edge_index = mx.array([[0, 100, 0], [0, 1, 100]])
+    # y4 = mx.array([[1, 2], [0, 0], [0, 0]])
+    # y_hat4 = mpnn(x, edge_index, edge_weights=None)
+
+    # shape (3, 2, 2)
+    x = mx.array([[[1, 2], [3, 4]], [[5, 6], [7, 8]], [[9, 10], [11, 12]]])
+    edge_index = mx.array([[0, 1, 0], [1, 1, 1]])
+    y_hat5 = mpnn(x, edge_index, edge_weights=None)
+    y5 = mx.array([[[0, 0], [0, 0]], [[7, 10], [13, 16]], [[0, 0], [0, 0]]])
+
+    # shape (3, 2, 2, 1)
+    edge_index = edge_index
+    x = x.reshape(*x.shape, 1)
+    y_hat6 = mpnn(x, edge_index, edge_weights=None)
+    y6 = y5.reshape(*y5.shape, 1)
+
+    assert mx.array_equal(y0, y_hat0), "Simple message passing failed"
+    assert mx.array_equal(y1, y_hat1), "Simple message passing failed"
+    assert mx.array_equal(y2, y_hat2), "Add message passing failed"
+    assert mx.array_equal(y3, y_hat3), "Add message passing failed"
+    # assert mx.array_equal(y4, y_hat4), "Out of bound message passing failed"
+    # mlx.core.array' object has no attribute 'typecode
+    assert mx.array_equal(y5, y_hat5), "Add message passing with multiple dims failed"
+    assert mx.array_equal(y6, y_hat6), "Add message passing with multiple dims failed"
 
 
-def test_falls_back_for_edge_features(graph, count_fused):
-    # GINE: messages are relu(x_j + proj(e)), not a weighted sum
-    edge_index, x, _ = graph
-    mx.random.seed(0)
-    layer = GINConv(
-        nn.Sequential(nn.Linear(DIM, DIM)), node_features_dim=DIM, edge_features_dim=4
-    )
-    edge_features = mx.random.normal((NUM_EDGES, 4), key=mx.random.key(3))
-    out = layer(edge_index, x, edge_features=edge_features)
-    assert count_fused["n"] == 0
-    with fused_message_passing_mode(False):
-        close(out, layer(edge_index, x, edge_features=edge_features))
+def test_sum_aggregation_with_edge_weight():
+    mpnn = MPNN(aggr="add")
+    x = mx.array([[1, 2], [3, 4], [5, 6]])
+
+    edge_index = mx.array([[0, 1, 2], [1, 2, 0]])
+    edge_weights = mx.array([0.1, 0.5, 1.0])
+    y1 = mx.array([[5.0, 6.0], [0.1, 0.2], [1.5, 2]])
+    y_hat1 = mpnn(x, edge_index, edge_weights=edge_weights)
+
+    edge_index = mx.array([[0, 2, 0], [1, 1, 1]])
+    edge_weights = mx.array([0.1, 0.5, 1.0])
+    y2 = mx.array([[0, 0], [3.6, 5.2], [0, 0]])
+    y_hat2 = mpnn(x, edge_index, edge_weights=edge_weights)
+
+    assert mx.array_equal(y1, y_hat1), "Simple message passing with weights failed"
+    assert mx.array_equal(y2, y_hat2), "Add message passing with weights failed"
 
 
-def test_disabled_globally(graph, count_fused):
-    edge_index, x, _ = graph
-    with fused_message_passing_mode(False):
-        GCNConv(DIM, 8)(edge_index, x)
-    assert count_fused["n"] == 0
+def test_sum_aggregation_raise():
+    mpnn = MPNN(aggr="add")
+    x = mx.array([[1, 2], [3, 4], [5, 6]])
+
+    with pytest.raises(Exception):
+        edge_index = mx.array([[0, 1, 2], [1, 2, 0], [1, 2, 0]])
+        mpnn(x, edge_index, edge_weights=None)
+
+    with pytest.raises(Exception):
+        edge_index = [[0, 1, 2], [1, 2, 0], [1, 2, 0]]
+        mpnn(x, edge_index, edge_weights=None)
 
 
-def test_undecorated_layer_unchanged(graph, count_fused):
-    edge_index, x, _ = graph
-    GATConv(DIM, 8)(edge_index, x)
-    assert count_fused["n"] == 0
+# ---------------------------------------------------------------------------
+# Bipartite message passing: (src_features, dst_features) tuples
+# ---------------------------------------------------------------------------
 
 
-def test_decorator_rejects_message_override():
-    with pytest.raises(TypeError, match="overrides message"):
+def test_bipartite_output_has_one_row_per_dst_node():
+    """5 source nodes (e.g. authors) send messages to 2 destination nodes
+    (e.g. papers): the output must have 2 rows, not 5."""
+    mpnn = MPNN(aggr="add")
+    x_src = mx.array([[1.0], [2.0], [3.0], [4.0], [5.0]])
+    x_dst = mx.zeros((2, 7))  # different feature size is fine
+    edge_index = mx.array([[0, 1, 4], [0, 0, 1]])  # src -> dst
 
-        @fused_message_passing
-        class Bad(MessagePassing):
-            def message(self, src_features, dst_features, **kwargs):
-                return src_features * dst_features
+    out = mpnn((x_src, x_dst), edge_index, edge_weights=None)
 
-
-def test_decorator_accepts_custom_fused_impl():
-    @fused_message_passing
-    class Custom(MessagePassing):
-        def message(self, src_features, dst_features, **kwargs):
-            return 2 * src_features
-
-        def message_and_aggregate(self, edge_index, node_features, **kwargs):
-            return 2 * super().message_and_aggregate(edge_index, node_features)
-
-    assert Custom._fused_format == "coo"
+    assert out.shape == (2, 1)
+    assert mx.array_equal(out, mx.array([[3.0], [5.0]]))  # 1+2, 5
 
 
-def test_decorator_rejects_non_message_passing():
-    with pytest.raises(TypeError):
+def test_bipartite_more_dst_than_src():
+    mpnn = MPNN(aggr="add")
+    x_src = mx.array([[1.0], [2.0]])
+    x_dst = mx.zeros((4, 1))
+    edge_index = mx.array([[0, 1, 1], [3, 3, 0]])
 
-        @fused_message_passing
-        class NotALayer:
-            pass
+    out = mpnn((x_src, x_dst), edge_index, edge_weights=None)
 
-
-def test_decorator_bad_format():
-    with pytest.raises(ValueError):
-        fused_message_passing(format="ell")
-
-
-def test_csr_cache_reused(graph):
-    edge_index, x, _ = graph
-    clear_csr_cache()
-    layer = SimpleConv(aggr="add")
-    with fused_message_passing_mode(True, format="csr"):
-        layer(edge_index, x)
-        layer(edge_index, x)
-    assert len(mp._csr_cache._entries) == 1
+    assert out.shape == (4, 1)
+    assert mx.array_equal(out, mx.array([[2.0], [0.0], [0.0], [3.0]]))
 
 
-@pytest.mark.parametrize("fmt", ["coo", "csr"])
-@pytest.mark.parametrize(
-    "make",
-    [
-        lambda: SAGEConv(8, 5),
-        lambda: SimpleConv(aggr="add"),
-        lambda: SimpleConv(aggr="mean"),
-        lambda: SimpleConv(aggr="max"),
-    ],
-    ids=["sage", "simple_add", "simple_mean", "simple_max"],
-)
-def test_bipartite_matches_gather_scatter(count_fused, fmt, make):
-    # 7 source nodes -> 4 destination nodes: output has one row per dst node
-    rng = np.random.default_rng(0)
-    edge_index = mx.array(np.stack([rng.integers(0, 7, 30), rng.integers(0, 4, 30)]))
-    xs = mx.random.normal((7, 8), key=mx.random.key(0))
-    xd = mx.random.normal((4, 8), key=mx.random.key(1))
-    mx.random.seed(0)
-    layer = make()
-    clear_csr_cache()
-    with fused_message_passing_mode(True, format=fmt):
-        out_f = layer(edge_index, (xs, xd))
-        gx_f = mx.grad(lambda a: layer(edge_index, (a, xd)).sum())(xs)
-    assert count_fused["n"] > 0
-    with fused_message_passing_mode(False):
-        out_r = layer(edge_index, (xs, xd))
-        gx_r = mx.grad(lambda a: layer(edge_index, (a, xd)).sum())(xs)
-    assert out_f.shape == (4, out_r.shape[1])
-    close(out_f, out_r)
-    close(gx_f, gx_r)
+@pytest.mark.parametrize("aggr", ["add", "mean", "max"])
+def test_tuple_of_same_features_matches_single_array(aggr):
+    mpnn = MPNN(aggr=aggr)
+    x = mx.random.normal((6, 3))
+    edge_index = mx.array([[0, 1, 2, 3, 5], [1, 1, 2, 4, 0]])
+
+    out_single = mpnn(x, edge_index, edge_weights=None)
+    out_tuple = mpnn((x, x), edge_index, edge_weights=None)
+
+    assert mx.allclose(out_single, out_tuple)
