@@ -186,6 +186,66 @@ def test_decorator_accepts_custom_fused_impl():
     assert Custom._fused_format == "coo"
 
 
+class DoubledConv(SimpleConv):
+    """Sends twice the source features along each edge."""
+
+    def message(self, src_features, dst_features, **kwargs):
+        return 2 * src_features
+
+
+def test_subclass_message_override_falls_back(graph, count_fused):
+    edge_index, x, _ = graph
+    assert DoubledConv._fused_format is None
+    assert SimpleConv._fused_format == "coo"  # parent untouched
+    out = DoubledConv(aggr="add")(edge_index, x)
+    assert count_fused["n"] == 0
+    with fused_message_passing_mode(False):
+        close(out, 2 * SimpleConv(aggr="add")(edge_index, x))
+
+
+def test_subclass_aggregate_override_falls_back():
+    class MaxConv(SimpleConv):
+        def aggregate(self, messages, indices, **kwargs):
+            return super().aggregate(messages, indices, **kwargs)
+
+    assert MaxConv._fused_format is None
+
+
+def test_subclass_without_override_stays_fused(graph, count_fused):
+    class PlainGCN(GCNConv):
+        pass
+
+    class PlainGIN(GINConv):  # GINConv's own allowed message override
+        pass
+
+    assert PlainGCN._fused_format == "coo"
+    assert PlainGIN._fused_format == "coo"
+    edge_index, x, _ = graph
+    mx.random.seed(0)
+    PlainGCN(DIM, 8)(edge_index, x)
+    assert count_fused["n"] == 1
+
+
+def test_subclass_with_custom_fused_impl_stays_fused():
+    class Custom(SimpleConv):
+        def message(self, src_features, dst_features, **kwargs):
+            return 2 * src_features
+
+        def message_and_aggregate(self, edge_index, node_features, **kwargs):
+            return 2 * super().message_and_aggregate(edge_index, node_features)
+
+    assert Custom._fused_format == "coo"
+
+
+def test_redecorated_subclass_uses_decorator_format():
+    @fused_message_passing(format="csr", allow_message_override=True)
+    class Redecorated(SimpleConv):
+        def message(self, src_features, dst_features, **kwargs):
+            return src_features
+
+    assert Redecorated._fused_format == "csr"
+
+
 def test_decorator_rejects_non_message_passing():
     with pytest.raises(TypeError):
 

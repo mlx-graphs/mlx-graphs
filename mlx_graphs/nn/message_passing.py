@@ -141,7 +141,10 @@ def fused_message_passing(
       is ``"softmax"``; max/min also need a recent mlx-cluster),
     * any message/aggregate kwarg other than ``edge_weights`` is set
       (e.g. ``edge_features``), since messages are then no longer a weighted
-      sum of neighbour features.
+      sum of neighbour features,
+    * the layer is a subclass of a decorated layer that overrides
+      ``message()`` or ``aggregate()`` without also overriding
+      ``message_and_aggregate()``.
 
     Args:
         format: ``"coo"`` (default) works directly on ``edge_index``.
@@ -212,6 +215,17 @@ class MessagePassing(nn.Module):
 
     # Set by the @fused_message_passing decorator; None = gather-scatter only.
     _fused_format: Optional[FusedFormat] = None
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # A subclass of a fused layer inherits _fused_format, but the fused
+        # kernel would ignore a new message()/aggregate(), so fall back to
+        # gather-scatter unless it also provides message_and_aggregate().
+        # Runs before any decorator on cls, so @fused_message_passing on the
+        # subclass itself still re-checks and sets the format.
+        overrides = "message" in cls.__dict__ or "aggregate" in cls.__dict__
+        if overrides and "message_and_aggregate" not in cls.__dict__:
+            cls._fused_format = None
 
     def __init__(self, aggr: ScatterAggregations = "add"):
         super().__init__()
