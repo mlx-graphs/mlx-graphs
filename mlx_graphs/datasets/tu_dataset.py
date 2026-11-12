@@ -151,6 +151,11 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     )
     data, slices = split(data, batch_indices)
 
+    # True node count per graph, taken from graph_indicator. Without it, graphs
+    # with no node features would count nodes from edge_index and miss isolated
+    # nodes, which shifts edge indices of later graphs when batching.
+    num_nodes_per_graph = np.bincount(np.array(batch_indices, copy=False)).tolist()
+
     graphs = []
     for i in range(len(slices["edge_index"]) - 1):
         kwargs = {}
@@ -163,7 +168,7 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
                 kwargs[k] = getattr(data, k)[
                     slices[k][i].item() : slices[k][i + 1].item()
                 ]
-        graphs.append(GraphData(**kwargs))
+        graphs.append(GraphData(**kwargs, num_nodes=num_nodes_per_graph[i]))
 
     return graphs
 
