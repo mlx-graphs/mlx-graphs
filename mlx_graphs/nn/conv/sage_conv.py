@@ -3,9 +3,10 @@ from typing import Optional, Tuple, Union
 import mlx.core as mx
 
 from mlx_graphs.nn.linear import Linear
-from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
 
+@fused_message_passing
 class SAGEConv(MessagePassing):
     r"""GraphSAGE convolution layer from `"Inductive Representation Learning on Large
     Graphs" <https://arxiv.org/abs/1706.02216>`_ paper.

@@ -2,12 +2,13 @@ from typing import Literal, Optional, get_args
 
 import mlx.core as mx
 
-from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 from mlx_graphs.utils import ScatterAggregations, add_self_loops
 
 CombineRootFunctions = Literal["sum", "cat", "self_loop"]
 
 
+@fused_message_passing
 class SimpleConv(MessagePassing):
     """A simple non-trainable message passing layer.
 
