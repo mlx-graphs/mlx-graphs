@@ -28,9 +28,12 @@ def collate(graph_list: list[GraphData]) -> dict:
     batch_attr_dict = {}
 
     # Pre-compute __inc__ and __cat_dim__ for all attributes outside the loop
+    # `_num_nodes` is a scalar node count, not an array to concatenate.
+    # It is handled separately at the end.
     attrs_inc_cat_dim = [
         (attr, graph_list[0].__inc__(key=attr), graph_list[0].__cat_dim__(key=attr))
         for attr in graph_list[0].to_dict()
+        if attr != "_num_nodes"
     ]
 
     # To store pre-computed cumsum for attributes where __inc__ is True
@@ -75,5 +78,12 @@ def collate(graph_list: list[GraphData]) -> dict:
                 ]
             )
             batch_attr_dict["_batch_indices"] = mx.array(batch_indices)
+
+    # Keep explicit node counts so the batch reports the right total and each
+    # graph gets its own count back when unbatching.
+    if "_num_nodes" in graph_list[0].to_dict():
+        num_nodes_list = [graph.num_nodes for graph in graph_list]
+        batch_attr_dict["_num_nodes"] = sum(num_nodes_list)
+        batch_attr_dict["_num_nodes_per_graph"] = mx.array(num_nodes_list)
 
     return batch_attr_dict
