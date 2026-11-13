@@ -223,9 +223,13 @@ def degree(
         )
 
     num_nodes = num_nodes if num_nodes is not None else index.max().item() + 1
-    src = edge_weights if edge_weights is not None else mx.ones((index.shape[0],))
-
-    return scatter(src, index, num_nodes, "add")
+    if edge_weights is None:
+        # int32 count: much faster than float atomics on hub nodes, and exact.
+        #  Returned as float32, as before.
+        return (
+            mx.zeros((num_nodes,), dtype=mx.int32).at[index].add(1).astype(mx.float32)
+        )
+    return scatter(edge_weights, index, num_nodes, "add")
 
 
 def invert_sqrt_degree(degree: mx.array) -> mx.array:
