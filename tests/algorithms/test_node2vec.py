@@ -52,3 +52,57 @@ def test_node2vec_rowptr_with_zero_out_degree_nodes(p, q):
 
     walks = model.pos_sample(mx.arange(num_nodes))
     _assert_walks_follow_edges(walks, edge_index)
+
+
+# 4-node undirected cycle 0 - 1 - 2 - 3 - 0
+CYCLE_EDGE_INDEX = mx.array([[0, 1, 1, 2, 2, 3, 3, 0], [1, 0, 2, 1, 3, 2, 0, 3]])
+
+
+def _expected_pos_rows(num_start, walks_per_node, walk_length, context_size):
+    return num_start * walks_per_node * (walk_length - context_size + 1)
+
+
+@pytest.mark.parametrize("p, q", [(1.0, 1.0), (2.0, 0.5)])
+def test_node2vec_dataloader_batch_smaller_than_graph(p, q):
+    # Regression: rand_data used to be sized [num_nodes, walk_length] instead of
+    # one row per walk, which breaks random_walk whenever batch_size < num_nodes.
+    walk_length, context_size, batch_size = 3, 2, 2
+    model = Node2Vec(
+        edge_index=CYCLE_EDGE_INDEX,
+        embedding_dim=8,
+        walk_length=walk_length,
+        context_size=context_size,
+        num_nodes=4,
+        p=p,
+        q=q,
+    )
+    for pos, neg in model.dataloader(batch_size=batch_size):
+        assert pos.shape == (
+            _expected_pos_rows(batch_size, 1, walk_length, context_size),
+            context_size,
+        )
+        assert neg.shape[1] == context_size
+        _assert_walks_follow_edges(pos, CYCLE_EDGE_INDEX)
+
+
+@pytest.mark.parametrize("p, q", [(1.0, 1.0), (2.0, 0.5)])
+def test_node2vec_multiple_walks_per_node(p, q):
+    # Regression: with walks_per_node > 1 there are more walks than nodes, so
+    # rand_data sized by num_nodes was read out of bounds.
+    walk_length, context_size, walks_per_node, num_nodes = 3, 2, 2, 4
+    model = Node2Vec(
+        edge_index=CYCLE_EDGE_INDEX,
+        embedding_dim=8,
+        walk_length=walk_length,
+        context_size=context_size,
+        num_nodes=num_nodes,
+        walks_per_node=walks_per_node,
+        p=p,
+        q=q,
+    )
+    pos = model.pos_sample(mx.arange(num_nodes))
+    assert pos.shape == (
+        _expected_pos_rows(num_nodes, walks_per_node, walk_length, context_size),
+        context_size,
+    )
+    _assert_walks_follow_edges(pos, CYCLE_EDGE_INDEX)
