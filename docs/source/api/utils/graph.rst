@@ -5,7 +5,7 @@ Graph utilities
 
 .. currentmodule:: mlx_graphs.utils
 
-Subgraphs, sampling, dense conversions and conversions to and from PyG.
+Subgraphs, negative sampling, dropout, dense conversions and graph statistics.
 
 .. autosummary::
 	:toctree: _autosummary_graph
@@ -20,5 +20,3 @@ Subgraphs, sampling, dense conversions and conversions to and from PyG.
 	to_dense_adj
 	get_laplacian
 	homophily
-	from_pyg
-	to_pyg

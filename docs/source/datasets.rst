@@ -50,6 +50,34 @@ Available Datasets
      - 8.99
      - node
      - node
+   * - Amazon Computers
+     - 1
+     - 13,752
+     - 491,722
+     - 71.51
+     - node
+     - node
+   * - Amazon Photo
+     - 1
+     - 7,650
+     - 238,162
+     - 62.26
+     - node
+     - node
+   * - Coauthor CS
+     - 1
+     - 18,333
+     - 163,788
+     - 17.87
+     - node
+     - node
+   * - Coauthor Physics
+     - 1
+     - 34,493
+     - 495,924
+     - 28.76
+     - node
+     - node
    * - QM7b
      - 7,211
      - ~15
@@ -85,6 +113,8 @@ Dataset Classes
 
    KarateClubDataset
    PlanetoidDataset
+   AmazonDataset
+   CoauthorDataset
    QM7bDataset
    TUDataset
    SuperPixelDataset
@@ -105,6 +135,20 @@ PlanetoidDataset
 ^^^^^^^^^^^^^^^^
 
 .. autoclass:: PlanetoidDataset
+   :members:
+   :show-inheritance:
+
+AmazonDataset
+^^^^^^^^^^^^^
+
+.. autoclass:: AmazonDataset
+   :members:
+   :show-inheritance:
+
+CoauthorDataset
+^^^^^^^^^^^^^^^
+
+.. autoclass:: CoauthorDataset
    :members:
    :show-inheritance:
 
