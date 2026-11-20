@@ -131,6 +131,7 @@ def main():
     os.makedirs(out_dir, exist_ok=True)
     with open(os.path.join(out_dir, "system.json"), "w") as f:
         json.dump(info, f, indent=2)
+        f.write("\n")
 
     results_path = os.path.join(out_dir, "results.jsonl")
     done = set()
