@@ -1,8 +1,5 @@
 <p align="center">
-  <picture>
-    <source media="(prefers-color-scheme: dark)" srcset="docs/source/_static/logo_dark.svg">
-    <img alt="mlx-graphs" src="docs/source/_static/logo.svg" width="420">
-  </picture>
+  <img alt="mlx-graphs" src="docs/source/_static/logo.svg" width="420">
 </p>
 
 <h3 align="center">Fast graph neural networks on Apple Silicon</h3>
@@ -32,10 +29,7 @@ PyTorch Geometric lacks on MPS.
 MPS and 5.8× faster than on CPU, with the same accuracy** (median of 35
 benchmarks on 12 datasets, up to 58×).
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_dark.png">
-  <img alt="Left: time of PyG on MPS and on CPU relative to mlx-graphs: 12× and 6.7× for one layer on 2 million edges, 5.3× and 7.4× per epoch of node classification, 5.6× and 2.9× per epoch of graph classification. Right: mean test accuracy of mlx-graphs, PyG on MPS and PyG on CPU: 79.2%, 79.0% and 78.9% in node classification, 68.8%, 69.2% and 68.9% in graph classification" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_light.png">
-</picture>
+<img alt="Left: time of PyG on MPS and on CPU relative to mlx-graphs: 12× and 6.7× for one layer on 2 million edges, 5.3× and 7.4× per epoch of node classification, 5.6× and 2.9× per epoch of graph classification. Right: mean test accuracy of mlx-graphs, PyG on MPS and PyG on CPU: 79.2%, 79.0% and 78.9% in node classification, 68.8%, 69.2% and 68.9% in graph classification" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_light.png">
 
 <sub>Apple M5 Pro, 64 GB · mlx 0.32.4 · PyTorch 2.15 · PyTorch Geometric 2.8.1 · same models, data and
 hyperparameters in every framework, 3 seeds. See [benchmarks](#benchmarks-vs-pytorch-geometric) for the details.</sub>
@@ -92,15 +86,9 @@ Speedups against PyG on MPS (the CPU numbers are in the figures):
 - **Graph classification** (MUTAG, PROTEINS, NCI1, DD, batching included):
   **2.7–11× faster**.
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/layers_speedup_dark.png">
-  <img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/layers_speedup_light.png">
-</picture>
+<img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/layers_speedup_light.png">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_classification_dark.png">
-  <img alt="Time per training epoch of full-batch node classification with GCN, GraphSAGE and GAT on eight datasets, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_classification_light.png">
-</picture>
+<img alt="Time per training epoch of full-batch node classification with GCN, GraphSAGE and GAT on eight datasets, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_classification_light.png">
 
 ### Same results
 
@@ -109,15 +97,9 @@ mlx-graphs and PyG follows the same curve at every epoch, and the test
 accuracies match within the spread between seeds (mean over node
 classification: 79.2% for mlx-graphs, 79.0% / 78.9% for PyG on MPS / CPU).
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_loss_dark.png">
-  <img alt="Training loss per epoch of GCN, GraphSAGE and GAT on eight node classification datasets, mlx-graphs, PyG on MPS and PyG on CPU overlaid: the curves coincide" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_loss_light.png">
-</picture>
+<img alt="Training loss per epoch of GCN, GraphSAGE and GAT on eight node classification datasets, mlx-graphs, PyG on MPS and PyG on CPU overlaid: the curves coincide" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_loss_light.png">
 
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_accuracy_dark.png">
-  <img alt="Test accuracy of GCN, GraphSAGE and GAT on eight node classification datasets, mean and range over 3 seeds, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_accuracy_light.png">
-</picture>
+<img alt="Test accuracy of GCN, GraphSAGE and GAT on eight node classification datasets, mean and range over 3 seeds, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_accuracy_light.png">
 
 The same figures for graph classification, peak memory and absolute
 timings are on the [benchmarks page of the docs](https://mlx-graphs.github.io/mlx-graphs/benchmarks.html)
