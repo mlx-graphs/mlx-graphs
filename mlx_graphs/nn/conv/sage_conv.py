@@ -1,8 +1,8 @@
 from typing import Optional, Tuple, Union
 
 import mlx.core as mx
+from mlx.nn import Linear  # PyTorch's default initialization, as in PyG
 
-from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
 

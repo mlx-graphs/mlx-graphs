@@ -1,0 +1,170 @@
+"""Benchmarks mlx-graphs against PyTorch Geometric on this Mac.
+
+    python benchmarks/pyg_comparison/run.py                 # everything
+    python benchmarks/pyg_comparison/run.py --tasks layer   # one task
+    python benchmarks/pyg_comparison/run.py --quick         # smoke test
+
+Every configuration runs in its own subprocess (see ``worker.py``) under a
+hard memory cap: a run whose footprint (CPU + GPU memory) goes over
+``--memory-gb`` is killed and recorded as out of memory. Results are appended
+to ``results/<chip>/results.jsonl``; configurations already in that file are
+skipped, so an interrupted run can be resumed. ``plot.py`` draws the figures.
+"""
+
+import argparse
+import itertools
+import json
+import os
+import subprocess
+import sys
+import time
+
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from common import FRAMEWORKS, footprint_gb, system_info  # noqa: E402
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+
+LAYER_GRAPHS = [(10_000, 100_000), (50_000, 500_000), (200_000, 2_000_000)]
+LAYERS = ["gcn", "sage", "gin", "gat", "gatv2"]
+
+NODE_DATASETS = [
+    "cora",
+    "citeseer",
+    "pubmed",
+    "amazon-photo",
+    "amazon-computers",
+    "coauthor-cs",
+    "coauthor-physics",
+    "ogbn-arxiv",
+]
+NODE_MODELS = ["gcn", "sage", "gat"]
+
+GRAPH_DATASETS = ["MUTAG", "PROTEINS", "NCI1", "DD"]
+GRAPH_MODELS = ["gcn", "gin", "sage"]
+
+
+def configurations(tasks, quick):
+    if "layer" in tasks:
+        graphs = LAYER_GRAPHS[:1] if quick else LAYER_GRAPHS
+        for (n, e), layer, fw in itertools.product(graphs, LAYERS, FRAMEWORKS):
+            repeats = "5" if quick else ("10" if fw == "pyg-cpu" else "20")
+            yield [
+                "layer",
+                "--framework", fw,
+                "--layer", layer,
+                "--num-nodes", str(n),
+                "--num-edges", str(e),
+                "--repeats", repeats,
+            ]  # fmt: skip
+    if "node" in tasks:
+        datasets = NODE_DATASETS[:1] if quick else NODE_DATASETS
+        for ds, model, fw in itertools.product(datasets, NODE_MODELS, FRAMEWORKS):
+            epochs = "20" if quick else ("100" if ds == "ogbn-arxiv" else "200")
+            yield [
+                "node",
+                "--framework", fw,
+                "--dataset", ds,
+                "--model", model,
+                "--epochs", epochs,
+            ]  # fmt: skip
+    if "graph" in tasks:
+        datasets = GRAPH_DATASETS[:1] if quick else GRAPH_DATASETS
+        for ds, model, fw in itertools.product(datasets, GRAPH_MODELS, FRAMEWORKS):
+            yield [
+                "graph",
+                "--framework", fw,
+                "--dataset", ds,
+                "--model", model,
+                "--epochs", "3" if quick else "30",
+                "--warmup", "1" if quick else "3",
+            ]  # fmt: skip
+
+
+def config_key(argv) -> str:
+    return " ".join(argv)
+
+
+def run_one(argv, memory_gb, timeout_s):
+    """Runs one worker; returns (result dict or None, status string)."""
+    cmd = [sys.executable, os.path.join(HERE, "worker.py"), *argv]
+    process = subprocess.Popen(
+        cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+    )
+    start, peak = time.time(), 0.0
+    while process.poll() is None:
+        used = footprint_gb(process.pid)
+        peak = max(peak, used)
+        if used > memory_gb:
+            process.kill()
+            process.wait()
+            return None, f"oom (> {memory_gb:.0f} GB)"
+        if time.time() - start > timeout_s:
+            process.kill()
+            process.wait()
+            return None, f"timeout (> {timeout_s:.0f} s)"
+        time.sleep(0.2)
+    out, err = process.communicate()
+    if process.returncode != 0:
+        lines = err.strip().splitlines() or ["?"]
+        return None, f"error: {lines[-1][:200]}"
+    return json.loads(out.strip().splitlines()[-1]), "ok"
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument(
+        "--tasks", nargs="+", default=["layer", "node", "graph"],
+        choices=["layer", "node", "graph"],
+    )  # fmt: skip
+    parser.add_argument("--memory-gb", type=float, default=16.0)
+    parser.add_argument("--timeout-s", type=float, default=900.0)
+    parser.add_argument("--quick", action="store_true", help="tiny smoke test")
+    parser.add_argument("--out", default=None, help="results directory")
+    args = parser.parse_args()
+
+    info = system_info()
+    out_dir = args.out or os.path.join(
+        HERE,
+        "results",
+        info["chip"].replace(" ", "_") + ("_quick" if args.quick else ""),
+    )
+    os.makedirs(out_dir, exist_ok=True)
+    with open(os.path.join(out_dir, "system.json"), "w") as f:
+        json.dump(info, f, indent=2)
+
+    results_path = os.path.join(out_dir, "results.jsonl")
+    done = set()
+    if os.path.exists(results_path):
+        with open(results_path) as f:
+            done = {json.loads(line)["config"] for line in f if line.strip()}
+
+    todo = [
+        c for c in configurations(args.tasks, args.quick) if config_key(c) not in done
+    ]
+    print(f"{len(todo)} configurations to run ({len(done)} already done)")
+    for i, argv in enumerate(todo, 1):
+        t0 = time.time()
+        result, status = run_one(argv, args.memory_gb, args.timeout_s)
+        record = {"config": config_key(argv), "status": status, **(result or {})}
+        if result is None:  # keep the identifying fields of failed runs
+            keys = argv[1::2]
+            record.update(
+                {"task": argv[0]}
+                | {k.lstrip("-").replace("-", "_"): v for k, v in zip(keys, argv[2::2])}
+            )
+        with open(results_path, "a") as f:
+            f.write(json.dumps(record) + "\n")
+        summary = {
+            k: round(v, 3) if isinstance(v, float) else v
+            for k, v in (result or {}).items()
+            if k.endswith(("_ms", "_acc", "_gb"))
+        }
+        print(
+            f"[{i}/{len(todo)}] {config_key(argv)}  ->  {status} "
+            f"({time.time() - t0:.0f} s) {summary}",
+            flush=True,
+        )
+
+
+if __name__ == "__main__":
+    main()

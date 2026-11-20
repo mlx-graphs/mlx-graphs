@@ -188,16 +188,20 @@ def scatter_softmax(
         scatter_softmax(src, index, num_nodes)
         >>>  mx.array([0.5, 0.5, 1, 1])
     """
-    # index = broadcast(index, values, axis) # NOTE: may be used in future.
-    scatt_max = scatter(values, index, out_size, aggr="max", axis=axis)
-    scatt_max = scatt_max[index]
-    out = (values - scatt_max).exp()
+    out_shape = list(values.shape)
+    out_shape[axis] = out_size
 
-    scatt_sum = scatter(out, index, out_size, aggr="add", axis=axis)
-    scatt_sum = scatt_sum[index]
+    # Subtracting the per-group maximum keeps exp() from overflowing. The
+    # softmax does not depend on that shift, so no gradient needs to flow
+    # through it, which skips the backward pass of the scatter-max.
+    scatt_max = mx.full(out_shape, -float("inf"), dtype=values.dtype)
+    scatt_max = mx.stop_gradient(scatt_max.at[index].maximum(values))
+    out = mx.exp(values - scatt_max[index])
+
+    scatt_sum = mx.zeros(out_shape, dtype=values.dtype).at[index].add(out)
 
     eps = 1e-16
-    return out / (scatt_sum + eps)
+    return out / (scatt_sum[index] + eps)
 
 
 def degree(

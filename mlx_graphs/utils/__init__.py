@@ -13,3 +13,11 @@ from .transformations import (
     has_self_loops,  # noqa
 )
 from .array_ops import expand, broadcast, one_hot, pairwise_distances, index_to_mask  # noqa
+from .sorting import index_to_ptr, sort_edge_index  # noqa
+from .topology import is_directed, is_undirected  # noqa
+from .subgraph import k_hop_subgraph, subgraph  # noqa
+from .negative_sampling import negative_sampling, structured_negative_sampling  # noqa
+from .dropout import dropout_edge, dropout_node  # noqa
+from .dense import to_dense_adj, to_dense_batch  # noqa
+from .laplacian import get_laplacian, homophily  # noqa
+from .pyg import from_pyg, to_pyg  # noqa

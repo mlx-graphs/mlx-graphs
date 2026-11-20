@@ -12,7 +12,6 @@ import pytest
 
 import mlx_graphs.nn.message_passing as mp
 from mlx_graphs.nn import (
-    GATConv,
     GCNConv,
     GINConv,
     MessagePassing,
@@ -84,17 +83,17 @@ LAYERS = [
 
 
 def close(a, b):
-    np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
+    # Both paths end in a dense matmul (the layer's Linear). MLX's GPU matmul
+    # is only accurate to ~1e-3 relative on some chips, and it turns the
+    # float-rounding differences between the two aggregation orders into
+    # differences of that size, so the tolerance cannot be tighter than this.
+    np.testing.assert_allclose(np.array(a), np.array(b), atol=5e-3, rtol=5e-3)
 
 
 @pytest.mark.parametrize("fmt", ["coo", "csr"])
 @pytest.mark.parametrize("weighted", [False, True])
 @pytest.mark.parametrize("name", LAYERS)
 def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
-    if name == "gcn_self_loops" and weighted:
-        pytest.skip(
-            "pre-existing GCNConv bug: add_self_loops does not extend edge_weights"
-        )
     edge_index, x, weights = graph
     layer = make_layer(name)
     w = weights if weighted else None
@@ -160,9 +159,78 @@ def test_disabled_globally(graph, count_fused):
 
 
 def test_undecorated_layer_unchanged(graph, count_fused):
+    class Plain(MessagePassing):
+        def __call__(self, edge_index, node_features):
+            return self.propagate(edge_index, node_features)
+
     edge_index, x, _ = graph
-    GATConv(DIM, 8)(edge_index, x)
+    Plain(aggr="add")(edge_index, x)
     assert count_fused["n"] == 0
+
+
+def test_multi_head_weights_are_fused(graph, count_fused):
+    # GAT-style: [num_nodes, heads, channels] features with one weight per
+    # (edge, head) run as one SpMM per head.
+    edge_index, x, _ = graph
+    heads = 4
+    x = x.reshape(NUM_NODES, heads, DIM // heads)
+    alpha = mx.random.uniform(shape=(NUM_EDGES, heads), key=mx.random.key(2))
+    layer = SimpleConv(aggr="add")
+
+    def run(x, alpha):
+        return layer.propagate(edge_index, x, message_kwargs={"edge_weights": alpha})
+
+    def loss(x, alpha):
+        return (run(x, alpha) ** 2).sum()
+
+    results = {}
+    for fmt in ("coo", "csr"):
+        clear_csr_cache()
+        with fused_message_passing_mode(True, format=fmt):
+            results[fmt] = (run(x, alpha), *mx.grad(loss, argnums=[0, 1])(x, alpha))
+    assert count_fused["n"] > 0
+    count_fused["n"] = 0
+    with fused_message_passing_mode(False):
+        reference = (run(x, alpha), *mx.grad(loss, argnums=[0, 1])(x, alpha))
+    assert count_fused["n"] == 0
+
+    assert reference[0].shape == (NUM_NODES, heads, DIM // heads)
+    for fmt in ("coo", "csr"):
+        for a, b in zip(results[fmt], reference):
+            np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
+
+
+def test_auto_format_switches_to_csr(graph, monkeypatch):
+    edge_index, x, _ = graph
+    layer = SimpleConv(aggr="add")
+    clear_csr_cache()
+    with fused_message_passing_mode(True, format="auto"):
+        outs = [layer(edge_index, x) for _ in range(mp._AUTO_CSR_MIN_USES + 1)]
+    entry = next(iter(mp._csr_cache._entries.values()))
+    assert entry.uses == mp._AUTO_CSR_MIN_USES + 1
+    assert entry.csr is not None  # built once the edge_index was reused enough
+    for out in outs[1:]:
+        np.testing.assert_allclose(np.array(out), np.array(outs[0]), atol=1e-5)
+
+    # a large graph converts on first use
+    clear_csr_cache()
+    monkeypatch.setattr(mp, "_AUTO_CSR_MIN_EDGES", NUM_EDGES)
+    with fused_message_passing_mode(True, format="auto"):
+        layer(edge_index, x)
+    assert next(iter(mp._csr_cache._entries.values())).csr is not None
+
+
+def test_auto_format_inside_compile(graph, monkeypatch):
+    # The CSR conversion cannot run while tracing; "auto" must fall back to COO.
+    edge_index, x, _ = graph
+    layer = SimpleConv(aggr="add")
+    clear_csr_cache()
+    monkeypatch.setattr(mp, "_AUTO_CSR_MIN_EDGES", 1)
+    with fused_message_passing_mode(True, format="auto"):
+        out = mx.compile(lambda e, x: layer(e, x))(edge_index, x)
+        mx.eval(out)
+    with fused_message_passing_mode(False):
+        close(out, layer(edge_index, x))
 
 
 def test_decorator_rejects_message_override():
@@ -183,7 +251,7 @@ def test_decorator_accepts_custom_fused_impl():
         def message_and_aggregate(self, edge_index, node_features, **kwargs):
             return 2 * super().message_and_aggregate(edge_index, node_features)
 
-    assert Custom._fused_format == "coo"
+    assert Custom._fused_format == "auto"
 
 
 class DoubledConv(SimpleConv):
@@ -196,7 +264,7 @@ class DoubledConv(SimpleConv):
 def test_subclass_message_override_falls_back(graph, count_fused):
     edge_index, x, _ = graph
     assert DoubledConv._fused_format is None
-    assert SimpleConv._fused_format == "coo"  # parent untouched
+    assert SimpleConv._fused_format == "auto"  # parent untouched
     out = DoubledConv(aggr="add")(edge_index, x)
     assert count_fused["n"] == 0
     with fused_message_passing_mode(False):
@@ -218,8 +286,8 @@ def test_subclass_without_override_stays_fused(graph, count_fused):
     class PlainGIN(GINConv):  # GINConv's own allowed message override
         pass
 
-    assert PlainGCN._fused_format == "coo"
-    assert PlainGIN._fused_format == "coo"
+    assert PlainGCN._fused_format == "auto"
+    assert PlainGIN._fused_format == "auto"
     edge_index, x, _ = graph
     mx.random.seed(0)
     PlainGCN(DIM, 8)(edge_index, x)
@@ -234,7 +302,7 @@ def test_subclass_with_custom_fused_impl_stays_fused():
         def message_and_aggregate(self, edge_index, node_features, **kwargs):
             return 2 * super().message_and_aggregate(edge_index, node_features)
 
-    assert Custom._fused_format == "coo"
+    assert Custom._fused_format == "auto"
 
 
 def test_redecorated_subclass_uses_decorator_format():

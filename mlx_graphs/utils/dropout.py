@@ -1,0 +1,136 @@
+from typing import Optional
+
+import mlx.core as mx
+import numpy as np
+
+from mlx_graphs.utils.subgraph import _subgraph
+from mlx_graphs.utils.transformations import (
+    _infer_num_nodes,
+    _take_edges,
+    _to_numpy,
+)
+from mlx_graphs.utils.validators import validate_edge_index
+
+
+def _check_probability(p: float) -> None:
+    if p < 0.0 or p > 1.0:
+        raise ValueError(f"Dropout probability has to be between 0 and 1 (got {p})")
+
+
+@validate_edge_index
+def dropout_edge(
+    edge_index: mx.array,
+    p: float = 0.5,
+    force_undirected: bool = False,
+    training: bool = True,
+) -> tuple[mx.array, mx.array]:
+    """
+    Randomly drops edges of ``edge_index`` with probability ``p``.
+
+    Randomness comes from ``mx.random.uniform``, so results are reproducible
+    with ``mx.random.seed``.
+
+    Args:
+        edge_index: a [2, num_edges] array representing the source and target
+            nodes of each edge
+        p: Probability of dropping each edge. Default: ``0.5``
+        force_undirected: If ``True``, either both directions of an edge are
+            dropped or both are kept: only the edges with ``src <= dst`` are
+            sampled, and the kept ones are returned in both directions.
+            Default: ``False``
+        training: If ``False``, nothing is dropped. Default: ``True``
+
+    Returns:
+        A tuple ``(edge_index, edge_mask)`` with the kept edges and a boolean
+        mask of shape ``[num_edges]`` of the input edges that were kept.
+
+        When ``force_undirected=True`` (and edges are being dropped), the
+        second element is instead, as in PyG, an array with the position in
+        the input ``edge_index`` of each returned edge, e.g. to index edge
+        features: an edge and its added reverse share the same position.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 1, 1, 2, 2, 3], [1, 0, 2, 1, 3, 2]])
+
+        edge_index, edge_mask = dropout_edge(edge_index, p=0.5)
+        # edge_index: e.g. mx.array([[0, 1, 2, 2], [1, 2, 1, 3]])
+        # edge_mask: e.g. mx.array([True, False, True, True, True, False])
+
+        edge_index, edge_id = dropout_edge(edge_index, force_undirected=True)
+        # edge_index: e.g. mx.array([[0, 1], [1, 0]])
+        # edge_id: e.g. mx.array([0, 0])
+    """
+    _check_probability(p)
+    num_edges = edge_index.shape[1]
+    if not training or p == 0.0:
+        return edge_index, mx.ones((num_edges,), dtype=mx.bool_)
+
+    edge_mask = _to_numpy(mx.random.uniform(shape=(num_edges,))) >= p
+    if force_undirected:
+        edges = _to_numpy(edge_index)
+        edge_mask = edge_mask & (edges[0] <= edges[1])
+
+    keep = np.nonzero(edge_mask)[0]
+    kept_edge_index = _take_edges(edge_index, keep)
+    if not force_undirected:
+        return kept_edge_index, mx.array(edge_mask)
+
+    kept_edge_index = mx.concatenate([kept_edge_index, kept_edge_index[::-1]], axis=1)
+    return kept_edge_index, mx.array(np.concatenate([keep, keep]))
+
+
+@validate_edge_index
+def dropout_node(
+    edge_index: mx.array,
+    p: float = 0.5,
+    num_nodes: Optional[int] = None,
+    training: bool = True,
+) -> tuple[mx.array, mx.array, mx.array]:
+    """
+    Randomly drops nodes with probability ``p``, together with all the edges
+    connected to them. The kept edges are not relabeled.
+
+    Randomness comes from ``mx.random.uniform``, so results are reproducible
+    with ``mx.random.seed``.
+
+    Args:
+        edge_index: a [2, num_edges] array representing the source and target
+            nodes of each edge
+        p: Probability of dropping each node. Default: ``0.5``
+        num_nodes: Number of nodes in the graph. Inferred from ``edge_index``
+            if not given.
+        training: If ``False``, nothing is dropped. Default: ``True``
+
+    Returns:
+        A tuple ``(edge_index, edge_mask, node_mask)`` with the kept edges, a
+        boolean mask of shape ``[num_edges]`` of the edges that were kept and
+        a boolean mask of shape ``[num_nodes]`` of the nodes that were kept.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 1, 1, 2, 2, 3], [1, 0, 2, 1, 3, 2]])
+
+        edge_index, edge_mask, node_mask = dropout_node(edge_index, p=0.5)
+        # edge_index: e.g. mx.array([[0, 1], [1, 0]])
+        # edge_mask: e.g. mx.array([True, True, False, False, False, False])
+        # node_mask: e.g. mx.array([True, True, False, False])
+    """
+    _check_probability(p)
+    num_nodes = _infer_num_nodes(edge_index, num_nodes)
+    if not training or p == 0.0:
+        return (
+            edge_index,
+            mx.ones((edge_index.shape[1],), dtype=mx.bool_),
+            mx.ones((num_nodes,), dtype=mx.bool_),
+        )
+
+    node_mask = _to_numpy(mx.random.uniform(shape=(num_nodes,))) > p
+    kept_edge_index, _, edge_mask = _subgraph(
+        edge_index, node_mask, None, False, num_nodes
+    )
+    return kept_edge_index, mx.array(edge_mask), mx.array(node_mask)

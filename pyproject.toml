@@ -19,10 +19,10 @@ classifiers = [
 dependencies = [
     "mlx>=0.32; sys_platform == 'darwin'",
     "numpy>=1.26.3",
-    "requests==2.31.0",
-    "fsspec==2024.2.0",
-    "tqdm==4.66.1",
-    "mlx_cluster>=0.1.0; sys_platform == 'darwin'",
+    "requests>=2.31.0",
+    "fsspec>=2024.2.0",
+    "tqdm>=4.66.1",
+    "mlx_cluster>=0.1.2; sys_platform == 'darwin'",
 ]
 
 [project.optional-dependencies]
@@ -30,11 +30,11 @@ dev = [
   "pre-commit==3.6.0",
 ]
 test = [
-  "pytest==7.4.4",
-  "scipy==1.12.0",
-  "networkx==3.2.1",
-  "torch==2.2.0",
-  "torch_geometric==2.5.0",
+  "pytest>=7.4.4",
+  "scipy>=1.12.0",
+  "networkx>=3.2.1",
+  "torch>=2.2.0",
+  "torch_geometric>=2.5.0",
 ]
 docs = [
   "ipython==8.21.0",
@@ -45,11 +45,11 @@ docs = [
   "sphinx-gallery==0.15.0",
 ]
 benchmarks = [
-  "scipy==1.12.0",
-  "dgl==2.0.0",
-  "torch==2.2.0",
-  "torch_geometric==2.5.0",
-  "torch_cluster==1.6.3",
+  "scipy>=1.12.0",
+  "matplotlib>=3.8",
+  "ogb>=1.3.6",
+  "torch>=2.2.0",
+  "torch_geometric>=2.5.0",
 ]
 
 [project.urls]

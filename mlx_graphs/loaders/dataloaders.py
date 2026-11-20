@@ -33,7 +33,16 @@ class Dataloader:
     def _shuffle_indices(self):
         np.random.shuffle(self._indices)
 
+    def __len__(self) -> int:
+        """Number of batches per epoch."""
+        return (len(self.dataset) + self.batch_size - 1) // self.batch_size
+
     def __iter__(self):
+        # Every `for batch in loader` is a new epoch: start from the first
+        # batch, and draw a new order when shuffling (including the first).
+        self._current_index = 0
+        if self.shuffle:
+            self._shuffle_indices()
         return self
 
     def __next__(self) -> GraphDataBatch:
@@ -44,9 +53,6 @@ class Dataloader:
             A batch of graphs.
         """
         if self._current_index >= len(self.dataset):
-            self._current_index = 0
-            if self.shuffle:
-                self._shuffle_indices()
             raise StopIteration
 
         batch_indices = self._indices[

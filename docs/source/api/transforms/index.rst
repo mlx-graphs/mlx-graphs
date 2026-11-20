@@ -11,4 +11,16 @@ Transforms
 	:template: transform-class-template.rst
 
 	BaseTransform
+	Compose
 	FeaturesNormalizedTransform
+	ToUndirected
+	AddSelfLoops
+	RemoveSelfLoops
+	RemoveIsolatedNodes
+	LargestConnectedComponents
+	RandomNodeSplit
+	RandomLinkSplit
+	OneHotDegree
+	Constant
+	AddRandomWalkPE
+	GCNNorm
