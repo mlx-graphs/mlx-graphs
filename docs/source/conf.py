@@ -2,14 +2,14 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath("../.."))
-autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster"]
+autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster", "torch", "torch_geometric"]
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.11"
+release = "0.1.0"
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -1,6 +1,6 @@
 # mlx-graphs vs PyTorch Geometric
 
-Machine: Apple M5 Pro, 64 GB, macOS 27.2.1. mlx 0.32.4, mlx-graphs 0.0.10, mlx-cluster 0.1.2, torch 2.15.0, torch_geometric 2.8.1, Python 3.12.14.
+Machine: Apple M5 Pro, 64 GB, macOS 27.2.1. mlx 0.32.4, mlx-graphs 0.0.11, mlx-cluster 0.1.2, torch 2.15.0, torch_geometric 2.8.1, Python 3.12.14.
 
 Times are medians in milliseconds; lower is better. Speedup is the PyG time divided by the mlx-graphs time.
 

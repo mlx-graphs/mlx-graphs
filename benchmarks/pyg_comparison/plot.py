@@ -945,7 +945,9 @@ def tables(records, system):
         "# mlx-graphs vs PyTorch Geometric",
         "",
         f"Machine: {system['chip']}, {system['memory_gb']} GB, {system['os']}. "
-        f"mlx {system['mlx']}, mlx-graphs {system['mlx-graphs']}, "
+        f"mlx {system['mlx']}, mlx-graphs "
+        # the measured checkout's version (the installed package may differ)
+        f"{system.get('library', {}).get('version') or system['mlx-graphs']}, "
         f"mlx-cluster {system['mlx-cluster']}, torch {system['torch']}, "
         f"torch_geometric {system['torch_geometric']}, Python {system['python']}.",
         "",

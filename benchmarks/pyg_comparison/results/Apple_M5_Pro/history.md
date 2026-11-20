@@ -5,9 +5,9 @@ Benchmark results of every version of mlx-graphs measured on this machine (Apple
 | version | branch | library commit | date | mlx | torch / PyG |
 |---|---|---|---|---|---|
 | [0.0.11-89185ae](0.0.11-89185ae/results.md) | v0.0.11 | `89185ae` Node2 vec bug fix (#201) | 2026-11-20 | 0.32.4 | 2.15.0 / 2.8.1 |
-| [0.0.11-c5f1246](0.0.11-c5f1246/results.md) | perf-and-features | `c5f1246` Faster message passing, PyG-parity layers and models, PyG benchmarks | 2026-11-20 | 0.32.4 | 2.15.0 / 2.8.1 |
+| [0.1.0-c5f1246](0.1.0-c5f1246/results.md) | perf-and-features | `c5f1246` Faster message passing, PyG-parity layers and models, PyG benchmarks | 2026-11-20 | 0.32.4 | 2.15.0 / 2.8.1 |
 
-Speedup columns compare the newest version (0.0.11-c5f1246 (perf-and-features)) with the oldest (0.0.11-89185ae (v0.0.11)). Times are medians, accuracies are mean ± standard deviation over seeds.
+Speedup columns compare the newest version (0.1.0-c5f1246 (perf-and-features)) with the oldest (0.0.11-89185ae (v0.0.11)). Times are medians, accuracies are mean ± standard deviation over seeds.
 
 ## One layer, forward + backward
 
@@ -18,7 +18,7 @@ Speedup columns compare the newest version (0.0.11-c5f1246 (perf-and-features)) 
 
 mlx-graphs time (ms per pass):
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) | speedup |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) | speedup |
 |---|---|---:|---:|---:|
 | 10,000 nodes · 100,000 edges | GCN | 1.53 | 1.10 | 1.4× |
 | 10,000 nodes · 100,000 edges | GraphSAGE | 0.88 | 1.26 | 0.7× |
@@ -38,7 +38,7 @@ mlx-graphs time (ms per pass):
 
 Peak memory (GB) of mlx-graphs:
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) |
 |---|---|---:|---:|
 | 10,000 nodes · 100,000 edges | GCN | 0.14 | 0.15 |
 | 10,000 nodes · 100,000 edges | GraphSAGE | 0.14 | 0.14 |
@@ -65,7 +65,7 @@ Peak memory (GB) of mlx-graphs:
 
 mlx-graphs time (ms per epoch):
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) | speedup |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) | speedup |
 |---|---|---:|---:|---:|
 | GCN | Cora | 1.10 | 0.73 | 1.5× |
 | GCN | CiteSeer | 1.46 | 1.17 | 1.2× |
@@ -94,7 +94,7 @@ mlx-graphs time (ms per epoch):
 
 Test accuracy of mlx-graphs:
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) |
 |---|---|---:|---:|
 | GCN | Cora | 0.804 ± 0.011 | 0.807 ± 0.009 |
 | GCN | CiteSeer | 0.674 ± 0.003 | 0.662 ± 0.002 |
@@ -130,7 +130,7 @@ Test accuracy of mlx-graphs:
 
 mlx-graphs time (ms per epoch):
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) | speedup |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) | speedup |
 |---|---|---:|---:|---:|
 | GCN | MUTAG | 6.59 | 3.79 | 1.7× |
 | GCN | PROTEINS | 33.90 | 18.79 | 1.8× |
@@ -147,7 +147,7 @@ mlx-graphs time (ms per epoch):
 
 Test accuracy of mlx-graphs:
 
-| | | 0.0.11-89185ae (v0.0.11) | 0.0.11-c5f1246 (perf-and-features) |
+| | | 0.0.11-89185ae (v0.0.11) | 0.1.0-c5f1246 (perf-and-features) |
 |---|---|---:|---:|
 | GCN | MUTAG | 0.633 ± 0.143 | 0.600 ± 0.041 |
 | GCN | PROTEINS | 0.720 ± 0.021 | 0.735 ± 0.004 |

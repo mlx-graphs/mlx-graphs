@@ -13,7 +13,7 @@ Each section below is one machine. Click a figure to see it at full size.
    from that machine's results. To update it, re-run the benchmarks and
    plot.py, then point the include below to the new results directory.
 
-.. include:: ../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/results.rst
+.. include:: ../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/results.rst
 
 What is measured
 ----------------

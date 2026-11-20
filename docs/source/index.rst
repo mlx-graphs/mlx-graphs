@@ -7,12 +7,12 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX
 and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the same accuracy**
 (medians over 35 training benchmarks, up to 58× faster). See the :doc:`benchmarks`.
 
-.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_light.png
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_light.png
    :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
    :class: only-light
    :width: 100%
 
-.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_dark.png
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_dark.png
    :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
    :class: only-dark
    :width: 100%
