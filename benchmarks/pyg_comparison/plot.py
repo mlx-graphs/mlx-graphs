@@ -356,38 +356,40 @@ def fig_layers(records, system, theme, out):
 
 
 def fig_layer_speedup(records, system, theme, out):
+    """Time of every framework relative to mlx-graphs (mlx-graphs = 1×)."""
     data = index(records, "layer", "num_nodes", "num_edges", "layer")
     graphs = sorted({(n, e) for n, e, _ in data}, key=lambda g: g[1])
     layers = [layer for layer in LAYER_NAMES if any(k[2] == layer for k in data)]
-    baselines = ["pyg-mps", "pyg-cpu"]
 
-    speedups = {}
+    ratios = {}
     for key, per_fw in data.items():
         mlx = per_fw.get("mlx-graphs")
         if not mlx or mlx.get("status") != "ok":
             continue
-        for fw in baselines:
+        for fw in FRAMEWORKS:
             r = per_fw.get(fw)
             if r and r.get("status") == "ok":
-                speedups[key + (fw,)] = (
+                ratios[key + (fw,)] = (
                     r["forward_backward_ms"] / mlx["forward_backward_ms"]
                 )
-    hi = max(speedups.values()) * 1.18
+    hi = max(ratios.values()) * 1.18
 
+    height = 5.0
     fig, axes = plt.subplots(
-        1, len(graphs), figsize=(3.4 * len(graphs), 4.4), sharey=True
+        1, len(graphs), figsize=(3.4 * len(graphs), height), sharey=True
     )
     top = header(
         fig,
         theme,
-        "How much faster mlx-graphs is, per layer",
-        "PyG time / mlx-graphs time for one forward + backward pass. "
-        "The line marks 1× (same speed).",
+        "Time per layer, relative to mlx-graphs",
+        "Forward + backward time of each framework divided by mlx-graphs' time "
+        "(1×). Lower is better.",
         system,
-        frameworks=baselines,
     )
-    fig.subplots_adjust(left=0.08, right=0.985, top=top, bottom=0.55 / 4.4, wspace=0.08)
-    bar_px, gap_px = 9, 2
+    fig.subplots_adjust(
+        left=0.08, right=0.985, top=top, bottom=0.55 / height, wspace=0.08
+    )
+    bar_px, gap_px = 7, 2
     for ax, (n, e) in zip(axes, graphs):
         ax.set_xlim(0, hi)
         ax.set_ylim(len(layers) - 0.5, -0.5)
@@ -395,17 +397,17 @@ def fig_layer_speedup(records, system, theme, out):
         ax.set_yticklabels([LAYER_NAMES[layer] for layer in layers])
         style_axis(ax, theme)
         ax.set_title(f"{n:,} nodes · {e:,} edges", fontsize=9)
-        ax.set_xlabel("speedup of mlx-graphs (×)")
+        ax.set_xlabel("time relative to mlx-graphs (×)")
         fig.canvas.draw()  # layout is final: pixel sizes can be computed
         px_per_y = abs(
             ax.transData.transform((0, 1))[1] - ax.transData.transform((0, 0))[1]
         )
-        offset = (bar_px + gap_px) / 2 / px_per_y
+        step = (bar_px + gap_px) / px_per_y
         for i, layer in enumerate(layers):
-            for j, fw in enumerate(baselines):
-                y = i + (offset if j else -offset)
-                s = speedups.get((n, e, layer, fw))
-                if s is None:
+            for j, fw in enumerate(FRAMEWORKS):
+                y = i + (j - 1) * step
+                ratio = ratios.get((n, e, layer, fw))
+                if ratio is None:
                     reason = failure_reason(data[(n, e, layer)].get(fw, {}))
                     ax.text(
                         0.02 * hi,
@@ -416,16 +418,17 @@ def fig_layer_speedup(records, system, theme, out):
                         color=theme["muted"],
                     )
                     continue
-                rounded_hbar(ax, y, s, bar_px, theme["series"][fw])
+                rounded_hbar(ax, y, ratio, bar_px, theme["series"][fw])
+                if fw == "mlx-graphs":
+                    continue  # always 1×, as the subtitle says
                 ax.text(
-                    s + 0.012 * hi,
+                    ratio + 0.012 * hi,
                     y,
-                    f"{s:.1f}×",
+                    f"{ratio:.0f}×" if ratio >= 10 else f"{ratio:.1f}×",
                     va="center",
-                    fontsize=7,
+                    fontsize=6.5,
                     color=theme["secondary"],
                 )
-        ax.axvline(1, color=theme["muted"], linewidth=1 * PX, zorder=0)
     fig.savefig(out, dpi=DPI)
     plt.close(fig)
 
@@ -599,8 +602,8 @@ def tables(records, system):
             "",
             *figure(
                 "layers_speedup",
-                "Speedup of mlx-graphs over PyG on MPS and on CPU, per layer "
-                "and graph size",
+                "Forward and backward time per layer and graph size, relative "
+                "to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU",
             ),
             *figure(
                 "layers_time",

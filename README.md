@@ -56,7 +56,7 @@ same data, same hyperparameters:
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/layers_speedup_dark.png">
-  <img alt="Speedup of mlx-graphs over PyG on MPS and on CPU for one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2 on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/layers_speedup_light.png">
+  <img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/layers_speedup_light.png">
 </picture>
 
 <picture>

@@ -10,7 +10,7 @@ Random graphs, 128 input and output features, 4 heads for GAT/GATv2.
 
 <picture>
   <source media="(prefers-color-scheme: dark)" srcset="figures/layers_speedup_dark.png">
-  <img alt="Speedup of mlx-graphs over PyG on MPS and on CPU, per layer and graph size" src="figures/layers_speedup_light.png">
+  <img alt="Forward and backward time per layer and graph size, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU" src="figures/layers_speedup_light.png">
 </picture>
 
 <picture>
