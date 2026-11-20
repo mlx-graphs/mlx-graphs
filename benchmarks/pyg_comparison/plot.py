@@ -563,6 +563,19 @@ def fmt(r, key, digits=1):
     return f"{r[key]:,.{digits}f}"
 
 
+def figure(name, alt):
+    """Markdown for a figure of ``figures/``: the dark version in dark mode
+    (GitHub, VS Code), the light version otherwise."""
+    return [
+        "<picture>",
+        '  <source media="(prefers-color-scheme: dark)" '
+        f'srcset="figures/{name}_dark.png">',
+        f'  <img alt="{alt}" src="figures/{name}_light.png">',
+        "</picture>",
+        "",
+    ]
+
+
 def tables(records, system):
     lines = [
         "# mlx-graphs vs PyTorch Geometric",
@@ -584,6 +597,21 @@ def tables(records, system):
             "",
             "Random graphs, 128 input and output features, 4 heads for GAT/GATv2.",
             "",
+            *figure(
+                "layers_speedup",
+                "Speedup of mlx-graphs over PyG on MPS and on CPU, per layer "
+                "and graph size",
+            ),
+            *figure(
+                "layers_time",
+                "Time of one forward and backward pass per layer and graph size, "
+                "for mlx-graphs, PyG on MPS and PyG on CPU",
+            ),
+            *figure(
+                "layers_memory",
+                "Peak memory per layer on the largest graph, for mlx-graphs, "
+                "PyG on MPS and PyG on CPU",
+            ),
             "| graph | layer | mlx-graphs | PyG MPS | PyG CPU | speedup vs MPS "
             "| speedup vs CPU | peak GB mlx / MPS / CPU |",
             "|---|---|---:|---:|---:|---:|---:|---|",
@@ -626,6 +654,11 @@ def tables(records, system):
             "",
             f"Median time per training epoch. {acc_note}",
             "",
+            *figure(
+                f"{task}_classification",
+                f"{title}: time per training epoch per dataset and model, for "
+                "mlx-graphs, PyG on MPS and PyG on CPU",
+            ),
             "| dataset | model | mlx-graphs | PyG MPS | PyG CPU | speedup vs MPS "
             "| speedup vs CPU | accuracy mlx / MPS / CPU |",
             "|---|---|---:|---:|---:|---:|---:|---|",

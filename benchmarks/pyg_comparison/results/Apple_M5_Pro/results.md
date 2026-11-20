@@ -8,6 +8,21 @@ Times are medians in milliseconds; lower is better. Speedup is the PyG time divi
 
 Random graphs, 128 input and output features, 4 heads for GAT/GATv2.
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/layers_speedup_dark.png">
+  <img alt="Speedup of mlx-graphs over PyG on MPS and on CPU, per layer and graph size" src="figures/layers_speedup_light.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/layers_time_dark.png">
+  <img alt="Time of one forward and backward pass per layer and graph size, for mlx-graphs, PyG on MPS and PyG on CPU" src="figures/layers_time_light.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/layers_memory_dark.png">
+  <img alt="Peak memory per layer on the largest graph, for mlx-graphs, PyG on MPS and PyG on CPU" src="figures/layers_memory_light.png">
+</picture>
+
 | graph | layer | mlx-graphs | PyG MPS | PyG CPU | speedup vs MPS | speedup vs CPU | peak GB mlx / MPS / CPU |
 |---|---|---:|---:|---:|---:|---:|---|
 | 10,000 nodes, 100,000 edges | GCN | 1.10 | 10.29 | 9.06 | 9.4× | 8.3× | 0.1 / 1.4 / 0.4 |
@@ -29,6 +44,11 @@ Random graphs, 128 input and output features, 4 heads for GAT/GATv2.
 ## Full-batch node classification
 
 Median time per training epoch. Test accuracy at the best validation epoch.
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/node_classification_dark.png">
+  <img alt="Full-batch node classification: time per training epoch per dataset and model, for mlx-graphs, PyG on MPS and PyG on CPU" src="figures/node_classification_light.png">
+</picture>
 
 | dataset | model | mlx-graphs | PyG MPS | PyG CPU | speedup vs MPS | speedup vs CPU | accuracy mlx / MPS / CPU |
 |---|---|---:|---:|---:|---:|---:|---|
@@ -60,6 +80,11 @@ Median time per training epoch. Test accuracy at the best validation epoch.
 ## Graph classification
 
 Median time per training epoch. Test accuracy after the last epoch (80/20 random split).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="figures/graph_classification_dark.png">
+  <img alt="Graph classification: time per training epoch per dataset and model, for mlx-graphs, PyG on MPS and PyG on CPU" src="figures/graph_classification_light.png">
+</picture>
 
 | dataset | model | mlx-graphs | PyG MPS | PyG CPU | speedup vs MPS | speedup vs CPU | accuracy mlx / MPS / CPU |
 |---|---|---:|---:|---:|---:|---:|---|
