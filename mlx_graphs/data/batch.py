@@ -161,6 +161,9 @@ class GraphDataBatch(GraphData):
 
             single_graph_dict[attr] = original_value
 
+        if "_num_nodes_per_graph" in self.to_dict():
+            single_graph_dict["num_nodes"] = self._num_nodes_per_graph[idx].item()  # type: ignore
+
         return GraphData(**single_graph_dict)
 
     def _get_attr_slice_at_index(self, attr: str, idx: int) -> tuple[int, int]:
