@@ -295,11 +295,21 @@ def load_node_dataset(name: str, seed: int) -> dict:
                         "physics": "Physics"}[which]  # fmt: skip
             data = (Amazon if group == "amazon" else Coauthor)(root, pyg_name)[0]
         elif name == "ogbn-arxiv":
+            import torch
             from ogb.nodeproppred import NodePropPredDataset
 
-            dataset = NodePropPredDataset(
-                name, root=os.path.join(DATA_DIR, "ogbn-arxiv", "raw")
-            )
+            # OGB caches the processed graph (numpy arrays) with torch.save
+            # and reads it back with torch.load, which refuses non-tensor
+            # objects since PyTorch 2.6 (weights_only=True by default). The
+            # file is OGB's own cache of the official dataset.
+            load = torch.load
+            torch.load = lambda *a, **k: load(*a, **{**k, "weights_only": False})
+            try:
+                dataset = NodePropPredDataset(
+                    name, root=os.path.join(DATA_DIR, "ogbn-arxiv", "raw")
+                )
+            finally:
+                torch.load = load
             graph, label = dataset[0]
             n = graph["num_nodes"]
             split = dataset.get_idx_split()

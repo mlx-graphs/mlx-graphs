@@ -92,8 +92,8 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    :maxdepth: 2
 
    tutorials/quickstart.rst
+   tutorials/from_pyg.rst
    tutorials/notebooks/graph_classification.ipynb
-   tutorials/notebooks/benchmark_pyg_dgl_mxg.ipynb
    tutorials/notebooks/node2vec.ipynb
    tutorials/examples/index.rst
 
