@@ -1,0 +1,1499 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Node2Vec benchmark: mlx-graphs vs PyTorch Geometric &#8212; mlx-graphs 0.0.11 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/nbsphinx-code-cells.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=96440fcd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=2fb9ae3b"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/notebooks/node2vec_benchmark_pyg';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.11 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.11 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node2vec.html">Node2vec</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../datasets.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../generated/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/data/index.html">Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/data/utils.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/datasets/index.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/transformations.html">Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.index_to_ptr.html">mlx_graphs.utils.sorting.index_to_ptr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/validators.html">Validators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/scatter.html">Scatter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/array_ops.html">Array ops</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.pairwise_distances.html">mlx_graphs.utils.array_ops.pairwise_distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/tutorials/notebooks/node2vec_benchmark_pyg.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Node2Vec benchmark: mlx-graphs vs PyTorch Geometric</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Helpers">Helpers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Walk-sampling">1. Walk sampling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Sanity-check:-walks-follow-graph-edges">Sanity check: walks follow graph edges</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Training">2. Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Embedding-quality">3. Embedding quality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Reading-the-results">Reading the results</a></li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="Node2Vec-benchmark:-mlx-graphs-vs-PyTorch-Geometric">
+<h1>Node2Vec benchmark: mlx-graphs vs PyTorch Geometric<a class="headerlink" href="#Node2Vec-benchmark:-mlx-graphs-vs-PyTorch-Geometric" title="Link to this heading">#</a></h1>
+<p>This notebook compares Node2Vec in <strong>mlx-graphs</strong> (walks from <code class="docutils literal notranslate"><span class="pre">mlx_cluster</span></code>, running on MLX) with <strong>PyTorch Geometric</strong> (walks from <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code>, running on PyTorch) on the Cora graph.</p>
+<p>It measures three things:</p>
+<ol class="arabic simple">
+<li><p><strong>Walk sampling</strong>: the random-walk kernels alone, for uniform walks (<code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">q</span> <span class="pre">=</span> <span class="pre">1</span></code>) and biased node2vec walks (<code class="docutils literal notranslate"><span class="pre">p</span></code>/<code class="docutils literal notranslate"><span class="pre">q</span></code> ≠ 1).</p></li>
+<li><p><strong>Training</strong>: seconds per epoch for each library’s full <code class="docutils literal notranslate"><span class="pre">Node2Vec</span></code> training loop.</p></li>
+<li><p><strong>Embedding quality</strong>: logistic-regression test accuracy on Cora, so speed is compared at equal quality.</p></li>
+</ol>
+<blockquote>
+<div><p>[!NOTE] PyG 2.8’s <code class="docutils literal notranslate"><span class="pre">Node2Vec</span></code> samples walks with <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code>, whose <code class="docutils literal notranslate"><span class="pre">random_walk</span></code> currently supports <strong>uniform walks only</strong> (<code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">q</span> <span class="pre">=</span> <span class="pre">1</span></code>); biased walks raise <code class="docutils literal notranslate"><span class="pre">Uniform</span> <span class="pre">sampling</span> <span class="pre">required</span> <span class="pre">for</span> <span class="pre">now</span></code>. Biased-walk rows therefore show PyG as “not supported” and report mlx-graphs alone.</p>
+<p>On macOS, <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code> ships CPU builds only, so PyG’s walks always run on the CPU (PyG’s <code class="docutils literal notranslate"><span class="pre">Node2Vec</span></code> keeps the graph on the CPU). PyG’s embedding training can still use the GPU through MPS. On the MLX side, walks run on the GPU with Metal.</p>
+</div></blockquote>
+<p><strong>Requirements:</strong> <code class="docutils literal notranslate"><span class="pre">mlx_cluster&gt;=0.1.2</span></code> (or a source build of current <code class="docutils literal notranslate"><span class="pre">main</span></code>), mlx-graphs with the Node2Vec <code class="docutils literal notranslate"><span class="pre">rand_data</span></code> fix, <code class="docutils literal notranslate"><span class="pre">torch</span></code>, <code class="docutils literal notranslate"><span class="pre">torch_geometric&gt;=2.8</span></code>, <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code>, <code class="docutils literal notranslate"><span class="pre">scikit-learn</span></code>.</p>
+<section id="Setup">
+<h2>Setup<a class="headerlink" href="#Setup" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">statistics</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">importlib.metadata</span><span class="w"> </span><span class="kn">import</span> <span class="n">PackageNotFoundError</span><span class="p">,</span> <span class="n">version</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mxnn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.optimizers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mxoptim</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch_geometric</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.linear_model</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogisticRegression</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">Planetoid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Node2Vec</span> <span class="k">as</span> <span class="n">PyGNode2Vec</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch_geometric.typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">WITH_PYG_LIB</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx_cluster</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.algorithms</span><span class="w"> </span><span class="kn">import</span> <span class="n">Node2Vec</span> <span class="k">as</span> <span class="n">MXGNode2Vec</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pkg_version</span><span class="p">(</span><span class="n">name</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="k">except</span> <span class="n">PackageNotFoundError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="s2">"not installed"</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Python          </span><span class="si">{</span><span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">()</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">platform</span><span class="o">.</span><span class="n">machine</span><span class="p">()</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"mlx"</span><span class="p">,</span> <span class="s2">"mlx_cluster"</span><span class="p">,</span> <span class="s2">"mlx-graphs"</span><span class="p">,</span> <span class="s2">"torch"</span><span class="p">,</span> <span class="s2">"torch_geometric"</span><span class="p">,</span> <span class="s2">"pyg-lib"</span><span class="p">,</span> <span class="s2">"scikit-learn"</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;15</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="n">name</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"MLX Metal GPU available:"</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">metal</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"PyTorch MPS available:  "</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"PyG has pyg-lib:        "</span><span class="p">,</span> <span class="n">WITH_PYG_LIB</span><span class="p">)</span>
+<span class="k">assert</span> <span class="n">WITH_PYG_LIB</span><span class="p">,</span> <span class="s2">"PyG's Node2Vec needs pyg-lib (see the install instructions)"</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/tqdm/auto.py:21: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/_param_validation.py:14: UserWarning: A NumPy version &gt;=1.26.4 and &lt;2.7.0 is required for this version of SciPy (detected version 1.26.3)
+  from scipy.sparse import csr_matrix, issparse
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Python          3.13.5 (arm64)
+mlx             0.32.4
+mlx_cluster     0.1.2
+mlx-graphs      0.0.10
+torch           2.12.1
+torch_geometric 2.8.1
+pyg-lib         0.9.0+pt212
+scikit-learn    1.8.0
+
+MLX Metal GPU available: True
+PyTorch MPS available:   True
+PyG has pyg-lib:         True
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">inspect</span>
+
+<span class="c1"># rejection_sampling has a GPU kernel only in mlx_cluster &gt;= 0.1.2 (it added max_attempts= at the same time)</span>
+<span class="n">MLX_CLUSTER_RS_HAS_GPU</span> <span class="o">=</span> <span class="s2">"max_attempts"</span> <span class="ow">in</span> <span class="p">(</span><span class="n">mlx_cluster</span><span class="o">.</span><span class="n">rejection_sampling</span><span class="o">.</span><span class="vm">__doc__</span> <span class="ow">or</span> <span class="s2">""</span><span class="p">)</span>
+<span class="c1"># Upstream mlx-graphs hard-codes stream=mx.cpu for biased walks; a local edit may enable the GPU</span>
+<span class="n">MXG_BIASED_WALKS_ON_GPU</span> <span class="o">=</span> <span class="s2">"stream=mx.cpu,"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">inspect</span><span class="o">.</span><span class="n">getsource</span><span class="p">(</span><span class="n">MXGNode2Vec</span><span class="o">.</span><span class="n">pos_sample</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_pyg_supports_biased_walks</span><span class="p">():</span>
+<span class="w">    </span><span class="sd">"""pyg-lib's random_walk raises for p/q != 1 ("Uniform sampling required for now")."""</span>
+    <span class="n">rowptr</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]),</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">pyg</span><span class="o">.</span><span class="n">random_walk</span><span class="p">(</span><span class="n">rowptr</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">tensor</span><span class="p">([</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">2</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">RuntimeError</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">False</span>
+
+<span class="n">PYG_SUPPORTS_BIASED</span> <span class="o">=</span> <span class="n">_pyg_supports_biased_walks</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">"mlx_cluster rejection_sampling has GPU kernel:"</span><span class="p">,</span> <span class="n">MLX_CLUSTER_RS_HAS_GPU</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"mlx-graphs Node2Vec runs biased walks on GPU:  "</span><span class="p">,</span> <span class="n">MXG_BIASED_WALKS_ON_GPU</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"PyG (pyg-lib) supports biased walks:           "</span><span class="p">,</span> <span class="n">PYG_SUPPORTS_BIASED</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">is_biased</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="ow">not</span> <span class="p">(</span><span class="n">p</span> <span class="o">==</span> <span class="mf">1.0</span> <span class="ow">and</span> <span class="n">q</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pyg_supports</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">PYG_SUPPORTS_BIASED</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_biased</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+mlx_cluster rejection_sampling has GPU kernel: True
+mlx-graphs Node2Vec runs biased walks on GPU:   True
+PyG (pyg-lib) supports biased walks:            False
+</pre></div></div>
+</div>
+</section>
+<section id="Configuration">
+<h2>Configuration<a class="headerlink" href="#Configuration" title="Link to this heading">#</a></h2>
+<p>Both libraries use the same graph and the same hyperparameters.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Training runs are repeated for each seed; results are reported as mean ± std</span>
+<span class="n">SEEDS</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="c1"># Node2Vec hyperparameters (shared by both libraries)</span>
+<span class="n">EMBEDDING_DIM</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">WALK_LENGTH</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">CONTEXT_SIZE</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">WALKS_PER_NODE</span> <span class="o">=</span> <span class="mi">10</span>
+<span class="n">NUM_NEGATIVE_SAMPLES</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">BATCH_SIZE</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">LEARNING_RATE</span> <span class="o">=</span> <span class="mf">0.01</span>
+<span class="n">NUM_EPOCHS</span> <span class="o">=</span> <span class="mi">10</span>   <span class="c1"># raise (e.g. to 50) to compare converged accuracy</span>
+
+<span class="c1"># MLX's Adam defaults to bias_correction=False, PyTorch's Adam always applies it.</span>
+<span class="c1"># With MATCH_ADAM, MLX uses bias correction too, so both optimizers behave the same.</span>
+<span class="n">MATCH_ADAM</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># PyTorch initializes nn.Embedding with std 1.0, MLX with std 1/sqrt(dim). With MATCH_INIT, PyG's</span>
+<span class="c1"># embeddings start at MLX's scale so both models begin from the same point; set False for library defaults.</span>
+<span class="n">MATCH_INIT</span> <span class="o">=</span> <span class="kc">True</span>
+
+<span class="c1"># Walk settings to benchmark: (label, p, q)</span>
+<span class="n">WALK_SETTINGS</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"uniform (p=1, q=1)"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span> <span class="p">(</span><span class="s2">"biased (p=1, q=0.5)"</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">)]</span>
+
+<span class="c1"># Walk-sampling benchmark</span>
+<span class="n">SAMPLING_WALK_LENGTH</span> <span class="o">=</span> <span class="mi">80</span>   <span class="c1"># typical node2vec walk length</span>
+<span class="n">WARMUP</span><span class="p">,</span> <span class="n">REPEATS</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">10</span>
+
+<span class="n">TORCH_DEVICE</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">device</span><span class="p">(</span><span class="s2">"mps"</span> <span class="k">if</span> <span class="n">torch</span><span class="o">.</span><span class="n">backends</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="k">else</span> <span class="s2">"cpu"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"PyTorch training device:"</span><span class="p">,</span> <span class="n">TORCH_DEVICE</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+PyTorch training device: mps
+</pre></div></div>
+</div>
+</section>
+<section id="Dataset">
+<h2>Dataset<a class="headerlink" href="#Dataset" title="Link to this heading">#</a></h2>
+<p>Cora is loaded once through PyG, and the <strong>same</strong> <code class="docutils literal notranslate"><span class="pre">edge_index</span></code> is passed to both libraries, so both work on an identical graph.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span> <span class="o">=</span> <span class="n">Planetoid</span><span class="p">(</span><span class="n">root</span><span class="o">=</span><span class="s2">"data/Planetoid"</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"Cora"</span><span class="p">)</span>
+<span class="n">data</span> <span class="o">=</span> <span class="n">dataset</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">num_nodes</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">num_nodes</span>
+
+<span class="n">edge_index_torch</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_index</span>                       <span class="c1"># int64, shape (2, E)</span>
+<span class="n">edge_index_mx</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>        <span class="c1"># same edges as an MLX array</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Cora: </span><span class="si">{</span><span class="n">num_nodes</span><span class="si">}</span><span class="s2"> nodes, </span><span class="si">{</span><span class="n">data</span><span class="o">.</span><span class="n">num_edges</span><span class="si">}</span><span class="s2"> edges"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Cora: 2708 nodes, 10556 edges
+</pre></div></div>
+</div>
+</section>
+<section id="Helpers">
+<h2>Helpers<a class="headerlink" href="#Helpers" title="Link to this heading">#</a></h2>
+<div class="nbinput nblast docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">benchmark</span><span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">sync</span><span class="p">,</span> <span class="n">warmup</span><span class="o">=</span><span class="n">WARMUP</span><span class="p">,</span> <span class="n">repeats</span><span class="o">=</span><span class="n">REPEATS</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Median wall-clock time of fn() in milliseconds. sync(result) forces lazy work to finish."""</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">warmup</span><span class="p">):</span>            <span class="c1"># first calls compile Metal kernels / warm caches</span>
+        <span class="n">sync</span><span class="p">(</span><span class="n">fn</span><span class="p">())</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeats</span><span class="p">):</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+        <span class="n">sync</span><span class="p">(</span><span class="n">fn</span><span class="p">())</span>
+        <span class="n">times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">*</span> <span class="mi">1000</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mx_sync</span><span class="p">(</span><span class="n">out</span><span class="p">):</span>
+    <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">torch_sync</span><span class="p">(</span><span class="n">out</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">TORCH_DEVICE</span><span class="o">.</span><span class="n">type</span> <span class="o">==</span> <span class="s2">"mps"</span><span class="p">:</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">mps</span><span class="o">.</span><span class="n">synchronize</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">print_table</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">rows</span><span class="p">):</span>
+    <span class="n">widths</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">r</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="p">[</span><span class="n">header</span><span class="p">]</span> <span class="o">+</span> <span class="n">rows</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">header</span><span class="p">))]</span>
+    <span class="n">line</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">r</span><span class="p">:</span> <span class="s2">"| "</span> <span class="o">+</span> <span class="s2">" | "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="o">.</span><span class="n">ljust</span><span class="p">(</span><span class="n">w</span><span class="p">)</span> <span class="k">for</span> <span class="n">c</span><span class="p">,</span> <span class="n">w</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">r</span><span class="p">,</span> <span class="n">widths</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" |"</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">(</span><span class="n">header</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"|"</span> <span class="o">+</span> <span class="s2">"|"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="s2">"-"</span> <span class="o">*</span> <span class="p">(</span><span class="n">w</span> <span class="o">+</span> <span class="mi">2</span><span class="p">)</span> <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">widths</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"|"</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">line</span><span class="p">(</span><span class="n">r</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</section>
+<section id="1.-Walk-sampling">
+<h2>1. Walk sampling<a class="headerlink" href="#1.-Walk-sampling" title="Link to this heading">#</a></h2>
+<p>This benchmark times the random-walk kernels directly, with the same CSR graph and the same start nodes (every node × <code class="docutils literal notranslate"><span class="pre">WALKS_PER_NODE</span></code>), so it doesn’t depend on either library’s training code.</p>
+<ul class="simple">
+<li><p><strong>mlx_cluster:</strong> <code class="docutils literal notranslate"><span class="pre">random_walk</span></code> for uniform walks, <code class="docutils literal notranslate"><span class="pre">rejection_sampling</span></code> for biased walks, on GPU and CPU.</p></li>
+<li><p><strong>PyG:</strong> <code class="docutils literal notranslate"><span class="pre">torch.ops.pyg.random_walk</span></code> (pyg-lib), CPU only on macOS.</p></li>
+</ul>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Build CSR once from PyG's sorted graph and share it with MLX</span>
+<span class="n">pyg_ref</span> <span class="o">=</span> <span class="n">PyGNode2Vec</span><span class="p">(</span><span class="n">edge_index_torch</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span> <span class="n">walk_length</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">context_size</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">num_nodes</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">)</span>
+<span class="n">rowptr_t</span><span class="p">,</span> <span class="n">col_t</span> <span class="o">=</span> <span class="n">pyg_ref</span><span class="o">.</span><span class="n">rowptr</span><span class="p">,</span> <span class="n">pyg_ref</span><span class="o">.</span><span class="n">col</span>
+<span class="n">rowptr_m</span><span class="p">,</span> <span class="n">col_m</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">rowptr_t</span><span class="o">.</span><span class="n">numpy</span><span class="p">()),</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">col_t</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+
+<span class="n">start_t</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">WALKS_PER_NODE</span><span class="p">)</span>
+<span class="n">start_m</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">start_t</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+<span class="n">num_walks</span> <span class="o">=</span> <span class="n">start_t</span><span class="o">.</span><span class="n">numel</span><span class="p">()</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">SAMPLING_WALK_LENGTH</span>
+<span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">rowptr_m</span><span class="p">,</span> <span class="n">col_m</span><span class="p">,</span> <span class="n">start_m</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">num_walks</span><span class="si">:</span><span class="s2">,</span><span class="si">}</span><span class="s2"> walks of length </span><span class="si">{</span><span class="n">L</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">pyg_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">ops</span><span class="o">.</span><span class="n">pyg</span><span class="o">.</span><span class="n">random_walk</span><span class="p">(</span><span class="n">rowptr_t</span><span class="p">,</span> <span class="n">col_t</span><span class="p">,</span> <span class="n">start_t</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">out</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">)</span> <span class="k">else</span> <span class="n">out</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mlx_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mf">1.0</span> <span class="ow">and</span> <span class="n">q</span> <span class="o">==</span> <span class="mf">1.0</span><span class="p">:</span>
+        <span class="n">rand</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="n">num_walks</span><span class="p">,</span> <span class="n">L</span><span class="p">])</span>
+        <span class="k">return</span> <span class="n">mlx_cluster</span><span class="o">.</span><span class="n">random_walk</span><span class="p">(</span><span class="n">rowptr_m</span><span class="p">,</span> <span class="n">col_m</span><span class="p">,</span> <span class="n">start_m</span><span class="p">,</span> <span class="n">rand</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">mlx_cluster</span><span class="o">.</span><span class="n">rejection_sampling</span><span class="p">(</span><span class="n">rowptr_m</span><span class="p">,</span> <span class="n">col_m</span><span class="p">,</span> <span class="n">start_m</span><span class="p">,</span> <span class="n">L</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">stream</span><span class="o">=</span><span class="n">stream</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mlx_gpu_available</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">metal</span><span class="o">.</span><span class="n">is_available</span><span class="p">()</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">is_biased</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="ow">or</span> <span class="n">MLX_CLUSTER_RS_HAS_GPU</span><span class="p">)</span>
+
+<span class="n">sampling_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">WALK_SETTINGS</span><span class="p">:</span>
+    <span class="n">t_pyg</span> <span class="o">=</span> <span class="n">benchmark</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">pyg_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">),</span> <span class="n">sync</span><span class="o">=</span><span class="k">lambda</span> <span class="n">out</span><span class="p">:</span> <span class="kc">None</span><span class="p">)</span> <span class="k">if</span> <span class="n">pyg_supports</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">t_mlx_cpu</span> <span class="o">=</span> <span class="n">benchmark</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">mlx_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">cpu</span><span class="p">),</span> <span class="n">sync</span><span class="o">=</span><span class="n">mx_sync</span><span class="p">)</span>
+    <span class="n">t_mlx_gpu</span> <span class="o">=</span> <span class="n">benchmark</span><span class="p">(</span><span class="k">lambda</span><span class="p">:</span> <span class="n">mlx_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">),</span> <span class="n">sync</span><span class="o">=</span><span class="n">mx_sync</span><span class="p">)</span> <span class="k">if</span> <span class="n">mlx_gpu_available</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">sampling_rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+        <span class="n">label</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_pyg</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">t_pyg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">"not supported"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_mlx_cpu</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_mlx_gpu</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">t_mlx_gpu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">"n/a"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_pyg</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t_mlx_gpu</span><span class="si">:</span><span class="s2">.1f</span><span class="si">}</span><span class="s2">x"</span> <span class="k">if</span> <span class="n">t_pyg</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">t_mlx_gpu</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="s2">"n/a"</span><span class="p">,</span>
+    <span class="p">])</span>
+
+<span class="n">print_table</span><span class="p">([</span><span class="s2">"Walks"</span><span class="p">,</span> <span class="s2">"PyG CPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX CPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX GPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX GPU vs PyG"</span><span class="p">],</span> <span class="n">sampling_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+27,080 walks of length 80
+| Walks               | PyG CPU (ms)  | MLX CPU (ms) | MLX GPU (ms) | MLX GPU vs PyG |
+|---------------------|---------------|--------------|--------------|----------------|
+| uniform (p=1, q=1)  | 18.0          | 15.8         | 2.4          | 7.4x           |
+| biased (p=1, q=0.5) | not supported | 52.4         | 6.1          | n/a            |
+</pre></div></div>
+</div>
+<section id="Sanity-check:-walks-follow-graph-edges">
+<h3>Sanity check: walks follow graph edges<a class="headerlink" href="#Sanity-check:-walks-follow-graph-edges" title="Link to this heading">#</a></h3>
+<p>Speed only counts if the walks are valid, so this cell checks that every step of each sampler’s walks is an edge of the graph (or a stay-in-place on a node with no outgoing edges).</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rowptr_np</span><span class="p">,</span> <span class="n">col_np</span> <span class="o">=</span> <span class="n">rowptr_t</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">col_t</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">edges</span> <span class="o">=</span> <span class="p">{(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">u</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">col_np</span><span class="p">[</span><span class="n">rowptr_np</span><span class="p">[</span><span class="n">u</span><span class="p">]:</span><span class="n">rowptr_np</span><span class="p">[</span><span class="n">u</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]}</span>
+<span class="n">has_out</span> <span class="o">=</span> <span class="p">{</span><span class="n">u</span> <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">}</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">invalid_steps</span><span class="p">(</span><span class="n">walks</span><span class="p">,</span> <span class="n">max_walks</span><span class="o">=</span><span class="mi">2000</span><span class="p">):</span>
+    <span class="n">bad</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">w</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">walks</span><span class="p">)[:</span><span class="n">max_walks</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">u</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">w</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">:]):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">u</span> <span class="ow">in</span> <span class="n">has_out</span> <span class="ow">and</span> <span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edges</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">u</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">has_out</span> <span class="ow">and</span> <span class="n">u</span> <span class="o">!=</span> <span class="n">v</span><span class="p">):</span>
+                <span class="n">bad</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">bad</span>
+
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">WALK_SETTINGS</span><span class="p">:</span>
+    <span class="n">checks</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"MLX CPU"</span><span class="p">:</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">mlx_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">cpu</span><span class="p">)}</span>
+    <span class="k">if</span> <span class="n">pyg_supports</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="n">checks</span><span class="p">[</span><span class="s2">"PyG"</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">pyg_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">mlx_gpu_available</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">):</span>
+        <span class="n">checks</span><span class="p">[</span><span class="s2">"MLX GPU"</span><span class="p">]</span> <span class="o">=</span> <span class="k">lambda</span><span class="p">:</span> <span class="n">mlx_walks</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">sample</span> <span class="ow">in</span> <span class="n">checks</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">name</span><span class="si">:</span><span class="s2">&lt;8</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">invalid_steps</span><span class="p">(</span><span class="n">sample</span><span class="p">())</span><span class="si">}</span><span class="s2"> invalid steps"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+uniform (p=1, q=1)   MLX CPU  0 invalid steps
+uniform (p=1, q=1)   PyG      0 invalid steps
+uniform (p=1, q=1)   MLX GPU  0 invalid steps
+biased (p=1, q=0.5)  MLX CPU  0 invalid steps
+biased (p=1, q=0.5)  MLX GPU  0 invalid steps
+</pre></div></div>
+</div>
+</section>
+</section>
+<section id="2.-Training">
+<h2>2. Training<a class="headerlink" href="#2.-Training" title="Link to this heading">#</a></h2>
+<p>Each library trains its own <code class="docutils literal notranslate"><span class="pre">Node2Vec</span></code> model for <code class="docutils literal notranslate"><span class="pre">NUM_EPOCHS</span></code> epochs with dense Adam (same learning rate and batch size), once per seed in <code class="docutils literal notranslate"><span class="pre">SEEDS</span></code>. The timer covers walk sampling, the loss, gradients and optimizer updates. After training, each run’s embeddings are scored with logistic regression on Cora (section 3).</p>
+<ul class="simple">
+<li><p><strong>mlx-graphs:</strong> walks on the GPU (biased walks only if <code class="docutils literal notranslate"><span class="pre">MXG_BIASED_WALKS_ON_GPU</span></code> is <code class="docutils literal notranslate"><span class="pre">True</span></code>), training on MLX’s default device (GPU).</p></li>
+<li><p><strong>PyG:</strong> walks on the CPU (pyg-lib), training on <code class="docutils literal notranslate"><span class="pre">TORCH_DEVICE</span></code> (MPS if available).</p></li>
+</ul>
+<p>Two switches make the runs comparable (both on by default): - <code class="docutils literal notranslate"><span class="pre">MATCH_INIT</span></code>: PyG’s embeddings are initialized at MLX’s scale (std 1/√<code class="docutils literal notranslate"><span class="pre">EMBEDDING_DIM</span></code> instead of PyTorch’s 1.0). - <code class="docutils literal notranslate"><span class="pre">MATCH_ADAM</span></code>: MLX’s Adam uses bias correction, as PyTorch’s Adam always does.</p>
+<p>PyG is skipped for biased walks, which pyg-lib doesn’t support.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">train_mask</span><span class="p">,</span> <span class="n">test_mask</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">train_mask</span><span class="o">.</span><span class="n">numpy</span><span class="p">(),</span> <span class="n">data</span><span class="o">.</span><span class="n">test_mask</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">numpy</span><span class="p">()</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">test_accuracy</span><span class="p">(</span><span class="n">embeddings</span><span class="p">):</span>
+    <span class="n">clf</span> <span class="o">=</span> <span class="n">LogisticRegression</span><span class="p">(</span><span class="n">max_iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">)</span>
+    <span class="n">clf</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">embeddings</span><span class="p">[</span><span class="n">train_mask</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">train_mask</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">clf</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">embeddings</span><span class="p">[</span><span class="n">test_mask</span><span class="p">],</span> <span class="n">labels</span><span class="p">[</span><span class="n">test_mask</span><span class="p">])</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train_mlx</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>  <span class="c1"># mlx-graphs' dataloader shuffles with NumPy</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">MXGNode2Vec</span><span class="p">(</span>
+        <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index_mx</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="n">EMBEDDING_DIM</span><span class="p">,</span> <span class="n">walk_length</span><span class="o">=</span><span class="n">WALK_LENGTH</span><span class="p">,</span>
+        <span class="n">context_size</span><span class="o">=</span><span class="n">CONTEXT_SIZE</span><span class="p">,</span> <span class="n">num_nodes</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">walks_per_node</span><span class="o">=</span><span class="n">WALKS_PER_NODE</span><span class="p">,</span>
+        <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span> <span class="n">num_negative_samples</span><span class="o">=</span><span class="n">NUM_NEGATIVE_SAMPLES</span><span class="p">,</span> <span class="n">use_gpu</span><span class="o">=</span><span class="n">mx</span><span class="o">.</span><span class="n">metal</span><span class="o">.</span><span class="n">is_available</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">mxoptim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">,</span> <span class="n">bias_correction</span><span class="o">=</span><span class="n">MATCH_ADAM</span><span class="p">)</span>
+    <span class="n">loss_and_grad</span> <span class="o">=</span> <span class="n">mxnn</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">)</span>
+    <span class="n">epoch_times</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_EPOCHS</span><span class="p">):</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pos</span><span class="p">,</span> <span class="n">neg</span> <span class="ow">in</span> <span class="n">model</span><span class="o">.</span><span class="n">dataloader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">):</span>
+            <span class="n">loss</span><span class="p">,</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">loss_and_grad</span><span class="p">(</span><span class="n">pos</span><span class="p">,</span> <span class="n">neg</span><span class="p">)</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">state</span><span class="p">,</span> <span class="n">loss</span><span class="p">)</span>
+            <span class="n">total</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">epoch_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+        <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">test_accuracy</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">epoch_times</span><span class="p">,</span> <span class="n">losses</span><span class="p">,</span> <span class="n">accuracy</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">train_pyg</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">seed</span><span class="p">):</span>
+    <span class="n">torch</span><span class="o">.</span><span class="n">manual_seed</span><span class="p">(</span><span class="n">seed</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">PyGNode2Vec</span><span class="p">(</span>
+        <span class="n">edge_index_torch</span><span class="p">,</span> <span class="n">embedding_dim</span><span class="o">=</span><span class="n">EMBEDDING_DIM</span><span class="p">,</span> <span class="n">walk_length</span><span class="o">=</span><span class="n">WALK_LENGTH</span><span class="p">,</span>
+        <span class="n">context_size</span><span class="o">=</span><span class="n">CONTEXT_SIZE</span><span class="p">,</span> <span class="n">walks_per_node</span><span class="o">=</span><span class="n">WALKS_PER_NODE</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="o">=</span><span class="n">q</span><span class="p">,</span>
+        <span class="n">num_negative_samples</span><span class="o">=</span><span class="n">NUM_NEGATIVE_SAMPLES</span><span class="p">,</span> <span class="n">num_nodes</span><span class="o">=</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">sparse</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">MATCH_INIT</span><span class="p">:</span>
+        <span class="n">torch</span><span class="o">.</span><span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">normal_</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="n">EMBEDDING_DIM</span> <span class="o">**</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">)</span>
+    <span class="n">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">TORCH_DEVICE</span><span class="p">)</span>
+    <span class="n">loader</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">loader</span><span class="p">(</span><span class="n">batch_size</span><span class="o">=</span><span class="n">BATCH_SIZE</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">num_workers</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">optimizer</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="n">Adam</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">lr</span><span class="o">=</span><span class="n">LEARNING_RATE</span><span class="p">)</span>
+    <span class="n">epoch_times</span><span class="p">,</span> <span class="n">losses</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">train</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">NUM_EPOCHS</span><span class="p">):</span>
+        <span class="n">start</span><span class="p">,</span> <span class="n">total</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">(),</span> <span class="mf">0.0</span><span class="p">,</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">pos_rw</span><span class="p">,</span> <span class="n">neg_rw</span> <span class="ow">in</span> <span class="n">loader</span><span class="p">:</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">zero_grad</span><span class="p">()</span>
+            <span class="n">loss</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">loss</span><span class="p">(</span><span class="n">pos_rw</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">TORCH_DEVICE</span><span class="p">),</span> <span class="n">neg_rw</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">TORCH_DEVICE</span><span class="p">))</span>
+            <span class="n">loss</span><span class="o">.</span><span class="n">backward</span><span class="p">()</span>
+            <span class="n">optimizer</span><span class="o">.</span><span class="n">step</span><span class="p">()</span>
+            <span class="n">total</span><span class="p">,</span> <span class="n">n</span> <span class="o">=</span> <span class="n">total</span> <span class="o">+</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">(),</span> <span class="n">n</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">torch_sync</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
+        <span class="n">epoch_times</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">start</span><span class="p">)</span>
+        <span class="n">losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total</span> <span class="o">/</span> <span class="n">n</span><span class="p">)</span>
+    <span class="n">accuracy</span> <span class="o">=</span> <span class="n">test_accuracy</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">embedding</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">detach</span><span class="p">()</span><span class="o">.</span><span class="n">cpu</span><span class="p">()</span><span class="o">.</span><span class="n">numpy</span><span class="p">())</span>
+    <span class="k">return</span> <span class="n">epoch_times</span><span class="p">,</span> <span class="n">losses</span><span class="p">,</span> <span class="n">accuracy</span>
+
+<span class="c1"># results[(label, library)] -&gt; list of (epoch_times, losses, accuracy), one per seed</span>
+<span class="n">results</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">WALK_SETTINGS</span><span class="p">:</span>
+    <span class="n">runs</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"mlx-graphs"</span><span class="p">,</span> <span class="n">train_mlx</span><span class="p">)]</span> <span class="o">+</span> <span class="p">([(</span><span class="s2">"PyG"</span><span class="p">,</span> <span class="n">train_pyg</span><span class="p">)]</span> <span class="k">if</span> <span class="n">pyg_supports</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">)</span> <span class="k">else</span> <span class="p">[])</span>
+    <span class="k">for</span> <span class="n">library</span><span class="p">,</span> <span class="n">train</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">:</span>
+        <span class="n">results</span><span class="p">[(</span><span class="n">label</span><span class="p">,</span> <span class="n">library</span><span class="p">)]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">seed</span> <span class="ow">in</span> <span class="n">SEEDS</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Training </span><span class="si">{</span><span class="n">library</span><span class="si">:</span><span class="s2">&lt;10</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">label</span><span class="si">:</span><span class="s2">&lt;20</span><span class="si">}</span><span class="s2"> seed </span><span class="si">{</span><span class="n">seed</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[(</span><span class="n">label</span><span class="p">,</span> <span class="n">library</span><span class="p">)]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">train</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">seed</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs uniform (p=1, q=1)   seed 0
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs uniform (p=1, q=1)   seed 1
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs uniform (p=1, q=1)   seed 2
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training PyG        uniform (p=1, q=1)   seed 0
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training PyG        uniform (p=1, q=1)   seed 1
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training PyG        uniform (p=1, q=1)   seed 2
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs biased (p=1, q=0.5)  seed 0
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs biased (p=1, q=0.5)  seed 1
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nboutput docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Training mlx-graphs biased (p=1, q=0.5)  seed 2
+</pre></div></div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area stderr docutils container">
+<div class="highlight"><pre>
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: divide by zero encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: overflow encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:206: RuntimeWarning: invalid value encountered in matmul
+  raw_prediction = X @ weights.T + intercept  # ndarray, likely C-contiguous
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: divide by zero encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: overflow encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/linear_model/_linear_loss.py:339: RuntimeWarning: invalid value encountered in matmul
+  grad[:, :n_features] = grad_pointwise.T @ X + l2_reg_strength * weights
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: divide by zero encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: overflow encountered in matmul
+  ret = a @ b
+/Users/vinay.pandya/mlx_graphs_workspace/mlx_graphs_venv/lib/python3.13/site-packages/sklearn/utils/extmath.py:227: RuntimeWarning: invalid value encountered in matmul
+  ret = a @ b
+</pre></div></div>
+</div>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">epoch_time</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Median seconds per epoch over all seeds, skipping each run's first epoch (compilation, caches)."""</span>
+    <span class="n">steady</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="k">for</span> <span class="n">times</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">runs</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="p">(</span><span class="n">times</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">times</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">statistics</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">steady</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">mean_std</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">fmt</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">format</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">fmt</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">statistics</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">),</span><span class="w"> </span><span class="n">fmt</span><span class="p">)</span><span class="si">}</span><span class="s2"> ± </span><span class="si">{</span><span class="nb">format</span><span class="p">(</span><span class="n">statistics</span><span class="o">.</span><span class="n">stdev</span><span class="p">(</span><span class="n">values</span><span class="p">),</span><span class="w"> </span><span class="n">fmt</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">final_losses</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">losses</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">losses</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">]</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">accuracies</span><span class="p">(</span><span class="n">runs</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">acc</span> <span class="k">for</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">acc</span> <span class="ow">in</span> <span class="n">runs</span><span class="p">]</span>
+
+<span class="n">NOT_SUPPORTED</span> <span class="o">=</span> <span class="s2">"not supported"</span>
+<span class="n">TRAINING_HEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Walks"</span><span class="p">,</span> <span class="s2">"PyG s/epoch"</span><span class="p">,</span> <span class="s2">"mlx-graphs s/epoch"</span><span class="p">,</span> <span class="s2">"mlx-graphs vs PyG"</span><span class="p">,</span> <span class="s2">"PyG final loss"</span><span class="p">,</span> <span class="s2">"mlx-graphs final loss"</span><span class="p">]</span>
+
+<span class="n">training_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">WALK_SETTINGS</span><span class="p">:</span>
+    <span class="n">mxg</span><span class="p">,</span> <span class="n">pyg</span> <span class="o">=</span> <span class="n">results</span><span class="p">[(</span><span class="n">label</span><span class="p">,</span> <span class="s2">"mlx-graphs"</span><span class="p">)],</span> <span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">label</span><span class="p">,</span> <span class="s2">"PyG"</span><span class="p">))</span>
+    <span class="n">t_mxg</span> <span class="o">=</span> <span class="n">epoch_time</span><span class="p">(</span><span class="n">mxg</span><span class="p">)</span>
+    <span class="n">t_pyg</span> <span class="o">=</span> <span class="n">epoch_time</span><span class="p">(</span><span class="n">pyg</span><span class="p">)</span> <span class="k">if</span> <span class="n">pyg</span> <span class="k">else</span> <span class="kc">None</span>
+    <span class="n">training_rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+        <span class="n">label</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_pyg</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span> <span class="k">if</span> <span class="n">pyg</span> <span class="k">else</span> <span class="n">NOT_SUPPORTED</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_mxg</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">t_pyg</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">t_mxg</span><span class="si">:</span><span class="s2">.2f</span><span class="si">}</span><span class="s2">x"</span> <span class="k">if</span> <span class="n">pyg</span> <span class="k">else</span> <span class="s2">"n/a"</span><span class="p">,</span>
+        <span class="n">mean_std</span><span class="p">(</span><span class="n">final_losses</span><span class="p">(</span><span class="n">pyg</span><span class="p">),</span> <span class="s2">".4f"</span><span class="p">)</span> <span class="k">if</span> <span class="n">pyg</span> <span class="k">else</span> <span class="n">NOT_SUPPORTED</span><span class="p">,</span>
+        <span class="n">mean_std</span><span class="p">(</span><span class="n">final_losses</span><span class="p">(</span><span class="n">mxg</span><span class="p">),</span> <span class="s2">".4f"</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">SEEDS</span><span class="p">)</span><span class="si">}</span><span class="s2"> seeds, </span><span class="si">{</span><span class="n">NUM_EPOCHS</span><span class="si">}</span><span class="s2"> epochs each (losses: mean ± std over seeds)"</span><span class="p">)</span>
+<span class="n">print_table</span><span class="p">(</span><span class="n">TRAINING_HEADER</span><span class="p">,</span> <span class="n">training_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+3 seeds, 10 epochs each (losses: mean ± std over seeds)
+| Walks               | PyG s/epoch   | mlx-graphs s/epoch | mlx-graphs vs PyG | PyG final loss  | mlx-graphs final loss |
+|---------------------|---------------|--------------------|-------------------|-----------------|-----------------------|
+| uniform (p=1, q=1)  | 0.33          | 0.15               | 2.14x             | 0.8286 ± 0.0008 | 0.8287 ± 0.0007       |
+| biased (p=1, q=0.5) | not supported | 0.18               | n/a               | not supported   | 0.8498 ± 0.0004       |
+</pre></div></div>
+</div>
+</section>
+<section id="3.-Embedding-quality">
+<h2>3. Embedding quality<a class="headerlink" href="#3.-Embedding-quality" title="Link to this heading">#</a></h2>
+<p>A logistic-regression classifier is trained on each run’s embeddings using Cora’s standard train split and scored on the test split (1,000 nodes, so a single score varies by roughly ±1.5 points from the test set alone). Accuracy is reported as mean ± std over <code class="docutils literal notranslate"><span class="pre">SEEDS</span></code>. If the two libraries’ ranges overlap, they learn embeddings of similar quality and the speed comparison is fair.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">QUALITY_HEADER</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"Walks"</span><span class="p">,</span> <span class="s2">"PyG test accuracy"</span><span class="p">,</span> <span class="s2">"mlx-graphs test accuracy"</span><span class="p">]</span>
+
+<span class="n">quality_rows</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">label</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="ow">in</span> <span class="n">WALK_SETTINGS</span><span class="p">:</span>
+    <span class="n">pyg</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get</span><span class="p">((</span><span class="n">label</span><span class="p">,</span> <span class="s2">"PyG"</span><span class="p">))</span>
+    <span class="n">quality_rows</span><span class="o">.</span><span class="n">append</span><span class="p">([</span>
+        <span class="n">label</span><span class="p">,</span>
+        <span class="n">mean_std</span><span class="p">(</span><span class="n">accuracies</span><span class="p">(</span><span class="n">pyg</span><span class="p">),</span> <span class="s2">".3f"</span><span class="p">)</span> <span class="k">if</span> <span class="n">pyg</span> <span class="k">else</span> <span class="n">NOT_SUPPORTED</span><span class="p">,</span>
+        <span class="n">mean_std</span><span class="p">(</span><span class="n">accuracies</span><span class="p">(</span><span class="n">results</span><span class="p">[(</span><span class="n">label</span><span class="p">,</span> <span class="s2">"mlx-graphs"</span><span class="p">)]),</span> <span class="s2">".3f"</span><span class="p">),</span>
+    <span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Mean ± std over </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">SEEDS</span><span class="p">)</span><span class="si">}</span><span class="s2"> seeds"</span><span class="p">)</span>
+<span class="n">print_table</span><span class="p">(</span><span class="n">QUALITY_HEADER</span><span class="p">,</span> <span class="n">quality_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Mean ± std over 3 seeds
+| Walks               | PyG test accuracy | mlx-graphs test accuracy |
+|---------------------|-------------------|--------------------------|
+| uniform (p=1, q=1)  | 0.719 ± 0.010     | 0.706 ± 0.007            |
+| biased (p=1, q=0.5) | not supported     | 0.722 ± 0.010            |
+</pre></div></div>
+</div>
+</section>
+<section id="Summary">
+<h2>Summary<a class="headerlink" href="#Summary" title="Link to this heading">#</a></h2>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Machine: </span><span class="si">{</span><span class="n">platform</span><span class="o">.</span><span class="n">machine</span><span class="p">()</span><span class="si">}</span><span class="s2">, mlx </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">'mlx'</span><span class="p">)</span><span class="si">}</span><span class="s2">, mlx_cluster </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">'mlx_cluster'</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"torch </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">'torch'</span><span class="p">)</span><span class="si">}</span><span class="s2">, torch_geometric </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">'torch_geometric'</span><span class="p">)</span><span class="si">}</span><span class="s2">, pyg-lib </span><span class="si">{</span><span class="n">pkg_version</span><span class="p">(</span><span class="s1">'pyg-lib'</span><span class="p">)</span><span class="si">}</span><span class="se">\n</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"Walk sampling (median ms per call):"</span><span class="p">)</span>
+<span class="n">print_table</span><span class="p">([</span><span class="s2">"Walks"</span><span class="p">,</span> <span class="s2">"PyG CPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX CPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX GPU (ms)"</span><span class="p">,</span> <span class="s2">"MLX GPU vs PyG"</span><span class="p">],</span> <span class="n">sampling_rows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Settings: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">SEEDS</span><span class="p">)</span><span class="si">}</span><span class="s2"> seeds, </span><span class="si">{</span><span class="n">NUM_EPOCHS</span><span class="si">}</span><span class="s2"> epochs, MATCH_INIT=</span><span class="si">{</span><span class="n">MATCH_INIT</span><span class="si">}</span><span class="s2">, MATCH_ADAM=</span><span class="si">{</span><span class="n">MATCH_ADAM</span><span class="si">}</span><span class="s2">, "</span>
+      <span class="sa">f</span><span class="s2">"PyG device </span><span class="si">{</span><span class="n">TORCH_DEVICE</span><span class="si">}</span><span class="s2">, mlx-graphs biased walks on GPU: </span><span class="si">{</span><span class="n">MXG_BIASED_WALKS_ON_GPU</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Training (median s per epoch over seeds, first epoch excluded; loss mean ± std):"</span><span class="p">)</span>
+<span class="n">print_table</span><span class="p">(</span><span class="n">TRAINING_HEADER</span><span class="p">,</span> <span class="n">training_rows</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">Embedding quality (logistic regression, Cora test split, mean ± std over seeds):"</span><span class="p">)</span>
+<span class="n">print_table</span><span class="p">(</span><span class="n">QUALITY_HEADER</span><span class="p">,</span> <span class="n">quality_rows</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+Machine: arm64, mlx 0.32.4, mlx_cluster 0.1.2, torch 2.12.1, torch_geometric 2.8.1, pyg-lib 0.9.0+pt212
+
+Walk sampling (median ms per call):
+| Walks               | PyG CPU (ms)  | MLX CPU (ms) | MLX GPU (ms) | MLX GPU vs PyG |
+|---------------------|---------------|--------------|--------------|----------------|
+| uniform (p=1, q=1)  | 18.0          | 15.8         | 2.4          | 7.4x           |
+| biased (p=1, q=0.5) | not supported | 52.4         | 6.1          | n/a            |
+
+Settings: 3 seeds, 10 epochs, MATCH_INIT=True, MATCH_ADAM=True, PyG device mps, mlx-graphs biased walks on GPU: True
+
+Training (median s per epoch over seeds, first epoch excluded; loss mean ± std):
+| Walks               | PyG s/epoch   | mlx-graphs s/epoch | mlx-graphs vs PyG | PyG final loss  | mlx-graphs final loss |
+|---------------------|---------------|--------------------|-------------------|-----------------|-----------------------|
+| uniform (p=1, q=1)  | 0.33          | 0.15               | 2.14x             | 0.8286 ± 0.0008 | 0.8287 ± 0.0007       |
+| biased (p=1, q=0.5) | not supported | 0.18               | n/a               | not supported   | 0.8498 ± 0.0004       |
+
+Embedding quality (logistic regression, Cora test split, mean ± std over seeds):
+| Walks               | PyG test accuracy | mlx-graphs test accuracy |
+|---------------------|-------------------|--------------------------|
+| uniform (p=1, q=1)  | 0.719 ± 0.010     | 0.706 ± 0.007            |
+| biased (p=1, q=0.5) | not supported     | 0.722 ± 0.010            |
+</pre></div></div>
+</div>
+<section id="Reading-the-results">
+<h3>Reading the results<a class="headerlink" href="#Reading-the-results" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>Walk sampling</strong> isolates the kernels: this is where the Metal walk kernels in <code class="docutils literal notranslate"><span class="pre">mlx_cluster</span></code> are compared directly with pyg-lib’s CPU sampler.</p></li>
+<li><p><strong>Training</strong> includes everything else as well (embedding lookups, loss, optimizer), so the gap is usually smaller than for sampling alone.</p></li>
+<li><p><strong>Biased walks</strong> have no PyG comparison: pyg-lib’s <code class="docutils literal notranslate"><span class="pre">random_walk</span></code> only supports <code class="docutils literal notranslate"><span class="pre">p</span> <span class="pre">=</span> <span class="pre">q</span> <span class="pre">=</span> <span class="pre">1</span></code>, so PyG 2.8’s <code class="docutils literal notranslate"><span class="pre">Node2Vec</span></code> can’t train biased node2vec. Those rows show mlx-graphs alone.</p></li>
+<li><p><strong>Accuracy</strong> is only meaningfully different if the mean ± std ranges don’t overlap; with a few seeds, differences of 1–2 points are usually noise.</p></li>
+<li><p>If <code class="docutils literal notranslate"><span class="pre">MXG_BIASED_WALKS_ON_GPU</span></code> is <code class="docutils literal notranslate"><span class="pre">False</span></code>, the biased-walk training row for mlx-graphs samples on the CPU, which is how upstream mlx-graphs currently behaves.</p></li>
+<li><p>With <code class="docutils literal notranslate"><span class="pre">MATCH_INIT</span> <span class="pre">=</span> <span class="pre">False</span></code>, PyG starts from much larger embeddings (std 1.0 vs 0.088), so its loss starts far higher and it needs more epochs to reach the same accuracy. That’s a difference in defaults, not in the algorithm.</p></li>
+<li><p>The two libraries use different random number generators, so the same seed doesn’t give the same walks across libraries; compare the mean ± std ranges, not single runs.</p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Setup">Setup</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Configuration">Configuration</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Dataset">Dataset</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Helpers">Helpers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#1.-Walk-sampling">1. Walk sampling</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Sanity-check:-walks-follow-graph-edges">Sanity check: walks follow graph edges</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#2.-Training">2. Training</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#3.-Embedding-quality">3. Embedding quality</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Summary">Summary</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Reading-the-results">Reading the results</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

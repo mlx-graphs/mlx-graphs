@@ -18,6 +18,7 @@
 	     ~HeteroGraphData.has_self_loops
 	     ~HeteroGraphData.is_directed
 	     ~HeteroGraphData.is_undirected
+	     ~HeteroGraphData.to_csc_dict
 	     ~HeteroGraphData.to_dict
 	
 	
@@ -28,6 +29,7 @@
 
 	.. autosummary::
 	
+	  ~HeteroGraphData.node_types
 	  ~HeteroGraphData.num_edge_classes
 	  ~HeteroGraphData.num_edge_features
 	  ~HeteroGraphData.num_edges

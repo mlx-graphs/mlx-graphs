@@ -17,6 +17,7 @@
 	
 	     ~MessagePassing.aggregate
 	     ~MessagePassing.message
+	     ~MessagePassing.message_and_aggregate
 	     ~MessagePassing.propagate
 	     ~MessagePassing.update_nodes
 	

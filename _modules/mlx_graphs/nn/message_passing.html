@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -7,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.0.10 documentation</title>
+    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.0.11 documentation</title>
   
   
   
@@ -26,8 +25,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
@@ -35,12 +34,12 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=94452c26"></script>
+    <script src="../../../_static/documentation_options.js?v=2fb9ae3b"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -50,6 +49,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
   
@@ -98,46 +98,6 @@
 
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
-<div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
-    <span class="fa-solid fa-bars"></span>
-  </button>
-  
-  
-  <div class="col-lg-9 navbar-header-items">
-    
-    
-    <div class="navbar-header-items__end">
-      
-        <div class="navbar-item navbar-persistent--container">
-          
-
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
-        </div>
-      
-      
-    </div>
-    
-  </div>
-  
-  
-    <div class="navbar-persistent--mobile">
-
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
-    </div>
-  
-
-  
-</div>
-
     </header>
   
 
@@ -148,7 +108,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -178,14 +138,14 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.10 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.10 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.11 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.11 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -261,6 +221,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -270,6 +231,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
@@ -278,6 +240,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
@@ -287,6 +250,11 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -313,6 +281,7 @@
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.index_to_ptr.html">mlx_graphs.utils.sorting.index_to_ptr</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
 </ul>
@@ -432,20 +401,20 @@
 
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
   </ul>
 </div>
 
 
-<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
 
@@ -474,12 +443,217 @@
                 <article class="bd-article">
                   
   <h1>Source code for mlx_graphs.nn.message_passing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">get_args</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">get_args</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScatterAggregations</span><span class="p">,</span> <span class="n">get_src_dst_features</span><span class="p">,</span> <span class="n">scatter</span>
+
+<span class="c1"># Fused SpMM kernels live in mlx-cluster. They are optional: without them (or</span>
+<span class="c1"># with an older mlx-cluster) every layer keeps the gather-scatter path.</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">coo_to_csr</span> <span class="k">as</span> <span class="n">_coo_to_csr</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">spmm_coo</span> <span class="k">as</span> <span class="n">_spmm_coo</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">spmm_csr</span> <span class="k">as</span> <span class="n">_spmm_csr</span>
+
+    <span class="n">HAS_FUSED_KERNELS</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">FUSED_KERNELS_IMPORT_ERROR</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="ne">ImportError</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="k">except</span> <span class="ne">ImportError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="c1"># Kept so tools can explain *why* (e.g. mlx_cluster built against a</span>
+    <span class="c1"># different mlx version) instead of just "not found".</span>
+    <span class="n">HAS_FUSED_KERNELS</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="n">FUSED_KERNELS_IMPORT_ERROR</span> <span class="o">=</span> <span class="n">e</span>
+
+<span class="n">FusedFormat</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"coo"</span><span class="p">,</span> <span class="s2">"csr"</span><span class="p">]</span>
+<span class="n">_FUSED_AGGRS</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">HAS_FUSED_KERNELS</span><span class="p">:</span>
+    <span class="c1"># max/min need an mlx-cluster with those reductions; older ones fall back</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_cluster.sparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">SpMMReduce</span> <span class="k">as</span> <span class="n">_SpMMReduce</span>
+
+        <span class="n">_FUSED_AGGRS</span> <span class="o">+=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">a</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"max"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">)</span> <span class="k">if</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">_SpMMReduce</span><span class="p">))</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+<span class="c1"># Global switch, mainly for benchmarks and tests (same model, both paths).</span>
+<span class="n">_fused_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+<span class="n">_fused_format_override</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+
+<div class="viewcode-block" id="set_fused_message_passing">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html#mlx_graphs.nn.set_fused_message_passing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">set_fused_message_passing</span><span class="p">(</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Globally enables/disables fused message passing.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        enabled: if ``False``, every layer uses gather-scatter.</span>
+<span class="sd">        format: if given, overrides the ``format`` chosen in</span>
+<span class="sd">            :func:`fused_message_passing` for every layer (``"coo"`` or ``"csr"``).</span>
+<span class="sd">    """</span>
+    <span class="k">global</span> <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span>
+    <span class="k">if</span> <span class="nb">format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">FusedFormat</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+    <span class="n">_fused_enabled</span> <span class="o">=</span> <span class="n">enabled</span>
+    <span class="n">_fused_format_override</span> <span class="o">=</span> <span class="nb">format</span></div>
+
+
+
+<div class="viewcode-block" id="is_fused_message_passing_enabled">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html#mlx_graphs.nn.is_fused_message_passing_enabled">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">is_fused_message_passing_enabled</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Whether fused message passing is enabled and the kernels are available."""</span>
+    <span class="k">return</span> <span class="n">_fused_enabled</span> <span class="ow">and</span> <span class="n">HAS_FUSED_KERNELS</span></div>
+
+
+
+<div class="viewcode-block" id="fused_message_passing_mode">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html#mlx_graphs.nn.fused_message_passing_mode">[docs]</a>
+<span class="nd">@contextmanager</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fused_message_passing_mode</span><span class="p">(</span><span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Context manager version of :func:`set_fused_message_passing`.</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        with fused_message_passing_mode(False):</span>
+<span class="sd">            out_reference = model(edge_index, x)  # gather-scatter</span>
+<span class="sd">    """</span>
+    <span class="k">global</span> <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="p">(</span><span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span><span class="p">)</span>
+    <span class="n">set_fused_message_passing</span><span class="p">(</span><span class="n">enabled</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">yield</span>
+    <span class="k">finally</span><span class="p">:</span>
+        <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span> <span class="o">=</span> <span class="n">previous</span></div>
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">_CSRCache</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Small LRU cache of COO -&gt; CSR conversions, keyed on the edge_index array.</span>
+
+<span class="sd">    The cache keeps a reference to each edge_index, so its ``id`` cannot be</span>
+<span class="sd">    reused by another array while the entry is alive.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">maxsize</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span> <span class="s2">"OrderedDict[Tuple[int, int, int], Tuple[mx.array, Any]]"</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">OrderedDict</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="c1"># num_rows = destination nodes (output rows), num_cols = source nodes</span>
+        <span class="c1"># (rows of x). They differ for bipartite (src, dst) inputs.</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">edge_index</span><span class="p">),</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
+        <span class="n">hit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">hit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">edge_index</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">hit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span><span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">csr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">csr</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
+
+
+<span class="n">_csr_cache</span> <span class="o">=</span> <span class="n">_CSRCache</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="clear_csr_cache">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html#mlx_graphs.nn.clear_csr_cache">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">clear_csr_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Drops all cached CSR conversions used by ``format="csr"``."""</span>
+    <span class="n">_csr_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="fused_message_passing">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html#mlx_graphs.nn.fused_message_passing">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">fused_message_passing</span><span class="p">(</span>
+    <span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">FusedFormat</span> <span class="o">=</span> <span class="s2">"coo"</span><span class="p">,</span>
+    <span class="n">allow_message_override</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Class decorator: lets a :class:`MessagePassing` layer fuse ``message``</span>
+<span class="sd">    and ``aggregate`` into a single sparse x dense matmul (SpMM).</span>
+
+<span class="sd">    With the decorator, :meth:`MessagePassing.propagate` calls</span>
+<span class="sd">    :meth:`MessagePassing.message_and_aggregate` instead of gathering one</span>
+<span class="sd">    message per edge and scattering them. This never materialises the</span>
+<span class="sd">    ``[num_edges, features]`` message array, which is what limits</span>
+<span class="sd">    gather-scatter on large graphs.</span>
+
+<span class="sd">    The fused path is used only when it gives the same result; otherwise the</span>
+<span class="sd">    layer silently falls back to gather-scatter. It falls back when:</span>
+
+<span class="sd">    * ``mlx_cluster`` (with ``spmm_coo``) is not installed,</span>
+<span class="sd">    * fused message passing is disabled (:func:`set_fused_message_passing`),</span>
+<span class="sd">    * ``aggr`` is not ``"add"``, ``"mean"``, ``"max"`` or ``"min"`` (i.e. it</span>
+<span class="sd">      is ``"softmax"``; max/min also need a recent mlx-cluster),</span>
+<span class="sd">    * any message/aggregate kwarg other than ``edge_weights`` is set</span>
+<span class="sd">      (e.g. ``edge_features``), since messages are then no longer a weighted</span>
+<span class="sd">      sum of neighbour features,</span>
+<span class="sd">    * the layer is a subclass of a decorated layer that overrides</span>
+<span class="sd">      ``message()`` or ``aggregate()`` without also overriding</span>
+<span class="sd">      ``message_and_aggregate()``.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        format: ``"coo"`` (default) works directly on ``edge_index``.</span>
+<span class="sd">            ``"csr"`` sorts the graph once (cached per ``edge_index``) and uses</span>
+<span class="sd">            a deterministic, atomic-free kernel.</span>
+<span class="sd">        allow_message_override: a layer that overrides ``message()`` or</span>
+<span class="sd">            ``aggregate()`` is rejected by default, because the fused kernel</span>
+<span class="sd">            would ignore those overrides. Pass ``True`` only if the override</span>
+<span class="sd">            reduces to the default ``edge_weights * x_j`` / scatter whenever</span>
+<span class="sd">            the extra kwargs are ``None`` (e.g. ``GINConv``).</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        @fused_message_passing</span>
+<span class="sd">        class MyConv(MessagePassing):</span>
+<span class="sd">            ...</span>
+
+
+<span class="sd">        @fused_message_passing(format="csr")</span>
+<span class="sd">        class MyOtherConv(MessagePassing):</span>
+<span class="sd">            ...</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">FusedFormat</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">MessagePassing</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">"@fused_message_passing can only decorate MessagePassing subclasses."</span>
+            <span class="p">)</span>
+        <span class="n">overrides</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">name</span>
+            <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"message"</span><span class="p">,</span> <span class="s2">"aggregate"</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">MessagePassing</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="n">custom_fused</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">klass</span><span class="o">.</span><span class="n">message_and_aggregate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">MessagePassing</span><span class="o">.</span><span class="n">message_and_aggregate</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">overrides</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">custom_fused</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">allow_message_override</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">klass</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> overrides </span><span class="si">{</span><span class="s1">' and '</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">overrides</span><span class="p">)</span><span class="si">}</span><span class="s2">(), which the "</span>
+                <span class="s2">"fused SpMM kernel would ignore. Implement message_and_aggregate(), "</span>
+                <span class="s2">"or pass allow_message_override=True if the override reduces to "</span>
+                <span class="s2">"the default when only edge_weights are given."</span>
+            <span class="p">)</span>
+        <span class="n">klass</span><span class="o">.</span><span class="n">_fused_format</span> <span class="o">=</span> <span class="nb">format</span>
+        <span class="k">return</span> <span class="n">klass</span>
+
+    <span class="k">return</span> <span class="n">wrap</span><span class="p">(</span><span class="bp">cls</span><span class="p">)</span> <span class="k">if</span> <span class="bp">cls</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">wrap</span></div>
+
 
 
 <div class="viewcode-block" id="MessagePassing">
@@ -500,6 +674,20 @@
 <span class="sd">        [2] `Fey et al. PyG &lt;https://pytorch-geometric.readthedocs.io/en/latest/\</span>
 <span class="sd">    generated/torch_geometric.nn.conv.MessagePassing.html&gt;`_</span>
 <span class="sd">    """</span>
+
+    <span class="c1"># Set by the @fused_message_passing decorator; None = gather-scatter only.</span>
+    <span class="n">_fused_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="c1"># A subclass of a fused layer inherits _fused_format, but the fused</span>
+        <span class="c1"># kernel would ignore a new message()/aggregate(), so fall back to</span>
+        <span class="c1"># gather-scatter unless it also provides message_and_aggregate().</span>
+        <span class="c1"># Runs before any decorator on cls, so @fused_message_passing on the</span>
+        <span class="c1"># subclass itself still re-checks and sets the format.</span>
+        <span class="n">overrides</span> <span class="o">=</span> <span class="s2">"message"</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span> <span class="ow">or</span> <span class="s2">"aggregate"</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span>
+        <span class="k">if</span> <span class="n">overrides</span> <span class="ow">and</span> <span class="s2">"message_and_aggregate"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
+            <span class="bp">cls</span><span class="o">.</span><span class="n">_fused_format</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aggr</span><span class="p">:</span> <span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
@@ -534,7 +722,9 @@
 <span class="sd">            edge_index: Graph representation of shape `[2, num_edges]`</span>
 <span class="sd">            node_features: Input node features/embeddings.</span>
 <span class="sd">                Can be either an array or a tuple of arrays, for distinct src and dst</span>
-<span class="sd">                node features.</span>
+<span class="sd">                node features. With a tuple ``(src, dst)``, ``edge_index[0]``</span>
+<span class="sd">                indexes ``src`` and ``edge_index[1]`` indexes ``dst``, and the</span>
+<span class="sd">                output has one row per ``dst`` node.</span>
 <span class="sd">            message_kwargs: Arguments to pass to the `message` method</span>
 <span class="sd">            aggregate_kwargs: Arguments to pass to the `aggregate` method</span>
 <span class="sd">            update_kwargs: Arguments to pass to the `update_nodes` method</span>
@@ -555,11 +745,23 @@
                     <span class="sa">f</span><span class="s2">"found </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">node_features</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="p">)</span>
 
-        <span class="n">src_features</span><span class="p">,</span> <span class="n">dst_features</span> <span class="o">=</span> <span class="n">get_src_dst_features</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">)</span>
-
+        <span class="c1"># Messages are aggregated onto destination nodes, so the output has one</span>
+        <span class="c1"># row per destination node. For a (src, dst) tuple (bipartite graphs,</span>
+        <span class="c1"># e.g. author -&gt; paper) that is the size of the dst features.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">node_features</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">node_features</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_fuse</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">message_kwargs</span><span class="p">,</span> <span class="n">aggregate_kwargs</span><span class="p">):</span>
+            <span class="c1"># shapes: (|N| -&gt; |N|), no per-edge message array</span>
+            <span class="n">aggregated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_and_aggregate</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span>
+                <span class="n">node_features</span><span class="o">=</span><span class="n">node_features</span><span class="p">,</span>
+                <span class="o">**</span><span class="n">message_kwargs</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_nodes</span><span class="p">(</span><span class="n">aggregated</span><span class="o">=</span><span class="n">aggregated</span><span class="p">,</span> <span class="o">**</span><span class="n">update_kwargs</span><span class="p">)</span>
+
+        <span class="n">src_features</span><span class="p">,</span> <span class="n">dst_features</span> <span class="o">=</span> <span class="n">get_src_dst_features</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">)</span>
         <span class="n">dst_idx</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># shapes: (|E| -&gt; |E|)</span>
@@ -583,6 +785,84 @@
         <span class="p">)</span>
 
         <span class="k">return</span> <span class="n">output</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_can_fuse</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">message_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+        <span class="n">aggregate_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_fused_message_passing_enabled</span><span class="p">():</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_FUSED_AGGRS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">message_kwargs</span> <span class="o">=</span> <span class="n">message_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">message_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"edge_weights"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">aggregate_kwargs</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">message_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"edge_weights"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># e.g. multi-dimensional weights: not a scalar per edge</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+<div class="viewcode-block" id="MessagePassing.message_and_aggregate">
+<a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing.message_and_aggregate">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">message_and_aggregate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">node_features</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]],</span>
+        <span class="n">edge_weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fused ``message`` + ``aggregate`` as one sparse x dense matmul.</span>
+
+<span class="sd">        Computes, for every node ``i``,</span>
+<span class="sd">        ``aggr_{j -&gt; i} edge_weights[j -&gt; i] * x_j`` (``aggr`` = add, mean,</span>
+<span class="sd">        max or min, per feature; 0 for nodes without neighbours), the same</span>
+<span class="sd">        result as the</span>
+<span class="sd">        default :meth:`message` followed by :meth:`aggregate`, without</span>
+<span class="sd">        building the per-edge message array. Used by layers decorated with</span>
+<span class="sd">        :func:`fused_message_passing`; override it to provide a custom fused</span>
+<span class="sd">        implementation.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            edge_index: Graph representation of shape `[2, num_edges]`</span>
+<span class="sd">            node_features: Node features, or a ``(src, dst)`` tuple</span>
+<span class="sd">                (only the source features are used).</span>
+<span class="sd">            edge_weights: Optional scalar weight per edge.</span>
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">edge_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">reduce</span> <span class="o">=</span> <span class="s2">"sum"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">==</span> <span class="s2">"add"</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span>  <span class="c1"># mean / max / min</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">_fused_format_override</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span>
+
+        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"csr"</span><span class="p">:</span>
+            <span class="n">csr</span> <span class="o">=</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">csr</span><span class="o">.</span><span class="n">perm</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">_spmm_csr</span><span class="p">(</span>
+                <span class="n">csr</span><span class="o">.</span><span class="n">rowptr</span><span class="p">,</span>
+                <span class="n">csr</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                <span class="n">x</span><span class="p">,</span>
+                <span class="n">weights</span><span class="p">,</span>
+                <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
+                <span class="c1"># load-balanced path for high-degree nodes (mlx-cluster &gt;= the</span>
+                <span class="c1"># long-row release; older CSR tuples have no such field)</span>
+                <span class="n">long_rows</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"long_rows"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="c1"># cached transpose: the backward also runs on the CSR kernel</span>
+                <span class="n">transpose</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"transpose"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+            <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">_spmm_coo</span><span class="p">(</span>
+            <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">x</span><span class="p">,</span>
+            <span class="n">weights</span><span class="p">,</span>
+            <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span>
+            <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
+        <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MessagePassing.message">
@@ -698,8 +978,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
 
   <footer class="bd-footer">
   </footer>
