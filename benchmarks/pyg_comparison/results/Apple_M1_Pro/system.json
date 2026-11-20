@@ -1,0 +1,11 @@
+{
+  "chip": "Apple M1 Pro",
+  "memory_gb": 32,
+  "os": "macOS 27.0",
+  "python": "3.12.10",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.0.11",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.8.1"
+}
