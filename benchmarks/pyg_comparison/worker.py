@@ -27,7 +27,9 @@ from common import peak_footprint_gb, random_graph, time_fn  # noqa: E402
 
 warnings.filterwarnings("ignore")
 
-DATA_DIR = os.path.join(
+# Datasets are shared by every checkout that sets MLX_GRAPHS_BENCH_DATA (e.g.
+# worktrees of other versions), and downloaded only once.
+DATA_DIR = os.environ.get("MLX_GRAPHS_BENCH_DATA") or os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", ".mlx_graphs_data"
 )
 LAYERS = ("gcn", "sage", "gin", "gat", "gatv2")
@@ -227,38 +229,106 @@ def run_layer(args) -> dict:
 # ---------------------------------------------------------------------------
 
 
-def load_node_dataset(name: str, seed: int) -> dict:
-    """Loads a node classification graph as numpy arrays, through mlx-graphs'
-    datasets, so that both frameworks train on exactly the same data."""
+def load_graph_dataset(name: str):
+    """Loads a TU dataset through PyG and converts it to mlx-graphs graphs.
+
+    Both frameworks train on exactly the same arrays. (mlx-graphs'
+    ``TUDataset`` also keeps continuous node attributes, e.g. on PROTEINS,
+    which PyG's ``TUDataset`` leaves out by default.) The timed epochs still
+    include mlx-graphs' own batching of the graphs.
+
+    Returns:
+        The list of ``GraphData``, the number of node features and of classes.
+    """
     import contextlib
     import io
 
-    import mlx_graphs.datasets as datasets
-    from mlx_graphs.utils import to_undirected
+    import mlx.core as mx
+    from torch_geometric.datasets import TUDataset
+
+    from mlx_graphs.data import GraphData
 
     with contextlib.redirect_stdout(io.StringIO()):
+        with contextlib.redirect_stderr(io.StringIO()):
+            dataset = TUDataset(os.path.join(DATA_DIR, "pyg"), name)
+    graphs = [
+        GraphData(
+            edge_index=mx.array(data.edge_index.numpy().astype(np.int32)),
+            node_features=mx.array(data.x.numpy()),
+            graph_labels=mx.array(data.y.numpy().astype(np.int32)),
+        )
+        for data in dataset
+    ]
+    return graphs, dataset.num_node_features, dataset.num_classes
+
+
+def load_node_dataset(name: str, seed: int) -> dict:
+    """Loads a node classification graph as numpy arrays through PyG and OGB.
+
+    Every framework, and every version of mlx-graphs, trains on exactly the
+    same arrays, and the harness does not depend on which datasets the
+    measured version of mlx-graphs has. (mlx-graphs' own loaders return the
+    same arrays; its dataset tests check this against PyG.)
+    """
+    import contextlib
+    import io
+
+    root = os.path.join(DATA_DIR, "pyg")
+    quiet = contextlib.ExitStack()
+    quiet.enter_context(contextlib.redirect_stdout(io.StringIO()))
+    quiet.enter_context(contextlib.redirect_stderr(io.StringIO()))
+    masks = None
+    with quiet:
         if name in ("cora", "citeseer", "pubmed"):
-            graph = datasets.PlanetoidDataset(name, base_dir=DATA_DIR)[0]
-        elif name.startswith("amazon-"):
-            graph = datasets.AmazonDataset(name.split("-")[1], base_dir=DATA_DIR)[0]
-        elif name.startswith("coauthor-"):
-            graph = datasets.CoauthorDataset(name.split("-")[1], base_dir=DATA_DIR)[0]
+            from torch_geometric.datasets import Planetoid
+
+            pyg_name = {"cora": "Cora", "citeseer": "CiteSeer", "pubmed": "PubMed"}
+            data = Planetoid(root, pyg_name[name])[0]
+            masks = [
+                data[f"{split}_mask"].numpy() for split in ("train", "val", "test")
+            ]
+        elif name.startswith(("amazon-", "coauthor-")):
+            from torch_geometric.datasets import Amazon, Coauthor
+
+            group, which = name.split("-")
+            pyg_name = {"computers": "Computers", "photo": "Photo", "cs": "CS",
+                        "physics": "Physics"}[which]  # fmt: skip
+            data = (Amazon if group == "amazon" else Coauthor)(root, pyg_name)[0]
         elif name == "ogbn-arxiv":
-            graph = datasets.OGBDataset(name, base_dir=DATA_DIR)[0]
-            graph.edge_index = to_undirected(
-                graph.edge_index, coalesce=True, num_nodes=graph.num_nodes
+            from ogb.nodeproppred import NodePropPredDataset
+
+            dataset = NodePropPredDataset(
+                name, root=os.path.join(DATA_DIR, "ogbn-arxiv", "raw")
             )
+            graph, label = dataset[0]
+            n = graph["num_nodes"]
+            split = dataset.get_idx_split()
+            masks = [
+                np.isin(np.arange(n), split[s]) for s in ("train", "valid", "test")
+            ]
+            # undirected, without duplicate edges, sorted by (source, target)
+            edges = graph["edge_index"].astype(np.int64)
+            edges = np.concatenate([edges, edges[::-1]], axis=1)
+            _, first = np.unique(edges[0] * n + edges[1], return_index=True)
+            data = {
+                "x": graph["node_feat"],
+                "edge_index": edges[:, first],
+                "y": label.reshape(-1),
+            }
         else:
             raise ValueError(f"unknown dataset {name}")
 
-    labels = np.array(graph.node_labels).reshape(-1).astype(np.int64)
+    if not isinstance(data, dict):
+        data = {
+            "x": data.x.numpy(),
+            "edge_index": data.edge_index.numpy(),
+            "y": data.y.numpy(),
+        }
+    labels = np.asarray(data["y"]).reshape(-1).astype(np.int64)
     num_nodes = labels.shape[0]
 
-    if getattr(graph, "train_mask", None) is not None:
-        train, val, test = (
-            np.nonzero(np.array(getattr(graph, f"{split}_mask")))[0]
-            for split in ("train", "val", "test")
-        )
+    if masks is not None:
+        train, val, test = (np.nonzero(mask)[0] for mask in masks)
     else:
         # Amazon / Coauthor have no public split: 20 train and 30 validation
         # nodes per class, the rest for testing (Shchur et al., 2018).
@@ -272,8 +342,8 @@ def load_node_dataset(name: str, seed: int) -> dict:
         test = np.setdiff1d(np.arange(num_nodes), np.concatenate([train, val]))
 
     return {
-        "x": np.array(graph.node_features).astype(np.float32),
-        "edge_index": np.array(graph.edge_index).astype(np.int64),
+        "x": np.asarray(data["x"]).astype(np.float32),
+        "edge_index": np.asarray(data["edge_index"]).astype(np.int64),
         "y": labels,
         "train": train,
         "val": val,
@@ -286,6 +356,47 @@ def with_self_loops(edge_index: np.ndarray, num_nodes: int) -> np.ndarray:
     edge_index = edge_index[:, edge_index[0] != edge_index[1]]
     loops = np.arange(num_nodes, dtype=edge_index.dtype)
     return np.concatenate([edge_index, np.stack([loops, loops])], axis=1)
+
+
+class Curves:
+    """Accuracy measured during training, and the model selected on it."""
+
+    def __init__(self):
+        self.epochs, self.train, self.val, self.test = [], [], [], []
+
+    def add(self, epoch, train_acc, val_acc, test_acc):
+        self.epochs.append(epoch)
+        self.train.append(float(train_acc))
+        self.val.append(float(val_acc))
+        self.test.append(float(test_acc))
+
+    def summary(self, losses):
+        """Final metrics, taken at the evaluation with the best validation
+        accuracy (the earliest one on ties), plus the full curves."""
+        best = int(np.argmax(self.val))
+        return {
+            "best_epoch": self.epochs[best],
+            "train_acc": self.train[best],
+            "val_acc": self.val[best],
+            "test_acc": self.test[best],
+            "final_train_loss": float(np.mean(losses[-10:])),
+            "loss_curve": [round(v, 5) for v in losses],
+            "eval_epochs": self.epochs,
+            "train_acc_curve": self.train,
+            "val_acc_curve": self.val,
+            "test_acc_curve": self.test,
+        }
+
+
+def split_indices(rng, size, train=0.8, val=0.1):
+    """Random train / validation / test split of ``range(size)``."""
+    perm = rng.permutation(size)
+    n_train, n_val = int(train * size), int(val * size)
+    return (
+        perm[:n_train].tolist(),
+        perm[n_train : n_train + n_val].tolist(),
+        perm[n_train + n_val :].tolist(),
+    )
 
 
 def run_node(args) -> dict:
@@ -302,7 +413,7 @@ def run_node(args) -> dict:
         args.num_layers,
         args.dropout,
     )
-    step_times, best_val, test_at_best = [], -1.0, 0.0
+    step_times, losses = [], []
     start = time.perf_counter()
 
     if args.framework == "mlx-graphs":
@@ -332,13 +443,14 @@ def run_node(args) -> dict:
             loss, grads = loss_and_grad(model)
             optimizer.update(model, grads)
             mx.eval(loss, model.parameters(), optimizer.state)
+            return loss
 
         def evaluate():
             model.eval()
             pred = mx.argmax(model(ei, x), axis=1)
             return [
                 (pred[idx[k]] == y[idx[k]]).astype(mx.float32).mean().item()
-                for k in ("val", "test")
+                for k in ("train", "val", "test")
             ]
 
     else:
@@ -363,6 +475,7 @@ def run_node(args) -> dict:
             loss.backward()
             optimizer.step()
             sync()
+            return loss.detach()
 
         @torch.no_grad()
         def evaluate():
@@ -370,17 +483,18 @@ def run_node(args) -> dict:
             pred = model(x, ei).argmax(dim=1)
             return [
                 (pred[idx[k]] == y[idx[k]]).float().mean().item()
-                for k in ("val", "test")
+                for k in ("train", "val", "test")
             ]
 
+    curves = Curves()
     for epoch in range(args.epochs):
         t0 = time.perf_counter()
-        train_step()
+        loss = train_step()
         step_times.append((time.perf_counter() - t0) * 1e3)
+        # read outside the timed section: the step already synchronized
+        losses.append(float(loss.item()))
         if epoch % args.eval_every == args.eval_every - 1 or epoch == args.epochs - 1:
-            val_acc, test_acc = evaluate()
-            if val_acc > best_val:
-                best_val, test_at_best = val_acc, test_acc
+            curves.add(epoch + 1, *evaluate())
 
     timed = step_times[args.warmup :]
     q1, median, q3 = np.percentile(timed, [25, 50, 75])
@@ -391,8 +505,7 @@ def run_node(args) -> dict:
         "epoch_ms_q1": float(q1),
         "epoch_ms_q3": float(q3),
         "total_s": time.perf_counter() - start,
-        "val_acc": float(best_val),
-        "test_acc": float(test_at_best),
+        **curves.summary(losses),
     }
 
 
@@ -413,23 +526,23 @@ def run_graph(args) -> dict:
         import mlx.nn as nn
         import mlx.optimizers as optim
 
-        from mlx_graphs.datasets import TUDataset
         from mlx_graphs.loaders import Dataloader
 
         mx.random.seed(args.seed)
-        with contextlib.redirect_stdout(io.StringIO()):
-            dataset = TUDataset(args.dataset, base_dir=DATA_DIR)
-        perm = rng.permutation(len(dataset)).tolist()
-        split = int(0.8 * len(dataset))
-        train_set, test_set = dataset[perm[:split]], dataset[perm[split:]]
+        graphs, num_features, num_classes = load_graph_dataset(args.dataset)
+        splits = split_indices(rng, len(graphs))
+        train_set, val_set, test_set = ([graphs[i] for i in s] for s in splits)
         train_loader = Dataloader(train_set, batch_size=args.batch_size, shuffle=True)
-        test_loader = Dataloader(test_set, batch_size=args.batch_size)
+        eval_loaders = [
+            Dataloader(subset, batch_size=args.batch_size)
+            for subset in (train_set, val_set, test_set)
+        ]
 
         model = build_mlx_model(
             args.model,
-            dataset.num_node_features,
+            num_features,
             args.hidden,
-            dataset.num_graph_classes,
+            num_classes,
             args.num_layers,
             args.dropout,
             pool=True,
@@ -447,23 +560,30 @@ def run_graph(args) -> dict:
 
         def train_epoch():
             model.train()
+            batch_losses = []
             for batch in train_loader:
                 loss, grads = loss_and_grad(model, batch)
                 optimizer.update(model, grads)
                 mx.eval(loss, model.parameters(), optimizer.state)
+                batch_losses.append((loss, batch.num_graphs))
+            return batch_losses
 
-        def evaluate():
-            model.eval()
-            correct = 0
-            for batch in test_loader:
+        def accuracy(loader):
+            correct, total = 0, 0
+            for batch in loader:
                 logits = model(
                     batch.edge_index, batch.node_features, batch.batch_indices
                 )
                 labels = batch.graph_labels.reshape(-1)
                 correct += (mx.argmax(logits, axis=1) == labels).sum().item()
-            return correct / len(test_set)
+                total += batch.num_graphs
+            return correct / total
 
-        num_graphs = len(dataset)
+        def evaluate():
+            model.eval()
+            return [accuracy(loader) for loader in eval_loaders]
+
+        num_graphs = len(graphs)
 
     else:
         import torch
@@ -475,11 +595,13 @@ def run_graph(args) -> dict:
         device, sync = torch_device(args.framework)
         with contextlib.redirect_stderr(io.StringIO()):
             dataset = TUDataset(os.path.join(DATA_DIR, "pyg"), args.dataset)
-        perm = rng.permutation(len(dataset)).tolist()
-        split = int(0.8 * len(dataset))
-        train_set, test_set = dataset[perm[:split]], dataset[perm[split:]]
+        splits = split_indices(rng, len(dataset))
+        train_set, val_set, test_set = (dataset[split] for split in splits)
         train_loader = DataLoader(train_set, batch_size=args.batch_size, shuffle=True)
-        test_loader = DataLoader(test_set, batch_size=args.batch_size)
+        eval_loaders = [
+            DataLoader(subset, batch_size=args.batch_size)
+            for subset in (train_set, val_set, test_set)
+        ]
 
         model = build_pyg_model(
             args.model,
@@ -494,32 +616,48 @@ def run_graph(args) -> dict:
 
         def train_epoch():
             model.train()
+            batch_losses = []
             for batch in train_loader:
                 batch = batch.to(device)
                 optimizer.zero_grad()
                 logits = model(batch.x, batch.edge_index, batch.batch)
-                F.cross_entropy(logits, batch.y).backward()
+                loss = F.cross_entropy(logits, batch.y)
+                loss.backward()
                 optimizer.step()
+                # kept on the device: reading it here would add a sync per batch
+                batch_losses.append((loss.detach(), batch.num_graphs))
             sync()
+            return batch_losses
+
+        def accuracy(loader):
+            correct, total = 0, 0
+            for batch in loader:
+                batch = batch.to(device)
+                logits = model(batch.x, batch.edge_index, batch.batch)
+                correct += (logits.argmax(dim=1) == batch.y).sum().item()
+                total += batch.num_graphs
+            return correct / total
 
         @torch.no_grad()
         def evaluate():
             model.eval()
-            correct = 0
-            for batch in test_loader:
-                batch = batch.to(device)
-                logits = model(batch.x, batch.edge_index, batch.batch)
-                correct += (logits.argmax(dim=1) == batch.y).sum().item()
-            return correct / len(test_set)
+            return [accuracy(loader) for loader in eval_loaders]
 
         num_graphs = len(dataset)
 
     start = time.perf_counter()
-    epoch_times = []
-    for _ in range(args.epochs):
+    epoch_times, losses, curves = [], [], Curves()
+    for epoch in range(args.epochs):
         t0 = time.perf_counter()
-        train_epoch()
+        batch_losses = train_epoch()
         epoch_times.append((time.perf_counter() - t0) * 1e3)
+        # mean training loss over the epoch, read outside the timed section
+        losses.append(
+            sum(float(loss.item()) * n for loss, n in batch_losses)
+            / sum(n for _, n in batch_losses)
+        )
+        if epoch % args.eval_every == args.eval_every - 1 or epoch == args.epochs - 1:
+            curves.add(epoch + 1, *evaluate())
     total = time.perf_counter() - start
     timed = epoch_times[args.warmup :]
     q1, median, q3 = np.percentile(timed, [25, 50, 75])
@@ -529,7 +667,7 @@ def run_graph(args) -> dict:
         "epoch_ms_q1": float(q1),
         "epoch_ms_q3": float(q3),
         "total_s": total,
-        "test_acc": float(evaluate()),
+        **curves.summary(losses),
     }
 
 
@@ -574,7 +712,8 @@ def main():
     p.add_argument("--num-layers", type=int, default=3)
     p.add_argument("--dropout", type=float, default=0.5)
     p.add_argument("--lr", type=float, default=0.01)
-    p.add_argument("--epochs", type=int, default=30)
+    p.add_argument("--epochs", type=int, default=100)
+    p.add_argument("--eval-every", type=int, default=5)
     p.add_argument("--batch-size", type=int, default=64)
 
     args = parser.parse_args()

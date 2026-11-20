@@ -1,10 +1,50 @@
-![mlx-graphs logo](docs/source/_static/logo.svg)
-______________________________________________________________________
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/source/_static/logo_dark.svg">
+    <img alt="mlx-graphs" src="docs/source/_static/logo.svg" width="420">
+  </picture>
+</p>
 
-**[Documentation](https://mlx-graphs.github.io/mlx-graphs/)** | **[Quickstart](https://mlx-graphs.github.io/mlx-graphs/tutorials/quickstart.html)** | **[Discord](https://discord.gg/K3mWFCxxM7)**
+<h3 align="center">Fast graph neural networks on Apple Silicon</h3>
 
-MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's [MLX](https://github.com/ml-explore/mlx).
+<p align="center">
+  <a href="https://pypi.org/project/mlx-graphs/"><img alt="PyPI" src="https://img.shields.io/pypi/v/mlx-graphs?color=2a78d6"></a>
+  <a href="https://pypi.org/project/mlx-graphs/"><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776ab"></a>
+  <img alt="macOS on Apple Silicon" src="https://img.shields.io/badge/macOS-Apple%20Silicon-555">
+  <a href="LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green"></a>
+  <a href="https://github.com/ml-explore/mlx"><img alt="Built on MLX" src="https://img.shields.io/badge/built%20on-MLX-black?logo=apple"></a>
+  <a href="https://discord.gg/K3mWFCxxM7"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white"></a>
+</p>
 
+<p align="center">
+  <a href="https://mlx-graphs.github.io/mlx-graphs/"><b>Documentation</b></a> ·
+  <a href="https://mlx-graphs.github.io/mlx-graphs/tutorials/quickstart.html"><b>Quickstart</b></a> ·
+  <a href="#benchmarks-vs-pytorch-geometric"><b>Benchmarks</b></a> ·
+  <a href="examples"><b>Examples</b></a> ·
+  <a href="https://discord.gg/K3mWFCxxM7"><b>Discord</b></a>
+</p>
+
+MLX-graphs is a library for Graph Neural Networks (GNNs) on Apple Silicon, built on Apple's [MLX](https://github.com/ml-explore/mlx).
+It runs message passing on your Mac's GPU with fused sparse kernels, which
+PyTorch Geometric lacks on MPS.
+
+**On an M5 Pro, mlx-graphs trains GNNs 5.6× faster than PyTorch Geometric on
+MPS and 5.8× faster than on CPU, with the same accuracy** (median of 35
+benchmarks on 12 datasets, up to 58×).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_dark.png">
+  <img alt="Left: time of PyG on MPS and on CPU relative to mlx-graphs: 12× and 6.7× for one layer on 2 million edges, 5.3× and 7.4× per epoch of node classification, 5.6× and 2.9× per epoch of graph classification. Right: mean test accuracy of mlx-graphs, PyG on MPS and PyG on CPU: 79.2%, 79.0% and 78.9% in node classification, 68.8%, 69.2% and 68.9% in graph classification" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_light.png">
+</picture>
+
+<sub>Apple M5 Pro, 64 GB · mlx 0.32.4 · PyTorch 2.15 · PyTorch Geometric 2.8.1 · same models, data and
+hyperparameters in every framework, 3 seeds. See [benchmarks](#benchmarks-vs-pytorch-geometric) for the details.</sub>
+
+
+## Installation
+```
+pip install mlx-graphs
+```
 
 ## Features
 
@@ -12,7 +52,8 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's [MLX
    Message passing runs on the Mac's GPU through MLX and fused sparse
    kernels: neighbours are aggregated with one sparse x dense matmul (SpMM)
    instead of building a `[num_edges, features]` message array, including for
-   the attention layers (one SpMM per head). See the [benchmarks](#benchmarks-vs-pytorch-geometric) below.
+   the attention layers (one SpMM per head): 5–6× faster training than PyTorch
+   Geometric on the same Mac, see the [benchmarks](#benchmarks-vs-pytorch-geometric).
 - **A PyG-style API.** `MessagePassing`, `GraphData` / batching, datasets,
   transforms and utilities follow PyTorch Geometric's design, so porting a
   PyG model is mostly mechanical. `from_pyg` / `to_pyg` convert graphs both ways.
@@ -36,59 +77,58 @@ MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's [MLX
 
 ## Benchmarks vs PyTorch Geometric
 
-Measured on an Apple M5 Pro (64 GB) against PyTorch Geometric 2.8.1 /
-PyTorch 2.15, on both of PyTorch's backends (MPS GPU and CPU), same models,
-same data, same hyperparameters:
+Apple M5 Pro (64 GB), PyG 2.8.1 / PyTorch 2.15 on MPS and CPU; same models,
+hyperparameters and data in every framework, 3 seeds.
 
-- **One layer, forward + backward** on a 2M-edge graph: **9–31× faster than
-  PyG on MPS** and 6–15× faster than PyG on CPU for GCN, GraphSAGE, GIN and
-  GAT, with 1.5–3.3× less peak memory. GATv2, which needs per-edge features for
-  its dynamic attention, is ~3× faster at similar memory.
-- **Full-batch node classification** on 8 datasets (Cora to ogbn-arxiv):
-  **1.6–70× faster per epoch than PyG on MPS** (25× for GCN on ogbn-arxiv,
-  55–70× for GraphSAGE on Amazon/Coauthor), at comparable accuracy
-  (single seed; within ~4 points either way). On
-  Coauthor Physics, PyG's GraphSAGE goes over a 16 GB memory cap on both
-  backends; mlx-graphs trains it at 4.7 GB.
-- **Graph classification** with mini-batches of small graphs (MUTAG,
-  PROTEINS, NCI1, DD), including batching: 3–10× faster than PyG on MPS and
-  1.6–4.7× faster than PyG on CPU.
+### Faster
+
+Speedups against PyG on MPS (the CPU numbers are in the figures):
+
+- **One layer** (forward + backward, 2M edges): **9–31× faster** for GCN, GraphSAGE, GIN and GAT, with up to 3.3× less memory; ~3× for
+  GATv2.
+- **Node classification** (8 datasets, Cora to ogbn-arxiv): **1.6–58× faster
+  per epoch**, median 5.3×. PyG's GraphSAGE runs out of memory (16 GB) on
+  Coauthor Physics; mlx-graphs needs 4.7 GB.
+- **Graph classification** (MUTAG, PROTEINS, NCI1, DD, batching included):
+  **2.7–11× faster**.
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/layers_speedup_dark.png">
-  <img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/layers_speedup_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/layers_speedup_dark.png">
+  <img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/layers_speedup_light.png">
 </picture>
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/node_classification_dark.png">
-  <img alt="Time per training epoch of full-batch node classification with GCN, GraphSAGE and GAT on eight datasets, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/figures/node_classification_light.png">
+  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_classification_dark.png">
+  <img alt="Time per training epoch of full-batch node classification with GCN, GraphSAGE and GAT on eight datasets, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_classification_light.png">
 </picture>
 
-More figures (absolute layer timings, peak memory, graph classification),
-every number as a table, and how the comparison was made are in
-[`benchmarks/pyg_comparison`](benchmarks/pyg_comparison/README.md); the
-tables are in [`results.md`](benchmarks/pyg_comparison/results/Apple_M5_Pro/results.md).
-To reproduce on your Mac:
+### Same results
+
+Speed only matters if the models learn the same thing. The training loss of
+mlx-graphs and PyG follows the same curve at every epoch, and the test
+accuracies match within the spread between seeds (mean over node
+classification: 79.2% for mlx-graphs, 79.0% / 78.9% for PyG on MPS / CPU).
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_loss_dark.png">
+  <img alt="Training loss per epoch of GCN, GraphSAGE and GAT on eight node classification datasets, mlx-graphs, PyG on MPS and PyG on CPU overlaid: the curves coincide" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_loss_light.png">
+</picture>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_accuracy_dark.png">
+  <img alt="Test accuracy of GCN, GraphSAGE and GAT on eight node classification datasets, mean and range over 3 seeds, for mlx-graphs, PyG on MPS and PyG on CPU" src="benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/node_accuracy_light.png">
+</picture>
+
+The same figures for graph classification, peak memory and absolute
+timings are on the [benchmarks page of the docs](https://mlx-graphs.github.io/mlx-graphs/benchmarks.html)
+and in [`results.md`](benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/results.md), which also has every number as a
+table. How the comparison is made is in
+[`benchmarks/pyg_comparison`](benchmarks/pyg_comparison/README.md). To reproduce
+on your Mac:
 
 ```bash
 pip install -e '.[benchmarks]'
 python benchmarks/pyg_comparison/run.py && python benchmarks/pyg_comparison/plot.py
-```
-
-## Installation
-`mlx-graphs` is available on Pypi. To install run
-```
-pip install mlx-graphs
-```
-### Build from source
-
-To build and install `mlx-graphs` from source start by cloning the github repo
-```
-git clone git@github.com:mlx-graphs/mlx-graphs.git && cd mlx-graphs
-```
-Create a new virtual environment and install the requirements
-```
-pip install -e .
 ```
 
 ## Usage

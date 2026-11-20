@@ -3,6 +3,21 @@ MLX-graphs
 
 MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX <https://github.com/ml-explore/mlx>`_.
 
+**On a Mac, MLX-graphs trains GNNs 5.6× faster than PyTorch Geometric on the GPU (MPS)
+and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the same accuracy**
+(medians over 35 training benchmarks, up to 58× faster). See the :doc:`benchmarks`.
+
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_light.png
+   :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
+   :class: only-light
+   :width: 100%
+
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.0.11-c5f1246/figures/headline_dark.png
+   :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
+   :class: only-dark
+   :width: 100%
+
+
 
 
 Features
@@ -11,8 +26,9 @@ Features
 - Fast GNN training and inference on Apple Silicon
    ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
    fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
-   available within the MLX core library. Initial benchmarks show an up to 10x speed improvement
-   with respect to other frameworks on large datasets.
+   available within the MLX core library, and message passing aggregates neighbours with fused
+   sparse kernels. On an M5 Pro, one GNN layer runs up to 31× faster than PyTorch Geometric on
+   the Mac's GPU (MPS). See the :doc:`benchmarks`.
 - Scalability to large graphs
    With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
    This setup allows Macs to leverage their entire memory capacity for storing graphs.
@@ -72,6 +88,12 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
    install
 
+.. toctree::
+   :caption: Benchmarks
+   :maxdepth: 1
+
+   benchmarks
+
 
 .. toctree::
    :caption: Tutorials
@@ -90,12 +112,6 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
    datasets
 
-
-.. toctree::
-   :caption: Benchmarks
-   :maxdepth: 1
-
-   benchmarks
 
 .. toctree::
    :caption: API
