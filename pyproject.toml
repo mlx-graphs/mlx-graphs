@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlx-graphs"
-version = "0.0.10"
+version = "0.0.11"
 description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
@@ -22,7 +22,7 @@ dependencies = [
     "requests==2.31.0",
     "fsspec==2024.2.0",
     "tqdm==4.66.1",
-    "mlx_cluster>=0.1.0; sys_platform == 'darwin'",
+    "mlx_cluster>=0.1.2; sys_platform == 'darwin'",
 ]
 
 [project.optional-dependencies]
