@@ -66,11 +66,23 @@ def _random_graph(num_nodes=40, num_edges=300, dim=12, seed=0):
 
 @pytest.mark.parametrize("heads, concat", [(1, True), (4, True), (3, False)])
 @pytest.mark.parametrize("edge_dim", [None, 5])
-def test_gatv2_conv_matches_pyg(heads, concat, edge_dim):
+@pytest.mark.parametrize(
+    "add_self_loops, fill_value",
+    [(False, "mean"), (True, "mean"), (True, "max"), (True, "add"), (True, 0.5)],
+)
+def test_gatv2_conv_matches_pyg(heads, concat, edge_dim, add_self_loops, fill_value):
+    # add_self_loops=True (the default, as in PyG) replaces the input
+    # self-loops (nodes 0-2) by one per node, with edge features given by
+    # fill_value.
     torch = pytest.importorskip("torch")
     pyg_nn = pytest.importorskip("torch_geometric.nn")
+    # Fixed weights: with MLX's ~1e-3 matmul error, a leaky ReLU input within
+    # ~1e-3 of 0 can take the other slope and change its edge's gradient.
+    torch.manual_seed(0)
 
     edge_index, x = _random_graph()
+    loops = np.array([[0, 1, 2, 2], [0, 1, 2, 2]])
+    edge_index = np.concatenate([edge_index, loops], axis=1)
     edge_features = None
     if edge_dim is not None:
         edge_features = (
@@ -84,7 +96,8 @@ def test_gatv2_conv_matches_pyg(heads, concat, edge_dim):
         8,
         heads=heads,
         concat=concat,
-        add_self_loops=False,
+        add_self_loops=add_self_loops,
+        fill_value=fill_value,
         edge_dim=edge_dim,
     )
     # mlx-graphs' projections have no bias
@@ -92,7 +105,13 @@ def test_gatv2_conv_matches_pyg(heads, concat, edge_dim):
     torch.nn.init.zeros_(ref.lin_r.bias)
 
     conv = GATv2Conv(
-        x.shape[1], 8, heads=heads, concat=concat, edge_features_dim=edge_dim
+        x.shape[1],
+        8,
+        heads=heads,
+        concat=concat,
+        edge_features_dim=edge_dim,
+        add_self_loops=add_self_loops,
+        fill_value=fill_value,
     )
     conv.W_src.weight = mx.array(ref.lin_l.weight.detach().numpy())
     conv.W_dst.weight = mx.array(ref.lin_r.weight.detach().numpy())
@@ -101,20 +120,28 @@ def test_gatv2_conv_matches_pyg(heads, concat, edge_dim):
     if edge_dim is not None:
         conv.edge_lin_proj.weight = mx.array(ref.lin_edge.weight.detach().numpy())
 
-    expected = ref(
-        torch.tensor(x),
-        torch.tensor(edge_index),
-        None if edge_features is None else torch.tensor(edge_features),
-    )
-    out = conv(
-        mx.array(edge_index),
-        mx.array(x),
-        None if edge_features is None else mx.array(edge_features),
-    )
+    x_torch = torch.tensor(x, requires_grad=True)
+    e_torch = None
+    if edge_features is not None:
+        e_torch = torch.tensor(edge_features, requires_grad=True)
+    expected = ref(x_torch, torch.tensor(edge_index), e_torch)
+    (expected**2).sum().backward()
+
+    def loss(x, e):
+        return (conv(mx.array(edge_index), x, e) ** 2).sum()
+
+    e = None if edge_features is None else mx.array(edge_features)
+    out = conv(mx.array(edge_index), mx.array(x), e)
+    grads = mx.grad(loss, argnums=[0] if e is None else [0, 1])(mx.array(x), e)
+    grads = grads if isinstance(grads, (list, tuple)) else [grads]
     # tolerance limited by the accuracy of MLX's GPU matmul (~1e-3 relative)
     np.testing.assert_allclose(
         np.array(out), expected.detach().numpy(), rtol=2e-2, atol=2e-2
     )
+    torch_grads = [x_torch.grad] + ([] if e_torch is None else [e_torch.grad])
+    for grad, torch_grad in zip(grads, torch_grads):
+        diff = np.linalg.norm(np.array(grad) - torch_grad.numpy())
+        assert diff <= 2e-2 * np.linalg.norm(torch_grad.numpy())
 
 
 @pytest.mark.parametrize("fmt", ["coo", "csr", "auto"])
@@ -141,3 +168,24 @@ def test_gatv2_conv_fused_matches_gather_scatter(fmt):
     np.testing.assert_allclose(np.array(out_f), np.array(out_r), rtol=5e-3, atol=5e-3)
     for (_, a), (_, b) in zip(nn.utils.tree_flatten(g_f), nn.utils.tree_flatten(g_r)):
         np.testing.assert_allclose(np.array(a), np.array(b), rtol=2e-2, atol=2e-2)
+
+
+def test_gatv2_conv_self_loops_default_and_bipartite():
+    # add_self_loops=True by default, as in PyG; it needs one node set.
+    conv = GATv2Conv(4, 3, heads=2)
+    assert conv._add_self_loops and conv.fill_value == "mean"
+    edge_index = mx.array([[0, 1], [1, 2]])
+    x = mx.random.normal((3, 4))
+    # a node without incoming edges still attends to itself
+    no_loops = GATv2Conv(4, 3, heads=2, add_self_loops=False)
+    no_loops.update(conv.parameters())
+    assert not mx.allclose(conv(edge_index, x)[0], no_loops(edge_index, x)[0])
+    # the same array on both sides is not bipartite
+    assert conv(edge_index, (x, x)).shape == (3, 6)
+
+    bipartite = GATv2Conv((4, 5), 3, heads=2)
+    x_dst = mx.random.normal((3, 5))
+    with pytest.raises(ValueError, match="add_self_loops=False"):
+        bipartite(edge_index, (x, x_dst))
+    bipartite = GATv2Conv((4, 5), 3, heads=2, add_self_loops=False)
+    assert bipartite(edge_index, (x, x_dst)).shape == (3, 6)

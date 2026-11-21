@@ -31,6 +31,16 @@ class SAGEConv(MessagePassing):
             different feature sizes
         out_features_dim: Size of output node embeddings
         bias: Whether to use bias in the node projection
+        root_weight: Whether to add the projection :math:`\mathbf{W}_1
+            \mathbf{x}_i` of the node's own features, as in PyG. Without it,
+            the bias (if any) is added to the neighbor term. Setting
+            ``conv.root_weight = False`` after construction, as
+            :class:`~mlx_graphs.nn.DirGNNConv` does, drops the projection
+            and keeps its bias. Default: ``True``
+        **kwargs: Arguments of :class:`~mlx_graphs.nn.MessagePassing`, e.g.
+            ``aggr`` (default ``"mean"``), which can also be a list of
+            aggregations whose outputs are concatenated, as in PyG
+            (``aggr=["mean", "max"]``)
 
     Example:
 
@@ -69,25 +79,60 @@ class SAGEConv(MessagePassing):
         node_features_dim: Union[int, Tuple[int, int]],
         out_features_dim: int,
         bias: bool = True,
+        root_weight: bool = True,
         **kwargs,
     ):
-        kwargs.setdefault("aggr", "mean")
-        super(SAGEConv, self).__init__(**kwargs)
-
         if isinstance(node_features_dim, int):
             src_dim = dst_dim = node_features_dim
         else:
             src_dim, dst_dim = node_features_dim
+
+        kwargs.setdefault("aggr", "mean")
+        if isinstance(kwargs["aggr"], str) and kwargs["aggr"].lower() == "lstm":
+            # As in PyG: an LSTM over the neighbor features, of the same size.
+            aggr_kwargs = dict(kwargs.get("aggr_kwargs") or {})
+            aggr_kwargs.setdefault("node_features_dim", src_dim)
+            aggr_kwargs.setdefault("out_features_dim", src_dim)
+            kwargs["aggr_kwargs"] = aggr_kwargs
+        super(SAGEConv, self).__init__(**kwargs)
 
         self.node_features_dim = node_features_dim
         self.out_features_dim = out_features_dim
         self.src_features_dim = src_dim
         self.dst_features_dim = dst_dim
 
+        # Size of the aggregated neighbor features: a list of aggregations
+        # (e.g. ``aggr=["mean", "max"]``) concatenates their outputs.
+        aggr_module = self.get("aggr_module")
+        if aggr_module is not None and hasattr(aggr_module, "get_out_features_dim"):
+            aggr_dim = aggr_module.get_out_features_dim(src_dim)
+        elif isinstance(getattr(aggr_module, "out_features_dim", None), int):
+            aggr_dim = aggr_module.out_features_dim  # e.g. an LSTM aggregation
+        else:
+            aggr_dim = src_dim
+
         # Neighbor messages come from source nodes, the self term from
         # destination nodes.
-        self.neigh_proj = Linear(src_dim, out_features_dim, bias=False)
+        self.neigh_proj = Linear(aggr_dim, out_features_dim, bias=False)
         self.self_proj = Linear(dst_dim, out_features_dim, bias=bias)
+        self._root_weight = True
+        self.root_weight = root_weight
+
+    @property
+    def root_weight(self) -> bool:
+        """Whether the projection of the node's own features is added."""
+        return self._root_weight
+
+    @root_weight.setter
+    def root_weight(self, value: bool):
+        # Without the root projection, its bias moves to a standalone
+        # parameter added to the neighbor term (PyG keeps the bias on the
+        # neighbor projection in that case).
+        self._root_weight = bool(value)
+        if not value and "self_proj" in self:
+            self_proj = self.pop("self_proj")
+            if "bias" in self_proj:
+                self.bias = self_proj.bias
 
     def __call__(
         self,
@@ -111,8 +156,15 @@ class SAGEConv(MessagePassing):
         else:
             src_features = dst_features = node_features
 
-        # We follow DGL's way by applying projection on the smaller feature dimension
-        linear_before_mp = self.src_features_dim > self.out_features_dim
+        # We follow DGL's way by applying projection on the smaller feature
+        # dimension. This is only exact for aggregations that commute with a
+        # linear map (sum, mean), not e.g. for max or min.
+        linear_before_mp = (
+            self.src_features_dim > self.out_features_dim
+            and isinstance(self.aggr, str)
+            and self.aggr in ("add", "mean")
+            and "aggr_module" not in self
+        )
 
         if linear_before_mp:
             neigh_features = self.propagate(
@@ -128,6 +180,8 @@ class SAGEConv(MessagePassing):
             )
             neigh_features = self.neigh_proj(neigh_features)
 
-        out_features = self.self_proj(dst_features) + neigh_features
-
-        return out_features
+        if "self_proj" in self:
+            return self.self_proj(dst_features) + neigh_features
+        if "bias" in self:
+            return neigh_features + self.bias
+        return neigh_features

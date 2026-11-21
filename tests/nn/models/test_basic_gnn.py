@@ -127,3 +127,54 @@ def test_mlp(plain_last, norm):
     if not plain_last:
         mlp.eval()
         assert bool(mx.all(mlp(mx.random.normal((7, DIM))) >= 0).item())  # relu last
+
+
+@pytest.mark.parametrize("norm", [None, "batch"])
+def test_gin_matches_pyg_with_act_and_norm(graph, norm):
+    """As PyG's GIN, the MLP of every GINConv uses the model's activation and
+    normalization (compared in training mode: batch statistics)."""
+    torch = pytest.importorskip("torch")
+    pyg_nn = pytest.importorskip("torch_geometric.nn")
+    edge_index, x = graph
+    model = GIN(DIM, 16, num_layers=3, out_features_dim=4, act="elu", norm=norm)
+    pyg_model = pyg_nn.GIN(
+        DIM,
+        16,
+        num_layers=3,
+        out_channels=4,
+        act="elu",
+        norm=None if norm is None else "batch_norm",
+    )
+    with torch.no_grad():
+        for conv, pyg_conv in zip(model.convs, pyg_model.convs):
+            assert len(conv.mlp.lins) == len(pyg_conv.nn.lins) == 2
+            pyg_norms = [
+                n for n in pyg_conv.nn.norms if not isinstance(n, torch.nn.Identity)
+            ]
+            assert len(conv.mlp.get("norms", [])) == len(pyg_norms)
+            for lin, pyg_lin in zip(conv.mlp.lins, pyg_conv.nn.lins):
+                pyg_lin.weight.copy_(torch.tensor(np.array(lin.weight)))
+                pyg_lin.bias.copy_(torch.tensor(np.array(lin.bias)))
+    model.train()
+    pyg_model.train()
+    out = model(edge_index, x)
+    with torch.no_grad():
+        expected = pyg_model(
+            torch.tensor(np.array(x)), torch.tensor(np.array(edge_index)).long()
+        )
+    np.testing.assert_allclose(np.array(out), expected.numpy(), rtol=2e-2, atol=2e-2)
+
+
+@pytest.mark.parametrize("v2", [False, True])
+def test_gat_applies_its_dropout_to_attention_like_pyg(v2):
+    """Regression: PyG's GAT passes its dropout to every GATConv (attention
+    dropout); mlx-graphs' only applied it between layers."""
+    model = GAT(8, 16, num_layers=2, out_features_dim=3, heads=2, v2=v2, dropout=0.5)
+    assert all("dropout" in conv for conv in model.convs)
+    assert all("dropout" not in conv for conv in GAT(8, 16, num_layers=2).convs)
+
+    edge_index = mx.array([[0, 1, 2, 3], [1, 2, 3, 0]])
+    x = mx.random.normal((4, 8))
+    model = GAT(8, 16, num_layers=2, out_features_dim=3, heads=2, v2=v2, dropout=0.5)
+    model.eval()
+    assert mx.array_equal(model(edge_index, x), model(edge_index, x))

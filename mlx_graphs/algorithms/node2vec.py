@@ -21,8 +21,8 @@ class Node2Vec(nn.Module):
     are learned via negative sampling optimization.
 
     .. note::
-        This feature is experimental and requires `mlx_cluster` to be installed which
-        currently requires mlx 0.18.
+        Random-walk sampling uses the kernels of ``mlx_cluster``, a
+        dependency of mlx-graphs on macOS.
 
     Args:
         edge_index : The edge indices.

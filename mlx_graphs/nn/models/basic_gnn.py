@@ -1,4 +1,4 @@
-from typing import Any, Callable, List, Literal, Optional, Union
+from typing import Any, Callable, List, Literal, Optional, Tuple, Union
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -123,7 +123,11 @@ class BasicGNN(nn.Module):
     convolution layer by implementing :meth:`init_conv`.
 
     Args:
-        node_features_dim: Size of the input node features.
+        node_features_dim: Size of the input node features, or a
+            ``(src_dim, dst_dim)`` tuple for bipartite message passing (as in
+            PyG, every layer then gets separate source and destination
+            weights, e.g. for :func:`~mlx_graphs.nn.to_hetero`), if the
+            convolution supports it.
         hidden_features_dim: Size of the hidden node embeddings.
         num_layers: Number of message passing layers.
         out_features_dim: Size of the output. If ``None``, the model outputs
@@ -148,7 +152,7 @@ class BasicGNN(nn.Module):
 
     def __init__(
         self,
-        node_features_dim: int,
+        node_features_dim: Union[int, Tuple[int, int]],
         hidden_features_dim: int,
         num_layers: int,
         out_features_dim: Optional[int] = None,
@@ -169,7 +173,10 @@ class BasicGNN(nn.Module):
             out_features_dim if out_features_dim is not None else hidden_features_dim
         )
         self.act = _resolve_activation(act)
+        # Normalization name, for convolutions with inner MLPs (`init_conv`).
+        self._norm_name = norm
         self.dropout = nn.Dropout(dropout) if dropout > 0.0 else None
+        self._dropout_p = dropout
 
         # Without Jumping Knowledge the last convolution maps directly to the
         # output size; with it, every convolution outputs hidden embeddings and
@@ -179,11 +186,17 @@ class BasicGNN(nn.Module):
             conv_out_last = out_features_dim
         self._plain_last = out_features_dim is not None and jk is None
 
-        dims = [node_features_dim] + [hidden_features_dim] * (num_layers - 1)
-        dims.append(conv_out_last)
+        # As in PyG, a (src, dst) input size gives every layer separate
+        # source and destination sizes.
+        hidden_in: Union[int, Tuple[int, int]] = hidden_features_dim
+        if isinstance(node_features_dim, (tuple, list)):
+            node_features_dim = tuple(node_features_dim)
+            hidden_in = (hidden_features_dim, hidden_features_dim)
+        in_dims = [node_features_dim] + [hidden_in] * (num_layers - 1)
+        out_dims = [hidden_features_dim] * (num_layers - 1) + [conv_out_last]
         self.convs = [
             self.init_conv(in_dim, out_dim, is_last=(i == num_layers - 1), **kwargs)
-            for i, (in_dim, out_dim) in enumerate(zip(dims[:-1], dims[1:]))
+            for i, (in_dim, out_dim) in enumerate(zip(in_dims, out_dims))
         ]
 
         num_post = num_layers - 1 if self._plain_last else num_layers
@@ -335,8 +348,10 @@ class GIN(BasicGNN):
         num_layers: Number of message passing layers.
         out_features_dim: Size of the output. Default: ``None``
         dropout: Dropout probability. Default: ``0.0``
-        act: Activation between layers. Default: ``"relu"``
-        norm: Normalization between layers. Default: ``None``
+        act: Activation between layers and inside the MLPs of the
+            convolutions (as PyG). Default: ``"relu"``
+        norm: Normalization between layers and inside the MLPs of the
+            convolutions (as PyG). Default: ``None``
         jk: Jumping Knowledge mode. Default: ``None``
         **kwargs: Additional arguments of :class:`~mlx_graphs.nn.GINConv`
             (e.g. ``learn_eps=True``).
@@ -345,7 +360,13 @@ class GIN(BasicGNN):
     supports_edge_weights = True
 
     def init_conv(self, node_features_dim, out_features_dim, is_last, **kwargs):
-        mlp = MLP([node_features_dim, out_features_dim, out_features_dim])
+        # As PyG, the inner MLPs use the activation and normalization of the
+        # model.
+        mlp = MLP(
+            [node_features_dim, out_features_dim, out_features_dim],
+            act=self.act,
+            norm=self._norm_name,
+        )
         return GINConv(mlp, **kwargs)
 
 
@@ -368,7 +389,9 @@ class GAT(BasicGNN):
         out_features_dim: Size of the output. Default: ``None``
         heads: Number of attention heads. Default: ``1``
         v2: Whether to use :class:`~mlx_graphs.nn.GATv2Conv`. Default: ``False``
-        dropout: Dropout probability. Default: ``0.0``
+        dropout: Dropout probability, applied after each hidden layer and, as
+            in PyG, to the attention coefficients of every layer.
+            Default: ``0.0``
         act: Activation between layers. Default: ``"relu"``
         norm: Normalization between layers. Default: ``None``
         jk: Jumping Knowledge mode. Default: ``None``
@@ -405,6 +428,9 @@ class GAT(BasicGNN):
 
     def init_conv(self, node_features_dim, out_features_dim, is_last, **kwargs):
         conv = GATv2Conv if self._v2 else GATConv
+        # As in PyG, the model's dropout also applies to the attention
+        # coefficients of every layer (unless `dropout` is given for the convs).
+        kwargs.setdefault("dropout", self._dropout_p)
         if is_last and self._plain_last:
             # output layer: average the heads
             return conv(

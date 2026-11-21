@@ -6,7 +6,7 @@ leaves a weighted sum over neighbours unchanged.
 """
 
 from collections import OrderedDict
-from typing import Any, Callable, Hashable, Literal, Optional, Tuple
+from typing import Any, Callable, Hashable, Literal, Optional, Tuple, Union
 
 import mlx.core as mx
 
@@ -197,3 +197,80 @@ def cached_gcn_norm(
         ("gcn", num_nodes, add_self_loops),
         lambda: gcn_norm(edge_index, num_nodes, None, add_self_loops),
     )
+
+
+SelfLoopFillValue = Union[
+    float, mx.array, Literal["mean", "add", "sum", "max", "min", "mul"]
+]
+
+
+def attention_self_loops(
+    edge_index: mx.array,
+    num_nodes: int,
+    edge_features: Optional[mx.array] = None,
+    fill_value: SelfLoopFillValue = "mean",
+) -> Tuple[mx.array, Optional[mx.array], mx.array]:
+    """Self-loops of the attention layers, as PyG's ``remove_self_loops``
+    followed by ``add_self_loops``, but with shapes fixed by the inputs.
+
+    One self-loop per node is appended to ``edge_index``. Existing self-loops
+    are kept in place (the number of edges cannot depend on the data), and
+    the returned mask flags them: the caller excludes them from the attention
+    softmax, which gives the same result as removing them.
+
+    Args:
+        edge_index: Graph connectivity of shape `[2, num_edges]`.
+        num_nodes: Number of nodes.
+        edge_features: Optional features of each edge, of shape
+            `[num_edges, ...]`.
+        fill_value: Features of the added self-loops: a constant (float or
+            array), or the reduction (``"mean"``, ``"add"``/``"sum"``,
+            ``"max"``, ``"min"`` or ``"mul"``) of the features of the incoming
+            edges of each node, existing self-loops excluded (0 for nodes
+            without incoming edges, as in PyG). Default: ``"mean"``
+
+    Returns:
+        The edge index with ``num_edges + num_nodes`` columns, the edge
+        features of the same length (or ``None``), and a boolean mask of
+        shape `[num_edges + num_nodes]`, ``True`` for the input self-loops.
+    """
+    row, col = edge_index[0], edge_index[1]
+    is_loop = row == col
+    loop = mx.arange(num_nodes, dtype=edge_index.dtype)
+    new_edge_index = mx.concatenate([edge_index, mx.stack([loop, loop])], axis=1)
+    removed = mx.concatenate([is_loop, mx.zeros((num_nodes,), dtype=mx.bool_)])
+
+    if edge_features is None:
+        return new_edge_index, None, removed
+
+    loop_shape = (num_nodes, *edge_features.shape[1:])
+    if not isinstance(fill_value, str):
+        loop_features = mx.broadcast_to(
+            mx.array(fill_value, dtype=edge_features.dtype), loop_shape
+        )
+    else:
+        per_edge = (-1,) + (1,) * (edge_features.ndim - 1)
+        keep = (~is_loop).reshape(per_edge)
+        count = scatter((~is_loop).astype(mx.int32), col, num_nodes, "add")
+        has_edges = (count > 0).reshape(per_edge)
+        if fill_value == "mean":
+            total = scatter(edge_features * keep, col, num_nodes, "add")
+            denominator = mx.maximum(count, 1).astype(edge_features.dtype)
+            loop_features = total / denominator.reshape(per_edge)
+        elif fill_value in ("add", "sum"):
+            loop_features = scatter(edge_features * keep, col, num_nodes, "add")
+        elif fill_value in ("max", "min", "mul"):
+            neutral = {"max": -float("inf"), "min": float("inf"), "mul": 1.0}
+            values = mx.where(keep, edge_features, neutral[fill_value])
+            loop_features = scatter(values, col, num_nodes, fill_value)
+            empty = 1.0 if fill_value == "mul" else 0.0
+            loop_features = mx.where(has_edges, loop_features, empty)
+        else:
+            raise ValueError(
+                f"Unknown fill_value {fill_value!r}: use a constant, 'mean', "
+                "'add', 'sum', 'max', 'min' or 'mul'"
+            )
+    new_edge_features = mx.concatenate(
+        [edge_features, loop_features.astype(edge_features.dtype)], axis=0
+    )
+    return new_edge_index, new_edge_features, removed

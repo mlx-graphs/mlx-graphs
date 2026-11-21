@@ -57,3 +57,25 @@ def test_read_tu_data_without_node_features_keeps_isolated_nodes(tmp_path):
     expected_edge_index = mx.array([[0, 1, 1, 2, 4, 5], [1, 0, 2, 1, 5, 4]])
     assert mx.array_equal(batched.edge_index, expected_edge_index)
     assert mx.array_equal(batched.batch_indices, mx.array([0, 0, 0, 0, 1, 1]))
+
+
+def test_read_tu_data_keeps_edge_labels_aligned_with_edges(tmp_path):
+    # Graphs whose edges are listed out of order, with edge labels only (like
+    # MUTAG): the labels become one-hot edge features, which must follow their
+    # edges when the edges are sorted.
+    prefix = "TOY"
+    folder = tmp_path / prefix
+    folder.mkdir()
+    (folder / f"{prefix}_A.txt").write_text("2, 1\n1, 2\n3, 1\n1, 3\n5, 4\n4, 5\n")
+    (folder / f"{prefix}_edge_labels.txt").write_text("0\n0\n2\n2\n1\n1\n")
+    (folder / f"{prefix}_graph_indicator.txt").write_text("1\n1\n1\n2\n2\n")
+    (folder / f"{prefix}_graph_labels.txt").write_text("1\n0\n")
+
+    graph, other = read_tu_data(str(tmp_path), prefix)
+
+    assert mx.array_equal(graph.edge_index, mx.array([[0, 0, 1, 2], [1, 2, 0, 0]]))
+    expected = mx.array([[1, 0, 0], [0, 0, 1], [1, 0, 0], [0, 0, 1]])
+    assert graph.edge_features is not None
+    assert mx.array_equal(graph.edge_features, expected)
+    assert mx.array_equal(other.edge_index, mx.array([[0, 1], [1, 0]]))
+    assert mx.array_equal(other.edge_features, mx.array([[0, 1, 0], [0, 1, 0]]))

@@ -82,11 +82,9 @@ def test_edge_conv_shapes(aggr):
 def test_edge_conv_default_aggr_is_max():
     mlp = _make_mlp()
     assert EdgeConv(mlp).aggr == "max"
-    with pytest.raises(ValueError):
-        EdgeConv(mlp, aggr="softmax")
 
 
-@pytest.mark.parametrize("aggr", [None, "max", "add", "mean", "min"])
+@pytest.mark.parametrize("aggr", [None, "max", "add", "mean", "min", "softmax"])
 def test_edge_conv_matches_pyg(aggr):
     mx.random.seed(0)
     rng = np.random.default_rng(1)

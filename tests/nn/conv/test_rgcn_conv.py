@@ -310,3 +310,9 @@ def test_rgcn_conv_gradients(monkeypatch, path, kwargs):
         return (conv(edge_index, node_features, edge_type) ** 2).sum()
 
     _assert_finite_grads(conv, loss_fn)
+
+
+@pytest.mark.parametrize("aggr", [["mean", "max"], "powermean"])
+def test_rgcn_conv_rejects_non_scatter_aggregations(aggr):
+    with pytest.raises(ValueError, match="single scatter aggregation"):
+        RGCNConv(4, 4, 2, aggr=aggr)

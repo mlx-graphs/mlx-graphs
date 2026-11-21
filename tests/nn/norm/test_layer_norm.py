@@ -46,6 +46,57 @@ def test_layer_norm(mode):
     )
 
 
+@pytest.mark.parametrize("mode", ["graph", "node"])
+@pytest.mark.parametrize("batched", [False, True])
+@pytest.mark.parametrize("affine", [True, False])
+def test_layer_norm_matches_pyg_with_gradients(mode, batched, affine):
+    # "graph" mode broadcast [B, 1] statistics against [B] counts (only right
+    # when num_features == num_graphs) and failed without batch; "node" mode
+    # used separate affine parameters.
+    import numpy as np
+    from torch_geometric.nn import LayerNorm as PyGLayerNorm
+
+    rng = np.random.default_rng(0)
+    x = rng.normal(size=(9, 5)).astype(np.float32)
+    # graphs of 4 nodes, 1 node (a single-node graph), none (graph 2) and 4
+    batch = np.array([0, 0, 0, 0, 1, 3, 3, 3, 3])
+    weight = rng.normal(size=5).astype(np.float32)
+    bias = rng.normal(size=5).astype(np.float32)
+    cot = rng.normal(size=(9, 5)).astype(np.float32)
+
+    ref = PyGLayerNorm(5, affine=affine, mode=mode)
+    norm = LayerNormalization(5, affine=affine, mode=mode)
+    if affine:
+        with torch.no_grad():
+            ref.weight.copy_(torch.tensor(weight))
+            ref.bias.copy_(torch.tensor(bias))
+        norm.weight, norm.bias = mx.array(weight), mx.array(bias)
+    batch_args = (mx.array(batch),) if batched else ()
+    torch_batch_args = (torch.tensor(batch),) if batched else ()
+
+    x_torch = torch.tensor(x, requires_grad=True)
+    expected = ref(x_torch, *torch_batch_args)
+    (expected * torch.tensor(cot)).sum().backward()
+
+    def loss(params, x):
+        norm.update(params)
+        return (norm(x, *batch_args) * mx.array(cot)).sum()
+
+    out = norm(mx.array(x), *batch_args)
+    grads, x_grad = mx.grad(loss, argnums=(0, 1))(
+        norm.trainable_parameters(), mx.array(x)
+    )
+    tol = dict(rtol=1e-4, atol=1e-5)
+    np.testing.assert_allclose(np.array(out), expected.detach().numpy(), **tol)
+    np.testing.assert_allclose(np.array(x_grad), x_torch.grad.numpy(), **tol)
+    if affine:
+        np.testing.assert_allclose(np.array(grads["weight"]), ref.weight.grad, **tol)
+        np.testing.assert_allclose(np.array(grads["bias"]), ref.bias.grad, **tol)
+    assert sorted(dict(norm.trainable_parameters())) == (
+        ["bias", "weight"] if affine else []
+    )
+
+
 def _flatten_by_type(node_features_dict: dict, type_order: list):
     """Mirrors PyG's HeteroData.to_homogeneous(): concatenates per-type node
     features into a single (x, type_vec) pair, with type_vec[i] holding the

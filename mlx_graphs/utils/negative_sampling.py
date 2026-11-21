@@ -42,10 +42,104 @@ def _host_edges(edge_index: mx.array, num_nodes: Optional[int]) -> tuple:
     return edges[0], edges[1], n
 
 
+def _num_negatives(num_neg_samples: Optional[Union[int, float]], num_edges: int) -> int:
+    if num_neg_samples is None:
+        return num_edges
+    if isinstance(num_neg_samples, float):
+        return int(num_neg_samples * num_edges)
+    return int(num_neg_samples)
+
+
+def _bipartite_negatives(
+    edges: np.ndarray,
+    size: tuple[int, int],
+    num_neg: int,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """``[2, k]`` host negatives between ``size[0]`` source and ``size[1]``
+    destination nodes, exact and without replacement."""
+    num_src, num_dst = size
+    population = num_src * num_dst
+    present = np.unique(edges[0] * num_dst + edges[1])
+    num_neg = min(num_neg, population - present.size)
+    if num_neg <= 0:
+        return np.zeros((2, 0), dtype=np.int64)
+    ranks = rng.choice(population - present.size, size=num_neg, replace=False)
+    ids = _kth_missing(present, ranks.astype(np.int64))
+    return np.stack([ids // num_dst, ids % num_dst])
+
+
+def _bipartite_negative_sampling(
+    edge_index: mx.array,
+    size: tuple[int, int],
+    num_neg_samples: Optional[Union[int, float]],
+) -> mx.array:
+    """Negative sampling between ``size[0]`` source and ``size[1]``
+    destination nodes, exact and without replacement."""
+    num_src, num_dst = size
+    edges = _to_numpy(edge_index).astype(np.int64).reshape(2, -1)
+    if edges.size > 0 and (
+        int(edges[0].max()) >= num_src or int(edges[1].max()) >= num_dst
+    ):
+        raise ValueError(f"`edge_index` contains nodes out of num_nodes={size}")
+    num_neg = _num_negatives(num_neg_samples, edges.shape[1])
+    if min(num_neg, num_src * num_dst) <= 0:
+        return _empty_like(edge_index)
+    negatives = _bipartite_negatives(edges, size, num_neg, _host_rng())
+    if negatives.shape[1] == 0:
+        return _empty_like(edge_index)
+    return mx.array(negatives, dtype=edge_index.dtype)
+
+
+def _negatives(
+    src: np.ndarray,
+    dst: np.ndarray,
+    n: int,
+    num_neg: int,
+    force_undirected: bool,
+    rng: np.random.Generator,
+) -> np.ndarray:
+    """``[2, k]`` host negatives of a graph of ``n`` nodes (see
+    :func:`negative_sampling`), exact and without replacement."""
+    not_loop = src != dst
+    src, dst = src[not_loop], dst[not_loop]
+
+    # Every candidate pair gets an id in [0, population). Self-loops have no id.
+    if force_undirected:
+        # Pairs (i, j) with i < j, row by row.
+        num_neg = num_neg // 2
+        population = n * (n - 1) // 2
+        nodes = np.arange(n, dtype=np.int64)
+        row_start = nodes * (2 * n - nodes - 1) // 2
+        low, high = np.minimum(src, dst), np.maximum(src, dst)
+        present = row_start[low] + high - low - 1
+    else:
+        # Pairs (i, j) with i != j: the diagonal is skipped in each row.
+        population = n * (n - 1)
+        present = src * (n - 1) + dst - (dst > src)
+    present = np.unique(present)
+
+    num_neg = min(num_neg, population - present.size)
+    if num_neg <= 0:
+        return np.zeros((2, 0), dtype=np.int64)
+
+    ranks = rng.choice(population - present.size, size=num_neg, replace=False)
+    ids = _kth_missing(present, ranks.astype(np.int64))
+
+    if force_undirected:
+        low = np.searchsorted(row_start, ids, side="right") - 1
+        high = ids - row_start[low] + low + 1
+        return np.stack([np.concatenate([low, high]), np.concatenate([high, low])])
+    neg_src = ids // (n - 1)
+    neg_dst = ids % (n - 1)
+    neg_dst += neg_dst >= neg_src
+    return np.stack([neg_src, neg_dst])
+
+
 @validate_edge_index
 def negative_sampling(
     edge_index: mx.array,
-    num_nodes: Optional[int] = None,
+    num_nodes: Optional[Union[int, tuple[int, int]]] = None,
     num_neg_samples: Optional[Union[int, float]] = None,
     force_undirected: bool = False,
 ) -> mx.array:
@@ -66,7 +160,10 @@ def negative_sampling(
         edge_index: a [2, num_edges] array representing the source and target
             nodes of each edge
         num_nodes: Number of nodes in the graph. Inferred from ``edge_index``
-            if not given.
+            if not given. For a bipartite graph, a tuple ``(num_src_nodes,
+            num_dst_nodes)``: the negatives are then pairs of a source and a
+            destination node (``src == dst`` is allowed) and
+            ``force_undirected`` is ignored.
         num_neg_samples: Number of negative edges to sample. A float is
             interpreted as a ratio of the number of edges in ``edge_index``.
             Default: ``None`` (one negative edge per edge of ``edge_index``).
@@ -91,49 +188,17 @@ def negative_sampling(
         negative_sampling(edge_index, num_neg_samples=2, force_undirected=True)
         # e.g. mx.array([[0, 2], [2, 0]])
     """
+    if isinstance(num_nodes, (tuple, list)):
+        return _bipartite_negative_sampling(
+            edge_index, (int(num_nodes[0]), int(num_nodes[1])), num_neg_samples
+        )
     src, dst, n = _host_edges(edge_index, num_nodes)
-
-    if num_neg_samples is None:
-        num_neg = src.size
-    elif isinstance(num_neg_samples, float):
-        num_neg = int(num_neg_samples * src.size)
-    else:
-        num_neg = int(num_neg_samples)
-
-    not_loop = src != dst
-    src, dst = src[not_loop], dst[not_loop]
-
-    # Every candidate pair gets an id in [0, population). Self-loops have no id.
-    if force_undirected:
-        # Pairs (i, j) with i < j, row by row.
-        num_neg = num_neg // 2
-        population = n * (n - 1) // 2
-        nodes = np.arange(n, dtype=np.int64)
-        row_start = nodes * (2 * n - nodes - 1) // 2
-        low, high = np.minimum(src, dst), np.maximum(src, dst)
-        present = row_start[low] + high - low - 1
-    else:
-        # Pairs (i, j) with i != j: the diagonal is skipped in each row.
-        population = n * (n - 1)
-        present = src * (n - 1) + dst - (dst > src)
-    present = np.unique(present)
-
-    num_neg = min(num_neg, population - present.size)
-    if num_neg <= 0:
+    num_neg = _num_negatives(num_neg_samples, src.size)
+    if num_neg <= 0 or n < 2:
         return _empty_like(edge_index)
-
-    ranks = _host_rng().choice(population - present.size, size=num_neg, replace=False)
-    ids = _kth_missing(present, ranks.astype(np.int64))
-
-    if force_undirected:
-        low = np.searchsorted(row_start, ids, side="right") - 1
-        high = ids - row_start[low] + low + 1
-        negatives = np.stack([np.concatenate([low, high]), np.concatenate([high, low])])
-    else:
-        neg_src = ids // (n - 1)
-        neg_dst = ids % (n - 1)
-        neg_dst += neg_dst >= neg_src
-        negatives = np.stack([neg_src, neg_dst])
+    negatives = _negatives(src, dst, n, num_neg, force_undirected, _host_rng())
+    if negatives.shape[1] == 0:
+        return _empty_like(edge_index)
     return mx.array(negatives, dtype=edge_index.dtype)
 
 
@@ -223,3 +288,86 @@ def structured_negative_sampling(
         return edge_index[0], edge_index[1], dst_neg
     feasible_mx = mx.array(feasible)
     return edge_index[0][feasible_mx], edge_index[1][feasible_mx], dst_neg
+
+
+@validate_edge_index
+def batched_negative_sampling(
+    edge_index: mx.array,
+    batch_indices: Union[mx.array, tuple[mx.array, mx.array]],
+    num_neg_samples: Optional[Union[int, float]] = None,
+    force_undirected: bool = False,
+) -> mx.array:
+    """
+    Samples random negative edges within each graph of a batch of graphs (see
+    :func:`negative_sampling`): no negative edge connects two different
+    graphs.
+
+    Args:
+        edge_index: a [2, num_edges] array representing the source and target
+            nodes of each edge of the batch
+        batch_indices: The graph of each node, of shape ``[num_nodes]``, with
+            the nodes of each graph stored contiguously (as in
+            :class:`~mlx_graphs.data.GraphDataBatch`). For bipartite graphs, a
+            tuple with the graph of each source node and of each destination
+            node.
+        num_neg_samples: Number of negative edges to sample per graph. A float
+            is interpreted as a ratio of the number of edges of each graph.
+            Default: ``None`` (one negative edge per edge of each graph).
+        force_undirected: If ``True``, the negative edges are undirected (see
+            :func:`negative_sampling`). Ignored for bipartite graphs.
+            Default: ``False``
+
+    Returns:
+        A ``[2, num_neg]`` array of negative edges, grouped by graph, with the
+        dtype of ``edge_index``.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[0, 1, 2, 3, 4, 5], [1, 2, 0, 4, 5, 3]])
+        batch_indices = mx.array([0, 0, 0, 1, 1, 1])
+
+        batched_negative_sampling(edge_index, batch_indices)
+        # e.g. mx.array([[1, 2, 0, 5, 3, 4], [0, 1, 2, 4, 5, 3]])
+    """
+    bipartite = isinstance(batch_indices, (tuple, list))
+    if bipartite:
+        src_batch = _to_numpy(batch_indices[0]).astype(np.int64).reshape(-1)
+        dst_batch = _to_numpy(batch_indices[1]).astype(np.int64).reshape(-1)
+    else:
+        src_batch = dst_batch = _to_numpy(batch_indices).astype(np.int64).reshape(-1)
+
+    num_graphs = int(max(src_batch.max(initial=-1), dst_batch.max(initial=-1))) + 1
+    num_src = np.bincount(src_batch, minlength=num_graphs)
+    num_dst = np.bincount(dst_batch, minlength=num_graphs)
+    src_ptr = np.concatenate([[0], np.cumsum(num_src)[:-1]])
+    dst_ptr = np.concatenate([[0], np.cumsum(num_dst)[:-1]])
+
+    edges = _to_numpy(edge_index).astype(np.int64).reshape(2, -1)
+    edge_batch = src_batch[edges[0]]
+    # Edges grouped by graph; one host generator for all the graphs (a
+    # single draw from mx.random, instead of one GPU sync per graph).
+    order = np.argsort(edge_batch, kind="stable")
+    edges, edge_batch = edges[:, order], edge_batch[order]
+    edge_ptr = np.searchsorted(edge_batch, np.arange(num_graphs + 1))
+    rng = _host_rng() if num_graphs > 0 else None
+    negatives = []
+    for graph in range(num_graphs):
+        local = edges[:, edge_ptr[graph] : edge_ptr[graph + 1]]
+        local = np.stack([local[0] - src_ptr[graph], local[1] - dst_ptr[graph]])
+        num_neg = _num_negatives(num_neg_samples, local.shape[1])
+        if num_neg <= 0:
+            continue
+        if bipartite:
+            size = (int(num_src[graph]), int(num_dst[graph]))
+            neg = _bipartite_negatives(local, size, num_neg, rng)
+        else:
+            n = int(num_src[graph])
+            if n < 2:
+                continue
+            neg = _negatives(local[0], local[1], n, num_neg, force_undirected, rng)
+        negatives.append(np.stack([neg[0] + src_ptr[graph], neg[1] + dst_ptr[graph]]))
+    if not negatives:
+        return _empty_like(edge_index)
+    return mx.array(np.concatenate(negatives, axis=1), dtype=edge_index.dtype)
