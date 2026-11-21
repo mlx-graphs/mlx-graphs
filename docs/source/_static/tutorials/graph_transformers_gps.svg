@@ -1,0 +1,157 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 568" width="960" height="568" role="img" aria-labelledby="t d">
+  <title id="t">GPS graph transformer on Peptides-func, mlx-graphs vs PyG</title>
+  <desc id="d">Peptides-func graphs from LRGBDataset get random-walk structural encodings (AddRandomWalkPE) and are batched 32 at a time. The GPS model embeds atoms and bonds with FeatureEncoder and projects the encodings with RWSEEncoder. Each of its 4 GPSConv layers runs a local GINEConv along the bonds and a global MultiheadAttention within each graph in parallel, each with a residual connection and batch normalization, sums them and applies an MLP with a residual and a normalization. global_mean_pool and an MLP head give 10 logits, trained with binary cross-entropy, an L2 penalty and Adam with bias correction, evaluated with average precision and compared with PyG on the CPU. The notebook also covers LapPE on CSL, PerformerAttention, DenseLayout with mx.compile, and SGFormer and Polynormer on Cora.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .alab { font-size: 11px; fill: #52514e; }
+    .malab { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+    .chip { font-size: 11.5px; font-weight: 600; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="566.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+  <rect x="24" y="52" width="176" height="370" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="224" y="52" width="372" height="370" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="226" y="40">MODEL · GPS</text>
+  <rect x="620" y="52" width="146" height="370" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="622" y="40">TRAIN</text>
+  <rect x="790" y="52" width="146" height="370" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="792" y="40">EVALUATE · VS PYG</text>
+  <!-- data column -->
+  <rect x="34" y="62" width="156" height="88" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="81.3">LRGBDataset</text>
+  <text class="sub" x="42" y="96.4">peptides-func</text>
+  <text class="sub" x="42" y="110.9">15,535 peptides</text>
+  <text class="sub" x="42" y="125.4">151 atoms on average</text>
+  <text class="sub" x="42" y="139.9">10 functions, multi-label</text>
+  <rect x="34" y="160" width="156" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="stitle" x="42" y="176">train · val · test</text>
+  <rect x="42" y="183" width="95.2" height="7" rx="2" fill="#1baf7a" fill-opacity="1.0"/>
+  <rect x="139.187" y="183" width="20.4" height="7" rx="2" fill="#1baf7a" fill-opacity="0.55"/>
+  <rect x="161.593" y="183" width="20.4" height="7" rx="2" fill="#1baf7a" fill-opacity="0.3"/>
+  <text class="small" x="42" y="201">10,873</text>
+  <text class="small" x="182" y="201" text-anchor="end">2,331 · 2,331</text>
+  <rect x="34" y="216" width="156" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="42" y="236.1">AddRandomWalkPE</text>
+  <text class="sub" x="42" y="251.1">20 steps, pre_transform</text>
+  <rect x="34" y="272" width="156" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="292.1">Dataloader</text>
+  <text class="sub" x="42" y="307.1">32 graphs per batch</text>
+  <rect x="34" y="328" width="156" height="84" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="stitle" x="42" y="352.6">CSL demo</text>
+  <text class="msub" x="42" y="367.6">GNNBenchmarkDataset</text>
+  <text class="sub" x="42" y="382.1">41-node cycles: RWSE</text>
+  <text class="sub" x="42" y="396.6">separates 10 classes</text>
+  <!-- model column: input encoders, GPSConv x 4, readout -->
+  <rect x="234" y="62" width="164" height="44" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="81.1">FeatureEncoder</text>
+  <text class="sub" x="242" y="96.1">atoms → 56 · bonds → 64</text>
+  <rect x="422" y="62" width="164" height="44" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="430" y="81.1">RWSEEncoder</text>
+  <text class="sub" x="430" y="96.1">RWSE 20 → 8</text>
+  <path d="M346.0,106 L346.0,116 L504.0,116 L504.0,106" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M410,116 L410,131" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="418" y="128">x: 56 ‖ 8 = 64 channels</text>
+  <rect x="234" y="132" width="352" height="228" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="title" x="244" y="150">GPSConv</text>
+  <text class="small" x="576" y="150" text-anchor="end">× 4 layers</text>
+  <path d="M324.0,169 L324.0,160 L496.0,160 L496.0,169" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M324,160 L324,169" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M496,160 L496,169" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <circle cx="410.0" cy="160" r="2.5" fill="#6b6a64"/>
+  <path d="M410.0,132 L410.0,160" stroke="#6b6a64" stroke-width="1.5"/>
+  <rect x="244" y="170" width="160" height="44" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="252" y="189.1">GINEConv</text>
+  <text class="sub" x="252" y="204.1">local, bond features</text>
+  <rect x="416" y="170" width="160" height="44" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="424" y="189.1">MultiheadAttention</text>
+  <text class="sub" x="424" y="204.1">global, 4 heads</text>
+  <path d="M324,214 L324,223" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="244" y="224" width="160" height="22" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="sub" x="324" y="239.1" text-anchor="middle">+ x · BatchNorm</text>
+  <path d="M496,214 L496,223" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="416" y="224" width="160" height="22" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="sub" x="496" y="239.1" text-anchor="middle">+ x · BatchNorm</text>
+  <path d="M324.0,246 L324.0,264 L401.0,264" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M496.0,246 L496.0,264 L419.0,264" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <circle cx="410.0" cy="264" r="8.5" fill="#ffffff" stroke="#6b6a64" stroke-width="1.5"/>
+  <text class="stitle" x="410" y="268.5" text-anchor="middle">+</text>
+  <path d="M410,272.5 L410,283" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="325" y="284" width="170" height="28" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="stitle" x="333" y="302.5">MLP</text>
+  <text class="sub" x="487" y="302.5" text-anchor="end">64 → 128 → 64</text>
+  <path d="M410,312 L410,321" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="325" y="322" width="170" height="22" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="sub" x="410" y="337.1" text-anchor="middle">+ residual · BatchNorm</text>
+  <path d="M418.5,264 L515,264 L515,333 L496,333" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M410,344 L410,352 L324,352 L324,375" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="244" y="376" width="160" height="36" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="252" y="398.3">global_mean_pool</text>
+  <rect x="416" y="376" width="160" height="36" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="stitle" x="424" y="398.3">MLP head</text>
+  <text class="sub" x="568" y="398.3" text-anchor="end">→ 10 logits</text>
+  <path d="M404,394 L415,394" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M204,84 L220,84" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M576,394 L629,394" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="630" y="372" width="126" height="40" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="638" y="389.1">BCE loss</text>
+  <text class="sub" x="638" y="404.1">10 functions</text>
+  <rect x="630" y="206" width="126" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="638" y="226.1">+ L2 penalty</text>
+  <text class="sub" x="638" y="241.1">1e-5 · p on grads</text>
+  <rect x="630" y="62" width="126" height="72" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="80.6">Adam</text>
+  <text class="sub" x="638" y="95.6">lr 1e-3</text>
+  <text class="sub" x="638" y="110.1">bias correction</text>
+  <text class="sub" x="638" y="124.6">8 epochs</text>
+  <path d="M693,372 L693,253" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M693,206 L693,135" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M770,98 L786,98" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="800" y="62" width="126" height="72" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="87.8">average precision</text>
+  <text class="sub" x="808" y="102.9">mean of 10 tasks</text>
+  <text class="sub" x="808" y="117.4">val &amp; test graphs</text>
+  <rect x="800" y="150" width="126" height="26" rx="4" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="chip" x="863" y="166.9" text-anchor="middle">mlx-graphs · GPU</text>
+  <rect x="800" y="184" width="126" height="26" rx="4" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="chip" x="863" y="200.9" text-anchor="middle">PyG · CPU</text>
+  <text class="small" x="802" y="232">same graphs, RWSE</text>
+  <text class="small" x="802" y="246">and hyperparameters;</text>
+  <text class="small" x="802" y="260">PyG GPSConv, GINEConv;</text>
+  <text class="small" x="802" y="274">compare AP, s / epoch</text>
+  <!-- band: the other sections of the tutorial -->
+  <rect x="24" y="456" width="912" height="66" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="444">ALSO IN THIS TUTORIAL</text>
+  <rect x="34" y="466" width="214" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="42" y="486.1">LapPEEncoder</text>
+  <text class="msub" x="42" y="501.1">AddLaplacianEigenvectorPE</text>
+  <rect x="260" y="466" width="214" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="268" y="486.1">PerformerAttention</text>
+  <text class="sub" x="268" y="501.1">linear-cost global attention</text>
+  <rect x="486" y="466" width="214" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="494" y="486.1">DenseLayout</text>
+  <text class="sub" x="494" y="501.1">+ mx.compile of a step</text>
+  <rect x="712" y="466" width="214" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="720" y="486.1">SGFormer, Polynormer</text>
+  <text class="sub" x="720" y="501.1">linear attention, Cora</text>
+  <rect x="537.21" y="537" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="553.21" y="546">data</text>
+  <rect x="593.98" y="537" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="609.98" y="546">trainable weights</text>
+  <rect x="715.207" y="537" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="731.207" y="546">no weights</text>
+  <rect x="805.212" y="537" width="10" height="10" rx="2.5" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="leg" x="821.212" y="546">mlx-graphs</text>
+  <rect x="897.632" y="537" width="10" height="10" rx="2.5" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="leg" x="913.632" y="546">PyG</text>
+</svg>

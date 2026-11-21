@@ -24,3 +24,21 @@ Transforms
 	Constant
 	AddRandomWalkPE
 	GCNNorm
+	AddRemainingSelfLoops
+	RemoveDuplicatedEdges
+	IndexToMask
+	MaskToIndex
+	KNNGraph
+	RadiusGraph
+	NormalizeFeatures
+	TargetIndegree
+	LocalDegreeProfile
+	AddLaplacianEigenvectorPE
+	SVDFeatureReduction
+	SIGN
+	FeaturePropagation
+	VirtualNode
+	TwoHop
+	LineGraph
+	ToDense
+	RemoveTrainingClasses

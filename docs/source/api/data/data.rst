@@ -12,3 +12,11 @@ Data Objects
 
 	GraphData
 	HeteroGraphData
+
+.. currentmodule:: mlx_graphs.data.temporal
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: data-class-template.rst
+
+	TemporalData

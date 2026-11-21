@@ -47,7 +47,7 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_theme_options = {
     # "show_toc_level": 2,
-    "repository_url": "https://github.com/TristanBilot/mlx-graphs",
+    "repository_url": "https://github.com/mlx-graphs/mlx-graphs",
     "use_repository_button": True,
     "navigation_with_keys": False,
     "logo": {
