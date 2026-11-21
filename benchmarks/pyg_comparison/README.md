@@ -76,7 +76,7 @@ measuring them does not change the timings. `--seeds` sets the seeds
   automatically. It is off for graph classification, where every batch is a
   new graph.
 - GAT / GATv2 run on a graph whose self-loops were added once beforehand, in
-  both frameworks, and are built with `add_self_loops=False` in PyG.
+  both frameworks, and are built with `add_self_loops=False` in both.
 - Every timed step ends with a synchronization (`mx.eval` /
   `torch.mps.synchronize`), and the first steps are excluded as warm-up.
 - Each configuration runs in a fresh process under a memory cap (16 GB by
