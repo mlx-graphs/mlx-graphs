@@ -15,6 +15,8 @@ Each section below is one machine. Click a figure to see it at full size.
 
 .. include:: ../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/results.rst
 
+.. include:: ../../benchmarks/pyg_comparison/results/Apple_M1_Pro/0.1.0-c5f1246/results.rst
+
 What is measured
 ----------------
 

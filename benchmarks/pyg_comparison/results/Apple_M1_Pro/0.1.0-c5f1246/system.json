@@ -1,0 +1,22 @@
+{
+  "chip": "Apple M1 Pro",
+  "memory_gb": 32,
+  "os": "macOS 27.0",
+  "python": "3.12.10",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.1.0",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.8.1",
+  "library": {
+    "label": "0.1.0-c5f1246",
+    "version": "0.1.0",
+    "commit": "c5f12463a0ee4cbf33545a28a8f736567ba80adc",
+    "commit_date": "2026-11-20T15:17:17Z",
+    "commit_subject": "Faster message passing, PyG-parity layers and models, PyG benchmarks",
+    "branch": null,
+    "dirty": false,
+    "repo_root": null,
+    "imported_from": null
+  }
+}
