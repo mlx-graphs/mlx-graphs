@@ -39,8 +39,8 @@ HEADS = 4
 # ---------------------------------------------------------------------------
 # Models. The same architectures are built in both frameworks.
 # GAT / GATv2 run on a graph whose self-loops were added once beforehand, for
-# both frameworks (PyG adds them inside the layer by default, mlx-graphs does
-# not). GCN adds its self-loops in the layer in both.
+# both frameworks, so both layers get add_self_loops=False (both add them
+# inside the layer by default). GCN adds its self-loops in the layer in both.
 # ---------------------------------------------------------------------------
 
 
@@ -60,9 +60,11 @@ def mlx_conv(name: str, in_dim: int, out_dim: int, heads: int = HEADS):
             )
         )
     if name == "gat":
-        return gnn.GATConv(in_dim, out_dim // heads, heads=heads)
+        return gnn.GATConv(in_dim, out_dim // heads, heads=heads, add_self_loops=False)
     if name == "gatv2":
-        return gnn.GATv2Conv(in_dim, out_dim // heads, heads=heads)
+        return gnn.GATv2Conv(
+            in_dim, out_dim // heads, heads=heads, add_self_loops=False
+        )
     raise ValueError(name)
 
 

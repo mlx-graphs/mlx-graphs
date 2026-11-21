@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 468" width="960" height="468" role="img" aria-labelledby="t d">
+  <title id="t">Link prediction on Cora with a GCN encoder and a dot-product decoder, mlx-graphs vs PyG</title>
+  <desc id="d">RandomLinkSplit splits the Cora edges into message-passing edges (edge_index), which the encoder sees, and supervision edges (edge_label_index), which the model scores; test edges never pass messages. A LinkPredictor encodes the nodes with a two-layer GCN and scores each pair with the dot product of the two embeddings. Training uses a BCE loss with one negative_sampling edge per positive edge, resampled every epoch, and Adam. Evaluation reports ROC-AUC and AP and ranking metrics with LinkPredMetricCollection, and compares with PyG on Cora, CiteSeer and PubMed. GAE, VGAE and LinkNeighborLoader are also covered.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .alab { font-size: 11px; fill: #52514e; }
+    .malab { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+    .chip { font-size: 11.5px; font-weight: 600; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="466.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+  <rect x="24" y="52" width="180" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="228" y="52" width="272" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="230" y="40">MODEL</text>
+  <rect x="524" y="52" width="172" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="526" y="40">TRAIN</text>
+  <rect x="720" y="52" width="216" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="722" y="40">EVALUATE · VS PYG</text>
+  <!-- data column: the split into message-passing and supervision edges -->
+  <rect x="34" y="62" width="160" height="50" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="76.8">PlanetoidDataset</text>
+  <text class="sub" x="42" y="91.9">Cora · 2,708 papers</text>
+  <text class="sub" x="42" y="106.4">5,278 citations</text>
+  <rect x="34" y="122" width="160" height="44" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="141.1">RandomLinkSplit</text>
+  <text class="sub" x="42" y="156.1">5% val · 10% test</text>
+  <rect x="34" y="176" width="160" height="62" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="189.6">edge_index</text>
+  <text class="sub" x="42" y="204.6">message-passing edges</text>
+  <text class="sub" x="42" y="219.1">train, val: train edges</text>
+  <text class="sub" x="42" y="233.6">test: + val edges</text>
+  <rect x="34" y="248" width="160" height="64" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="262.6">edge_label_index</text>
+  <text class="sub" x="42" y="277.6">scored pairs, label 1 / 0</text>
+  <text class="sub" x="42" y="292.1">val 263 + 263 neg</text>
+  <text class="sub" x="42" y="306.6">test 527 + 527 neg</text>
+  <!-- model column: LinkPredictor = GCN encoder + dot-product decoder -->
+  <rect x="238" y="62" width="252" height="250" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="title" x="248" y="80">LinkPredictor</text>
+  <text class="small" x="480" y="80" text-anchor="end">encode, then decode</text>
+  <rect x="248" y="118" width="232" height="30" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="256" y="137.5">node_features</text>
+  <text class="sub" x="472" y="137.5" text-anchor="end">2,708 × 1,433</text>
+  <path d="M364,148 L364,175" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="248" y="176" width="232" height="62" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="256" y="196.8">GCN</text>
+  <text class="sub" x="256" y="211.9">2 × GCNConv · ReLU</text>
+  <text class="sub" x="256" y="226.4">1,433 → 128 → 64</text>
+  <path d="M364,238 L364,259" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="372" y="252.5">z, 64 per node</text>
+  <rect x="248" y="260" width="232" height="40" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="256" y="277.1">decode</text>
+  <text class="sub" x="256" y="292.1">z_u · z_v → logit</text>
+  <path d="M194,87 L216,87 L216,133 L247,133" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M194,207 L247,207" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M194,280 L247,280" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <!-- train column: negatives, BCE loss, Adam -->
+  <rect x="534" y="62" width="152" height="58" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="542" y="80.8">Adam</text>
+  <text class="sub" x="542" y="95.9">lr 0.01 · 100 epochs</text>
+  <text class="sub" x="542" y="110.4">full batch</text>
+  <rect x="534" y="176" width="152" height="62" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="542" y="204.1">BCE loss</text>
+  <text class="sub" x="542" y="219.1">pos → 1 · neg → 0</text>
+  <rect x="534" y="262" width="152" height="50" rx="6" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="title" x="542" y="276.8">negative_sampling</text>
+  <text class="sub" x="542" y="291.9">1 per positive edge</text>
+  <text class="sub" x="542" y="306.4">new every epoch</text>
+  <path d="M610,176 L610,121" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M480,271 L512,271 L512,207 L533,207" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M534,289 L481,289" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M700,91 L716,91" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="730" y="62" width="196" height="58" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="738" y="80.8">ROC-AUC · AP</text>
+  <text class="sub" x="738" y="95.9">val &amp; test pairs</text>
+  <text class="sub" x="738" y="110.4">test at best val AUC</text>
+  <rect x="730" y="130" width="196" height="76" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="738" y="150.6">ranking, top 20</text>
+  <text class="msub" x="738" y="165.6">LinkPredMetricCollection</text>
+  <text class="sub" x="738" y="180.1">MRR · Hits · NDCG · Recall</text>
+  <text class="sub" x="738" y="194.6">test nodes rank all nodes</text>
+  <rect x="730" y="216" width="196" height="24" rx="4" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="chip" x="828" y="231.9" text-anchor="middle">mlx-graphs · GPU</text>
+  <rect x="730" y="246" width="196" height="24" rx="4" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="chip" x="828" y="261.9" text-anchor="middle">PyG · CPU</text>
+  <text class="small" x="732" y="286">Cora, CiteSeer, PubMed · 5 splits</text>
+  <text class="small" x="732" y="299">same edges, shared via to_pyg</text>
+  <text class="small" x="732" y="312">compare AUC, ranking, ms / epoch</text>
+  <!-- band: the other sections of the tutorial -->
+  <rect x="24" y="356" width="912" height="66" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="344">ALSO IN THIS TUTORIAL</text>
+  <rect x="34" y="366" width="250" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="42" y="386.1">GAE</text>
+  <text class="sub" x="42" y="401.1">GCN encoder · recon_loss</text>
+  <rect x="296" y="366" width="250" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="304" y="386.1">VGAE</text>
+  <text class="sub" x="304" y="401.1">mean and log std · kl_loss</text>
+  <rect x="558" y="366" width="368" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="566" y="386.1">LinkNeighborLoader</text>
+  <text class="sub" x="566" y="401.1">batches of 256 edges · 10, 10 neighbors</text>
+  <rect x="351.928" y="437" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="367.928" y="446">data</text>
+  <rect x="408.697" y="437" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="424.697" y="446">trainable weights</text>
+  <rect x="529.925" y="437" width="10" height="10" rx="2.5" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="leg" x="545.925" y="446">state or sampling, no weights</text>
+  <rect x="715.207" y="437" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="731.207" y="446">no weights</text>
+  <rect x="805.212" y="437" width="10" height="10" rx="2.5" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="leg" x="821.212" y="446">mlx-graphs</text>
+  <rect x="897.632" y="437" width="10" height="10" rx="2.5" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="leg" x="913.632" y="446">PyG</text>
+</svg>

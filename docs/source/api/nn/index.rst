@@ -35,9 +35,35 @@ Convolution layers
 	TAGConv
 	EdgeConv
 	RGCNConv
+	FastRGCNConv
+	RGATConv
+	GENConv
+	MixHopConv
+	FAConv
+	GeneralConv
+	DirGNNConv
+	HANConv
+	HGTConv
 	SimpleConv
 	HeteroConv
 	GeneralizedRelationalConv
+	GINEConv
+	GCN2Conv
+	SSGConv
+	LGConv
+	ARMAConv
+	GatedGraphConv
+	ResGatedGraphConv
+	NNConv
+	CGConv
+	MFConv
+	LEConv
+	FiLMConv
+	AGNNConv
+	ClusterGCNConv
+	DynamicEdgeConv
+	PNAConv
+	GPSConv
 
 Models
 ------
@@ -55,6 +81,60 @@ Jumping Knowledge.
 	GAT
 	MLP
 	BasicGNN
+	PNA
+
+Other models and building blocks:
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	EdgeCNN
+	LINKX
+	DeepGCNLayer
+	MaskLabel
+	RECT_L
+	DeepGraphInfomax
+	LightGCN
+	SGFormer
+	Polynormer
+
+Graph auto-encoders
+-------------------
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	InnerProductDecoder
+	GAE
+	VGAE
+	ARGA
+	ARGVA
+
+Label propagation
+-----------------
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	LabelPropagation
+	CorrectAndSmooth
+
+Knowledge graph embeddings
+--------------------------
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	KGEModel
+	TransE
+	DistMult
+	ComplEx
+	RotatE
+	KGTripletLoader
 
 Normalization
 -------------
@@ -68,6 +148,43 @@ Normalization
 	InstanceNormalization
 	LayerNormalization
 	HeteroLayerNormalization
+	GraphNormalization
+	PairNormalization
+	GraphSizeNormalization
+	MeanSubtractionNormalization
+	MessageNormalization
+	DiffGroupNormalization
+
+Each normalization layer is also available under its PyG name, as an alias
+of the same class:
+
+.. list-table::
+   :header-rows: 1
+
+   * - PyG name
+     - Class
+   * - ``BatchNorm``
+     - :class:`~mlx_graphs.nn.BatchNormalization`
+   * - ``HeteroBatchNorm``
+     - :class:`~mlx_graphs.nn.HeteroBatchNormalization`
+   * - ``InstanceNorm``
+     - :class:`~mlx_graphs.nn.InstanceNormalization`
+   * - ``LayerNorm``
+     - :class:`~mlx_graphs.nn.LayerNormalization`
+   * - ``HeteroLayerNorm``
+     - :class:`~mlx_graphs.nn.HeteroLayerNormalization`
+   * - ``GraphNorm``
+     - :class:`~mlx_graphs.nn.GraphNormalization`
+   * - ``PairNorm``
+     - :class:`~mlx_graphs.nn.PairNormalization`
+   * - ``GraphSizeNorm``
+     - :class:`~mlx_graphs.nn.GraphSizeNormalization`
+   * - ``MeanSubtractionNorm``
+     - :class:`~mlx_graphs.nn.MeanSubtractionNormalization`
+   * - ``MessageNorm``
+     - :class:`~mlx_graphs.nn.MessageNormalization`
+   * - ``DiffGroupNorm``
+     - :class:`~mlx_graphs.nn.DiffGroupNormalization`
 
 Pooling and readout
 -------------------
@@ -79,13 +196,125 @@ Pooling and readout
 	JumpingKnowledge
 	AttentionalAggregation
 	Set2Set
+	TopKPooling
+	SAGPooling
 
 .. autosummary::
 	:toctree: _autosummary
 
 	global_add_pool
-	global_max_pool
 	global_mean_pool
+	global_max_pool
+	global_sort_pool
+	topk
+	filter_adj
+	knn
+	knn_graph
+	radius
+	radius_graph
+
+Aggregations
+------------
+
+Aggregation operators of ``mlx_graphs.nn.aggr`` (as ``torch_geometric.nn.aggr``).
+They reduce a set of elements given by an ``index`` (``aggr(x, index,
+dim_size)``) and can be used as readouts, or passed as ``aggr`` to any
+:class:`MessagePassing` layer, alone or as a list (e.g.
+``SAGEConv(16, 32, aggr=["mean", "max"])``).
+
+.. currentmodule:: mlx_graphs.nn.aggr
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	Aggregation
+	SumAggregation
+	MeanAggregation
+	MaxAggregation
+	MinAggregation
+	MulAggregation
+	VarAggregation
+	StdAggregation
+	SoftmaxAggregation
+	PowerMeanAggregation
+	MedianAggregation
+	QuantileAggregation
+	MultiAggregation
+	DegreeScalerAggregation
+	SortAggregation
+	DeepSetsAggregation
+	LSTMAggregation
+	GRUAggregation
+	SetTransformerAggregation
+	GraphMultisetTransformer
+	MLPAggregation
+	LCMAggregation
+	EquilibriumAggregation
+	VariancePreservingAggregation
+
+Set transformer building blocks:
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	MultiheadAttentionBlock
+	SetAttentionBlock
+	InducedSetAttentionBlock
+	PoolingByMultiheadAttention
+
+Dense layout of grouped elements (used by the set and graph transformers):
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	DenseLayout
+
+.. autosummary::
+	:toctree: _autosummary
+
+	aggregation_resolver
+
+.. currentmodule:: mlx_graphs.nn
+
+Positional encodings
+--------------------
+
+Encodings of positions and times (``torch_geometric.nn.encoding``), and the
+projections of the random-walk / Laplacian positional encodings used by graph
+transformers such as :class:`GPSConv`.
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	PositionalEncoding
+	TemporalEncoding
+	RWSEEncoder
+	LapPEEncoder
+
+Attention
+---------
+
+Global attention mechanisms of ``mlx_graphs.nn.attention`` (as
+``torch_geometric.nn.attention``), applied to dense batches of node features
+``[batch_size, num_nodes, channels]`` with a mask of the real nodes. They are
+also exported by ``mlx_graphs.nn``, as in PyG.
+
+.. currentmodule:: mlx_graphs.nn.attention
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	MultiheadAttention
+	PerformerAttention
+	SGFormerAttention
+	PolynormerAttention
+
+.. currentmodule:: mlx_graphs.nn
 
 Fused message passing
 ---------------------
@@ -125,4 +354,61 @@ modifying an ``edge_index`` in place.
 	fused_message_passing_mode
 	is_fused_message_passing_enabled
 	clear_csr_cache
+	gcn_norm
 	clear_norm_cache
+
+Temporal graph networks
+-----------------------
+
+The TGN memory model and its building blocks (``mlx_graphs.nn.models.tgn``, as
+``torch_geometric.nn.models.tgn``). See ``examples/tgn_jodie.py``.
+
+.. currentmodule:: mlx_graphs.nn
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	TGNMemory
+
+.. currentmodule:: mlx_graphs.nn.models.tgn
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	IdentityMessage
+	LastAggregator
+	MeanAggregator
+	TimeEncoder
+	GRUCell
+	LastNeighborLoader
+
+Heterogeneous models
+--------------------
+
+:func:`to_hetero` converts a homogeneous model (e.g. a :class:`GraphSAGE`, or
+a model written with message passing layers, ``Linear`` layers and
+activations) into a heterogeneous one, with one copy of every message passing
+layer per edge type and of every other layer per node type, like PyG's
+``to_hetero``. The converted model takes dicts keyed by node and edge types.
+
+.. code-block:: python
+
+    from mlx_graphs.nn import GraphSAGE, to_hetero
+
+    model = to_hetero(
+        GraphSAGE(64, 64, num_layers=2, out_features_dim=4),
+        data.metadata(),
+        input_dims=data.num_node_features,  # no lazy sizes in MLX
+    )
+    out = model(data.edge_index_dict, data.node_features_dict)
+
+.. currentmodule:: mlx_graphs.nn
+
+.. autosummary::
+	:toctree: _autosummary
+
+	to_hetero
+	to_hetero_with_bases
+	ToHeteroModel

@@ -27,7 +27,7 @@ class GraphNetworkBlock(Module):
     (see [1]).
 
     For a usage example see `here
-    <github.com/TristanBilot/mlx-graphs/blob/main/examples/graph_network_block.py>`_.
+    <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/graph_network_block.py>`_.
 
     Args:
         node_model: a callable Module which updates

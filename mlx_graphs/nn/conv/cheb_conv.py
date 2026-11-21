@@ -64,6 +64,9 @@ class ChebConv(MessagePassing):
         h = conv(edge_index, node_features, lambda_max=1.8)
     """
 
+    # what follows the aggregation expects the size of one aggregation (as in PyG)
+    supports_concat_aggr = False
+
     def __init__(
         self,
         node_features_dim: int,

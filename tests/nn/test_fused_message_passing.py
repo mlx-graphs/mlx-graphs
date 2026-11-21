@@ -131,10 +131,14 @@ def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
 
 def test_falls_back_for_unsupported_aggr(graph, count_fused):
     edge_index, x, _ = graph
-    out = SimpleConv(aggr="softmax")(edge_index, x)
-    assert count_fused["n"] == 0
-    with fused_message_passing_mode(False):
-        close(out, SimpleConv(aggr="softmax")(edge_index, x))
+    # "softmax" is SoftmaxAggregation (an aggregation module), "std" a scatter
+    # reduction without a fused kernel
+    for aggr in ("softmax", "std"):
+        out = SimpleConv(aggr=aggr)(edge_index, x)
+        assert count_fused["n"] == 0
+        assert out.shape == x.shape
+        with fused_message_passing_mode(False):
+            close(out, SimpleConv(aggr=aggr)(edge_index, x))
 
 
 def test_falls_back_for_edge_features(graph, count_fused):
@@ -198,6 +202,67 @@ def test_multi_head_weights_are_fused(graph, count_fused):
     for fmt in ("coo", "csr"):
         for a, b in zip(results[fmt], reference):
             np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
+
+
+@pytest.mark.parametrize("aggr", ["max", "min"])
+@pytest.mark.parametrize("weights", [None, "edge", "head"])
+def test_max_min_gradient_of_duplicate_edges(count_fused, aggr, weights):
+    # Duplicate edges send identical messages: the gradient of the maximum is
+    # split among them on both paths. The fused kernels gave each duplicate
+    # the full gradient.
+    rng = np.random.default_rng(0)
+    edges = rng.integers(0, 20, (2, 60))
+    edges = np.concatenate([edges, edges[:, :20]], axis=1)
+    edge_index = mx.array(edges)
+    heads = 2
+    x = mx.random.normal((25, heads, 3), key=mx.random.key(0))
+    w = None
+    if weights == "edge":
+        w = mx.random.uniform(0.5, 1.5, (60,), key=mx.random.key(1))
+        w = mx.concatenate([w, w[:20]])
+    elif weights == "head":
+        w = mx.random.uniform(0.5, 1.5, (60, heads), key=mx.random.key(1))
+        w = mx.concatenate([w, w[:20]])
+    layer = SimpleConv(aggr=aggr)
+    scale = mx.arange(1, heads * 3 + 1).reshape(heads, 3)
+
+    def loss(x, w):
+        out = layer.propagate(edge_index, x, message_kwargs={"edge_weights": w})
+        return (out * scale).sum()
+
+    def grads(grad_fn):
+        out = grad_fn(x, w)
+        return out if isinstance(out, (tuple, list)) else (out,)
+
+    argnums = [0] if w is None else [0, 1]
+    with fused_message_passing_mode(False):
+        reference = grads(mx.grad(loss, argnums=argnums))
+    assert count_fused["n"] == 0
+    for fmt in ("coo", "csr"):
+        clear_csr_cache()
+        with fused_message_passing_mode(True, format=fmt):
+            for grad_fn in (
+                mx.grad(loss, argnums=argnums),
+                mx.compile(mx.grad(loss, argnums=argnums)),
+            ):
+                for a, b in zip(grads(grad_fn), reference):
+                    np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-5)
+    assert count_fused["n"] > 0
+    # each of the two copies of an edge gets half of its gradient: the source
+    # nodes of the duplicated edges get the gradient of a single edge
+    single = SimpleConv(aggr=aggr)
+    with fused_message_passing_mode(False):
+        expected = mx.grad(
+            lambda x: (
+                single.propagate(
+                    mx.array(edges[:, :60]),
+                    x,
+                    message_kwargs={"edge_weights": None if w is None else w[:60]},
+                )
+                * scale
+            ).sum()
+        )(x)
+    np.testing.assert_allclose(np.array(reference[0]), np.array(expected), atol=1e-5)
 
 
 def test_auto_format_switches_to_csr(graph, monkeypatch):
@@ -335,3 +400,39 @@ def test_csr_cache_reused(graph):
         layer(edge_index, x)
         layer(edge_index, x)
     assert len(mp._csr_cache._entries) == 1
+
+
+@pytest.mark.parametrize("aggr", ["add", "max"])
+def test_fused_without_nodes(count_fused, aggr):
+    # The features were reshaped with an inferred size, which fails on 0 nodes.
+    layer = SimpleConv(aggr=aggr)
+    edge_index = mx.zeros((2, 0), dtype=mx.int32)
+    assert layer(edge_index, mx.zeros((0, 4))).shape == (0, 4)
+    out = layer.propagate(
+        edge_index,
+        mx.zeros((0, 2, 3)),
+        message_kwargs={"edge_weights": mx.zeros((0, 2))},
+    )
+    assert out.shape == (0, 2, 3)
+    assert count_fused["n"] > 0
+
+
+def test_csr_format_compiles_with_edge_index_as_input(graph):
+    """Regression: ``format="csr"`` read the graph back on the host while
+    tracing and failed under mx.compile; it now falls back to the COO
+    kernel, as ``format="auto"`` does."""
+
+    @mp.fused_message_passing(format="csr")
+    class SumConv(mp.MessagePassing):
+        def __init__(self):
+            super().__init__(aggr="add")
+
+        def __call__(self, edge_index, node_features):
+            return self.propagate(edge_index, node_features)
+
+    conv = SumConv()
+    edge_index, x = graph[0], graph[1]
+    expected = conv(edge_index, x)
+    compiled = mx.compile(lambda ei, h: conv(ei, h))
+    out = compiled(mx.array(np.array(edge_index)), x)
+    np.testing.assert_allclose(np.array(out), np.array(expected), atol=1e-5)

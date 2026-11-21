@@ -57,17 +57,27 @@ pip install mlx-graphs
 
 ### What's included
 
+Names and signatures follow PyTorch Geometric; see [Coming from PyTorch Geometric](https://mlx-graphs.github.io/mlx-graphs/tutorials/from_pyg.html).
+
 | | |
 |---|---|
-| **Convolutions** | `GCNConv`, `SAGEConv`, `GINConv` (+ GINE), `GATConv`, `GATv2Conv`, `TransformerConv`, `GraphConv`, `SGConv`, `APPNP`, `ChebConv`, `TAGConv`, `EdgeConv`, `RGCNConv`, `SimpleConv`, `GeneralizedRelationalConv`, `HeteroConv` |
-| **Models** | `GCN`, `GraphSAGE`, `GIN`, `GAT` (v1/v2), `MLP`: multi-layer, with dropout, batch/layer norm and Jumping Knowledge |
-| **Pooling / readout** | `global_{add,mean,max}_pool`, `AttentionalAggregation`, `Set2Set`, `JumpingKnowledge` |
-| **Normalization** | `BatchNormalization`, `LayerNormalization`, `InstanceNormalization` (+ heterogeneous variants) |
-| **Data** | `GraphData`, `HeteroGraphData`, `GraphDataBatch`, `Dataloader`, `NeighborLoader` (homogeneous and heterogeneous) |
-| **Datasets** | Planetoid (Cora, CiteSeer, PubMed), Amazon (Computers, Photo), Coauthor (CS, Physics), OGB, TU datasets, QM7b, superpixels, Elliptic, MovieLens, IMDB, DBLP, Karate Club |
-| **Transforms** | `Compose`, `ToUndirected`, `AddSelfLoops`, `RemoveSelfLoops`, `RemoveIsolatedNodes`, `LargestConnectedComponents`, `RandomNodeSplit`, `RandomLinkSplit`, `OneHotDegree`, `Constant`, `AddRandomWalkPE`, `GCNNorm`, `FeaturesNormalizedTransform` |
-| **Utilities** | `subgraph`, `k_hop_subgraph`, `negative_sampling`, `structured_negative_sampling`, `dropout_edge`, `dropout_node`, `to_dense_batch`, `to_dense_adj`, `get_laplacian`, `homophily`, `coalesce`, `to_undirected`, `scatter`, `degree`, `from_pyg` / `to_pyg`, `from_networkx` / `to_networkx` |
-| **Algorithms** | `Node2Vec` |
+| **Convolutions** | `GCNConv`, `SAGEConv`, `GINConv`, `GINEConv`, `GATConv`, `GATv2Conv`, `TransformerConv`, `GraphConv`, `GeneralConv`, `SGConv`, `SSGConv`, `APPNP`, `ChebConv`, `TAGConv`, `ARMAConv`, `MixHopConv`, `GCN2Conv`, `FAConv`, `AGNNConv`, `LEConv`, `LGConv`, `MFConv`, `ClusterGCNConv`, `GENConv`, `PNAConv`, `CGConv`, `NNConv`, `ResGatedGraphConv`, `GatedGraphConv`, `FiLMConv`, `EdgeConv`, `DynamicEdgeConv`, `DirGNNConv`, `SimpleConv`, `GeneralizedRelationalConv` |
+| **Heterogeneous** | `to_hetero`, `to_hetero_with_bases`, `HeteroConv`, `HANConv`, `HGTConv`, `RGCNConv`, `FastRGCNConv`, `RGATConv`, `HeteroDictLinear`, `HeteroGraphData` |
+| **Graph transformers** | `GPSConv`, `SGFormer`, `Polynormer`, `MultiheadAttention`, `PerformerAttention`; positional encodings `AddRandomWalkPE`, `AddLaplacianEigenvectorPE`, `RWSEEncoder`, `LapPEEncoder` |
+| **Temporal graphs** | `TemporalData`, `TemporalDataLoader`, `TGNMemory`, `LastNeighborLoader`, `TemporalEncoding`, `JODIEDataset` |
+| **Models** | `GCN`, `GraphSAGE`, `GIN`, `GAT`, `PNA`, `EdgeCNN`, `MLP`, `DeepGCNLayer`, `LINKX`, `LightGCN`, `GAE` / `VGAE` / `ARGA` / `ARGVA`, `DeepGraphInfomax`, `RECT_L`, `LabelPropagation`, `CorrectAndSmooth`, knowledge-graph embeddings (`TransE`, `DistMult`, `ComplEx`, `RotatE`), `Node2Vec` |
+| **Aggregations** | `aggr="sum"`, `"mean"`, `"max"`, ... or lists of them, and the modules `SoftmaxAggregation`, `PowerMeanAggregation`, `MultiAggregation`, `DegreeScalerAggregation`, `QuantileAggregation`, `MedianAggregation`, `StdAggregation`, `VarAggregation`, `LSTMAggregation`, `GRUAggregation`, `SortAggregation`, `SetTransformerAggregation`, `GraphMultisetTransformer`, `DeepSetsAggregation`, `MLPAggregation`, `EquilibriumAggregation`, `LCMAggregation`, ... |
+| **Pooling / readout** | `global_{add,mean,max,sort}_pool`, `TopKPooling`, `SAGPooling`, `AttentionalAggregation`, `Set2Set`, `JumpingKnowledge`, `knn_graph`, `radius_graph` |
+| **Normalization** | `BatchNorm`, `LayerNorm`, `InstanceNorm`, `GraphNorm`, `PairNorm`, `DiffGroupNorm`, `MessageNorm`, `GraphSizeNorm`, `MeanSubtractionNorm`, `HeteroBatchNorm`, `HeteroLayerNorm` |
+| **Loaders and samplers** | `Dataloader`, `NeighborLoader` and `LinkNeighborLoader` (homogeneous and heterogeneous), `HGTLoader`, `ClusterData` / `ClusterLoader`, GraphSAINT samplers, `ShaDowKHopSampler`, `RandomNodeLoader`, `ImbalancedSampler`, `DynamicBatchSampler`, `DataListLoader`, `DenseDataLoader` |
+| **Datasets** | Planetoid, CitationFull, Amazon, Coauthor, WikiCS, WebKB, WikipediaNetwork, Actor, HeterophilousGraphDataset, OGB (incl. OGBMAG), TU datasets, GNNBenchmarkDataset, LRGB, JODIE, QM7b, superpixels, Elliptic, MovieLens, IMDB, DBLP, FB15k-237, WordNet18, Karate Club, fake datasets |
+| **Transforms** | `Compose`, `ToUndirected`, `AddSelfLoops`, `NormalizeFeatures`, `RandomNodeSplit`, `RandomLinkSplit`, `GCNNorm`, `SIGN`, `VirtualNode`, `LineGraph`, `TwoHop`, `KNNGraph`, `LocalDegreeProfile`, `FeaturePropagation`, `SVDFeatureReduction`, `ToDense`, ... (32 in all) |
+| **Metrics** | `LinkPredMRR`, `LinkPredHitRatio`, `LinkPredNDCG`, `LinkPredMAP`, `LinkPredPrecision`, `LinkPredRecall`, `LinkPredF1` and more, `roc_auc_score`, `average_precision_score` |
+| **Utilities** | `scatter`, `softmax`, `degree`, `subgraph`, `k_hop_subgraph`, `negative_sampling`, `dropout_edge`, `to_dense_batch`, `to_dense_adj`, `get_laplacian`, `get_ppr`, `homophily`, `assortativity`, `coalesce`, `to_undirected`, graph generators, `from_pyg` / `to_pyg`, `from_networkx` / `to_networkx`, `from_scipy_sparse_matrix`, ... |
+
+Every layer was checked against PyG with copied weights (outputs and gradients),
+and the models by training them in both frameworks on the same data: see
+[Validation against PyG](https://mlx-graphs.github.io/mlx-graphs/validation.html).
 
 ## Benchmarks vs PyTorch Geometric
 

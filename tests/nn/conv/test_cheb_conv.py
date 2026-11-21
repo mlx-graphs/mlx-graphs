@@ -195,6 +195,8 @@ def test_cheb_conv_fused_matches_gather_scatter(normalization, weighted, monkeyp
     monkeypatch.setattr(MessagePassing, "message_and_aggregate", spy)
 
     edges, x, weights = make_graph()
+    # Seeded: the weights would otherwise depend on the tests that ran before.
+    mx.random.seed(0)
     layer = ChebConv(DIM, 7, K=4, normalization=normalization)
     args = (mx.array(edges), mx.array(x), mx.array(weights) if weighted else None)
 

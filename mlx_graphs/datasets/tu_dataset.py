@@ -9,7 +9,7 @@ from mlx_graphs.data import GraphData
 from mlx_graphs.datasets.dataset import Dataset
 from mlx_graphs.datasets.utils.download import download, extract_archive
 from mlx_graphs.datasets.utils.io import read_txt_array
-from mlx_graphs.utils import one_hot, remove_duplicate_directed_edges
+from mlx_graphs.utils import coalesce, one_hot
 
 
 class TUDataset(Dataset):
@@ -129,7 +129,7 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
     elif edge_attributes is not None:
         edge_features = edge_attributes
     elif edge_labels is not None:
-        edge_features = edge_attributes
+        edge_features = edge_labels
 
     graph_labels = None
     if "graph_attributes" in names:  # Regression problem.
@@ -139,9 +139,12 @@ def read_tu_data(folder: str, prefix: str) -> list[GraphData]:
         _, graph_labels = np.unique(np.array(graph_labels), return_inverse=True)
         graph_labels = mx.array(graph_labels, dtype=mx.int32)
 
-    edge_index = remove_duplicate_directed_edges(edge_index.astype(mx.int32))
-    # TODO: Once we have coalesced(), we can replace remove_duplicate_directed_edges()
-    # by the scatter which will remove duplicates and sum duplicates edge features
+    # Sorts the edges and merges duplicates, keeping the edge features aligned
+    # with their edges (duplicate edges get the sum of their features, as in PyG)
+    if edge_features is None:
+        edge_index = coalesce(edge_index.astype(mx.int32))
+    else:
+        edge_index, edge_features = coalesce(edge_index.astype(mx.int32), edge_features)
 
     data = GraphData(
         edge_index=edge_index,

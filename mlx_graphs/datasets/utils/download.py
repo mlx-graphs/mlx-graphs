@@ -163,22 +163,30 @@ def extract_archive(file: str, target_dir: str, overwrite=True):
         import tarfile
 
         with tarfile.open(file, "r") as archive:
+            abs_target = os.path.abspath(target_dir)
 
-            def is_within_directory(directory, target):
-                abs_directory = os.path.abspath(directory)
-                abs_target = os.path.abspath(target)
-                prefix = os.path.commonprefix([abs_directory, abs_target])
-                return prefix == abs_directory
+            def is_within_target(path: str) -> bool:
+                # `commonpath` compares whole path components: unlike a
+                # string prefix, "<target>_evil" is not inside "<target>".
+                path = os.path.abspath(path)
+                return os.path.commonpath([abs_target, path]) == abs_target
 
-            def safe_extract(tar, path=".", members=None, *, numeric_owner=False):
-                for member in tar.getmembers():
-                    member_path = os.path.join(path, member.name)
-                    if not is_within_directory(path, member_path):
+            for member in archive.getmembers():
+                member_path = os.path.join(abs_target, member.name)
+                if not is_within_target(member_path):
+                    raise Exception("Attempted Path Traversal in Tar File")
+                # Links must not point outside either: files extracted later
+                # could be written through them.
+                if member.issym() or member.islnk():
+                    base = (
+                        os.path.dirname(member_path) if member.issym() else abs_target
+                    )
+                    if not is_within_target(os.path.join(base, member.linkname)):
                         raise Exception("Attempted Path Traversal in Tar File")
-                # nosec B202 - members validated above by is_within_directory
-                tar.extractall(path, members, numeric_owner=numeric_owner)  # nosec B202
-
-            safe_extract(archive, path=target_dir)
+            if hasattr(tarfile, "data_filter"):  # Python >= 3.12 and backports
+                archive.extractall(target_dir, filter="data")  # nosec B202
+            else:  # members validated above
+                archive.extractall(target_dir)  # nosec B202
     elif file.endswith(".gz"):
         import gzip
         import shutil

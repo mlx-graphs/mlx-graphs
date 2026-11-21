@@ -260,3 +260,127 @@ def k_hop_subgraph(
     return _k_hop_subgraph(
         edge_index, node_idx, num_hops, relabel_nodes, num_nodes, directed
     )
+
+
+def _bipartite_side_mask(
+    subset: NodeSubset, max_node: int, size: Optional[int]
+) -> tuple[np.ndarray, np.ndarray]:
+    """Boolean host mask of one side of a bipartite subset, and new node ids."""
+    subset_np = _to_numpy(subset) if isinstance(subset, mx.array) else subset
+    subset_np = np.asarray(subset_np).reshape(-1)
+    if subset_np.dtype == np.bool_:
+        if max_node >= subset_np.size:
+            raise ValueError(
+                f"The boolean subset has {subset_np.size} entries but "
+                f"`edge_index` contains node {max_node}"
+            )
+        mapping = np.full(subset_np.size, -1, dtype=np.int64)
+        mapping[subset_np] = np.arange(int(subset_np.sum()))
+        return subset_np, mapping
+
+    index = subset_np.astype(np.int64)
+    num = max_node + 1 if size is None else int(size)
+    if index.size > 0:
+        if index.min() < 0:
+            raise ValueError("`subset` must contain non-negative node indices")
+        num = max(num, int(index.max()) + 1)
+    mask = np.zeros(num, dtype=bool)
+    mask[index] = True
+    mapping = np.full(num, -1, dtype=np.int64)
+    mapping[index[::-1]] = np.arange(index.size)[::-1]
+    return mask, mapping
+
+
+@validate_edge_index
+def _bipartite_subgraph(
+    edge_index: mx.array,
+    subset: tuple[NodeSubset, NodeSubset],
+    edge_features: Optional[mx.array],
+    relabel_nodes: bool,
+    size: Optional[tuple[int, int]],
+) -> tuple[mx.array, Optional[mx.array], np.ndarray]:
+    if edge_features is not None and edge_features.shape[0] != edge_index.shape[1]:
+        raise ValueError(
+            "edge_features must be 1 per edge "
+            f"(got {edge_index.shape[1]} edges and {edge_features.shape[0]} features)"
+        )
+    edges = _to_numpy(edge_index)
+    max_src = int(edges[0].max(initial=-1))
+    max_dst = int(edges[1].max(initial=-1))
+    src_mask, src_mapping = _bipartite_side_mask(
+        subset[0], max_src, None if size is None else size[0]
+    )
+    dst_mask, dst_mapping = _bipartite_side_mask(
+        subset[1], max_dst, None if size is None else size[1]
+    )
+    edge_mask = src_mask[edges[0]] & dst_mask[edges[1]]
+    keep = np.nonzero(edge_mask)[0]
+
+    if relabel_nodes and keep.size > 0:
+        sub_edge_index = mx.array(
+            np.stack([src_mapping[edges[0, keep]], dst_mapping[edges[1, keep]]]),
+            dtype=edge_index.dtype,
+        )
+    else:
+        sub_edge_index = _take_edges(edge_index, keep)
+    if edge_features is not None:
+        edge_features = _take_rows(edge_features, keep)
+    return sub_edge_index, edge_features, edge_mask
+
+
+def bipartite_subgraph(
+    subset: tuple[NodeSubset, NodeSubset],
+    edge_index: mx.array,
+    edge_features: Optional[mx.array] = None,
+    relabel_nodes: bool = False,
+    size: Optional[tuple[int, int]] = None,
+    return_edge_mask: bool = False,
+) -> Union[
+    tuple[mx.array, Optional[mx.array]],
+    tuple[mx.array, Optional[mx.array], mx.array],
+]:
+    """
+    Returns the subgraph of a bipartite graph induced by a subset of the
+    source nodes and a subset of the destination nodes, i.e. the edges whose
+    source is in ``subset[0]`` and destination is in ``subset[1]``.
+
+    Args:
+        subset: A tuple ``(src_subset, dst_subset)`` of the source and
+            destination nodes to keep, each given as an array (or list) of
+            node indices or as a boolean mask.
+        edge_index: a [2, num_edges] array representing the source and target
+            nodes of each edge
+        edge_features: Optional features of each edge, of shape
+            ``[num_edges, ...]``. Default: ``None``
+        relabel_nodes: If ``True``, the source (destination) nodes of the
+            returned ``edge_index`` are relabeled to their position in
+            ``src_subset`` (``dst_subset``), or their rank among the selected
+            nodes for a boolean mask. Default: ``False``
+        size: The number of source and destination nodes ``(num_src,
+            num_dst)``. Inferred from ``edge_index`` if not given.
+        return_edge_mask: If ``True``, also returns the boolean mask of shape
+            ``[num_edges]`` of the edges that were kept. Default: ``False``
+
+    Returns:
+        A tuple ``(edge_index, edge_features)`` with the edges of the subgraph
+        and their features (``None`` if ``edge_features`` was not given),
+        followed by the edge mask if ``return_edge_mask`` is ``True``.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array(
+            [[0, 5, 2, 3, 3, 4, 4, 3, 5, 5, 6], [0, 0, 3, 2, 0, 0, 2, 1, 2, 3, 1]]
+        )
+        subset = (mx.array([2, 3, 5]), mx.array([2, 3]))
+
+        bipartite_subgraph(subset, edge_index, relabel_nodes=True)
+        # (mx.array([[0, 1, 2, 2], [1, 0, 0, 1]]), None)
+    """
+    sub_edge_index, sub_edge_features, edge_mask = _bipartite_subgraph(
+        edge_index, subset, edge_features, relabel_nodes, size
+    )
+    if return_edge_mask:
+        return sub_edge_index, sub_edge_features, mx.array(edge_mask)
+    return sub_edge_index, sub_edge_features

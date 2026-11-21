@@ -15,3 +15,29 @@ from .transformer_conv import TransformerConv  # noqa
 from .edge_conv import EdgeConv  # noqa
 from .rgcn_conv import RGCNConv  # noqa
 from ._norm import clear_norm_cache, gcn_norm  # noqa
+from .gine_conv import GINEConv  # noqa
+from .gcn2_conv import GCN2Conv  # noqa
+from .ssg_conv import SSGConv  # noqa
+from .lg_conv import LGConv  # noqa
+from .arma_conv import ARMAConv  # noqa
+from .gated_graph_conv import GatedGraphConv  # noqa
+from .res_gated_graph_conv import ResGatedGraphConv  # noqa
+from .nn_conv import ECConv, NNConv  # noqa
+from .cg_conv import CGConv  # noqa
+from .mf_conv import MFConv  # noqa
+from .le_conv import LEConv  # noqa
+from .film_conv import FiLMConv  # noqa
+from .agnn_conv import AGNNConv  # noqa
+from .cluster_gcn_conv import ClusterGCNConv  # noqa
+from .gen_conv import GENConv  # noqa
+from .mixhop_conv import MixHopConv  # noqa
+from .fa_conv import FAConv  # noqa
+from .general_conv import GeneralConv  # noqa
+from .dir_gnn_conv import DirGNNConv  # noqa
+from .fast_rgcn_conv import FastRGCNConv  # noqa
+from .rgat_conv import RGATConv  # noqa
+from .han_conv import HANConv  # noqa
+from .hgt_conv import HGTConv  # noqa
+from .dynamic_edge_conv import DynamicEdgeConv  # noqa
+from .pna_conv import PNAConv  # noqa
+from .gps_conv import GPSConv  # noqa

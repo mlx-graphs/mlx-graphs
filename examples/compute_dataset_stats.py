@@ -246,6 +246,45 @@ def main():
         "movie_lens_100k": ("MovieLens100K", MovieLens100K, {}),
     }
 
+    # Citation, heterophily, Wikipedia and knowledge graph datasets
+    from mlx_graphs.datasets import (
+        Actor,
+        CitationFull,
+        FB15k_237,
+        HeterophilousGraphDataset,
+        WebKB,
+        WikiCS,
+        WikipediaNetwork,
+        WordNet18RR,
+    )
+
+    for name in ["cora", "cora_ml", "citeseer", "dblp", "pubmed"]:
+        dataset_registry[f"{name}_full"] = (
+            "CitationFull",
+            CitationFull,
+            {"name": name},
+        )
+    for name in [
+        "roman_empire",
+        "amazon_ratings",
+        "minesweeper",
+        "tolokers",
+        "questions",
+    ]:
+        dataset_registry[name] = (
+            "HeterophilousGraphDataset",
+            HeterophilousGraphDataset,
+            {"name": name},
+        )
+    for name in ["cornell", "texas", "wisconsin"]:
+        dataset_registry[name] = ("WebKB", WebKB, {"name": name})
+    for name in ["chameleon", "squirrel"]:
+        dataset_registry[name] = ("WikipediaNetwork", WikipediaNetwork, {"name": name})
+    dataset_registry["actor"] = ("Actor", Actor, {})
+    dataset_registry["wikics"] = ("WikiCS", WikiCS, {})
+    dataset_registry["fb15k_237"] = ("FB15k_237", FB15k_237, {})
+    dataset_registry["wordnet18rr"] = ("WordNet18RR", WordNet18RR, {})
+
     if args.dataset:
         if args.dataset not in dataset_registry:
             print(f"Unknown dataset: {args.dataset}")

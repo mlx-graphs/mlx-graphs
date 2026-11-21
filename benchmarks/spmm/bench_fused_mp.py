@@ -106,14 +106,14 @@ LAYERS: Dict[str, Callable[[int], object]] = {
     "aggr-max": lambda d: SimpleConv(aggr="max"),
     "aggr-min": lambda d: SimpleConv(aggr="min"),
     # real layers: aggregation + linear projections + normalisation
-    "gcn": lambda d: GCNConv(d, d),
+    "gcn": lambda d: GCNConv(d, d, add_self_loops=False),
     "sage": lambda d: SAGEConv(d, d),
     "gin": lambda d: GINConv(
         nn.Sequential(nn.Linear(d, d), nn.ReLU(), nn.Linear(d, d))
     ),
     # control: attention messages depend on both endpoints, so GAT is never
     # fused; its coo/csr rows should match gather (~1.0x)
-    "gat": lambda d: GATConv(d, d, heads=1),
+    "gat": lambda d: GATConv(d, d, heads=1, add_self_loops=False),
 }
 DEFAULT_LAYERS = ["aggr-add", "gcn", "sage"]
 NOT_FUSED = {"gat"}

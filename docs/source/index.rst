@@ -33,6 +33,11 @@ Features
    With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
    This setup allows Macs to leverage their entire memory capacity for storing graphs.
    Consequently, Macs equipped with substantial memory can efficiently train GNNs on large graphs, spanning tens of gigabytes, directly using the Mac's GPU.
+- PyTorch Geometric's API, on MLX
+   The layers, models, samplers and loaders, transforms and datasets of PyG are available under
+   the same names: mini-batch training with ``NeighborLoader`` and ``ClusterLoader``,
+   heterogeneous models with ``to_hetero``, temporal graphs with TGN, and graph transformers
+   with ``GPSConv``. Each was checked against PyG. See :doc:`tutorials/from_pyg`.
 - Multi-device
    Unified memory eliminates the need for time-consuming device-to-device transfers.
    This architecture also enables specific operations to be run explicitly on either the CPU or GPU without incurring any overhead, facilitating more efficient computation and resource utilization.
@@ -75,34 +80,48 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
 
 
 .. toctree::
-   :caption: Install
+   :caption: Getting started
    :maxdepth: 1
 
    install
-
-.. toctree::
-   :caption: Benchmarks
-   :maxdepth: 1
-
-   benchmarks
+   tutorials/quickstart.rst
+   tutorials/from_pyg.rst
 
 
 .. toctree::
    :caption: Tutorials
-   :maxdepth: 2
+   :maxdepth: 1
 
-   tutorials/quickstart.rst
-   tutorials/from_pyg.rst
    tutorials/notebooks/graph_classification.ipynb
    tutorials/notebooks/node2vec.ipynb
+   tutorials/notebooks/minibatch_training.ipynb
+   tutorials/notebooks/link_prediction.ipynb
+   tutorials/notebooks/temporal_graph_networks.ipynb
+   tutorials/notebooks/heterogeneous_to_hetero.ipynb
+   tutorials/notebooks/graph_transformers_gps.ipynb
+
+
+.. toctree::
+   :caption: User guide
+   :maxdepth: 1
+
+   guide/message_passing
+   datasets
+
+
+.. toctree::
+   :caption: Examples
+   :maxdepth: 1
+
    tutorials/examples/index.rst
 
 
 .. toctree::
-   :caption: Datasets
+   :caption: Benchmarks and validation
    :maxdepth: 1
 
-   datasets
+   benchmarks
+   validation
 
 
 .. toctree::
@@ -116,10 +135,14 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    api/nn/index.rst
    api/utils/index.rst
    api/algorithms/index.rst
+   api/metrics/index.rst
 
 
+.. toctree::
+   :caption: Project
+   :maxdepth: 1
 
-
+   changelog
 
 
 .. Indices and tables

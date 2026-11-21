@@ -1,10 +1,14 @@
-from typing import Literal, Optional, get_args
+import math
+from typing import List, Literal, Optional, Sequence, Union, get_args
 
 import mlx.core as mx
 
 from mlx_graphs.utils.array_ops import broadcast
 
-ScatterAggregations = Literal["add", "max", "mean", "softmax", "min"]
+ScatterAggregations = Literal[
+    "add", "max", "mean", "softmax", "min", "mul", "var", "std", "median"
+]
+QuantileInterpolations = Literal["linear", "lower", "higher", "nearest", "midpoint"]
 
 
 def scatter(
@@ -22,7 +26,17 @@ def scatter(
         index: array with index to which scatter the values
         out_size: number of elements in the output array (size of the first dimension).
             If not provided, uses the number of elements in `values`
-        aggr: scattering method employed for reduction at index
+        aggr: scattering method employed for reduction at index:
+
+            * ``"add"``, ``"mean"``, ``"max"``, ``"min"``: sum, average,
+              feature-wise maximum and minimum (0 for empty groups)
+            * ``"mul"``: product (1 for empty groups, as in PyG)
+            * ``"var"``, ``"std"``: population variance and standard deviation
+              (see :func:`scatter_var` and :func:`scatter_std`)
+            * ``"median"``: lower median (see :func:`scatter_quantile`)
+            * ``"softmax"``: softmax normalization of the values within each
+              group. Unlike the other reductions, the output has one row per
+              *value*, not per group.
         axis: axis on which applying the scattering
 
     Returns:
@@ -56,6 +70,14 @@ def scatter(
         return scatter_softmax(values, index, _out_size)
     if aggr == "mean":
         return scatter_mean(values, index, _out_size)
+    if aggr == "std":
+        return scatter_std(values, index, _out_size)
+    if aggr == "var":
+        return scatter_var(values, index, _out_size)
+    if aggr == "mul":
+        return scatter_mul(values, index, _out_size)
+    if aggr == "median":
+        return scatter_quantile(values, index, _out_size, q=0.5, interpolation="lower")
 
     out_shape = list(values.shape)
     out_shape[axis] = _out_size
@@ -101,12 +123,7 @@ def scatter_max(src: mx.array, index: mx.array, values: mx.array):
         The resulting array after applying scatter and max operations on the values at
         duplicate indices
     """
-    lowest = (
-        -float("inf")
-        if mx.issubdtype(values.dtype, mx.floating)
-        else mx.iinfo(values.dtype).min
-    )
-    out = mx.full(src.shape, lowest, dtype=values.dtype).at[index].maximum(values)
+    out = _scatter_extremum(src.shape, index, values, "max")
     count = broadcast(degree(index, src.shape[0]), out, 0)
     return mx.where(count > 0, out, src)
 
@@ -124,14 +141,51 @@ def scatter_min(src: mx.array, index: mx.array, values: mx.array):
         The resulting array after applying scatter and min operations on the values at
         duplicate indices
     """
-    highest = (
-        float("inf")
-        if mx.issubdtype(values.dtype, mx.floating)
-        else mx.iinfo(values.dtype).max
-    )
-    out = mx.full(src.shape, highest, dtype=values.dtype).at[index].minimum(values)
+    out = _scatter_extremum(src.shape, index, values, "min")
     count = broadcast(degree(index, src.shape[0]), out, 0)
     return mx.where(count > 0, out, src)
+
+
+def _scatter_extremum(
+    out_shape: Sequence[int], index: mx.array, values: mx.array, reduce: str
+) -> mx.array:
+    """Scatter-max (``reduce="max"``) or scatter-min of ``values`` into an
+    array of shape ``out_shape``, with -inf (+inf for min) in empty groups.
+
+    MLX's gradient of ``.at[].maximum`` gives the full gradient to every
+    value equal to the maximum of its group, so ties (e.g. the identical
+    messages of duplicate edges) get k times too much in total. As torch's
+    ``scatter_reduce`` (used by PyG without torch_scatter), the custom
+    gradient instead splits it equally among the tied values.
+    """
+    floating = mx.issubdtype(values.dtype, mx.floating)
+    if reduce == "max":
+        fill = -float("inf") if floating else mx.iinfo(values.dtype).min
+    else:
+        fill = float("inf") if floating else mx.iinfo(values.dtype).max
+
+    def _forward(x: mx.array) -> mx.array:
+        out = mx.full(out_shape, fill, dtype=x.dtype).at[index]
+        return out.maximum(x) if reduce == "max" else out.minimum(x)
+
+    @mx.custom_function
+    def _extremum(x: mx.array) -> mx.array:
+        return _forward(x)
+
+    @_extremum.vjp
+    def _extremum_vjp(primals, cotangent, output):
+        # a single primal is passed as is, several as a tuple
+        x = primals if isinstance(primals, mx.array) else primals[0]
+        is_extremum = x == output[index]
+        num_ties = (
+            mx.zeros(out_shape, dtype=mx.int32)
+            .at[index]
+            .add(is_extremum.astype(mx.int32))
+        )
+        share = cotangent / mx.maximum(num_ties, 1).astype(cotangent.dtype)
+        return (mx.where(is_extremum, share[index], mx.zeros_like(x)),)
+
+    return _extremum(values)
 
 
 def scatter_mean(
@@ -158,6 +212,216 @@ def scatter_mean(
     degrees = broadcast(degrees, scatt_add, axis)  # Match the shapes for division
 
     return mx.divide(scatt_add, degrees)
+
+
+def scatter_mul(values: mx.array, index: mx.array, out_size: int) -> mx.array:
+    """Computes the product of the values grouped by index (along axis 0).
+
+    Groups without any value are set to 1, as in PyG. MLX has no gradient for
+    multiplicative scatters, so this function provides its own: the gradient
+    of a value is the product of the other values of its group, which is also
+    correct for groups containing zeros.
+
+    Args:
+        values: Input array of shape ``[num_values, ...]``.
+        index: Array of shape ``[num_values]`` with the group of each value.
+        out_size: Number of groups.
+
+    Returns:
+        An array of shape ``[out_size, ...]`` with the product of each group.
+    """
+    out_shape = (out_size, *values.shape[1:])
+
+    def _prod(x: mx.array) -> mx.array:
+        return mx.ones(out_shape, dtype=x.dtype).at[index].multiply(x)
+
+    @mx.custom_function
+    def _scatter_mul(x: mx.array) -> mx.array:
+        return _prod(x)
+
+    @_scatter_mul.vjp
+    def _scatter_mul_vjp(primals, cotangent, output):
+        # a single primal is passed as is, several as a tuple
+        x = primals if isinstance(primals, mx.array) else primals[0]
+        is_zero = x == 0
+        ones = mx.ones_like(x)
+        zeros = mx.zeros_like(x)
+        # product of the non-zero values and number of zeros of each group
+        prod_nonzero = _prod(mx.where(is_zero, ones, x))[index]
+        num_zeros = (
+            mx.zeros(out_shape, dtype=mx.int32).at[index].add(is_zero.astype(mx.int32))
+        )[index]
+        # d(prod)/dx_i = prod_{j != i} x_j
+        grad = mx.where(
+            is_zero,
+            mx.where(num_zeros == 1, prod_nonzero, zeros),
+            mx.where(num_zeros == 0, prod_nonzero / mx.where(is_zero, ones, x), zeros),
+        )
+        return (cotangent[index] * grad,)
+
+    return _scatter_mul(values)
+
+
+def scatter_var(
+    values: mx.array, index: mx.array, out_size: int, semi_grad: bool = False
+) -> mx.array:
+    r"""Computes the (population) variance of the values grouped by index
+    (along axis 0),
+    :math:`\mathrm{var}(\mathcal{X}) = \mathrm{mean}(\mathcal{X}^2) -
+    \mathrm{mean}(\mathcal{X})^2`, as PyG's ``VarAggregation``. Groups without
+    any value are set to 0.
+
+    Args:
+        values: Input array of shape ``[num_values, ...]``.
+        index: Array of shape ``[num_values]`` with the group of each value.
+        out_size: Number of groups.
+        semi_grad: If ``True``, no gradient flows through
+            :math:`\mathrm{mean}(\mathcal{X}^2)` (semi-gradient, as in PyG).
+            Default: ``False``
+
+    Returns:
+        An array of shape ``[out_size, ...]`` with the variance of each group.
+    """
+    mean = scatter_mean(values, index, out_size)
+    mean2 = scatter_mean(values * values, index, out_size)
+    if semi_grad:
+        mean2 = mx.stop_gradient(mean2)
+    return mean2 - mean * mean
+
+
+def scatter_std(
+    values: mx.array,
+    index: mx.array,
+    out_size: int,
+    semi_grad: bool = False,
+    eps: float = 1e-5,
+) -> mx.array:
+    """Computes the (population) standard deviation of the values grouped by
+    index (along axis 0).
+
+    As in PyG's ``StdAggregation``, the variance is clamped to ``eps`` before
+    the square root (so that the gradient stays finite) and standard
+    deviations up to ``sqrt(eps)`` are set to 0.
+
+    Args:
+        values: Input array of shape ``[num_values, ...]``.
+        index: Array of shape ``[num_values]`` with the group of each value.
+        out_size: Number of groups.
+        semi_grad: See :func:`scatter_var`. Default: ``False``
+        eps: Lower bound of the variance. Default: ``1e-5``
+
+    Returns:
+        An array of shape ``[out_size, ...]`` with the standard deviation of
+        each group.
+    """
+    var = scatter_var(values, index, out_size, semi_grad=semi_grad)
+    out = mx.sqrt(mx.maximum(var, eps))
+    return mx.where(out <= math.sqrt(eps), mx.zeros_like(out), out)
+
+
+def scatter_quantile(
+    values: mx.array,
+    index: mx.array,
+    out_size: int,
+    q: Union[float, List[float]] = 0.5,
+    interpolation: QuantileInterpolations = "linear",
+    fill_value: float = 0.0,
+) -> mx.array:
+    r"""Computes the feature-wise :math:`q`-th quantile of the values grouped
+    by index (along axis 0), as PyG's ``QuantileAggregation``.
+
+    The values of each group are sorted, and the quantile is read at position
+    :math:`q \cdot (n - 1)` of its :math:`n` sorted values, interpolating
+    between the two neighbouring values when the position is not an integer.
+    The index does not need to be sorted. The gradient flows to the selected
+    values.
+
+    Args:
+        values: Input array of shape ``[num_values, ...]``.
+        index: Array of shape ``[num_values]`` with the group of each value.
+        out_size: Number of groups.
+        q: Quantile(s) in ``[0, 1]``. With several quantiles, the results are
+            concatenated along the last axis. Default: ``0.5``
+        interpolation: How to read a quantile lying between two values
+            ``a <= b``: ``"linear"`` (``a + (b - a) * frac``), ``"lower"``
+            (``a``), ``"higher"`` (``b``), ``"nearest"`` or ``"midpoint"``.
+            Default: ``"linear"``
+        fill_value: Value of groups without any value. Default: ``0.0``
+
+    Returns:
+        An array of shape ``[out_size, ...]``, or ``[out_size, ...,
+        len(q) * num_features]`` for several quantiles.
+
+    Example:
+
+    .. code-block:: python
+
+        values = mx.array([[1.0], [5.0], [3.0], [2.0]])
+        index = mx.array([0, 0, 0, 1])
+
+        scatter_quantile(values, index, 3, q=0.5)
+        >>> mx.array([[3.0], [2.0], [0.0]])
+    """
+    qs = list(q) if isinstance(q, (list, tuple)) else [q]
+    if len(qs) == 0:
+        raise ValueError("Provide at least one quantile value for `q`.")
+    if not all(0.0 <= quantile <= 1.0 for quantile in qs):
+        raise ValueError("`q` must be in the range [0, 1].")
+    if interpolation not in get_args(QuantileInterpolations):
+        raise ValueError(
+            f"Invalid interpolation '{interpolation}', available values are "
+            f"{get_args(QuantileInterpolations)}"
+        )
+
+    num_values = values.shape[0]
+    feature_shape = values.shape[1:]
+    if num_values == 0:
+        out = mx.full((out_size, *feature_shape), fill_value, dtype=values.dtype)
+        return out if len(qs) == 1 else mx.concatenate([out] * len(qs), axis=-1)
+
+    x = values.reshape(num_values, -1)
+
+    # Sort each feature column by value, then (stably) by group, so that the
+    # values of every group are contiguous and sorted in every column.
+    perm = mx.argsort(x, axis=0)
+    rank = mx.arange(num_values, dtype=mx.int64).reshape(-1, 1)
+    group_key = index.astype(mx.int64)[perm] * num_values + rank
+    perm = mx.take_along_axis(perm, mx.argsort(group_key, axis=0), axis=0)
+    x = mx.take_along_axis(x, mx.stop_gradient(perm), axis=0)
+
+    count = mx.zeros((out_size,), dtype=mx.int32).at[index].add(1)
+    start = mx.minimum(mx.cumsum(count) - count, num_values - 1)
+    empty = (count == 0).reshape(-1, 1)
+    fill = mx.array(fill_value, dtype=x.dtype)
+
+    outs = []
+    for quantile in qs:
+        # Position within the group, added to the (integer) start of the
+        # group afterwards: a float32 global position would be rounded for
+        # more than 2**24 values and read from the wrong group.
+        local = mx.maximum(quantile * (count - 1).astype(mx.float32), 0.0)
+        low = mx.floor(local)
+        frac_point = local - low
+        low_idx = mx.minimum(start + low.astype(mx.int32), num_values - 1)
+        high_idx = mx.minimum(start + mx.ceil(local).astype(mx.int32), num_values - 1)
+        if interpolation == "lower":
+            out = x[low_idx]
+        elif interpolation == "higher":
+            out = x[high_idx]
+        elif interpolation == "nearest":
+            # round half to even on the global position, as torch.round
+            tie_idx = mx.where(low_idx % 2 == 0, low_idx, high_idx)
+            nearest = mx.where(frac_point < 0.5, low_idx, high_idx)
+            out = x[mx.where(frac_point == 0.5, tie_idx, nearest)]
+        elif interpolation == "linear":
+            frac = frac_point.reshape(-1, 1).astype(x.dtype)
+            out = x[low_idx] + (x[high_idx] - x[low_idx]) * frac
+        else:  # midpoint
+            out = 0.5 * x[low_idx] + 0.5 * x[high_idx]
+        out = mx.where(empty, fill, out)
+        outs.append(out.reshape(out_size, *feature_shape))
+
+    return outs[0] if len(outs) == 1 else mx.concatenate(outs, axis=-1)
 
 
 def scatter_softmax(

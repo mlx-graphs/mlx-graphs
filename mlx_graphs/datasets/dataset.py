@@ -1,5 +1,6 @@
 import copy
 import os
+import warnings
 from typing import Callable, Literal, Optional, Sequence, Union
 
 import mlx.core as mx
@@ -76,18 +77,150 @@ class Dataset(BaseDataset):
 
     @property
     def num_node_features(self) -> int:
-        """Returns the number of node features."""
-        return self.graphs[0].num_node_features
+        """Returns the number of node features, after ``transform`` (as in PyG)."""
+        return self[0].num_node_features
 
     @property
     def num_edge_features(self) -> int:
-        """Returns the number of edge features."""
-        return self.graphs[0].num_edge_features
+        """Returns the number of edge features, after ``transform`` (as in PyG)."""
+        return self[0].num_edge_features
 
     @property
     def num_graph_features(self) -> int:
-        """Returns the number of graph features."""
-        return self.graphs[0].num_graph_features
+        """Returns the number of graph features, after ``transform`` (as in PyG)."""
+        return self[0].num_graph_features
+
+    @property
+    def num_classes(self) -> int:
+        """PyG-style number of classes of the labels ``y`` (the node labels if
+        the graphs have some, the graph labels otherwise, see
+        :attr:`GraphData.y`), inferred as in PyG from the labels of all the
+        graphs (after ``transform``):
+
+        - integer labels with one entry per node (graph): ``max + 1``;
+        - floating-point labels with one entry per node (graph): the number of
+          distinct values (with a warning if there are more than two);
+        - labels with several entries per node (graph), e.g. multi-label
+          targets of shape ``[*, num_tasks]``: their last dimension.
+
+        Returns ``0`` if no graph has labels.
+        """
+        graphs = (
+            self.graphs
+            if self.transform is None
+            else [self[i] for i in range(len(self))]
+        )
+        labels = []
+        for graph in graphs:
+            y = getattr(graph, "y", None)
+            if y is not None:
+                y = np.array(y) if isinstance(y, mx.array) else np.asarray(y)
+                labels.append(y.reshape(1) if y.ndim == 0 else y)
+        if len(labels) == 0:
+            return 0
+        y = np.concatenate(labels, axis=0)
+        if y.size == 0:
+            return 0
+        if y.size == y.shape[0] and not np.issubdtype(y.dtype, np.floating):
+            return int(y.max()) + 1
+        if y.size == y.shape[0]:
+            num_classes = int(np.unique(y).size)
+            if num_classes > 2:
+                warnings.warn(
+                    "Found floating-point labels while calling "
+                    "`dataset.num_classes`. Returning the number of unique "
+                    "elements. Please make sure that this is expected.",
+                    stacklevel=2,
+                )
+            return num_classes
+        return int(y.shape[-1])
+
+    @property
+    def num_features(self) -> int:
+        """PyG-style alias of :attr:`num_node_features`."""
+        return self.num_node_features
+
+    def index_select(
+        self, idx: Union[slice, mx.array, np.ndarray, Sequence]
+    ) -> "Dataset":
+        """Returns a new dataset with the graphs at the indices ``idx``.
+
+        The graphs are shared with this dataset (not copied), and the
+        ``transform`` of the dataset is still applied lazily when a graph is
+        accessed.
+
+        Args:
+            idx: The graphs to select, as a slice, a list or array of indices
+                (negative indices are allowed), or a boolean mask of shape
+                ``[len(dataset)]``.
+
+        Returns:
+            The dataset restricted to the selected graphs.
+
+        Example:
+
+        .. code-block:: python
+
+            subset = dataset.index_select([0, 2, 4])
+            len(subset)
+            # 3
+        """
+        indices = range(len(self))
+        if isinstance(idx, slice):
+            selected = list(indices[idx])
+        else:
+            idx_np = np.asarray(np.array(idx) if isinstance(idx, mx.array) else idx)
+            idx_np = idx_np.reshape(-1)
+            if idx_np.dtype == np.bool_:
+                if idx_np.size != len(self):
+                    raise IndexError(
+                        f"The boolean mask has {idx_np.size} entries but the "
+                        f"dataset has {len(self)} graphs"
+                    )
+                selected = np.nonzero(idx_np)[0].tolist()
+            elif idx_np.size == 0 or np.issubdtype(idx_np.dtype, np.integer):
+                selected = [indices[i] for i in idx_np.astype(np.int64).tolist()]
+            else:
+                raise IndexError(
+                    "Dataset indexing failed. Accepted indices are: slice, "
+                    "integer or boolean mx.array / np.ndarray, list, tuple "
+                    f"(got dtype '{idx_np.dtype}')"
+                )
+
+        dataset = copy.copy(self)
+        dataset.graphs = [self.graphs[i] for i in selected]
+        return dataset
+
+    def shuffle(
+        self, return_perm: bool = False
+    ) -> Union["Dataset", tuple["Dataset", mx.array]]:
+        """Returns a copy of the dataset with the graphs in random order.
+
+        The permutation comes from ``mx.random.permutation``, so it is
+        reproducible with ``mx.random.seed``. The graphs themselves are shared,
+        not copied.
+
+        Args:
+            return_perm: Whether to also return the permutation. Default:
+                ``False``
+
+        Returns:
+            The shuffled dataset, and the permutation if ``return_perm`` is
+            ``True`` (graph ``i`` of the shuffled dataset is graph ``perm[i]``
+            of this one).
+
+        Example:
+
+        .. code-block:: python
+
+            mx.random.seed(42)
+            shuffled, perm = dataset.shuffle(return_perm=True)
+        """
+        perm = mx.random.permutation(len(self)).astype(mx.int32)
+        dataset = self.index_select(perm)
+        if return_perm:
+            return dataset, perm
+        return dataset
 
     def _num_classes(
         self, task: Literal["node", "edge", "graph"]
@@ -155,34 +288,17 @@ class Dataset(BaseDataset):
 
             return data
 
-        if isinstance(idx, slice):
-            indices = indices[idx]
+        if isinstance(idx, (slice, mx.array, np.ndarray)) or (
+            isinstance(idx, Sequence) and not isinstance(idx, str)
+        ):
+            # The transform stays lazy: it is applied when a graph of the
+            # returned dataset is accessed, not twice.
+            return self.index_select(idx)
 
-        elif isinstance(idx, mx.array) and idx.dtype in [  # type: ignore
-            mx.int64,
-            mx.int32,
-            mx.int16,
-        ]:
-            return self[idx.flatten().tolist()]  # type: ignore - idx is a mx.array
-
-        elif isinstance(idx, np.ndarray) and idx.dtype == np.int64:
-            return self[idx.flatten().tolist()]
-
-        elif isinstance(idx, Sequence) and not isinstance(idx, str):
-            indices = [indices[i] for i in idx]
-
-        else:
-            raise IndexError(
-                f"Dataset indexing failed. Accepted indices are: int, mx.array, "
-                f"list, tuple, np.ndarray (got '{type(idx).__name__}')"
-            )
-
-        dataset = copy.copy(self)
-        graphs = [self.graphs[i] for i in indices]
-        if self.transform is not None:
-            graphs = [self.transform(g) for g in graphs]
-        dataset.graphs = graphs
-        return dataset
+        raise IndexError(
+            f"Dataset indexing failed. Accepted indices are: int, mx.array, "
+            f"list, tuple, np.ndarray (got '{type(idx).__name__}')"
+        )
 
     def __repr__(self):
         return (

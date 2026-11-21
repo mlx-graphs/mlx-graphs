@@ -39,9 +39,10 @@ def test_from_pyg_renames_attributes():
     assert graph.train_mask.tolist() == [True, True, False, False, False]
     assert graph.pos.shape == (5, 2)
     assert graph.name == "toy"
-    # No PyG name is left behind.
+    # No PyG name is stored (`x`, `edge_attr` and `y` are read-only aliases).
     for key in ("x", "edge_attr", "edge_weight", "y"):
-        assert not hasattr(graph, key)
+        assert key not in vars(graph)
+    assert not hasattr(graph, "edge_weight")
 
 
 def test_from_pyg_graph_level_labels():
