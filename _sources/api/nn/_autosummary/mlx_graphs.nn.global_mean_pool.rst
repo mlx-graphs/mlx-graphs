@@ -3,12 +3,4 @@
 
 .. currentmodule:: mlx_graphs.nn
 
-.. autoclass:: global_mean_pool
-	:members:
-	:show-inheritance:
-
-	
-	.. automethod:: __call__
-
-	
-	
+.. autofunction:: global_mean_pool

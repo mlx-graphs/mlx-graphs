@@ -3,6 +3,21 @@ MLX-graphs
 
 MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX <https://github.com/ml-explore/mlx>`_.
 
+**On a Mac, MLX-graphs trains GNNs 5.6× faster than PyTorch Geometric on the GPU (MPS)
+and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the same accuracy**
+(medians over 35 training benchmarks, up to 58× faster). See the :doc:`benchmarks`.
+
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_light.png
+   :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
+   :class: only-light
+   :width: 100%
+
+.. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_dark.png
+   :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
+   :class: only-dark
+   :width: 100%
+
+
 
 
 Features
@@ -11,8 +26,9 @@ Features
 - Fast GNN training and inference on Apple Silicon
    ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
    fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
-   available within the MLX core library. Initial benchmarks show an up to 10x speed improvement
-   with respect to other frameworks on large datasets.
+   available within the MLX core library, and message passing aggregates neighbours with fused
+   sparse kernels. On an M5 Pro, one GNN layer runs up to 31× faster than PyTorch Geometric on
+   the Mac's GPU (MPS). See the :doc:`benchmarks`.
 - Scalability to large graphs
    With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
    This setup allows Macs to leverage their entire memory capacity for storing graphs.
@@ -33,37 +49,29 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
    import mlx.core as mx
    from mlx_graphs.nn.linear import Linear
-   from mlx_graphs.nn.message_passing import MessagePassing
+   from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
+
+   @fused_message_passing  # aggregate with one SpMM instead of gather-scatter
    class SAGEConv(MessagePassing):
-       def __init__(
-           self, node_features_dim: int, out_features_dim: int, bias: bool = True, **kwargs
-       ):
-           super(SAGEConv, self).__init__(aggr="mean", **kwargs)
-
-           self.node_features_dim = node_features_dim
-           self.out_features_dim = out_features_dim
-
+       def __init__(self, node_features_dim: int, out_features_dim: int, bias: bool = True):
+           super().__init__(aggr="mean")
            self.neigh_proj = Linear(node_features_dim, out_features_dim, bias=False)
            self.self_proj = Linear(node_features_dim, out_features_dim, bias=bias)
 
        def __call__(self, edge_index: mx.array, node_features: mx.array, edge_weights: mx.array) -> mx.array:
-            """Forward layer of the custom SAGE layer."""
-            neigh_features = self.propagate( # Message passing directly on GPU
+           # Message passing directly on GPU. The default message is
+           # edge_weights * source features, which the fused kernel computes.
+           neigh_features = self.propagate(
                edge_index=edge_index,
                node_features=node_features,
                message_kwargs={"edge_weights": edge_weights},
-            )
-            neigh_features = self.neigh_proj(neigh_features)
+           )
+           return self.self_proj(node_features) + self.neigh_proj(neigh_features)
 
-           out_features = self.self_proj(node_features) + neigh_features
-           return out_features
-
-      def message(self, src_features: mx.array, dst_features: mx.array, **kwargs) -> mx.array:
-            """Message function called by propagate(). Computes messages for all edges in the graph."""
-           edge_weights = kwargs.get("edge_weights", None)
-
-           return edge_weights.reshape(-1, 1) * src_features
+Layers that override ``message()`` with something other than a weighted sum of
+neighbour features (e.g. attention computed per edge) simply drop the
+decorator, and ``propagate`` gathers per-edge messages and scatters them.
 
 
 .. toctree::
@@ -72,14 +80,20 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 
    install
 
+.. toctree::
+   :caption: Benchmarks
+   :maxdepth: 1
+
+   benchmarks
+
 
 .. toctree::
    :caption: Tutorials
    :maxdepth: 2
 
    tutorials/quickstart.rst
+   tutorials/from_pyg.rst
    tutorials/notebooks/graph_classification.ipynb
-   tutorials/notebooks/benchmark_pyg_dgl_mxg.ipynb
    tutorials/notebooks/node2vec.ipynb
    tutorials/examples/index.rst
 
@@ -89,6 +103,7 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
    :maxdepth: 1
 
    datasets
+
 
 .. toctree::
    :caption: API

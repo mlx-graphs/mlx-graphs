@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.0.11 documentation</title>
+    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.1.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6c5b376d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=2fb9ae3b"></script>
+    <script src="../../../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -138,8 +138,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.11 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.11 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.1.0 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -156,11 +156,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks.html">Benchmarks</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
@@ -169,19 +173,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../datasets.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="nav bd-sidenav">
@@ -209,6 +201,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.AmazonDataset.html">mlx_graphs.datasets.AmazonDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.CoauthorDataset.html">mlx_graphs.datasets.CoauthorDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
@@ -226,7 +220,19 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.Compose.html">mlx_graphs.transforms.Compose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.ToUndirected.html">mlx_graphs.transforms.ToUndirected</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddSelfLoops.html">mlx_graphs.transforms.AddSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveSelfLoops.html">mlx_graphs.transforms.RemoveSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveIsolatedNodes.html">mlx_graphs.transforms.RemoveIsolatedNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.LargestConnectedComponents.html">mlx_graphs.transforms.LargestConnectedComponents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomNodeSplit.html">mlx_graphs.transforms.RandomNodeSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomLinkSplit.html">mlx_graphs.transforms.RandomLinkSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.OneHotDegree.html">mlx_graphs.transforms.OneHotDegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -234,19 +240,36 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TransformerConv.html">mlx_graphs.nn.TransformerConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphConv.html">mlx_graphs.nn.GraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SGConv.html">mlx_graphs.nn.SGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.APPNP.html">mlx_graphs.nn.APPNP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ChebConv.html">mlx_graphs.nn.ChebConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
@@ -255,6 +278,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -272,6 +296,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/graph.html">Graph utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.subgraph.html">mlx_graphs.utils.subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.k_hop_subgraph.html">mlx_graphs.utils.k_hop_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.negative_sampling.html">mlx_graphs.utils.negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.structured_negative_sampling.html">mlx_graphs.utils.structured_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_edge.html">mlx_graphs.utils.dropout_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_node.html">mlx_graphs.utils.dropout_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_batch.html">mlx_graphs.utils.to_dense_batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -313,6 +350,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.from_pyg.html">mlx_graphs.utils.from_pyg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
 </ul>
 </details></li>
 </ul>
@@ -467,7 +506,14 @@
     <span class="n">HAS_FUSED_KERNELS</span> <span class="o">=</span> <span class="kc">False</span>
     <span class="n">FUSED_KERNELS_IMPORT_ERROR</span> <span class="o">=</span> <span class="n">e</span>
 
-<span class="n">FusedFormat</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"coo"</span><span class="p">,</span> <span class="s2">"csr"</span><span class="p">]</span>
+<span class="n">FusedFormat</span> <span class="o">=</span> <span class="n">Literal</span><span class="p">[</span><span class="s2">"auto"</span><span class="p">,</span> <span class="s2">"coo"</span><span class="p">,</span> <span class="s2">"csr"</span><span class="p">]</span>
+
+<span class="c1"># ``format="auto"`` switches from the COO kernel to the faster CSR kernel when</span>
+<span class="c1"># the one-time COO -&gt; CSR sort pays off: at once for large graphs, and after a</span>
+<span class="c1"># few uses of the same ``edge_index`` for smaller ones (e.g. full-batch</span>
+<span class="c1"># training), but not for mini-batches that are seen once per layer.</span>
+<span class="n">_AUTO_CSR_MIN_EDGES</span> <span class="o">=</span> <span class="mi">1_000_000</span>
+<span class="n">_AUTO_CSR_MIN_USES</span> <span class="o">=</span> <span class="mi">4</span>
 <span class="n">_FUSED_AGGRS</span><span class="p">:</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="o">...</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"add"</span><span class="p">,</span> <span class="s2">"mean"</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">HAS_FUSED_KERNELS</span><span class="p">:</span>
     <span class="c1"># max/min need an mlx-cluster with those reductions; older ones fall back</span>
@@ -493,11 +539,12 @@
 <span class="sd">    Args:</span>
 <span class="sd">        enabled: if ``False``, every layer uses gather-scatter.</span>
 <span class="sd">        format: if given, overrides the ``format`` chosen in</span>
-<span class="sd">            :func:`fused_message_passing` for every layer (``"coo"`` or ``"csr"``).</span>
+<span class="sd">            :func:`fused_message_passing` for every layer (``"auto"``,</span>
+<span class="sd">            ``"coo"`` or ``"csr"``).</span>
 <span class="sd">    """</span>
     <span class="k">global</span> <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span>
     <span class="k">if</span> <span class="nb">format</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">FusedFormat</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'auto', 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
     <span class="n">_fused_enabled</span> <span class="o">=</span> <span class="n">enabled</span>
     <span class="n">_fused_format_override</span> <span class="o">=</span> <span class="nb">format</span></div>
 
@@ -532,32 +579,72 @@
 
 
 
+<span class="k">class</span><span class="w"> </span><span class="nc">_CSREntry</span><span class="p">:</span>
+    <span class="vm">__slots__</span> <span class="o">=</span> <span class="p">(</span><span class="s2">"edge_index"</span><span class="p">,</span> <span class="s2">"uses"</span><span class="p">,</span> <span class="s2">"csr"</span><span class="p">,</span> <span class="s2">"failed"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edge_index</span> <span class="o">=</span> <span class="n">edge_index</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uses</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">csr</span><span class="p">:</span> <span class="n">Any</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">False</span>
+
+
 <span class="k">class</span><span class="w"> </span><span class="nc">_CSRCache</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">"""Small LRU cache of COO -&gt; CSR conversions, keyed on the edge_index array.</span>
 
 <span class="sd">    The cache keeps a reference to each edge_index, so its ``id`` cannot be</span>
-<span class="sd">    reused by another array while the entry is alive.</span>
+<span class="sd">    reused by another array while the entry is alive. It also counts how often</span>
+<span class="sd">    each edge_index was used, which ``format="auto"`` uses to decide when the</span>
+<span class="sd">    conversion is worth it.</span>
 <span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">8</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">maxsize</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span> <span class="o">=</span> <span class="n">maxsize</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span> <span class="s2">"OrderedDict[Tuple[int, int, int], Tuple[mx.array, Any]]"</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">OrderedDict</span><span class="p">()</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">:</span> <span class="s2">"OrderedDict[Tuple[int, int, int], _CSREntry]"</span> <span class="o">=</span> <span class="n">OrderedDict</span><span class="p">()</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_entry</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">_CSREntry</span><span class="p">:</span>
         <span class="c1"># num_rows = destination nodes (output rows), num_cols = source nodes</span>
         <span class="c1"># (rows of x). They differ for bipartite (src, dst) inputs.</span>
         <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">edge_index</span><span class="p">),</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
-        <span class="n">hit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">hit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">hit</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">is</span> <span class="n">edge_index</span><span class="p">:</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">edge_index</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">edge_index</span><span class="p">:</span>
+            <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">_CSREntry</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
-            <span class="k">return</span> <span class="n">hit</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span><span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">csr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="p">)</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">maxsize</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">popitem</span><span class="p">(</span><span class="n">last</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">csr</span>
+        <span class="n">entry</span><span class="o">.</span><span class="n">uses</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">entry</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""CSR of ``edge_index``, converted on first use."""</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_if_worth_it</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""CSR of ``edge_index`` if it is cached or worth converting now,</span>
+<span class="sd">        otherwise ``None`` (the caller then uses the COO kernel)."""</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">entry</span><span class="o">.</span><span class="n">failed</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">_AUTO_CSR_MIN_EDGES</span>
+            <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">uses</span> <span class="o">&lt;</span> <span class="n">_AUTO_CSR_MIN_USES</span>
+        <span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span>
+            <span class="p">)</span>
+        <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+            <span class="c1"># The conversion reads the graph back on the host, which is not</span>
+            <span class="c1"># possible while tracing (edge_index is an input of mx.compile).</span>
+            <span class="n">entry</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -569,7 +656,8 @@
 <div class="viewcode-block" id="clear_csr_cache">
 <a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html#mlx_graphs.nn.clear_csr_cache">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">clear_csr_cache</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Drops all cached CSR conversions used by ``format="csr"``."""</span>
+<span class="w">    </span><span class="sd">"""Drops all cached CSR conversions used by the ``"auto"`` and ``"csr"``</span>
+<span class="sd">    formats of fused message passing."""</span>
     <span class="n">_csr_cache</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span></div>
 
 
@@ -579,7 +667,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">fused_message_passing</span><span class="p">(</span>
     <span class="bp">cls</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">*</span><span class="p">,</span>
-    <span class="nb">format</span><span class="p">:</span> <span class="n">FusedFormat</span> <span class="o">=</span> <span class="s2">"coo"</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">FusedFormat</span> <span class="o">=</span> <span class="s2">"auto"</span><span class="p">,</span>
     <span class="n">allow_message_override</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Class decorator: lets a :class:`MessagePassing` layer fuse ``message``</span>
@@ -606,9 +694,19 @@
 <span class="sd">      ``message_and_aggregate()``.</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        format: ``"coo"`` (default) works directly on ``edge_index``.</span>
-<span class="sd">            ``"csr"`` sorts the graph once (cached per ``edge_index``) and uses</span>
-<span class="sd">            a deterministic, atomic-free kernel.</span>
+<span class="sd">        format: ``"coo"`` works directly on ``edge_index``. ``"csr"`` sorts</span>
+<span class="sd">            the graph once (cached per ``edge_index``) and uses a faster,</span>
+<span class="sd">            deterministic, atomic-free kernel. ``"auto"`` (default) starts</span>
+<span class="sd">            with ``"coo"`` and switches to ``"csr"`` when the sort pays off:</span>
+<span class="sd">            immediately for graphs with at least a million edges, and once</span>
+<span class="sd">            the same ``edge_index`` array has been used a few times</span>
+<span class="sd">            otherwise (e.g. full-batch training).</span>
+
+<span class="sd">    .. note::</span>
+<span class="sd">        Cached conversions are looked up by the identity of the</span>
+<span class="sd">        ``edge_index`` array. Build a new array instead of modifying an</span>
+<span class="sd">        ``edge_index`` in place (``edge_index[0, 3] = 5``) between calls, or</span>
+<span class="sd">        call :func:`clear_csr_cache` after doing so.</span>
 <span class="sd">        allow_message_override: a layer that overrides ``message()`` or</span>
 <span class="sd">            ``aggregate()`` is rejected by default, because the fused kernel</span>
 <span class="sd">            would ignore those overrides. Pass ``True`` only if the override</span>
@@ -627,7 +725,7 @@
 <span class="sd">            ...</span>
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">format</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">FusedFormat</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"format must be 'auto', 'coo' or 'csr', got </span><span class="si">{</span><span class="nb">format</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">wrap</span><span class="p">(</span><span class="n">klass</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">klass</span><span class="p">,</span> <span class="n">MessagePassing</span><span class="p">)):</span>
@@ -711,9 +809,9 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">node_features</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]],</span>
-        <span class="n">message_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
-        <span class="n">aggregate_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
-        <span class="n">update_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="p">{},</span>
+        <span class="n">message_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">aggregate_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+        <span class="n">update_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Computes messages from neighbors, aggregates them and updates</span>
 <span class="sd">        the final node embeddings.</span>
@@ -729,6 +827,9 @@
 <span class="sd">            aggregate_kwargs: Arguments to pass to the `aggregate` method</span>
 <span class="sd">            update_kwargs: Arguments to pass to the `update_nodes` method</span>
 <span class="sd">        """</span>
+        <span class="n">message_kwargs</span> <span class="o">=</span> <span class="n">message_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">aggregate_kwargs</span> <span class="o">=</span> <span class="n">aggregate_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
+        <span class="n">update_kwargs</span> <span class="o">=</span> <span class="n">update_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="ow">and</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Edge index should be an array with shape (2, |E|)"</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
@@ -752,7 +853,7 @@
             <span class="n">node_features</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_fuse</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">message_kwargs</span><span class="p">,</span> <span class="n">aggregate_kwargs</span><span class="p">):</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_fuse</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">,</span> <span class="n">message_kwargs</span><span class="p">,</span> <span class="n">aggregate_kwargs</span><span class="p">):</span>
             <span class="c1"># shapes: (|N| -&gt; |N|), no per-edge message array</span>
             <span class="n">aggregated</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">message_and_aggregate</span><span class="p">(</span>
                 <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span>
@@ -790,6 +891,7 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">_can_fuse</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">node_features</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]],</span>
         <span class="n">message_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
         <span class="n">aggregate_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">],</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
@@ -802,9 +904,21 @@
             <span class="k">return</span> <span class="kc">False</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="p">(</span><span class="n">aggregate_kwargs</span> <span class="ow">or</span> <span class="p">{})</span><span class="o">.</span><span class="n">values</span><span class="p">()):</span>
             <span class="k">return</span> <span class="kc">False</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span>
+        <span class="k">if</span> <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">mx</span><span class="o">.</span><span class="n">issubdtype</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">floating</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">False</span>
         <span class="n">weights</span> <span class="o">=</span> <span class="n">message_kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"edge_weights"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
-            <span class="k">return</span> <span class="kc">False</span>  <span class="c1"># e.g. multi-dimensional weights: not a scalar per edge</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">num_edges</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">per_edge</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">num_edges</span>  <span class="c1"># one scalar per edge</span>
+            <span class="c1"># one scalar per edge and per head, for [num_nodes, heads, ...] features</span>
+            <span class="n">per_head</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">x</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;=</span> <span class="mi">3</span>
+                <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">ndim</span> <span class="o">==</span> <span class="mi">2</span>
+                <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">num_edges</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">per_edge</span> <span class="ow">or</span> <span class="n">per_head</span><span class="p">):</span>
+                <span class="k">return</span> <span class="kc">False</span>
         <span class="k">return</span> <span class="kc">True</span>
 
 <div class="viewcode-block" id="MessagePassing.message_and_aggregate">
@@ -831,39 +945,79 @@
 <span class="sd">            edge_index: Graph representation of shape `[2, num_edges]`</span>
 <span class="sd">            node_features: Node features, or a ``(src, dst)`` tuple</span>
 <span class="sd">                (only the source features are used).</span>
-<span class="sd">            edge_weights: Optional scalar weight per edge.</span>
+<span class="sd">            edge_weights: Optional weights: one scalar per edge, or, for</span>
+<span class="sd">                multi-head features of shape ``[num_nodes, heads, channels]``,</span>
+<span class="sd">                an array of shape ``[num_edges, heads]`` with one scalar per</span>
+<span class="sd">                edge and head (e.g. attention coefficients).</span>
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span>
-        <span class="n">weights</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="n">edge_weights</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
         <span class="n">reduce</span> <span class="o">=</span> <span class="s2">"sum"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">==</span> <span class="s2">"add"</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span>  <span class="c1"># mean / max / min</span>
-        <span class="n">fmt</span> <span class="o">=</span> <span class="n">_fused_format_override</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span>
+        <span class="n">num_edges</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">out_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
 
-        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"csr"</span><span class="p">:</span>
-            <span class="n">csr</span> <span class="o">=</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">edge_weights</span>
+        <span class="n">per_head</span> <span class="o">=</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">num_edges</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">per_head</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="c1"># The kernels work on [num_nodes, features]: with one weight per</span>
+        <span class="c1"># (edge, head) each head is its own SpMM, otherwise heads and channels</span>
+        <span class="c1"># are flattened into the feature axis.</span>
+        <span class="k">if</span> <span class="n">per_head</span><span class="p">:</span>
+            <span class="n">heads</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">heads</span><span class="p">)]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">heads</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+
+        <span class="n">csr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_csr</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">csr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">csr</span><span class="o">.</span><span class="n">perm</span><span class="p">]</span>
-            <span class="k">return</span> <span class="n">_spmm_csr</span><span class="p">(</span>
-                <span class="n">csr</span><span class="o">.</span><span class="n">rowptr</span><span class="p">,</span>
-                <span class="n">csr</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
-                <span class="n">x</span><span class="p">,</span>
-                <span class="n">weights</span><span class="p">,</span>
-                <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
-                <span class="c1"># load-balanced path for high-degree nodes (mlx-cluster &gt;= the</span>
-                <span class="c1"># long-row release; older CSR tuples have no such field)</span>
-                <span class="n">long_rows</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"long_rows"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-                <span class="c1"># cached transpose: the backward also runs on the CSR kernel</span>
-                <span class="n">transpose</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"transpose"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
-            <span class="p">)</span>
+            <span class="n">outs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_spmm_csr</span><span class="p">(</span>
+                    <span class="n">csr</span><span class="o">.</span><span class="n">rowptr</span><span class="p">,</span>
+                    <span class="n">csr</span><span class="o">.</span><span class="n">col</span><span class="p">,</span>
+                    <span class="n">xs</span><span class="p">[</span><span class="n">h</span><span class="p">],</span>
+                    <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="p">(</span><span class="n">weights</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span> <span class="k">if</span> <span class="n">per_head</span> <span class="k">else</span> <span class="n">weights</span><span class="p">),</span>
+                    <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
+                    <span class="c1"># load-balanced path for high-degree nodes (mlx-cluster &gt;= the</span>
+                    <span class="c1"># long-row release; older CSR tuples have no such field)</span>
+                    <span class="n">long_rows</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"long_rows"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                    <span class="c1"># cached transpose: the backward also runs on the CSR kernel</span>
+                    <span class="n">transpose</span><span class="o">=</span><span class="nb">getattr</span><span class="p">(</span><span class="n">csr</span><span class="p">,</span> <span class="s2">"transpose"</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">heads</span><span class="p">)</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">outs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">_spmm_coo</span><span class="p">(</span>
+                    <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                    <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                    <span class="n">xs</span><span class="p">[</span><span class="n">h</span><span class="p">],</span>
+                    <span class="kc">None</span>
+                    <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span>
+                    <span class="k">else</span> <span class="p">(</span><span class="n">weights</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span> <span class="k">if</span> <span class="n">per_head</span> <span class="k">else</span> <span class="n">weights</span><span class="p">),</span>
+                    <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span>
+                    <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">heads</span><span class="p">)</span>
+            <span class="p">]</span>
 
-        <span class="k">return</span> <span class="n">_spmm_coo</span><span class="p">(</span>
-            <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">x</span><span class="p">,</span>
-            <span class="n">weights</span><span class="p">,</span>
-            <span class="n">num_rows</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span>
-            <span class="n">reduce</span><span class="o">=</span><span class="n">reduce</span><span class="p">,</span>
-        <span class="p">)</span></div>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">outs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">heads</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out_shape</span><span class="p">)</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fused_csr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_src_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""CSR form of the graph for the fused kernel, or ``None`` for COO."""</span>
+        <span class="n">fmt</span> <span class="o">=</span> <span class="n">_fused_format_override</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span>
+        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"csr"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_src_nodes</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get_if_worth_it</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_src_nodes</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MessagePassing.message">
 <a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing.message">[docs]</a>
@@ -879,16 +1033,22 @@
 <span class="sd">            src_features: Source node embeddings</span>
 <span class="sd">            dst_features: Destination node embeddings</span>
 <span class="sd">            edge_weights: Array of scalars with shape (num_edges,) or (num_edges, 1)</span>
-<span class="sd">                used to weigh neighbor features during aggregation. Default: ``None``</span>
+<span class="sd">                used to weigh neighbor features during aggregation. For</span>
+<span class="sd">                multi-head source features of shape (num_edges, heads, channels),</span>
+<span class="sd">                an array of shape (num_edges, heads) weighs each head separately.</span>
+<span class="sd">                Default: ``None``</span>
 <span class="sd">            **kwargs: Optional args to compute messages</span>
 <span class="sd">        """</span>
         <span class="n">edge_weights</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"edge_weights"</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-        <span class="k">return</span> <span class="p">(</span>
-            <span class="n">src_features</span>
-            <span class="k">if</span> <span class="n">edge_weights</span> <span class="ow">is</span> <span class="kc">None</span>
-            <span class="k">else</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">src_features</span>
-        <span class="p">)</span></div>
+        <span class="k">if</span> <span class="n">edge_weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">src_features</span>
+        <span class="k">if</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">src_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="c1"># one scalar per edge, broadcast over all feature axes</span>
+            <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,)</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="n">src_features</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">src_features</span>
+        <span class="c1"># one scalar per edge and head</span>
+        <span class="n">shape</span> <span class="o">=</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="n">src_features</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">ndim</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">edge_weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span> <span class="o">*</span> <span class="n">src_features</span></div>
 
 
 <div class="viewcode-block" id="MessagePassing.aggregate">

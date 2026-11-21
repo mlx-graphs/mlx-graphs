@@ -6,7 +6,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.utils.transformations &#8212; mlx-graphs 0.0.11 documentation</title>
+    <title>mlx_graphs.utils.transformations &#8212; mlx-graphs 0.1.0 documentation</title>
   
   
   
@@ -31,7 +31,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=61a4c737" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=96440fcd" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/custom.css?v=6c5b376d" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
@@ -39,7 +39,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
 
-    <script src="../../../_static/documentation_options.js?v=2fb9ae3b"></script>
+    <script src="../../../_static/documentation_options.js?v=a1637f0b"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -138,8 +138,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.0.11 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.0.11 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.1.0 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.1.0 documentation - Home"/>
   
   
 </a></div>
@@ -156,11 +156,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
 </ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks.html">Benchmarks</a></li>
+</ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/benchmark_pyg_dgl_mxg.html">Benchmarking mlx-graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
@@ -169,19 +173,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../datasets.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../generated/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="nav bd-sidenav">
@@ -209,6 +201,8 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.AmazonDataset.html">mlx_graphs.datasets.AmazonDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.CoauthorDataset.html">mlx_graphs.datasets.CoauthorDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
@@ -226,7 +220,19 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.Compose.html">mlx_graphs.transforms.Compose</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.ToUndirected.html">mlx_graphs.transforms.ToUndirected</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddSelfLoops.html">mlx_graphs.transforms.AddSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveSelfLoops.html">mlx_graphs.transforms.RemoveSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveIsolatedNodes.html">mlx_graphs.transforms.RemoveIsolatedNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.LargestConnectedComponents.html">mlx_graphs.transforms.LargestConnectedComponents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomNodeSplit.html">mlx_graphs.transforms.RandomNodeSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomLinkSplit.html">mlx_graphs.transforms.RandomLinkSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.OneHotDegree.html">mlx_graphs.transforms.OneHotDegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -234,19 +240,36 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TransformerConv.html">mlx_graphs.nn.TransformerConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphConv.html">mlx_graphs.nn.GraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SGConv.html">mlx_graphs.nn.SGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.APPNP.html">mlx_graphs.nn.APPNP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ChebConv.html">mlx_graphs.nn.ChebConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
@@ -255,6 +278,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -272,6 +296,19 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/graph.html">Graph utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.subgraph.html">mlx_graphs.utils.subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.k_hop_subgraph.html">mlx_graphs.utils.k_hop_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.negative_sampling.html">mlx_graphs.utils.negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.structured_negative_sampling.html">mlx_graphs.utils.structured_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_edge.html">mlx_graphs.utils.dropout_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_node.html">mlx_graphs.utils.dropout_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_batch.html">mlx_graphs.utils.to_dense_batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -313,6 +350,8 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.from_pyg.html">mlx_graphs.utils.from_pyg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
 </ul>
 </details></li>
 </ul>
@@ -448,6 +487,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils.scatter</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils.validators</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">validate_adjacency_matrix</span><span class="p">,</span>
     <span class="n">validate_edge_index</span><span class="p">,</span>
@@ -623,6 +663,42 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_numpy</span><span class="p">(</span><span class="n">array</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Host view of an ``mx.array`` (evaluates it; no copy when possible).</span>
+
+<span class="sd">    Unsigned indices are widened to int64, so that arithmetic and sentinels</span>
+<span class="sd">    such as ``max(initial=-1)`` cannot overflow.</span>
+<span class="sd">    """</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">array</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">out</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"u"</span><span class="p">:</span>
+        <span class="n">out</span> <span class="o">=</span> <span class="n">out</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_edge_keys</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Encodes each ``(src, dst)`` pair as one int64, ordered by ``(src, dst)``."""</span>
+    <span class="k">return</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="o">*</span> <span class="n">num_nodes</span> <span class="o">+</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_infer_num_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">num_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">())</span> <span class="o">+</span> <span class="mi">1</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_empty_like</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_take_edges</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">keep</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Columns ``keep`` (host indices) of ``edge_index``; ``[2, 0]`` if empty."""</span>
+    <span class="k">if</span> <span class="n">keep</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_empty_like</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">edge_index</span><span class="p">[:,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keep</span><span class="p">)]</span>
+
+
 <div class="viewcode-block" id="get_unique_edge_indices">
 <a class="viewcode-back" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html#mlx_graphs.utils.transformations.get_unique_edge_indices">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_unique_edge_indices</span><span class="p">(</span><span class="n">edge_index_1</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">edge_index_2</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
@@ -657,17 +733,10 @@
 <span class="sd">        x = get_unique_edge_indices(edge_index_1, edge_index_2)</span>
 <span class="sd">        # [0, 1]</span>
 <span class="sd">    """</span>
-    <span class="n">edge_2_unique</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_index_2</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
-
-    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span>
-            <span class="n">i</span>
-            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">edge</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_index_1</span><span class="o">.</span><span class="n">transpose</span><span class="p">(),</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
-            <span class="k">if</span> <span class="n">edge</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">edge_2_unique</span>
-        <span class="p">]</span>
-    <span class="p">)</span></div>
+    <span class="n">edges_1</span><span class="p">,</span> <span class="n">edges_2</span> <span class="o">=</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index_1</span><span class="p">),</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index_2</span><span class="p">)</span>
+    <span class="n">num_nodes</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">edges_1</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">initial</span><span class="o">=-</span><span class="mi">1</span><span class="p">),</span> <span class="n">edges_2</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">initial</span><span class="o">=-</span><span class="mi">1</span><span class="p">)))</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">present</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">_edge_keys</span><span class="p">(</span><span class="n">edges_1</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">),</span> <span class="n">_edge_keys</span><span class="p">(</span><span class="n">edges_2</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">present</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
 
 
@@ -722,28 +791,32 @@
 
 <span class="sd">    """</span>
     <span class="k">if</span> <span class="n">num_nodes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">num_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span> <span class="o">&gt;</span> <span class="n">num_nodes</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
                 <span class="s2">"num_nodes must be &gt;= than the number of nodes in the edge_index "</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"(got num_nodes=</span><span class="si">{</span><span class="n">num_nodes</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
+                <span class="sa">f</span><span class="s2">"(got num_nodes=</span><span class="si">{</span><span class="n">num_nodes</span><span class="si">}</span><span class="s2"> and </span><span class="si">{</span><span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="s2">"nodes in index"</span><span class="p">,</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">num_nodes</span> <span class="o">=</span> <span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="n">num_nodes</span> <span class="o">=</span> <span class="n">_infer_num_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
 
     <span class="c1"># add self loops to index</span>
-    <span class="n">self_loop_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">loop_nodes</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">allow_repeated</span><span class="p">:</span>
-        <span class="n">self_loop_index</span> <span class="o">=</span> <span class="n">self_loop_index</span><span class="p">[</span>
-            <span class="p">:,</span> <span class="n">get_unique_edge_indices</span><span class="p">(</span><span class="n">self_loop_index</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">)</span>
-        <span class="p">]</span>
+        <span class="n">edges</span> <span class="o">=</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+        <span class="n">has_loop</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+        <span class="n">has_loop</span><span class="p">[</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]]]</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">loop_nodes</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="o">~</span><span class="n">has_loop</span><span class="p">)[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">edge_index</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">self_loop_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">loop_nodes</span><span class="p">,</span> <span class="n">loop_nodes</span><span class="p">])</span>
     <span class="n">full_edge_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">self_loop_index</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># add self loops to features</span>
-        <span class="n">self_loop_features</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">mx</span><span class="o">.</span><span class="n">ones</span><span class="p">([</span><span class="n">self_loop_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span> <span class="o">*</span> <span class="n">fill_value</span>
-        <span class="p">)</span>
+        <span class="n">self_loop_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">full</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">self_loop_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="o">*</span><span class="n">edge_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span>
+            <span class="n">fill_value</span><span class="p">,</span>
+            <span class="n">dtype</span><span class="o">=</span><span class="n">edge_features</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">edge_features</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
         <span class="n">full_edge_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">self_loop_features</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">full_edge_index</span><span class="p">,</span> <span class="n">full_edge_features</span>
     <span class="k">return</span> <span class="n">full_edge_index</span></div>
@@ -786,32 +859,42 @@
 <span class="sd">        A tuple containing the updated edge_index and edge_features without self-loops.</span>
 
 <span class="sd">    """</span>
-    <span class="n">num_nodes</span> <span class="o">=</span> <span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+    <span class="n">keep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">keep</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">edges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>  <span class="c1"># nothing to remove</span>
+        <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_features</span>
+        <span class="k">return</span> <span class="n">edge_index</span>
 
-    <span class="c1"># add self loops to index</span>
-    <span class="n">self_loop_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">),</span> <span class="mi">0</span><span class="p">),</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">preserved_idx</span> <span class="o">=</span> <span class="n">get_unique_edge_indices</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">self_loop_index</span><span class="p">)</span>
-    <span class="n">no_self_loop_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">preserved_idx</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">no_self_loop_index</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[:,</span> <span class="n">preserved_idx</span><span class="p">]</span>
-
+    <span class="n">no_self_loop_index</span> <span class="o">=</span> <span class="n">_take_edges</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">keep</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">no_self_loop_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([[]])</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">preserved_idx</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">no_self_loop_features</span> <span class="o">=</span> <span class="n">edge_features</span><span class="p">[</span><span class="n">preserved_idx</span><span class="p">]</span>
-        <span class="k">return</span> <span class="n">no_self_loop_index</span><span class="p">,</span> <span class="n">no_self_loop_features</span>
+        <span class="k">if</span> <span class="n">keep</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">no_self_loop_index</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
+                <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="o">*</span><span class="n">edge_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">edge_features</span><span class="o">.</span><span class="n">dtype</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">no_self_loop_index</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">keep</span><span class="p">)]</span>
     <span class="k">return</span> <span class="n">no_self_loop_index</span></div>
 
 
 
 <span class="nd">@overload</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">to_undirected</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">edge_features</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">to_undirected</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">coalesce</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
     <span class="o">...</span>
 
 
 <span class="nd">@overload</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_undirected</span><span class="p">(</span>
-    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">coalesce</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
     <span class="o">...</span>
 
@@ -820,15 +903,26 @@
 <a class="viewcode-back" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html#mlx_graphs.utils.transformations.to_undirected">[docs]</a>
 <span class="nd">@validate_edge_index_and_features</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">to_undirected</span><span class="p">(</span>
-    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">coalesce</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Converts a graph given as `edge_index` and, optionally, `edge_features`</span>
-<span class="sd">    to an undirected one.</span>
+<span class="sd">    to an undirected one, by adding the reverse of every edge.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        edge_index: The edge index of the graph.</span>
 <span class="sd">        edge_features: Edge features associated with each edge.</span>
+<span class="sd">        coalesce: If ``True``, duplicate edges are merged afterwards (see</span>
+<span class="sd">            :func:`coalesce`), so an edge that already had its reverse is kept</span>
+<span class="sd">            once per direction. This is the behavior of PyG's</span>
+<span class="sd">            ``to_undirected``. Default: ``False`` (plain concatenation).</span>
+<span class="sd">        num_nodes: Number of nodes, only used when ``coalesce=True``.</span>
+<span class="sd">        reduce: How the features of merged edges are combined when</span>
+<span class="sd">            ``coalesce=True``. Default: ``"add"``.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        The undirected `edge_index` (and `edge_features`)</span>
@@ -838,8 +932,15 @@
     <span class="n">undirected_edge_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
         <span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">src</span><span class="p">,</span> <span class="n">dst</span><span class="p">]),</span> <span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">])],</span> <span class="mi">1</span>
     <span class="p">)</span>
+    <span class="n">undirected_edge_features</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">undirected_edge_features</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">coalesce</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_coalesce</span><span class="p">(</span>
+            <span class="n">undirected_edge_index</span><span class="p">,</span> <span class="n">undirected_edge_features</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">reduce</span>
+        <span class="p">)</span>
+    <span class="k">if</span> <span class="n">undirected_edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">undirected_edge_index</span><span class="p">,</span> <span class="n">undirected_edge_features</span>
     <span class="k">return</span> <span class="n">undirected_edge_index</span></div>
 
@@ -856,49 +957,102 @@
 <span class="sd">        edge_index: The `edge_index` on which remove duplicate edges.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        An `edge_index` without duplicates.</span>
+<span class="sd">        An `edge_index` without duplicates, sorted by source then destination.</span>
 <span class="sd">    """</span>
-    <span class="n">base_dtype</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">dtype</span>
-    <span class="k">if</span> <span class="n">base_dtype</span> <span class="o">==</span> <span class="n">mx</span><span class="o">.</span><span class="n">int64</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Does not support yet `edge_index` with int64 dtype."</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span></div>
 
-    <span class="c1"># TODO: this method shall be updated to full mlx once unique() and structured</span>
-    <span class="c1"># arrays are implemented</span>
-    <span class="n">edge_index_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
-    <span class="c1"># Convert edge_index to a structured array to leverage np.unique for</span>
-    <span class="c1"># multi-column uniqueness</span>
-    <span class="n">dtype</span> <span class="o">=</span> <span class="p">[(</span><span class="s2">"node1"</span><span class="p">,</span> <span class="n">edge_index_</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span> <span class="p">(</span><span class="s2">"node2"</span><span class="p">,</span> <span class="n">edge_index_</span><span class="o">.</span><span class="n">dtype</span><span class="p">)]</span>
-    <span class="n">structured_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">edge_index_</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_index_</span><span class="p">[</span><span class="mi">1</span><span class="p">])),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
 
-    <span class="n">unique_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">structured_edges</span><span class="p">)</span>
-    <span class="n">unique_edge_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">unique_edges</span><span class="p">[</span><span class="s2">"node1"</span><span class="p">],</span> <span class="n">unique_edges</span><span class="p">[</span><span class="s2">"node2"</span><span class="p">]])</span>
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">coalesce</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="o">...</span>
 
-    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">unique_edge_index</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span></div>
 
+<span class="nd">@overload</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">coalesce</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]:</span>
+    <span class="o">...</span>
 
 
 <div class="viewcode-block" id="coalesce">
 <a class="viewcode-back" href="../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html#mlx_graphs.utils.transformations.coalesce">[docs]</a>
-<span class="nd">@validate_edge_index</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="nd">@validate_edge_index_and_features</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">coalesce</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]]:</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Removes duplicate edges in ``edge_index`` and scatters the duplicate edges to the</span>
-<span class="sd">    edge attributes following a given reduction operation (e.g. sum of duplicate edges).</span>
+<span class="sd">    Sorts ``edge_index`` by source then destination and merges duplicate edges.</span>
+
+<span class="sd">    The features of merged edges are combined with ``reduce``.</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        edge_index: Edges to coalesce.</span>
+<span class="sd">        edge_features: Optional features of each edge, of shape</span>
+<span class="sd">            ``[num_edges, ...]``.</span>
+<span class="sd">        num_nodes: Number of nodes. Inferred from ``edge_index`` if not given.</span>
+<span class="sd">        reduce: How the features of duplicate edges are combined: ``"add"``,</span>
+<span class="sd">            ``"mean"``, ``"max"`` or ``"min"``. Default: ``"add"``.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        The edges without duplicates, with source and destination nodes swapped.</span>
+<span class="sd">        The sorted edges without duplicates, and their features if</span>
+<span class="sd">        ``edge_features`` was given.</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        edge_index = mx.array([[1, 0, 1, 0], [0, 1, 0, 2]])</span>
+<span class="sd">        edge_features = mx.array([1.0, 2.0, 3.0, 4.0])</span>
+
+<span class="sd">        coalesce(edge_index)</span>
+<span class="sd">        # mx.array([[0, 0, 1], [1, 2, 0]])</span>
+
+<span class="sd">        coalesce(edge_index, edge_features)</span>
+<span class="sd">        # (mx.array([[0, 0, 1], [1, 2, 0]]), mx.array([2.0, 4.0, 4.0]))</span>
 <span class="sd">    """</span>
-    <span class="n">edge_index</span> <span class="o">=</span> <span class="n">remove_duplicate_directed_edges</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_coalesce</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="n">reduce</span><span class="p">)</span></div>
 
-    <span class="n">row</span><span class="p">,</span> <span class="n">col</span> <span class="o">=</span> <span class="n">edge_index</span>
-    <span class="n">edge_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">col</span><span class="p">,</span> <span class="n">row</span><span class="p">])</span>
 
-    <span class="k">return</span> <span class="n">edge_index</span></div>
 
+<span class="k">def</span><span class="w"> </span><span class="nf">_coalesce</span><span class="p">(</span>
+    <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+    <span class="n">edge_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">],</span>
+    <span class="n">num_nodes</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">reduce</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]]:</span>
+    <span class="k">if</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">edge_index</span> <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="kc">None</span> <span class="k">else</span> <span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">)</span>
+
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="n">_edge_keys</span><span class="p">(</span><span class="n">edges</span><span class="p">,</span> <span class="n">_infer_num_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">keys</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">keys</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&gt;</span> <span class="n">keys</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">])):</span>
+            <span class="k">return</span> <span class="n">edge_index</span>  <span class="c1"># already sorted, no duplicates</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">first</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">keys</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">_take_edges</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span>
+
+    <span class="n">unique_keys</span><span class="p">,</span> <span class="n">first</span><span class="p">,</span> <span class="n">inverse</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span>
+        <span class="n">keys</span><span class="p">,</span> <span class="n">return_index</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">return_inverse</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">)</span>
+    <span class="n">coalesced_index</span> <span class="o">=</span> <span class="n">_take_edges</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">first</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">unique_keys</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">keys</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>  <span class="c1"># no duplicates: this is only a sort</span>
+        <span class="k">return</span> <span class="n">coalesced_index</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">first</span><span class="p">)]</span>
+    <span class="k">return</span> <span class="n">coalesced_index</span><span class="p">,</span> <span class="n">scatter</span><span class="p">(</span>
+        <span class="n">edge_features</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">inverse</span><span class="p">),</span> <span class="n">unique_keys</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="n">reduce</span>
+    <span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_isolated_nodes_mask">
@@ -907,16 +1061,20 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">get_isolated_nodes_mask</span><span class="p">(</span>
     <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">complement</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">"""Returns a mask with isolated nodes set to ``False`` to filter them out if needed.</span>
+<span class="w">    </span><span class="sd">"""Returns the indices of non-isolated nodes, or of isolated nodes.</span>
+
+<span class="sd">    A node is isolated if it has no edge to another node (self-loops are</span>
+<span class="sd">    ignored).</span>
 
 <span class="sd">    Args:</span>
 <span class="sd">        edge_index: Edge index from which to remove isolated nodes.</span>
 <span class="sd">        num_nodes: Number of nodes of the graph.</span>
-<span class="sd">        complement: Wether to filter isolated or non isolated nodes.</span>
+<span class="sd">        complement: If ``True`` (default), returns the indices of the nodes</span>
+<span class="sd">            that are not isolated. If ``False``, returns the indices of the</span>
+<span class="sd">            isolated nodes.</span>
 
 <span class="sd">    Returns:</span>
-<span class="sd">        A boolean mask of size ``num_nodes`` where ``True`` means the node isn't</span>
-<span class="sd">        isolated and ``False`` means it is.</span>
+<span class="sd">        A sorted array of node indices.</span>
 
 <span class="sd">    Example:</span>
 
@@ -928,13 +1086,19 @@
 <span class="sd">        mask = get_isolated_nodes_mask(edge_index, 3, complement=False)</span>
 <span class="sd">        &gt;&gt;&gt; mx.array([1])</span>
 <span class="sd">    """</span>
-    <span class="n">edge_index</span> <span class="o">=</span> <span class="n">remove_self_loops</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
-    <span class="n">indices</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edge_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span>
-    <span class="k">if</span> <span class="n">complement</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">indices</span><span class="p">)</span>
+    <span class="n">connected</span> <span class="o">=</span> <span class="n">_connected_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nonzero</span><span class="p">(</span><span class="n">connected</span> <span class="k">if</span> <span class="n">complement</span> <span class="k">else</span> <span class="o">~</span><span class="n">connected</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span></div>
 
-    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">setdiff1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">),</span> <span class="n">indices</span><span class="p">))</span></div>
 
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_connected_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Boolean host mask of the nodes with at least one non-self-loop edge."""</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">_to_numpy</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
+    <span class="n">edges</span> <span class="o">=</span> <span class="n">edges</span><span class="p">[:,</span> <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="n">size</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">edges</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">initial</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">connected</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">connected</span><span class="p">[</span><span class="n">edges</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">return</span> <span class="n">connected</span>
 
 
 <div class="viewcode-block" id="has_isolated_nodes">
@@ -946,6 +1110,7 @@
 
 <span class="sd">    Args:</span>
 <span class="sd">        edge_index: Edge index on which to check for isolated nodes.</span>
+<span class="sd">        num_nodes: Number of nodes of the graph.</span>
 
 <span class="sd">    Returns:</span>
 <span class="sd">        A boolean of whether the graph has isolated nodes.</span>
@@ -955,12 +1120,11 @@
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        edge_index = mx.array([[0, 2, 0], [2, 0, 0]])</span>
-<span class="sd">        has_self_loops(edge_index, 3)</span>
+<span class="sd">        has_isolated_nodes(edge_index, 3)</span>
 <span class="sd">        &gt;&gt;&gt; True</span>
 
 <span class="sd">    """</span>
-    <span class="n">edge_index</span> <span class="o">=</span> <span class="n">remove_self_loops</span><span class="p">(</span><span class="n">edge_index</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">edge_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;</span> <span class="n">num_nodes</span></div>
+    <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">_connected_nodes</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">num_nodes</span><span class="p">)</span></div>
 
 
 

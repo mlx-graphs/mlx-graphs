@@ -15,6 +15,5 @@
 
 	.. autosummary::
 	
-	     ~GATConv.message
 	
 	

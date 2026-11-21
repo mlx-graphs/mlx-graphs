@@ -15,6 +15,5 @@
 
 	.. autosummary::
 	
-	     ~GATv2Conv.message
 	
 	
