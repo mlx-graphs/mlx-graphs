@@ -14,7 +14,7 @@
     "commit": "c5f12463a0ee4cbf33545a28a8f736567ba80adc",
     "commit_date": "2026-11-20T15:17:17Z",
     "commit_subject": "Faster message passing, PyG-parity layers and models, PyG benchmarks",
-    "branch": null,
+    "branch": "perf-and-features",
     "dirty": false,
     "repo_root": null,
     "imported_from": null
