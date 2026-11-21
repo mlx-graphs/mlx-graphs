@@ -3,11 +3,12 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.linear import Linear
-from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils import get_src_dst_features, scatter
+from mlx_graphs.nn.linear import Linear, glorot
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
+from mlx_graphs.utils import scatter
 
 
+@fused_message_passing
 class GATv2Conv(MessagePassing):
     """Graph Attention Network convolution layer with dynamic attention.
 
@@ -64,8 +65,7 @@ class GATv2Conv(MessagePassing):
         self.W_dst = Linear(node_features_dim, heads * out_features_dim, bias=False)
 
         # Attention is applied in message() during message passing stage.
-        glorot_init = nn.init.glorot_uniform()
-        self.att = glorot_init(mx.zeros((1, heads, out_features_dim)))
+        self.att = glorot((1, heads, out_features_dim))
 
         if bias:
             bias_shape = (heads * out_features_dim) if concat else (out_features_dim)
@@ -78,7 +78,7 @@ class GATv2Conv(MessagePassing):
             self.edge_lin_proj = Linear(
                 edge_features_dim, heads * out_features_dim, bias=False
             )
-            self.edge_att = glorot_init(mx.zeros((1, heads, out_features_dim)))
+            self.edge_att = glorot((1, heads, out_features_dim))
 
     def __call__(
         self,
@@ -97,22 +97,38 @@ class GATv2Conv(MessagePassing):
             mx.array: computed node embeddings
         """
         H, C = self.heads, self.out_features_dim
+        src_idx, dst_idx = edge_index
 
         src_feats = self.W_src(node_features).reshape(-1, H, C)
         dst_feats = self.W_dst(node_features).reshape(-1, H, C)
 
-        src, dst = get_src_dst_features(edge_index, (src_feats, dst_feats))
-        dst_idx = edge_index[1]
+        # Dynamic attention: alpha = att . leaky_relu(z), with one z per edge,
+        # z = W_src x_j + W_dst x_i (+ edge features). Writing
+        # leaky_relu(z) = slope * z + (1 - slope) * relu(z) leaves a term that
+        # is linear in z, computed per node and gathered as [num_edges, heads]
+        # scalars, and a relu term, whose backward pass is cheaper than the
+        # leaky relu's on the large [num_edges, heads, channels] array.
+        z = src_feats[src_idx] + dst_feats[dst_idx]
+        linear = (src_feats * self.att).sum(-1)[src_idx] + (dst_feats * self.att).sum(
+            -1
+        )[dst_idx]
+        if edge_features is not None:
+            edge_feats = self._compute_edge_features(edge_features)
+            z = z + edge_feats
+            linear = linear + (edge_feats * self.att).sum(-1)
 
+        slope = self.negative_slope
+        alpha = slope * linear + (1 - slope) * (mx.maximum(z, 0) * self.att).sum(-1)
+        alpha = scatter(alpha, dst_idx, src_feats.shape[0], aggr="softmax")
+
+        if "dropout" in self:
+            alpha = self.dropout(alpha)
+
+        # Weighted sum of neighbor features, one weight per (edge, head).
         node_features = self.propagate(
-            node_features=(src_feats, dst_feats),
+            node_features=src_feats,
             edge_index=edge_index,
-            message_kwargs={
-                "src": src,
-                "dst": dst,
-                "index": dst_idx,
-                "edge_features": edge_features,
-            },
+            message_kwargs={"edge_weights": alpha},
         )
 
         if self.concat:
@@ -126,32 +142,6 @@ class GATv2Conv(MessagePassing):
             node_features = node_features + self.bias
 
         return node_features
-
-    def message(
-        self,
-        src_features: mx.array,
-        dst_features: mx.array,
-        src: mx.array,
-        dst: mx.array,
-        index: mx.array,
-        edge_features: Optional[mx.array] = None,
-    ) -> mx.array:
-        # Collect alpha before applying non-linearity
-        alpha = src + dst
-        if edge_features is not None:
-            alpha_edge = self._compute_edge_features(edge_features)
-            alpha = alpha + alpha_edge
-
-        alpha = nn.leaky_relu(alpha, self.negative_slope)
-        # Apply attention after non-linearity to get dynamic attention
-        alpha = (alpha * self.att).sum(-1)
-
-        alpha = scatter(alpha, index, self.num_nodes, aggr="softmax")
-
-        if "dropout" in self:
-            alpha = self.dropout(alpha)
-
-        return mx.expand_dims(alpha, -1) * src_features
 
     def _compute_edge_features(self, edge_features: mx.array):
         assert all(layer in self for layer in ["edge_lin_proj", "edge_att"]), """Using

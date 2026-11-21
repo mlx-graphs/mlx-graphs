@@ -222,6 +222,8 @@ def main():
 
     # Import datasets lazily to avoid unnecessary downloads
     from mlx_graphs.datasets import (
+        AmazonDataset,
+        CoauthorDataset,
         EllipticBitcoinDataset,
         KarateClubDataset,
         MovieLens100K,
@@ -236,6 +238,10 @@ def main():
         "cora": ("PlanetoidDataset", PlanetoidDataset, {"name": "cora"}),
         "citeseer": ("PlanetoidDataset", PlanetoidDataset, {"name": "citeseer"}),
         "pubmed": ("PlanetoidDataset", PlanetoidDataset, {"name": "pubmed"}),
+        "amazon_computers": ("AmazonDataset", AmazonDataset, {"name": "computers"}),
+        "amazon_photo": ("AmazonDataset", AmazonDataset, {"name": "photo"}),
+        "coauthor_cs": ("CoauthorDataset", CoauthorDataset, {"name": "cs"}),
+        "coauthor_physics": ("CoauthorDataset", CoauthorDataset, {"name": "physics"}),
         "elliptic": ("EllipticBitcoinDataset", EllipticBitcoinDataset, {}),
         "movie_lens_100k": ("MovieLens100K", MovieLens100K, {}),
     }

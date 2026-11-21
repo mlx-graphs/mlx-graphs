@@ -240,6 +240,7 @@ def edge_index_from_dict(
     if without_self_loops:
         edge_index = remove_self_loops(edge_index)
 
-    edge_index = coalesce(edge_index)
-
-    return edge_index
+    # Sorted by destination node, as in PyG: the graph is undirected, so
+    # swapping the rows of the (source, destination)-sorted edges does it.
+    row, col = coalesce(edge_index)
+    return mx.stack([col, row])

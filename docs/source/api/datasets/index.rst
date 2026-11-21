@@ -20,6 +20,8 @@ Datasets
 
 	KarateClubDataset
 	PlanetoidDataset
+	AmazonDataset
+	CoauthorDataset
 	QM7bDataset
 	TUDataset
 	SuperPixelDataset

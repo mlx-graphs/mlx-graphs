@@ -50,6 +50,34 @@ Available Datasets
      - 8.99
      - node
      - node
+   * - Amazon Computers
+     - 1
+     - 13,752
+     - 491,722
+     - 71.51
+     - node
+     - node
+   * - Amazon Photo
+     - 1
+     - 7,650
+     - 238,162
+     - 62.26
+     - node
+     - node
+   * - Coauthor CS
+     - 1
+     - 18,333
+     - 163,788
+     - 17.87
+     - node
+     - node
+   * - Coauthor Physics
+     - 1
+     - 34,493
+     - 495,924
+     - 28.76
+     - node
+     - node
    * - QM7b
      - 7,211
      - ~15
@@ -80,11 +108,12 @@ Dataset Classes
 .. currentmodule:: mlx_graphs.datasets
 
 .. autosummary::
-   :toctree: generated/
    :nosignatures:
 
    KarateClubDataset
    PlanetoidDataset
+   AmazonDataset
+   CoauthorDataset
    QM7bDataset
    TUDataset
    SuperPixelDataset
@@ -100,6 +129,7 @@ KarateClubDataset
 .. autoclass:: KarateClubDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 PlanetoidDataset
 ^^^^^^^^^^^^^^^^
@@ -107,6 +137,23 @@ PlanetoidDataset
 .. autoclass:: PlanetoidDataset
    :members:
    :show-inheritance:
+   :no-index:
+
+AmazonDataset
+^^^^^^^^^^^^^
+
+.. autoclass:: AmazonDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+CoauthorDataset
+^^^^^^^^^^^^^^^
+
+.. autoclass:: CoauthorDataset
+   :members:
+   :show-inheritance:
+   :no-index:
 
 QM7bDataset
 ^^^^^^^^^^^
@@ -114,6 +161,7 @@ QM7bDataset
 .. autoclass:: QM7bDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 TUDataset
 ^^^^^^^^^
@@ -121,6 +169,7 @@ TUDataset
 .. autoclass:: TUDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 SuperPixelDataset
 ^^^^^^^^^^^^^^^^^
@@ -128,6 +177,7 @@ SuperPixelDataset
 .. autoclass:: SuperPixelDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 OGBDataset
 ^^^^^^^^^^
@@ -135,6 +185,7 @@ OGBDataset
 .. autoclass:: OGBDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 EllipticBitcoinDataset
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -142,6 +193,7 @@ EllipticBitcoinDataset
 .. autoclass:: EllipticBitcoinDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 MovieLens100K
 ^^^^^^^^^^^^^
@@ -149,6 +201,7 @@ MovieLens100K
 .. autoclass:: MovieLens100K
    :members:
    :show-inheritance:
+   :no-index:
 
 IMDB
 ^^^^
@@ -156,6 +209,7 @@ IMDB
 .. autoclass:: IMDB
    :members:
    :show-inheritance:
+   :no-index:
 
 DBLP
 ^^^^
@@ -163,6 +217,7 @@ DBLP
 .. autoclass:: DBLP
    :members:
    :show-inheritance:
+   :no-index:
 
 Using Datasets
 --------------

@@ -9,6 +9,7 @@ Utils
 	:maxdepth: 1
 
 	transformations
+	graph
 	topology
 	sorting
 	validators

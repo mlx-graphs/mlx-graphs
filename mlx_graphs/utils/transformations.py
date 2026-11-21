@@ -3,6 +3,7 @@ from typing import Optional, Union, overload
 import mlx.core as mx
 import numpy as np
 
+from mlx_graphs.utils.scatter import scatter
 from mlx_graphs.utils.validators import (
     validate_adjacency_matrix,
     validate_edge_index,
@@ -166,6 +167,42 @@ def get_src_dst_features(
     return src_val, dst_val
 
 
+def _to_numpy(array: mx.array) -> np.ndarray:
+    """Host view of an ``mx.array`` (evaluates it; no copy when possible).
+
+    Unsigned indices are widened to int64, so that arithmetic and sentinels
+    such as ``max(initial=-1)`` cannot overflow.
+    """
+    out = np.asarray(array)
+    if out.dtype.kind == "u":
+        out = out.astype(np.int64)
+    return out
+
+
+def _edge_keys(edge_index: np.ndarray, num_nodes: int) -> np.ndarray:
+    """Encodes each ``(src, dst)`` pair as one int64, ordered by ``(src, dst)``."""
+    return edge_index[0].astype(np.int64) * num_nodes + edge_index[1].astype(np.int64)
+
+
+def _infer_num_nodes(edge_index: mx.array, num_nodes: Optional[int] = None) -> int:
+    if num_nodes is not None:
+        return int(num_nodes)
+    if edge_index.size == 0:
+        return 0
+    return int(mx.max(edge_index).item()) + 1
+
+
+def _empty_like(edge_index: mx.array) -> mx.array:
+    return mx.zeros((2, 0), dtype=edge_index.dtype)
+
+
+def _take_edges(edge_index: mx.array, keep: np.ndarray) -> mx.array:
+    """Columns ``keep`` (host indices) of ``edge_index``; ``[2, 0]`` if empty."""
+    if keep.size == 0:
+        return _empty_like(edge_index)
+    return edge_index[:, mx.array(keep)]
+
+
 def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> mx.array:
     """
     Computes the indices of the edges in edge_index_1 that are NOT present in
@@ -198,17 +235,10 @@ def get_unique_edge_indices(edge_index_1: mx.array, edge_index_2: mx.array) -> m
         x = get_unique_edge_indices(edge_index_1, edge_index_2)
         # [0, 1]
     """
-    edge_2_unique = np.unique(
-        np.array(edge_index_2.transpose(), copy=False), axis=0
-    ).tolist()
-
-    return mx.array(
-        [
-            i
-            for i, edge in enumerate(np.array(edge_index_1.transpose(), copy=False))
-            if edge.tolist() not in edge_2_unique
-        ]
-    )
+    edges_1, edges_2 = _to_numpy(edge_index_1), _to_numpy(edge_index_2)
+    num_nodes = int(max(edges_1.max(initial=-1), edges_2.max(initial=-1))) + 1
+    present = np.isin(_edge_keys(edges_1, num_nodes), _edge_keys(edges_2, num_nodes))
+    return mx.array(np.nonzero(~present)[0])
 
 
 @overload
@@ -260,28 +290,32 @@ def add_self_loops(
 
     """
     if num_nodes is not None:
-        if mx.max(edge_index) > num_nodes - 1:
+        if edge_index.size > 0 and mx.max(edge_index).item() > num_nodes - 1:
             raise ValueError(
                 "num_nodes must be >= than the number of nodes in the edge_index ",
-                f"(got num_nodes={num_nodes} and {mx.max(edge_index) + 1}",
+                f"(got num_nodes={num_nodes} and {mx.max(edge_index).item() + 1}",
                 "nodes in index",
             )
     else:
-        num_nodes = (mx.max(edge_index) + 1).item()
+        num_nodes = _infer_num_nodes(edge_index)
 
     # add self loops to index
-    self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
+    loop_nodes = mx.arange(num_nodes, dtype=edge_index.dtype)
     if not allow_repeated:
-        self_loop_index = self_loop_index[
-            :, get_unique_edge_indices(self_loop_index, edge_index)
-        ]
+        edges = _to_numpy(edge_index)
+        has_loop = np.zeros(num_nodes, dtype=bool)
+        has_loop[edges[0][edges[0] == edges[1]]] = True
+        loop_nodes = mx.array(np.nonzero(~has_loop)[0], dtype=edge_index.dtype)
+    self_loop_index = mx.stack([loop_nodes, loop_nodes])
     full_edge_index = mx.concatenate([edge_index, self_loop_index], 1)
 
     if edge_features is not None:
         # add self loops to features
-        self_loop_features = (
-            mx.ones([self_loop_index.shape[1], edge_features.shape[1]]) * fill_value
-        )
+        self_loop_features = mx.full(
+            (self_loop_index.shape[1], *edge_features.shape[1:]),
+            fill_value,
+            dtype=edge_features.dtype,
+        ).astype(edge_features.dtype)
         full_edge_features = mx.concatenate([edge_features, self_loop_features], 0)
         return full_edge_index, full_edge_features
     return full_edge_index
@@ -321,46 +355,67 @@ def remove_self_loops(
         A tuple containing the updated edge_index and edge_features without self-loops.
 
     """
-    num_nodes = (mx.max(edge_index) + 1).item()
+    edges = _to_numpy(edge_index)
+    keep = np.nonzero(edges[0] != edges[1])[0]
+    if keep.size == edges.shape[1]:  # nothing to remove
+        if edge_features is not None:
+            return edge_index, edge_features
+        return edge_index
 
-    # add self loops to index
-    self_loop_index = mx.repeat(mx.expand_dims(mx.arange(num_nodes), 0), 2, 0)
-    preserved_idx = get_unique_edge_indices(edge_index, self_loop_index)
-    no_self_loop_index = mx.array([[]])
-    if len(preserved_idx) != 0:
-        no_self_loop_index = edge_index[:, preserved_idx]
-
+    no_self_loop_index = _take_edges(edge_index, keep)
     if edge_features is not None:
-        no_self_loop_features = mx.array([[]])
-        if len(preserved_idx) != 0:
-            no_self_loop_features = edge_features[preserved_idx]
-        return no_self_loop_index, no_self_loop_features
+        if keep.size == 0:
+            return no_self_loop_index, mx.zeros(
+                (0, *edge_features.shape[1:]), dtype=edge_features.dtype
+            )
+        return no_self_loop_index, edge_features[mx.array(keep)]
     return no_self_loop_index
 
 
 @overload
-def to_undirected(edge_index: mx.array, edge_features=None) -> mx.array:
+def to_undirected(
+    edge_index: mx.array,
+    edge_features=None,
+    coalesce: bool = False,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
+) -> mx.array:
     ...
 
 
 @overload
 def to_undirected(
-    edge_index: mx.array, edge_features: mx.array
+    edge_index: mx.array,
+    edge_features: mx.array,
+    coalesce: bool = False,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
 ) -> tuple[mx.array, mx.array]:
     ...
 
 
 @validate_edge_index_and_features
 def to_undirected(
-    edge_index: mx.array, edge_features: Optional[mx.array] = None
+    edge_index: mx.array,
+    edge_features: Optional[mx.array] = None,
+    coalesce: bool = False,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
 ) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
     Converts a graph given as `edge_index` and, optionally, `edge_features`
-    to an undirected one.
+    to an undirected one, by adding the reverse of every edge.
 
     Args:
         edge_index: The edge index of the graph.
         edge_features: Edge features associated with each edge.
+        coalesce: If ``True``, duplicate edges are merged afterwards (see
+            :func:`coalesce`), so an edge that already had its reverse is kept
+            once per direction. This is the behavior of PyG's
+            ``to_undirected``. Default: ``False`` (plain concatenation).
+        num_nodes: Number of nodes, only used when ``coalesce=True``.
+        reduce: How the features of merged edges are combined when
+            ``coalesce=True``. Default: ``"add"``.
 
     Returns:
         The undirected `edge_index` (and `edge_features`)
@@ -370,8 +425,15 @@ def to_undirected(
     undirected_edge_index = mx.concatenate(
         [mx.stack([src, dst]), mx.stack([dst, src])], 1
     )
+    undirected_edge_features = None
     if edge_features is not None:
         undirected_edge_features = mx.concatenate([edge_features, edge_features], 0)
+
+    if coalesce:
+        return _coalesce(
+            undirected_edge_index, undirected_edge_features, num_nodes, reduce
+        )
+    if undirected_edge_features is not None:
         return undirected_edge_index, undirected_edge_features
     return undirected_edge_index
 
@@ -385,61 +447,118 @@ def remove_duplicate_directed_edges(edge_index: mx.array) -> mx.array:
         edge_index: The `edge_index` on which remove duplicate edges.
 
     Returns:
-        An `edge_index` without duplicates.
+        An `edge_index` without duplicates, sorted by source then destination.
     """
-    base_dtype = edge_index.dtype
-    if base_dtype == mx.int64:
-        raise ValueError("Does not support yet `edge_index` with int64 dtype.")
-
-    # TODO: this method shall be updated to full mlx once unique() and structured
-    # arrays are implemented
-    edge_index_ = np.array(edge_index, np.int32)
-
-    # Convert edge_index to a structured array to leverage np.unique for
-    # multi-column uniqueness
-    dtype = [("node1", edge_index_.dtype), ("node2", edge_index_.dtype)]
-    structured_edges = np.array(list(zip(edge_index_[0], edge_index_[1])), dtype=dtype)
-
-    unique_edges = np.unique(structured_edges)
-    unique_edge_index = np.array([unique_edges["node1"], unique_edges["node2"]])
-
-    return mx.array(unique_edge_index, mx.int32)
+    return coalesce(edge_index)
 
 
-@validate_edge_index
-def coalesce(edge_index: mx.array) -> mx.array:
+@overload
+def coalesce(
+    edge_index: mx.array,
+    edge_features=None,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
+) -> mx.array:
+    ...
+
+
+@overload
+def coalesce(
+    edge_index: mx.array,
+    edge_features: mx.array,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
+) -> tuple[mx.array, mx.array]:
+    ...
+
+
+@validate_edge_index_and_features
+def coalesce(
+    edge_index: mx.array,
+    edge_features: Optional[mx.array] = None,
+    num_nodes: Optional[int] = None,
+    reduce: str = "add",
+) -> Union[mx.array, tuple[mx.array, mx.array]]:
     """
-    Removes duplicate edges in ``edge_index`` and scatters the duplicate edges to the
-    edge attributes following a given reduction operation (e.g. sum of duplicate edges).
+    Sorts ``edge_index`` by source then destination and merges duplicate edges.
+
+    The features of merged edges are combined with ``reduce``.
 
     Args:
         edge_index: Edges to coalesce.
+        edge_features: Optional features of each edge, of shape
+            ``[num_edges, ...]``.
+        num_nodes: Number of nodes. Inferred from ``edge_index`` if not given.
+        reduce: How the features of duplicate edges are combined: ``"add"``,
+            ``"mean"``, ``"max"`` or ``"min"``. Default: ``"add"``.
 
     Returns:
-        The edges without duplicates, with source and destination nodes swapped.
+        The sorted edges without duplicates, and their features if
+        ``edge_features`` was given.
+
+    Example:
+
+    .. code-block:: python
+
+        edge_index = mx.array([[1, 0, 1, 0], [0, 1, 0, 2]])
+        edge_features = mx.array([1.0, 2.0, 3.0, 4.0])
+
+        coalesce(edge_index)
+        # mx.array([[0, 0, 1], [1, 2, 0]])
+
+        coalesce(edge_index, edge_features)
+        # (mx.array([[0, 0, 1], [1, 2, 0]]), mx.array([2.0, 4.0, 4.0]))
     """
-    edge_index = remove_duplicate_directed_edges(edge_index)
+    return _coalesce(edge_index, edge_features, num_nodes, reduce)
 
-    row, col = edge_index
-    edge_index = mx.stack([col, row])
 
-    return edge_index
+def _coalesce(
+    edge_index: mx.array,
+    edge_features: Optional[mx.array],
+    num_nodes: Optional[int],
+    reduce: str,
+) -> Union[mx.array, tuple[mx.array, mx.array]]:
+    if edge_index.shape[1] == 0:
+        return edge_index if edge_features is None else (edge_index, edge_features)
+
+    edges = _to_numpy(edge_index)
+    keys = _edge_keys(edges, _infer_num_nodes(edge_index, num_nodes))
+
+    if edge_features is None:
+        if keys.size < 2 or bool(np.all(keys[1:] > keys[:-1])):
+            return edge_index  # already sorted, no duplicates
+        _, first = np.unique(keys, return_index=True)
+        return _take_edges(edge_index, first)
+
+    unique_keys, first, inverse = np.unique(
+        keys, return_index=True, return_inverse=True
+    )
+    coalesced_index = _take_edges(edge_index, first)
+    if unique_keys.size == keys.size:  # no duplicates: this is only a sort
+        return coalesced_index, edge_features[mx.array(first)]
+    return coalesced_index, scatter(
+        edge_features, mx.array(inverse), unique_keys.size, aggr=reduce
+    )
 
 
 @validate_edge_index
 def get_isolated_nodes_mask(
     edge_index: mx.array, num_nodes: int, complement: bool = True
 ) -> mx.array:
-    """Returns a mask with isolated nodes set to ``False`` to filter them out if needed.
+    """Returns the indices of non-isolated nodes, or of isolated nodes.
+
+    A node is isolated if it has no edge to another node (self-loops are
+    ignored).
 
     Args:
         edge_index: Edge index from which to remove isolated nodes.
         num_nodes: Number of nodes of the graph.
-        complement: Wether to filter isolated or non isolated nodes.
+        complement: If ``True`` (default), returns the indices of the nodes
+            that are not isolated. If ``False``, returns the indices of the
+            isolated nodes.
 
     Returns:
-        A boolean mask of size ``num_nodes`` where ``True`` means the node isn't
-        isolated and ``False`` means it is.
+        A sorted array of node indices.
 
     Example:
 
@@ -451,12 +570,18 @@ def get_isolated_nodes_mask(
         mask = get_isolated_nodes_mask(edge_index, 3, complement=False)
         >>> mx.array([1])
     """
-    edge_index = remove_self_loops(edge_index)
-    indices = np.unique(edge_index.reshape(-1))
-    if complement:
-        return mx.array(indices)
+    connected = _connected_nodes(edge_index, num_nodes)
+    return mx.array(np.nonzero(connected if complement else ~connected)[0])
 
-    return mx.array(np.setdiff1d(np.arange(num_nodes), indices))
+
+def _connected_nodes(edge_index: mx.array, num_nodes: int) -> np.ndarray:
+    """Boolean host mask of the nodes with at least one non-self-loop edge."""
+    edges = _to_numpy(edge_index)
+    edges = edges[:, edges[0] != edges[1]]
+    size = max(int(num_nodes), int(edges.max(initial=-1)) + 1)
+    connected = np.zeros(size, dtype=bool)
+    connected[edges.reshape(-1)] = True
+    return connected
 
 
 @validate_edge_index
@@ -466,6 +591,7 @@ def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
 
     Args:
         edge_index: Edge index on which to check for isolated nodes.
+        num_nodes: Number of nodes of the graph.
 
     Returns:
         A boolean of whether the graph has isolated nodes.
@@ -475,12 +601,11 @@ def has_isolated_nodes(edge_index: mx.array, num_nodes: int) -> bool:
     .. code-block:: python
 
         edge_index = mx.array([[0, 2, 0], [2, 0, 0]])
-        has_self_loops(edge_index, 3)
+        has_isolated_nodes(edge_index, 3)
         >>> True
 
     """
-    edge_index = remove_self_loops(edge_index)
-    return np.unique(edge_index.reshape(-1)).size < num_nodes
+    return bool(_connected_nodes(edge_index, num_nodes).sum() < num_nodes)
 
 
 @validate_edge_index

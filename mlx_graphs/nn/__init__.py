@@ -11,3 +11,4 @@ from .message_passing import (  # noqa
 )
 from .pooling import *  # noqa
 from .norm import *  # noqa
+from .models import GAT, GCN, GIN, MLP, BasicGNN, GraphSAGE  # noqa

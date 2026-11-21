@@ -258,3 +258,55 @@ For instance, here is a :class:`~mlx_graphs.nn.SAGEConv` layer from the `Inducti
         [1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
         [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897]],
         dtype=float32)
+
+
+Models and training
+-------------------
+
+Common architectures are available as ready-to-use multi-layer models in
+:mod:`mlx_graphs.nn`: :class:`~mlx_graphs.nn.GCN`,
+:class:`~mlx_graphs.nn.GraphSAGE`, :class:`~mlx_graphs.nn.GIN`,
+:class:`~mlx_graphs.nn.GAT` and :class:`~mlx_graphs.nn.MLP`, with optional
+dropout, normalization and Jumping Knowledge. Here is a full-batch training
+loop for node classification on Cora:
+
+.. code-block:: python
+
+    import mlx.core as mx
+    import mlx.nn as nn
+    import mlx.optimizers as optim
+    import numpy as np
+
+    from mlx_graphs.datasets import PlanetoidDataset
+    from mlx_graphs.nn import GCN
+
+    graph = PlanetoidDataset("cora")[0]
+    train = mx.array(np.nonzero(np.array(graph.train_mask))[0])
+    labels = graph.node_labels
+
+    model = GCN(graph.num_node_features, 64, num_layers=2, out_features_dim=7, dropout=0.5)
+    # bias_correction=True: the same update rule as torch.optim.Adam
+    optimizer = optim.Adam(learning_rate=0.01, bias_correction=True)
+
+
+    def loss_fn(model):
+        logits = model(graph.edge_index, graph.node_features)
+        return nn.losses.cross_entropy(logits[train], labels[train], reduction="mean")
+
+
+    loss_and_grad = nn.value_and_grad(model, loss_fn)
+    for epoch in range(200):
+        loss, grads = loss_and_grad(model)
+        optimizer.update(model, grads)
+        mx.eval(model.parameters(), optimizer.state)
+
+.. tip::
+
+    Create MLX's ``Adam`` / ``AdamW`` with ``bias_correction=True``. MLX's
+    default (no bias correction) takes much larger first steps than
+    PyTorch's Adam, which can cost accuracy (about 4 points for GAT on Cora
+    in our runs).
+
+The message passing of the built-in layers runs as fused sparse kernels on
+the GPU; see :ref:`nn` for how to control it, and the :doc:`../benchmarks`
+for how it compares with PyTorch Geometric.

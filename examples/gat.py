@@ -98,7 +98,7 @@ def main(args):
     )
     mx.eval(gat.parameters())
 
-    optimizer = optim.Adam(learning_rate=args.lr)
+    optimizer = optim.Adam(learning_rate=args.lr, bias_correction=True)
     loss_and_grad_fn = nn.value_and_grad(gat, forward_fn)
 
     best_val_loss = float("inf")

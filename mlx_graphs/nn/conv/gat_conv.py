@@ -3,13 +3,26 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.linear import Linear
-from mlx_graphs.nn.message_passing import MessagePassing
-from mlx_graphs.utils import get_src_dst_features, scatter
+from mlx_graphs.nn.linear import Linear, glorot
+from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
+from mlx_graphs.utils import scatter
 
 
+@fused_message_passing
 class GATConv(MessagePassing):
-    """Graph Attention Network convolution layer.
+    r"""Graph Attention Network convolution layer from `"Graph Attention
+    Networks" <https://arxiv.org/abs/1710.10903>`_ paper.
+
+    .. math::
+        \mathbf{h}_i = \sum_{j \in \mathcal{N}(i)} \alpha_{ij} \mathbf{W}
+        \mathbf{x}_j, \qquad
+        \alpha_{ij} = \mathrm{softmax}_j \left( \mathrm{LeakyReLU} \left(
+        \mathbf{a}_{s}^{\top} \mathbf{W} \mathbf{x}_j +
+        \mathbf{a}_{d}^{\top} \mathbf{W} \mathbf{x}_i \right) \right)
+
+    The attention coefficients are computed per edge, but the weighted sum
+    over neighbors runs as one sparse x dense matmul per head, so the
+    ``[num_edges, heads, out_features_dim]`` message array is never built.
 
     Args:
         node_features_dim: Size of input node features
@@ -57,9 +70,8 @@ class GATConv(MessagePassing):
 
         self.lin_proj = Linear(node_features_dim, heads * out_features_dim, bias=False)
 
-        glorot_init = nn.init.glorot_uniform()
-        self.att_src = glorot_init(mx.zeros((1, heads, out_features_dim)))
-        self.att_dst = glorot_init(mx.zeros((1, heads, out_features_dim)))
+        self.att_src = glorot((1, heads, out_features_dim))
+        self.att_dst = glorot((1, heads, out_features_dim))
 
         if bias:
             bias_shape = (heads * out_features_dim) if concat else (out_features_dim)
@@ -72,7 +84,7 @@ class GATConv(MessagePassing):
             self.edge_lin_proj = Linear(
                 edge_features_dim, heads * out_features_dim, bias=False
             )
-            self.edge_att = glorot_init(mx.zeros((1, heads, out_features_dim)))
+            self.edge_att = glorot((1, heads, out_features_dim))
 
     def __call__(
         self,
@@ -91,24 +103,31 @@ class GATConv(MessagePassing):
             mx.array: computed node embeddings
         """
         H, C = self.heads, self.out_features_dim
+        src_idx, dst_idx = edge_index
 
-        src_feats = dst_feats = self.lin_proj(node_features).reshape(-1, H, C)
+        features = self.lin_proj(node_features).reshape(-1, H, C)
 
-        alpha_src = (src_feats * self.att_src).sum(-1)
-        alpha_dst = (dst_feats * self.att_dst).sum(-1)
+        # Attention logits are a sum of one term per source node and one per
+        # destination node, so they are computed per node and only gathered
+        # per edge as [num_edges, heads] scalars.
+        alpha_src = (features * self.att_src).sum(-1)
+        alpha_dst = (features * self.att_dst).sum(-1)
+        alpha = alpha_src[src_idx] + alpha_dst[dst_idx]
 
-        alpha_src, alpha_dst = get_src_dst_features(edge_index, (alpha_src, alpha_dst))
-        dst_idx = edge_index[1]
+        if edge_features is not None:
+            alpha = alpha + self._compute_alpha_edge_features(edge_features)
 
+        alpha = nn.leaky_relu(alpha, self.negative_slope)
+        alpha = scatter(alpha, dst_idx, features.shape[0], aggr="softmax")
+
+        if "dropout" in self:
+            alpha = self.dropout(alpha)
+
+        # Weighted sum of neighbor features, one weight per (edge, head).
         node_features = self.propagate(
-            node_features=(src_feats, dst_feats),
+            node_features=features,
             edge_index=edge_index,
-            message_kwargs={
-                "alpha_src": alpha_src,
-                "alpha_dst": alpha_dst,
-                "index": dst_idx,
-                "edge_features": edge_features,
-            },
+            message_kwargs={"edge_weights": alpha},
         )
 
         if self.concat:
@@ -122,44 +141,6 @@ class GATConv(MessagePassing):
             node_features = node_features + self.bias
 
         return node_features
-
-    def message(
-        self,
-        src_features: mx.array,
-        dst_features: mx.array,
-        alpha_src: mx.array,
-        alpha_dst: mx.array,
-        index: mx.array,
-        edge_features: Optional[mx.array] = None,
-    ) -> mx.array:
-        """
-        Computes a message for each edge in the graph following GAT's propagation rule.
-
-        Args:
-            src_features: Features of the source nodes.
-            dst_features: Features of the destination nodes (not used in this function
-                but included for compatibility).
-            alpha_src: Precomputed attention values for the source nodes.
-            alpha_dst: Precomputed attention values for the destination nodes.
-            index: 1D array with indices of either src or dst nodes to compute softmax.
-            edge_features: Features of the edges in the graph.
-
-        Returns:
-            mx.array: The computed messages for each edge in the graph.
-        """
-        alpha = alpha_src + alpha_dst
-
-        if edge_features is not None:
-            alpha_edge = self._compute_alpha_edge_features(edge_features)
-            alpha = alpha + alpha_edge
-
-        alpha = nn.leaky_relu(alpha, self.negative_slope)
-        alpha = scatter(alpha, index, self.num_nodes, aggr="softmax")
-
-        if "dropout" in self:
-            alpha = self.dropout(alpha)
-
-        return mx.expand_dims(alpha, -1) * src_features
 
     def _compute_alpha_edge_features(self, edge_features: mx.array):
         assert all(layer in self for layer in ["edge_lin_proj", "edge_att"]), """Using
