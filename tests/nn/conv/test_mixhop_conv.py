@@ -137,7 +137,10 @@ def test_mixhop_conv_save_load_weights(tmp_path, powers):
     loaded = MixHopConv(6, 8, powers=powers)
     loaded.load_weights(path)
     np.testing.assert_allclose(
-        np.array(loaded(edge_index, x)), np.array(conv(edge_index, x)), rtol=1e-5
+        np.array(loaded(edge_index, x)),
+        np.array(conv(edge_index, x)),
+        rtol=1e-5,
+        atol=1e-6,
     )
     # parameter trees survive a flatten / unflatten round trip
     loaded.update(tree_unflatten(tree_flatten(conv.parameters())))

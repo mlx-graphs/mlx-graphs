@@ -36,6 +36,7 @@ def test_inner_product_decoder(data):
 def test_parity_with_pyg(data):
     torch = pytest.importorskip("torch")
     pyg = pytest.importorskip("torch_geometric.nn")
+    pytest.importorskip("sklearn")  # PyG's GAE.test uses scikit-learn
     z, pos, neg = data
 
     pyg_gae = pyg.GAE(torch.nn.Identity())

@@ -15,7 +15,7 @@ NUM_NODES = {"paper": 6, "author": 5, "institution": 2, "field_of_study": 3}
 
 
 def _write_csv(path, array, header=None):
-    import pandas as pd
+    pd = pytest.importorskip("pandas")
 
     os.makedirs(osp.dirname(path), exist_ok=True)
     frame = pd.DataFrame(array, columns=header)
