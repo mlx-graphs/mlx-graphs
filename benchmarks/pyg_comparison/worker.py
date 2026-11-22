@@ -32,7 +32,7 @@ warnings.filterwarnings("ignore")
 DATA_DIR = os.environ.get("MLX_GRAPHS_BENCH_DATA") or os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "..", ".mlx_graphs_data"
 )
-LAYERS = ("gcn", "sage", "gin", "gat", "gatv2")
+LAYERS = ("gcn", "sage", "gin", "gat", "gatv2", "transformer")
 HEADS = 4
 
 
@@ -65,6 +65,8 @@ def mlx_conv(name: str, in_dim: int, out_dim: int, heads: int = HEADS):
         return gnn.GATv2Conv(
             in_dim, out_dim // heads, heads=heads, add_self_loops=False
         )
+    if name == "transformer":
+        return gnn.TransformerConv(in_dim, out_dim // heads, heads=heads)
     raise ValueError(name)
 
 
@@ -94,6 +96,8 @@ def pyg_conv(
         return pnn.GATv2Conv(
             in_dim, out_dim // heads, heads=heads, add_self_loops=False
         )
+    if name == "transformer":
+        return pnn.TransformerConv(in_dim, out_dim // heads, heads=heads)
     raise ValueError(name)
 
 

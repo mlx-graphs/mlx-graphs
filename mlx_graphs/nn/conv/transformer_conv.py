@@ -5,10 +5,16 @@ import mlx.core as mx
 import mlx.nn as nn
 from mlx.nn import Linear  # PyTorch's default initialization, as in PyG
 
-from mlx_graphs.nn.message_passing import MessagePassing
+from mlx_graphs.nn.message_passing import (
+    MessagePassing,
+    edge_scores,
+    fused_message_passing,
+)
 from mlx_graphs.utils import scatter
 
 
+# message() reduces to the default edge_weights * x_j without edge features
+@fused_message_passing(allow_message_override=True)
 class TransformerConv(MessagePassing):
     r"""Graph transformer convolution layer from `"Masked Label Prediction: Unified
     Message Passing Model for Semi-Supervised Classification"
@@ -183,15 +189,29 @@ class TransformerConv(MessagePassing):
 
         src_idx, dst_idx = edge_index[0], edge_index[1]
 
+        num_dst = query.shape[0]
+        scale = 1.0 / math.sqrt(C)
+
+        # Attention logits q_i . k_j / sqrt(C), one per (edge, head). With a
+        # recent mlx_cluster this never gathers [num_edges, heads, C] queries
+        # and keys (see edge_scores).
+        alpha = edge_scores(dst_idx, src_idx, query, key, scale)
+        if edge_features is not None:
+            # keys are k_j + e_ij; the edge term is per edge already
+            alpha = alpha + scale * (query[dst_idx] * edge_features).sum(axis=-1)
+        alpha = scatter(alpha, dst_idx, num_dst, aggr="softmax")
+
+        if "dropout" in self:
+            alpha = self.dropout(alpha)
+
+        # Weighted sum of the values, one weight per (edge, head). Without edge
+        # features this is a fused SpMM per head, as in GATConv; with them the
+        # values are v_j + e_ij and messages go through message().
         # shape: [num_dst_nodes, heads, out_features_dim]
         out = self.propagate(
             edge_index=edge_index,
             node_features=(value, query),
-            message_kwargs={
-                "key": key[src_idx],
-                "index": dst_idx,
-                "edge_features": edge_features,
-            },
+            message_kwargs={"edge_weights": alpha, "edge_features": edge_features},
         )
 
         if self.concat:
@@ -215,38 +235,27 @@ class TransformerConv(MessagePassing):
         self,
         src_features: mx.array,
         dst_features: mx.array,
-        key: mx.array,
-        index: mx.array,
+        edge_weights: mx.array,
         edge_features: Optional[mx.array] = None,
     ) -> mx.array:
         """Computes one attention-weighted message per edge.
 
+        Only used on the gather-scatter path (with edge features, or without
+        the fused kernels); without edge features it is the default
+        ``edge_weights * x_j`` that the fused SpMM computes.
+
         Args:
             src_features: Values of the source nodes,
                 shape `[num_edges, heads, out_features_dim]`
-            dst_features: Queries of the destination nodes,
-                shape `[num_edges, heads, out_features_dim]`
-            key: Keys of the source nodes,
-                shape `[num_edges, heads, out_features_dim]`
-            index: Destination node of each edge, used to normalize the
-                attention coefficients over the incoming edges of a node
+            dst_features: Queries of the destination nodes (unused)
+            edge_weights: Attention coefficients, shape `[num_edges, heads]`
             edge_features: Projected edge features,
                 shape `[num_edges, heads, out_features_dim]`
 
         Returns:
             mx.array: The messages, shape `[num_edges, heads, out_features_dim]`
         """
-        if edge_features is not None:
-            key = key + edge_features
-
-        alpha = (dst_features * key).sum(axis=-1) / math.sqrt(self.out_features_dim)
-        alpha = scatter(alpha, index, self.num_nodes, aggr="softmax")
-
-        if "dropout" in self:
-            alpha = self.dropout(alpha)
-
         value = src_features
         if edge_features is not None:
             value = value + edge_features
-
-        return mx.expand_dims(alpha, -1) * value
+        return mx.expand_dims(edge_weights, -1) * value

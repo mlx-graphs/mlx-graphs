@@ -41,6 +41,17 @@ if HAS_FUSED_KERNELS:
     except ImportError:
         pass
 
+# Per-edge attention scores without gathering [num_edges, heads, channels]
+# arrays need an mlx-cluster with edge_scores; older ones fall back.
+HAS_EDGE_SCORES = False
+if HAS_FUSED_KERNELS:
+    try:
+        from mlx_cluster import edge_scores as _edge_scores
+
+        HAS_EDGE_SCORES = True
+    except ImportError:
+        pass
+
 # Global switch, mainly for benchmarks and tests (same model, both paths).
 _fused_enabled: bool = True
 _fused_format_override: Optional[FusedFormat] = None
@@ -67,6 +78,31 @@ def set_fused_message_passing(
 def is_fused_message_passing_enabled() -> bool:
     """Whether fused message passing is enabled and the kernels are available."""
     return _fused_enabled and HAS_FUSED_KERNELS
+
+
+def edge_scores(
+    row: mx.array, col: mx.array, a: mx.array, b: mx.array, scale: float = 1.0
+) -> mx.array:
+    """Dot product per edge and per head: ``scale * (a[row] * b[col]).sum(-1)``.
+
+    With a recent ``mlx_cluster`` and fused message passing enabled, this runs
+    a kernel that never builds the gathered ``a[row]`` and ``b[col]`` arrays
+    (``[num_edges, heads, channels]`` each), forward or backward. Otherwise it
+    computes the expression above.
+
+    Args:
+        row: ``[num_edges]`` index into ``a`` (e.g. destination nodes).
+        col: ``[num_edges]`` index into ``b`` (e.g. source nodes).
+        a: ``[num_a, heads, channels]`` (or ``[num_a, channels]``).
+        b: ``[num_b, heads, channels]`` (or ``[num_b, channels]``).
+        scale: factor applied to every score.
+
+    Returns:
+        ``[num_edges, heads]`` (or ``[num_edges]``) scores.
+    """
+    if HAS_EDGE_SCORES and is_fused_message_passing_enabled():
+        return _edge_scores(row, col, a, b, scale)
+    return scale * (a[row] * b[col]).sum(axis=-1)
 
 
 @contextmanager

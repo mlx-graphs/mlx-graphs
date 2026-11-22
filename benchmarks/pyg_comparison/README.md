@@ -12,6 +12,9 @@ python benchmarks/pyg_comparison/history.py   # results/<chip>/history.md: all v
 
 `run.py --quick` runs the smallest configuration of every task as a smoke
 test. Datasets download into `.mlx_graphs_data/` on first use.
+`--tasks`, `--layers` and `--frameworks` run a subset, e.g.
+`run.py --tasks layer --layers transformer` for one layer; a run into an
+existing results directory only adds the configurations it does not have yet.
 
 ## Tracking performance across versions
 
@@ -43,7 +46,7 @@ other down.
 
 | task | setup | reported |
 |---|---|---|
-| `layer` | one convolution layer (GCN, GraphSAGE, GIN, GAT, GATv2) on uniform random graphs of 100k, 500k and 2M edges; 128 features in and out, 4 heads for the attention layers | median time of a forward pass and of a forward + backward pass; peak memory |
+| `layer` | one convolution layer (GCN, GraphSAGE, GIN, GAT, GATv2, TransformerConv) on uniform random graphs of 100k, 500k and 2M edges; 128 features in and out, 4 heads for the attention layers | median time of a forward pass and of a forward + backward pass; peak memory |
 | `node` | full-batch node classification, 2-layer GCN / GraphSAGE / GAT, 64 hidden units, dropout 0.5, Adam (lr 0.01), 200 epochs (100 on ogbn-arxiv), on Cora, CiteSeer, PubMed, Amazon Photo / Computers, Coauthor CS / Physics and ogbn-arxiv; 3 seeds | median time per training step; training loss at every epoch; train / validation / test accuracy every 10 epochs; test accuracy at the best validation accuracy |
 | `graph` | graph classification on TU datasets (MUTAG, PROTEINS, NCI1, DD), 3 layers + mean pooling, batches of 64 graphs, 100 epochs, random 80/10/10 train / validation / test split; 3 seeds | median time per epoch, *including loading and batching the graphs*; mean training loss of every epoch; accuracies every 5 epochs; test accuracy at the best validation accuracy |
 

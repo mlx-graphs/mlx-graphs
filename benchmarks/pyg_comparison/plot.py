@@ -38,6 +38,7 @@ LAYER_NAMES = {
     "gin": "GIN",
     "gat": "GAT",
     "gatv2": "GATv2",
+    "transformer": "Transformer",
 }
 DATASET_NAMES = {
     "cora": "Cora",
@@ -375,7 +376,7 @@ def fig_layers(records, system, theme, out):
         fig,
         theme,
         "One layer, forward + backward, random graphs",
-        "128 features in and out, 4 heads for GAT/GATv2. Lower is better.",
+        "128 features in and out, 4 heads for the attention layers. Lower is better.",
         system,
     )
     fig.subplots_adjust(left=0.08, right=0.985, top=top, bottom=0.55 / 4.2, wspace=0.08)
@@ -973,7 +974,7 @@ def tables(records, system):
         lines += [
             "## One layer, forward + backward",
             "",
-            "Random graphs, 128 input and output features, 4 heads for GAT/GATv2.",
+            "Random graphs, 128 input and output features, 4 heads for the attention layers.",
             "",
             *figure(
                 "layers_speedup",
@@ -1209,7 +1210,7 @@ def docs_rst(records, system, fig_dir):
         lines += [
             *heading("One layer", "~"),
             "One convolution layer, forward + backward, on random graphs "
-            "with 128 input and output features (4 heads for GAT and GATv2).",
+            "with 128 input and output features (4 heads for the attention layers).",
             "",
             *rst_figure(
                 fig_dir,

@@ -36,7 +36,7 @@ from versions import (  # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 LAYER_GRAPHS = [(10_000, 100_000), (50_000, 500_000), (200_000, 2_000_000)]
-LAYERS = ["gcn", "sage", "gin", "gat", "gatv2"]
+LAYERS = ["gcn", "sage", "gin", "gat", "gatv2", "transformer"]
 
 NODE_DATASETS = [
     "cora",
@@ -54,10 +54,10 @@ GRAPH_DATASETS = ["MUTAG", "PROTEINS", "NCI1", "DD"]
 GRAPH_MODELS = ["gcn", "gin", "sage"]
 
 
-def configurations(tasks, quick, seeds=(0,)):
+def configurations(tasks, quick, seeds=(0,), layers=LAYERS, frameworks=FRAMEWORKS):
     if "layer" in tasks:
         graphs = LAYER_GRAPHS[:1] if quick else LAYER_GRAPHS
-        for (n, e), layer, fw in itertools.product(graphs, LAYERS, FRAMEWORKS):
+        for (n, e), layer, fw in itertools.product(graphs, layers, frameworks):
             repeats = "5" if quick else ("10" if fw == "pyg-cpu" else "20")
             yield [
                 "layer",
@@ -70,7 +70,7 @@ def configurations(tasks, quick, seeds=(0,)):
     if "node" in tasks:
         datasets = NODE_DATASETS[:1] if quick else NODE_DATASETS
         for seed, ds, model, fw in itertools.product(
-            seeds, datasets, NODE_MODELS, FRAMEWORKS
+            seeds, datasets, NODE_MODELS, frameworks
         ):
             epochs = "20" if quick else ("100" if ds == "ogbn-arxiv" else "200")
             yield [
@@ -84,7 +84,7 @@ def configurations(tasks, quick, seeds=(0,)):
     if "graph" in tasks:
         datasets = GRAPH_DATASETS[:1] if quick else GRAPH_DATASETS
         for seed, ds, model, fw in itertools.product(
-            seeds, datasets, GRAPH_MODELS, FRAMEWORKS
+            seeds, datasets, GRAPH_MODELS, frameworks
         ):
             yield [
                 "graph",
@@ -138,6 +138,14 @@ def main():
         "--tasks", nargs="+", default=["layer", "node", "graph"],
         choices=["layer", "node", "graph"],
     )  # fmt: skip
+    parser.add_argument(
+        "--layers", nargs="+", default=LAYERS, choices=LAYERS,
+        help="layers of the layer task (default: all)",
+    )  # fmt: skip
+    parser.add_argument(
+        "--frameworks", nargs="+", default=list(FRAMEWORKS), choices=FRAMEWORKS,
+        help="frameworks to measure (default: all)",
+    )  # fmt: skip
     parser.add_argument("--memory-gb", type=float, default=16.0)
     parser.add_argument("--timeout-s", type=float, default=900.0)
     parser.add_argument("--quick", action="store_true", help="tiny smoke test")
@@ -186,7 +194,11 @@ def main():
     todo = [
         c
         for c in configurations(
-            args.tasks, args.quick, [0] if args.quick else args.seeds
+            args.tasks,
+            args.quick,
+            [0] if args.quick else args.seeds,
+            args.layers,
+            args.frameworks,
         )
         if config_key(c) not in done
     ]

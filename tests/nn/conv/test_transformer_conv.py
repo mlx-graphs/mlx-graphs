@@ -6,7 +6,9 @@ import torch
 from mlx.utils import tree_flatten
 from torch_geometric.nn import TransformerConv as PyGTransformerConv
 
+from mlx_graphs.nn import fused_message_passing_mode
 from mlx_graphs.nn.conv.transformer_conv import TransformerConv
+from mlx_graphs.nn.message_passing import HAS_EDGE_SCORES
 
 # MLX's GPU matmul is only accurate to ~1e-3 relative on some machines, while a
 # wrong formula gives O(1) errors with these O(1) inputs.
@@ -240,3 +242,67 @@ def test_transformer_conv_gradients(kwargs):
         return (conv(edge_index, node_features, edge_features) ** 2).sum()
 
     _assert_finite_grads(conv, loss_fn)
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        dict(),
+        dict(heads=3),
+        dict(heads=3, concat=False),
+        dict(heads=2, beta=True),
+        dict(heads=2, edge_features_dim=5),
+        dict(heads=2, aggr="mean"),
+    ],
+)
+@pytest.mark.parametrize("bipartite", [False, True])
+def test_transformer_conv_fused_matches_gather_scatter(kwargs, bipartite):
+    """The fused path (edge_scores + SpMM) gives the outputs and gradients of
+    gather-scatter, which is what the layer computes without mlx_cluster."""
+    rng = np.random.default_rng(6)
+    num_src, num_dst = (15, 9) if bipartite else (12, 12)
+    edge_index = mx.array(_random_graph(rng, num_src, num_dst))
+    src = mx.array(rng.normal(size=(num_src, 6)).astype(np.float32))
+    dst = mx.array(rng.normal(size=(num_dst, 6)).astype(np.float32))
+    node_features = (src, dst) if bipartite else src
+    edge_features = None
+    if "edge_features_dim" in kwargs:
+        edge_features = mx.array(
+            rng.normal(size=(edge_index.shape[1], 5)).astype(np.float32)
+        )
+
+    mx.random.seed(0)
+    conv = TransformerConv(6, 8, **kwargs)
+
+    def loss_fn():
+        return (conv(edge_index, node_features, edge_features) ** 2).sum()
+
+    out = conv(edge_index, node_features, edge_features)
+    loss, grads = nn.value_and_grad(conv, loss_fn)()
+    with fused_message_passing_mode(False):
+        ref_out = conv(edge_index, node_features, edge_features)
+        ref_loss, ref_grads = nn.value_and_grad(conv, loss_fn)()
+
+    np.testing.assert_allclose(np.array(out), np.array(ref_out), **TOL)
+    np.testing.assert_allclose(loss.item(), ref_loss.item(), rtol=1e-3)
+    ref_grads = dict(tree_flatten(ref_grads))
+    for name, grad in tree_flatten(grads):
+        np.testing.assert_allclose(
+            np.array(grad), np.array(ref_grads[name]), err_msg=name, **TOL
+        )
+
+
+@pytest.mark.skipif(not HAS_EDGE_SCORES, reason="needs mlx_cluster.edge_scores")
+def test_transformer_conv_uses_fused_kernels(monkeypatch):
+    """Without edge features, neither the scores nor the messages are
+    computed per edge in Python."""
+    rng = np.random.default_rng(7)
+    edge_index = mx.array(_random_graph(rng))
+    node_features = mx.array(rng.normal(size=(12, 6)).astype(np.float32))
+    conv = TransformerConv(6, 8, heads=2)
+
+    def fail(*args, **kwargs):
+        raise AssertionError("message() called on the fused path")
+
+    monkeypatch.setattr(conv, "message", fail)
+    assert conv(edge_index, node_features).shape == (12, 16)
