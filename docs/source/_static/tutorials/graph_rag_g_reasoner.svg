@@ -1,0 +1,129 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 424" width="960" height="424" role="img" aria-labelledby="t d">
+  <title id="t">G-reasoner: from a question and a knowledge graph to the documents that answer it</title>
+  <desc id="d">Left: a small knowledge graph for the question "In which county is the town in which Raymond Robertsen was born?". Documents are rectangles and entities are pills. The start nodes of the question are filled. The entity raymond robertsen is linked to the entity hammerfest by the fact "born in", and hammerfest is mentioned in the document Hammerfest, which is not a start node. Middle: the G-reasoner model. Text embeddings of the graph and of the question, the question added on the start nodes, six layers of relational message passing (one Metal kernel), a linear layer, a layer normalization and a ReLU with a residual connection, then an MLP that gives a score to every node. Right: the documents ranked by score, Raymond Robertsen 7.0, Hammerfest 6.4 and Raymond, Maine -1.1; an LLM reads the top 5 and answers Finnmark county.</desc>
+  <style>
+    text { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 12px; fill: #1a1a1a; }
+    .b { font-weight: 600; }
+    .i { font-style: italic; }
+    .s { font-size: 11px; fill: #555555; }
+    .rel { font-size: 11px; font-style: italic; fill: #555555; }
+    .ent { font-size: 11.5px; }
+    .box { stroke: #2b2b2b; stroke-width: 1.2; }
+    .line { fill: none; stroke: #2b2b2b; stroke-width: 1.2; }
+    .mention { fill: none; stroke: #8a8a8a; stroke-width: 1.1; stroke-dasharray: 3.5 3; }
+    .hop { fill: none; stroke: #1f4e9c; stroke-width: 2.4; }
+  </style>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6.5" markerHeight="6.5" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#2b2b2b"/></marker>
+    <marker id="am" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#8a8a8a"/></marker>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,1 L10,5 L0,9 z" fill="#1f4e9c"/></marker>
+  </defs>
+  <rect width="960" height="424" rx="8" fill="#ffffff"/>
+
+  <!-- question -->
+  <text x="24" y="40"><tspan class="b">Question</tspan><tspan class="i" dx="10">In which county is the town in which Raymond Robertsen was born?</tspan></text>
+
+  <!-- knowledge graph: mentions -->
+  <path class="mention" d="M92,206 L92,138" marker-end="url(#am)"/>
+  <path class="mention" d="M240,206 L240,138" marker-end="url(#am)"/>
+  <path class="mention" d="M372,206 L302,138" marker-end="url(#am)"/>
+  <!-- facts -->
+  <path class="line" d="M92,230 L92,290" marker-end="url(#a)"/>
+  <text class="rel" x="99" y="264">is a town in</text>
+  <path class="line" d="M240,230 L240,290" marker-end="url(#a)"/>
+  <text class="rel" x="247" y="264">is a</text>
+  <path class="line" d="M398,230 L398,290" marker-end="url(#a)"/>
+  <text class="rel" x="391" y="264" text-anchor="end">is a municipality in</text>
+  <!-- the hop that links the two documents -->
+  <path class="hop" d="M304,218 L352,218" marker-end="url(#ah)"/>
+  <text x="328" y="209" text-anchor="middle" style="font-size:11px;font-style:italic;font-weight:600;fill:#1f4e9c">born in</text>
+  <path class="hop" d="M398,206 L398,139" stroke-dasharray="6 3" marker-end="url(#ah)"/>
+
+  <!-- documents -->
+  <rect class="box" x="44" y="100" width="112" height="28" rx="3" fill="#fdeaa7"/>
+  <rect class="box" x="40" y="104" width="112" height="28" rx="3" fill="#fdeaa7"/>
+  <rect class="box" x="36" y="108" width="112" height="28" rx="3" fill="#fdeaa7"/>
+  <text x="92" y="126.200" text-anchor="middle">Raymond, Maine</text>
+  <text class="s" x="156" y="94" text-anchor="end">×4</text>
+  <rect class="box" x="171" y="108" width="138" height="28" rx="3" fill="#fdeaa7"/>
+  <text x="240" y="126.200" text-anchor="middle">Raymond Robertsen</text>
+  <rect class="box" x="350" y="108" width="96" height="28" rx="3" fill="#ffffff"/>
+  <text x="398" y="126.200" text-anchor="middle">Hammerfest</text>
+
+  <!-- entities -->
+  <rect class="box" x="57" y="206" width="70" height="24" rx="12" fill="#fdeaa7"/>
+  <text class="ent" x="92" y="222" text-anchor="middle">raymond</text>
+  <rect class="box" x="176" y="206" width="128" height="24" rx="12" fill="#fdeaa7"/>
+  <text class="ent" x="240" y="222" text-anchor="middle">raymond robertsen</text>
+  <rect class="box" x="354" y="206" width="88" height="24" rx="12" fill="#fdeaa7"/>
+  <text class="ent" x="398" y="222" text-anchor="middle">hammerfest</text>
+  <rect class="box" x="28" y="292" width="128" height="24" rx="12" fill="#fdeaa7"/>
+  <text class="ent" x="92" y="308" text-anchor="middle">cumberland county</text>
+  <rect class="box" x="172" y="292" width="136" height="24" rx="12" fill="#fdeaa7"/>
+  <text class="ent" x="240" y="308" text-anchor="middle">norwegian politician</text>
+  <rect class="box" x="362" y="292" width="72" height="24" rx="12" fill="#ffffff"/>
+  <text class="ent" x="398" y="308" text-anchor="middle">finnmark</text>
+
+  <!-- legend -->
+  <rect class="box" x="28" y="352" width="20" height="13" rx="2" fill="#ffffff"/>
+  <text class="s" x="54" y="363">document</text>
+  <rect class="box" x="116" y="352" width="24" height="13" rx="6.500" fill="#ffffff"/>
+  <text class="s" x="146" y="363">entity</text>
+  <rect class="box" x="190" y="352" width="20" height="13" rx="2" fill="#fdeaa7"/>
+  <text class="s" x="216" y="363">start node</text>
+  <path class="line" d="M284,358.500 L308,358.500" marker-end="url(#a)"/>
+  <text class="s" x="314" y="363">fact</text>
+  <path class="mention" d="M348,358.500 L372,358.500" marker-end="url(#am)"/>
+  <text class="s" x="378" y="363">mention</text>
+
+  <!-- model -->
+  <text x="560" y="408" text-anchor="middle">Graph</text>
+  <text x="652" y="408" text-anchor="middle">Question</text>
+  <path class="line" d="M560,394 L560,387" marker-end="url(#a)"/>
+  <path class="line" d="M652,394 L652,387" marker-end="url(#a)"/>
+  <rect class="box" x="524" y="362" width="164" height="24" rx="5" fill="#f9d5d3"/>
+  <text x="606" y="378.200" text-anchor="middle">Text embedding</text>
+  <path class="line" d="M606,362 L606,347" marker-end="url(#a)"/>
+  <circle class="box" cx="606" cy="338" r="8" fill="#ffffff"/>
+  <path class="line" d="M606,333.500 L606,342.500 M601.500,338 L610.500,338"/>
+  <text class="s" x="621" y="342">question on start nodes</text>
+
+  <rect x="500" y="160" width="200" height="158" rx="10" fill="#f3f3f3" stroke="#9a9a9a" stroke-width="1.2"/>
+  <text x="490" y="238" text-anchor="end" style="font-size:14px">6×</text>
+  <text class="s" x="490" y="254" text-anchor="end">mlx-graphs</text>
+  <path class="line" d="M606,330 L606,309" marker-end="url(#a)"/>
+  <path class="line" d="M606,324 L512,324 L512,176 L597,176" marker-end="url(#a)"/>
+  <rect class="box" x="524" y="270" width="164" height="38" rx="5" fill="#fbdcae"/>
+  <text x="606" y="286.500" text-anchor="middle">Relational message passing</text>
+  <text class="s" x="606" y="300.500" text-anchor="middle">one Metal kernel</text>
+  <path class="line" d="M606,270 L606,259" marker-end="url(#a)"/>
+  <rect class="box" x="524" y="234" width="164" height="24" rx="5" fill="#d3e3f6"/>
+  <text x="606" y="250.200" text-anchor="middle">Linear</text>
+  <path class="line" d="M606,234 L606,223" marker-end="url(#a)"/>
+  <rect class="box" x="524" y="198" width="164" height="24" rx="5" fill="#d9ead3"/>
+  <text x="606" y="214.200" text-anchor="middle">LayerNorm, ReLU</text>
+  <path class="line" d="M606,198 L606,185" marker-end="url(#a)"/>
+  <circle class="box" cx="606" cy="176" r="8" fill="#ffffff"/>
+  <path class="line" d="M606,171.500 L606,180.500 M601.500,176 L610.500,176"/>
+  <path class="line" d="M606,168 L606,145" marker-end="url(#a)"/>
+  <rect class="box" x="524" y="120" width="164" height="24" rx="5" fill="#d3e3f6"/>
+  <text x="606" y="136.200" text-anchor="middle">MLP</text>
+  <path class="line" d="M606,120 L606,101" marker-end="url(#a)"/>
+  <text x="606" y="92" text-anchor="middle">Node scores</text>
+
+  <!-- ranked documents, LLM, answer -->
+  <path class="line" d="M650,88 L752,88" marker-end="url(#a)"/>
+  <text class="b" x="764" y="74">Raymond Robertsen</text>
+  <text class="b" x="936" y="74" text-anchor="end">7.0</text>
+  <text class="b" x="764" y="92">Hammerfest</text>
+  <text class="b" x="936" y="92" text-anchor="end">6.4</text>
+  <text x="764" y="110" style="fill:#777777">Raymond, Maine</text>
+  <text x="936" y="110" text-anchor="end" style="fill:#777777">−1.1</text>
+  <path class="line" d="M850,124 L850,225" marker-end="url(#a)"/>
+  <text class="s" x="858" y="178">top 5</text>
+  <rect class="box" x="790" y="226" width="120" height="38" rx="5" fill="#e4d7f0"/>
+  <text x="850" y="242.500" text-anchor="middle">LLM</text>
+  <text class="s" x="850" y="256.500" text-anchor="middle">Gemma 4 12B</text>
+  <path class="line" d="M850,264 L850,313" marker-end="url(#a)"/>
+  <text class="b" x="850" y="333" text-anchor="middle" style="font-size:13px">Finnmark county</text>
+</svg>
