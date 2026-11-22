@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 
 
@@ -7,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Neural Networks &#8212; mlx-graphs 0.1.0 documentation</title>
+    <title>Neural Networks &#8212; mlx-graphs 0.2.1 documentation</title>
   
   
   
@@ -26,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=a95f357e85573c9b56d5" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=384b581d" />
@@ -35,18 +36,18 @@
     <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=6c5b376d" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=a95f357e85573c9b56d5"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../_static/documentation_options.js?v=a1637f0b"></script>
-    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/documentation_options.js?v=c480a563"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
-    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/nn/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
@@ -54,7 +55,6 @@
     <link rel="next" title="mlx_graphs.nn.Linear" href="_autosummary/mlx_graphs.nn.Linear.html" />
     <link rel="prev" title="mlx_graphs.transforms.RemoveTrainingClasses" href="../transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
   
@@ -103,6 +103,50 @@
 
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
     </header>
   
 
@@ -111,7 +155,7 @@
       
       
       
-      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <dialog id="pst-primary-sidebar-modal"></dialog>
       <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
@@ -141,14 +185,14 @@
       
     
     
-    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.1.0 documentation - Home"/>
-    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.1.0 documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.2.1 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.2.1 documentation - Home"/>
   
   
 </a></div>
         <div class="sidebar-primary-item">
 
-<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -302,7 +346,7 @@
 <li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html">mlx_graphs.transforms.RemoveTrainingClasses</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Neural Networks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Neural Networks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
@@ -737,20 +781,20 @@
 
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
-    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div>
 
 
-<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass fa-lg"></i>
 </button>
 <label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -810,7 +854,7 @@
                   
   <section id="neural-networks">
 <span id="nn"></span><h1>Neural Networks<a class="headerlink" href="#neural-networks" title="Link to this heading">#</a></h1>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.Linear.html#mlx_graphs.nn.Linear" title="mlx_graphs.nn.Linear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Linear</span></code></a>(input_dims, output_dims[, bias])</p></td>
 <td><p>Linear layer with Xavier Glorot weight initialization and a zero bias.</p></td>
@@ -829,7 +873,7 @@
 </div>
 <section id="convolution-layers">
 <h2>Convolution layers<a class="headerlink" href="#convolution-layers" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GCNConv.html#mlx_graphs.nn.GCNConv" title="mlx_graphs.nn.GCNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GCNConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
 <td><p>Graph convolution layer from <a class="reference external" href="https://arxiv.org/abs/1609.02907">&quot;Semi-Supervised Classification with Graph Convolutional Networks&quot;</a> paper.</p></td>
@@ -871,7 +915,7 @@
 <td><p>Relational graph convolution layer from <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.FastRGCNConv.html#mlx_graphs.nn.FastRGCNConv" title="mlx_graphs.nn.FastRGCNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FastRGCNConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
-<td><p>Relational graph convolution layer with the same semantics as <a class="reference internal" href="_autosummary/mlx_graphs.nn.RGCNConv.html#mlx_graphs.nn.RGCNConv" title="mlx_graphs.nn.RGCNConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">RGCNConv</span></code></a>, from the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RGATConv.html#mlx_graphs.nn.RGATConv" title="mlx_graphs.nn.RGATConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RGATConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
 <td><p>The relational graph attentional operator from the <a class="reference external" href="https://arxiv.org/abs/1904.05811">&quot;Relational Graph Attention Networks&quot;</a> paper.</p></td>
@@ -949,7 +993,7 @@
 <td><p>Graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1905.07953">&quot;Cluster-GCN: An Efficient Algorithm for Training Deep and Large Graph Convolutional Networks&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DynamicEdgeConv.html#mlx_graphs.nn.DynamicEdgeConv" title="mlx_graphs.nn.DynamicEdgeConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DynamicEdgeConv</span></code></a>(mlp, k, **kwargs)</p></td>
-<td><p>Dynamic edge convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1801.07829">&quot;Dynamic Graph CNN for Learning on Point Clouds&quot;</a> paper (see <a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeConv.html#mlx_graphs.nn.EdgeConv" title="mlx_graphs.nn.EdgeConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeConv</span></code></a>), where the graph is dynamically constructed using the nearest neighbors in the feature space.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNAConv.html#mlx_graphs.nn.PNAConv" title="mlx_graphs.nn.PNAConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PNAConv</span></code></a>(node_features_dim, out_features_dim, ...)</p></td>
 <td><p>Principal Neighbourhood Aggregation graph convolution from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> paper.</p></td>
@@ -965,19 +1009,19 @@
 <h2>Models<a class="headerlink" href="#models" title="Link to this heading">#</a></h2>
 <p>Ready-to-use multi-layer models, with optional normalization, dropout and
 Jumping Knowledge.</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GCN.html#mlx_graphs.nn.GCN" title="mlx_graphs.nn.GCN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GCN</span></code></a>(node_features_dim, hidden_features_dim, ...)</p></td>
-<td><p>Graph Convolutional Network from <a class="reference external" href="https://arxiv.org/abs/1609.02907">&quot;Semi-Supervised Classification with Graph Convolutional Networks&quot;</a>, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.GCNConv.html#mlx_graphs.nn.GCNConv" title="mlx_graphs.nn.GCNConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GCNConv</span></code></a> layers.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphSAGE.html#mlx_graphs.nn.GraphSAGE" title="mlx_graphs.nn.GraphSAGE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphSAGE</span></code></a>(node_features_dim, ...[, ...])</p></td>
-<td><p>GraphSAGE from <a class="reference external" href="https://arxiv.org/abs/1706.02216">&quot;Inductive Representation Learning on Large Graphs&quot;</a>, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.SAGEConv.html#mlx_graphs.nn.SAGEConv" title="mlx_graphs.nn.SAGEConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">SAGEConv</span></code></a> layers.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GIN.html#mlx_graphs.nn.GIN" title="mlx_graphs.nn.GIN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GIN</span></code></a>(node_features_dim, hidden_features_dim, ...)</p></td>
-<td><p>Graph Isomorphism Network from <a class="reference external" href="https://arxiv.org/abs/1810.00826">&quot;How Powerful are Graph Neural Networks?&quot;</a>, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.GINConv.html#mlx_graphs.nn.GINConv" title="mlx_graphs.nn.GINConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GINConv</span></code></a> layers, each with a two-layer MLP.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GAT.html#mlx_graphs.nn.GAT" title="mlx_graphs.nn.GAT"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAT</span></code></a>(node_features_dim, hidden_features_dim, ...)</p></td>
-<td><p>Graph Attention Network from <a class="reference external" href="https://arxiv.org/abs/1710.10903">&quot;Graph Attention Networks&quot;</a> (or, with <code class="docutils literal notranslate"><span class="pre">v2=True</span></code>, <a class="reference external" href="https://arxiv.org/abs/2105.14491">&quot;How Attentive are Graph Attention Networks?&quot;</a>), a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.GATConv.html#mlx_graphs.nn.GATConv" title="mlx_graphs.nn.GATConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GATConv</span></code></a> / <a class="reference internal" href="_autosummary/mlx_graphs.nn.GATv2Conv.html#mlx_graphs.nn.GATv2Conv" title="mlx_graphs.nn.GATv2Conv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GATv2Conv</span></code></a> layers.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MLP.html#mlx_graphs.nn.MLP" title="mlx_graphs.nn.MLP"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MLP</span></code></a>(dims[, dropout, act, norm, plain_last, bias])</p></td>
 <td><p>Multi-layer perceptron.</p></td>
@@ -986,16 +1030,16 @@ Jumping Knowledge.</p>
 <td><p>Base class of the ready-to-use GNN models.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNA.html#mlx_graphs.nn.PNA" title="mlx_graphs.nn.PNA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PNA</span></code></a>(node_features_dim, hidden_features_dim, ...)</p></td>
-<td><p>Principal Neighbourhood Aggregation network from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a>, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.PNAConv.html#mlx_graphs.nn.PNAConv" title="mlx_graphs.nn.PNAConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">PNAConv</span></code></a> layers.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>Other models and building blocks:</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeCNN.html#mlx_graphs.nn.EdgeCNN" title="mlx_graphs.nn.EdgeCNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EdgeCNN</span></code></a>(node_features_dim, ...[, ...])</p></td>
-<td><p>The Dynamic Graph CNN model from the <a class="reference external" href="https://arxiv.org/abs/1801.07829">&quot;Dynamic Graph CNN for Learning on Point Clouds&quot;</a> paper, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeConv.html#mlx_graphs.nn.EdgeConv" title="mlx_graphs.nn.EdgeConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeConv</span></code></a> layers, each with a two-layer MLP mapping <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">in_dim</span></code> features to <code class="docutils literal notranslate"><span class="pre">out_dim</span></code>.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LINKX.html#mlx_graphs.nn.LINKX" title="mlx_graphs.nn.LINKX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LINKX</span></code></a>(num_nodes, node_features_dim, ...[, ...])</p></td>
 <td><p>The LINKX model from the <a class="reference external" href="https://arxiv.org/abs/2110.14446">&quot;Large Scale Learning on Non-Homophilous Graphs: New Benchmarks and Strong Simple Methods&quot;</a> paper.</p></td>
@@ -1004,7 +1048,7 @@ Jumping Knowledge.</p>
 <td><p>The skip connection operations from the <a class="reference external" href="https://arxiv.org/abs/1904.03751">&quot;DeepGCNs: Can GCNs Go as Deep as CNNs?&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;All You Need to Train Deeper GCNs&quot;</a> papers.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MaskLabel.html#mlx_graphs.nn.MaskLabel" title="mlx_graphs.nn.MaskLabel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MaskLabel</span></code></a>(num_classes, out_features_dim[, ...])</p></td>
-<td><p>The label embedding and masking layer from the <a class="reference external" href="https://arxiv.org/abs/2009.03509">&quot;Masked Label Prediction: Unified Message Passing Model for Semi-Supervised Classification&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RECT_L.html#mlx_graphs.nn.RECT_L" title="mlx_graphs.nn.RECT_L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RECT_L</span></code></a>(node_features_dim, hidden_features_dim)</p></td>
 <td><p>The RECT model, i.e. its supervised RECT-L part, from the <a class="reference external" href="https://arxiv.org/abs/2007.03545">&quot;Network Embedding with Completely-imbalanced Labels&quot;</a> paper.</p></td>
@@ -1013,7 +1057,7 @@ Jumping Knowledge.</p>
 <td><p>The Deep Graph Infomax model from the <a class="reference external" href="https://arxiv.org/abs/1809.10341">&quot;Deep Graph Infomax&quot;</a> paper, based on a user-defined encoder <span class="math notranslate nohighlight">\(\mathcal{E}\)</span>, summary (readout) function <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> and corruption function <span class="math notranslate nohighlight">\(\mathcal{C}\)</span>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LightGCN.html#mlx_graphs.nn.LightGCN" title="mlx_graphs.nn.LightGCN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightGCN</span></code></a>(num_nodes, embedding_dim, num_layers)</p></td>
-<td><p>The LightGCN model from the <a class="reference external" href="https://arxiv.org/abs/2002.02126">&quot;LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SGFormer.html#mlx_graphs.nn.SGFormer" title="mlx_graphs.nn.SGFormer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SGFormer</span></code></a>(node_features_dim, ...[, ...])</p></td>
 <td><p>The SGFormer model from the <a class="reference external" href="https://arxiv.org/abs/2306.10759">&quot;SGFormer: Simplifying and Empowering Transformers for Large-Graph Representations&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">SGFormer</span></code>.</p></td>
@@ -1027,22 +1071,22 @@ Jumping Knowledge.</p>
 </section>
 <section id="graph-auto-encoders">
 <h2>Graph auto-encoders<a class="headerlink" href="#graph-auto-encoders" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.InnerProductDecoder.html#mlx_graphs.nn.InnerProductDecoder" title="mlx_graphs.nn.InnerProductDecoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InnerProductDecoder</span></code></a>(*args, **kwargs)</p></td>
 <td><p>The inner product decoder from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GAE.html#mlx_graphs.nn.GAE" title="mlx_graphs.nn.GAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAE</span></code></a>(encoder[, decoder])</p></td>
-<td><p>The Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper, based on user-defined encoder and decoder models.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.VGAE.html#mlx_graphs.nn.VGAE" title="mlx_graphs.nn.VGAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VGAE</span></code></a>(encoder[, decoder])</p></td>
-<td><p>The Variational Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGA.html#mlx_graphs.nn.ARGA" title="mlx_graphs.nn.ARGA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ARGA</span></code></a>(encoder, discriminator[, decoder])</p></td>
 <td><p>The Adversarially Regularized Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1802.04407">&quot;Adversarially Regularized Graph Autoencoder for Graph Embedding&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGVA.html#mlx_graphs.nn.ARGVA" title="mlx_graphs.nn.ARGVA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ARGVA</span></code></a>(encoder, discriminator[, decoder])</p></td>
-<td><p>The Adversarially Regularized Variational Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1802.04407">&quot;Adversarially Regularized Graph Autoencoder for Graph Embedding&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1050,13 +1094,13 @@ Jumping Knowledge.</p>
 </section>
 <section id="label-propagation">
 <h2>Label propagation<a class="headerlink" href="#label-propagation" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LabelPropagation.html#mlx_graphs.nn.LabelPropagation" title="mlx_graphs.nn.LabelPropagation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LabelPropagation</span></code></a>(num_layers, alpha)</p></td>
 <td><p>The label propagation operator from the <a class="reference external" href="http://mlg.eng.cam.ac.uk/zoubin/papers/CMU-CALD-02-107.pdf">&quot;Learning from Labeled and Unlabeled Data with Label Propagation&quot;</a> paper, in the form used by <a class="reference external" href="https://arxiv.org/abs/2010.13993">&quot;Combining Label Propagation And Simple Models Out-performs Graph Neural Networks&quot;</a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.CorrectAndSmooth.html#mlx_graphs.nn.CorrectAndSmooth" title="mlx_graphs.nn.CorrectAndSmooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CorrectAndSmooth</span></code></a>(num_correction_layers, ...)</p></td>
-<td><p>The correct and smooth (C&amp;S) post-processing model from the <a class="reference external" href="https://arxiv.org/abs/2010.13993">&quot;Combining Label Propagation And Simple Models Out-performs Graph Neural Networks&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1064,7 +1108,7 @@ Jumping Knowledge.</p>
 </section>
 <section id="knowledge-graph-embeddings">
 <h2>Knowledge graph embeddings<a class="headerlink" href="#knowledge-graph-embeddings" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel" title="mlx_graphs.nn.KGEModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KGEModel</span></code></a>(num_nodes, num_relations, ...)</p></td>
 <td><p>Base class of the knowledge graph embedding models.</p></td>
@@ -1090,7 +1134,7 @@ Jumping Knowledge.</p>
 </section>
 <section id="normalization">
 <h2>Normalization<a class="headerlink" href="#normalization" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.BatchNormalization.html#mlx_graphs.nn.BatchNormalization" title="mlx_graphs.nn.BatchNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BatchNormalization</span></code></a>(num_features[, eps, ...])</p></td>
 <td><p>Applies batch normalization over a batch of features as described in the <a class="reference external" href="https://arxiv.org/abs/1502.03167">Batch Normalization: Accelerating Deep Network Training by Reducing Internal Covariate Shift&quot;</a> paper.</p></td>
@@ -1176,13 +1220,13 @@ of the same class:</p>
 </section>
 <section id="pooling-and-readout">
 <h2>Pooling and readout<a class="headerlink" href="#pooling-and-readout" title="Link to this heading">#</a></h2>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.JumpingKnowledge.html#mlx_graphs.nn.JumpingKnowledge" title="mlx_graphs.nn.JumpingKnowledge"><code class="xref py py-obj docutils literal notranslate"><span class="pre">JumpingKnowledge</span></code></a>(mode[, node_features_dim, ...])</p></td>
 <td><p>Jumping Knowledge layer aggregation from <a class="reference external" href="https://arxiv.org/abs/1806.03536">&quot;Representation Learning on Graphs with Jumping Knowledge Networks&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.AttentionalAggregation.html#mlx_graphs.nn.AttentionalAggregation" title="mlx_graphs.nn.AttentionalAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AttentionalAggregation</span></code></a>(gate_nn[, nn])</p></td>
-<td><p>Soft attention pooling (global attention) from <a class="reference external" href="https://arxiv.org/abs/1511.05493">&quot;Gated Graph Sequence Neural Networks&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.Set2Set.html#mlx_graphs.nn.Set2Set" title="mlx_graphs.nn.Set2Set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Set2Set</span></code></a>(node_features_dim, processing_steps)</p></td>
 <td><p>Set2Set global pooling from <a class="reference external" href="https://arxiv.org/abs/1511.06391">&quot;Order Matters: Sequence to Sequence for Sets&quot;</a> paper.</p></td>
@@ -1191,12 +1235,12 @@ of the same class:</p>
 <td><p><span class="math notranslate nohighlight">\(\mathrm{top}_k\)</span> pooling operator from the <a class="reference external" href="https://arxiv.org/abs/1905.05178">&quot;Graph U-Nets&quot;</a>, <a class="reference external" href="https://arxiv.org/abs/1811.01287">&quot;Towards Sparse Hierarchical Graph Classifiers&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/1905.02850">&quot;Understanding Attention and Generalization in Graph Neural Networks&quot;</a> papers.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SAGPooling.html#mlx_graphs.nn.SAGPooling" title="mlx_graphs.nn.SAGPooling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAGPooling</span></code></a>(node_features_dim, ratio, GNN, ...)</p></td>
-<td><p>The self-attention pooling operator from the <a class="reference external" href="https://arxiv.org/abs/1904.08082">&quot;Self-Attention Graph Pooling&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/1905.02850">&quot;Understanding Attention and Generalization in Graph Neural Networks&quot;</a> papers.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_add_pool.html#mlx_graphs.nn.global_add_pool" title="mlx_graphs.nn.global_add_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_add_pool</span></code></a>(node_features[, ...])</p></td>
 <td><p>Sums all node features to obtain a global graph-level representation.</p></td>
@@ -1239,7 +1283,7 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 <span class="pre">dim_size)</span></code>) and can be used as readouts, or passed as <code class="docutils literal notranslate"><span class="pre">aggr</span></code> to any
 <a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.MessagePassing"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessagePassing</span></code></a> layer, alone or as a list (e.g.
 <code class="docutils literal notranslate"><span class="pre">SAGEConv(16,</span> <span class="pre">32,</span> <span class="pre">aggr=[&quot;mean&quot;,</span> <span class="pre">&quot;max&quot;])</span></code>).</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.Aggregation.html#mlx_graphs.nn.aggr.Aggregation" title="mlx_graphs.nn.aggr.Aggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Aggregation</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Base class of the aggregation operators, mirroring <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.aggr.Aggregation</span></code>.</p></td>
@@ -1266,10 +1310,10 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 <td><p>Feature-wise (population) standard deviation of the elements of each set.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html#mlx_graphs.nn.aggr.SoftmaxAggregation" title="mlx_graphs.nn.aggr.SoftmaxAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SoftmaxAggregation</span></code></a>([t, learn, semi_grad, ...])</p></td>
-<td><p>Softmax aggregation with an (optionally learnable) inverse temperature, from <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCN: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html#mlx_graphs.nn.aggr.PowerMeanAggregation" title="mlx_graphs.nn.aggr.PowerMeanAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PowerMeanAggregation</span></code></a>([p, learn, channels, ...])</p></td>
-<td><p>Power mean aggregation with an (optionally learnable) power, from <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCN: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html#mlx_graphs.nn.aggr.MedianAggregation" title="mlx_graphs.nn.aggr.MedianAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MedianAggregation</span></code></a>([fill_value])</p></td>
 <td><p>Feature-wise median of the elements of each set.</p></td>
@@ -1278,22 +1322,22 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 <td><p>Feature-wise <span class="math notranslate nohighlight">\(q\)</span>-th quantile of the elements of each set.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html#mlx_graphs.nn.aggr.MultiAggregation" title="mlx_graphs.nn.aggr.MultiAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiAggregation</span></code></a>(aggrs[, aggrs_kwargs, ...])</p></td>
-<td><p>Applies several aggregations and combines their results, as in <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/2104.01481">&quot;Adaptive Filters and Aggregator Fusion for Efficient Graph Convolutions&quot;</a> papers.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html#mlx_graphs.nn.aggr.DegreeScalerAggregation" title="mlx_graphs.nn.aggr.DegreeScalerAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DegreeScalerAggregation</span></code></a>(aggr, scaler, deg[, ...])</p></td>
-<td><p>Combines one or more aggregations and rescales their output with one or more degree-based scalers, from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> paper.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SortAggregation.html#mlx_graphs.nn.aggr.SortAggregation" title="mlx_graphs.nn.aggr.SortAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAggregation</span></code></a>(k)</p></td>
-<td><p>Sort pooling from <a class="reference external" href="https://www.cse.wustl.edu/~muhan/papers/AAAI_2018_DGCNN.pdf">&quot;An End-to-End Deep Learning Architecture for Graph Classification&quot;</a> paper (DGCNN).</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html#mlx_graphs.nn.aggr.DeepSetsAggregation" title="mlx_graphs.nn.aggr.DeepSetsAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeepSetsAggregation</span></code></a>([local_nn, global_nn])</p></td>
 <td><p>Deep Sets aggregation: the elements are transformed by a network <span class="math notranslate nohighlight">\(\phi_{\mathbf{\Theta}}\)</span>, summed, and the sum is transformed by a network <span class="math notranslate nohighlight">\(\rho_{\mathbf{\Theta}}\)</span>, as in <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html#mlx_graphs.nn.aggr.LSTMAggregation" title="mlx_graphs.nn.aggr.LSTMAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LSTMAggregation</span></code></a>(node_features_dim, ...[, bias])</p></td>
-<td><p>Aggregation with an LSTM, from the <a class="reference external" href="https://arxiv.org/abs/1706.02216">&quot;Inductive Representation Learning on Large Graphs&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">LSTMAggregation</span></code>.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html#mlx_graphs.nn.aggr.GRUAggregation" title="mlx_graphs.nn.aggr.GRUAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRUAggregation</span></code></a>(node_features_dim, ...[, bias])</p></td>
-<td><p>Aggregation with a GRU, from the <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">GRUAggregation</span></code>.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html#mlx_graphs.nn.aggr.SetTransformerAggregation" title="mlx_graphs.nn.aggr.SetTransformerAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetTransformerAggregation</span></code></a>(channels[, ...])</p></td>
 <td><p>Aggregation with a Set Transformer, from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">SetTransformerAggregation</span></code>.</p></td>
@@ -1302,7 +1346,7 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 <td><p>The Graph Multiset Transformer pooling operator from the <a class="reference external" href="https://arxiv.org/abs/2102.11533">&quot;Accurate Learning of Graph Representations with Graph Multiset Pooling&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">GraphMultisetTransformer</span></code>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html#mlx_graphs.nn.aggr.MLPAggregation" title="mlx_graphs.nn.aggr.MLPAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MLPAggregation</span></code></a>(node_features_dim, ...[, ...])</p></td>
-<td><p>Aggregation with a multi-layer perceptron on the concatenated elements of each set, from the <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">MLPAggregation</span></code>.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html#mlx_graphs.nn.aggr.LCMAggregation" title="mlx_graphs.nn.aggr.LCMAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LCMAggregation</span></code></a>(node_features_dim, ...[, project])</p></td>
 <td><p>The Learnable Commutative Monoid aggregation from the <a class="reference external" href="https://arxiv.org/abs/2212.08541">&quot;Learnable Commutative Monoids for Graph Neural Networks&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">LCMAggregation</span></code>.</p></td>
@@ -1317,25 +1361,25 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 </table>
 </div>
 <p>Set transformer building blocks:</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html#mlx_graphs.nn.aggr.MultiheadAttentionBlock" title="mlx_graphs.nn.aggr.MultiheadAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiheadAttentionBlock</span></code></a>(channels[, heads, ...])</p></td>
-<td><p>The Multihead Attention Block (MAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks&quot;</a> paper, as in PyG.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html#mlx_graphs.nn.aggr.SetAttentionBlock" title="mlx_graphs.nn.aggr.SetAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttentionBlock</span></code></a>(channels[, heads, ...])</p></td>
 <td><p>The Set Attention Block (SAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{SAB}(\mathbf{X}) = \mathrm{MAB}(\mathbf{x}, \mathbf{y})\)</span>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html#mlx_graphs.nn.aggr.InducedSetAttentionBlock" title="mlx_graphs.nn.aggr.InducedSetAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InducedSetAttentionBlock</span></code></a>(channels, ...[, ...])</p></td>
-<td><p>The Induced Set Attention Block (ISAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{ISAB}(\mathbf{X}) = \mathrm{MAB}(\mathbf{x}, \mathbf{h})\)</span> with <span class="math notranslate nohighlight">\(\mathbf{h} = \mathrm{MAB}(\mathbf{I}, \mathbf{x})\)</span> for learnable induced points <span class="math notranslate nohighlight">\(\mathbf{I}\)</span>.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html#mlx_graphs.nn.aggr.PoolingByMultiheadAttention" title="mlx_graphs.nn.aggr.PoolingByMultiheadAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoolingByMultiheadAttention</span></code></a>(channels[, ...])</p></td>
-<td><p>The Pooling by Multihead Attention (PMA) layer from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{PMA}(\mathbf{X}) = \mathrm{MAB}(\mathbf{S}, \mathrm{ReLU}(\mathbf{X}\mathbf{W}))\)</span> for learnable seed points <span class="math notranslate nohighlight">\(\mathbf{S}\)</span>.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
 </div>
 <p>Dense layout of grouped elements (used by the set and graph transformers):</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DenseLayout.html#mlx_graphs.nn.aggr.DenseLayout" title="mlx_graphs.nn.aggr.DenseLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenseLayout</span></code></a>(index, num_elements[, dim_size, ...])</p></td>
 <td><p>Host-side layout of a set of elements grouped by <code class="docutils literal notranslate"><span class="pre">index</span></code> into a dense <code class="docutils literal notranslate"><span class="pre">[num_sets,</span> <span class="pre">max_set_size,</span> <span class="pre">...]</span></code> array, as PyG's <code class="docutils literal notranslate"><span class="pre">to_dense_batch</span></code>.</p></td>
@@ -1343,7 +1387,7 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 </tbody>
 </table>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html#mlx_graphs.nn.aggr.aggregation_resolver" title="mlx_graphs.nn.aggr.aggregation_resolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aggregation_resolver</span></code></a>(aggr, **kwargs)</p></td>
 <td><p>Returns the <a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.Aggregation.html#mlx_graphs.nn.aggr.Aggregation" title="mlx_graphs.nn.aggr.Aggregation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregation</span></code></a> described by <code class="docutils literal notranslate"><span class="pre">aggr</span></code>, as PyG's <code class="docutils literal notranslate"><span class="pre">aggregation_resolver</span></code>.</p></td>
@@ -1357,7 +1401,7 @@ They reduce a set of elements given by an <code class="docutils literal notransl
 <p>Encodings of positions and times (<code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.encoding</span></code>), and the
 projections of the random-walk / Laplacian positional encodings used by graph
 transformers such as <a class="reference internal" href="_autosummary/mlx_graphs.nn.GPSConv.html#mlx_graphs.nn.GPSConv" title="mlx_graphs.nn.GPSConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPSConv</span></code></a>.</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PositionalEncoding.html#mlx_graphs.nn.PositionalEncoding" title="mlx_graphs.nn.PositionalEncoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PositionalEncoding</span></code></a>(out_features_dim[, ...])</p></td>
 <td><p>The sinusoidal positional encoding from the <a class="reference external" href="https://arxiv.org/abs/1706.03762">&quot;Attention Is All You Need&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">PositionalEncoding</span></code>.</p></td>
@@ -1369,7 +1413,7 @@ transformers such as <a class="reference internal" href="_autosummary/mlx_graphs
 <td><p>Projection of the random-walk structural encodings (RWSE) of the nodes, as in the GPS example of PyG (<code class="docutils literal notranslate"><span class="pre">examples/graph_gps.py</span></code>) and the <code class="docutils literal notranslate"><span class="pre">RWSE</span></code> node encoder of <a class="reference external" href="https://github.com/rampasek/GraphGPS">GraphGPS</a>.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LapPEEncoder.html#mlx_graphs.nn.LapPEEncoder" title="mlx_graphs.nn.LapPEEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LapPEEncoder</span></code></a>(pe_dim, out_features_dim[, ...])</p></td>
-<td><p>Projection of the Laplacian eigenvector positional encodings (LapPE) of the nodes, as the linear <code class="docutils literal notranslate"><span class="pre">LapPE</span></code> node encoder of <a class="reference external" href="https://github.com/rampasek/GraphGPS">GraphGPS</a>.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1381,7 +1425,7 @@ transformers such as <a class="reference internal" href="_autosummary/mlx_graphs
 <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.attention</span></code>), applied to dense batches of node features
 <code class="docutils literal notranslate"><span class="pre">[batch_size,</span> <span class="pre">num_nodes,</span> <span class="pre">channels]</span></code> with a mask of the real nodes. They are
 also exported by <code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn</span></code>, as in PyG.</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html#mlx_graphs.nn.attention.MultiheadAttention" title="mlx_graphs.nn.attention.MultiheadAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiheadAttention</span></code></a>(dims, num_heads[, ...])</p></td>
 <td><p>Multi-head scaled dot-product attention with the semantics of <code class="docutils literal notranslate"><span class="pre">torch.nn.MultiheadAttention(...,</span> <span class="pre">batch_first=True)</span></code>.</p></td>
@@ -1390,10 +1434,10 @@ also exported by <code class="docutils literal notranslate"><span class="pre">ml
 <td><p>The linear scaled attention mechanism from the <a class="reference external" href="https://arxiv.org/abs/2009.14794">&quot;Rethinking Attention with Performers&quot;</a> paper, as in PyG.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html#mlx_graphs.nn.attention.SGFormerAttention" title="mlx_graphs.nn.attention.SGFormerAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SGFormerAttention</span></code></a>(channels[, heads, ...])</p></td>
-<td><p>The simple global attention mechanism from the <a class="reference external" href="https://arxiv.org/abs/2306.10759">&quot;SGFormer: Simplifying and Empowering Transformers for Large-Graph Representations&quot;</a> paper, as in PyG.</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html#mlx_graphs.nn.attention.PolynormerAttention" title="mlx_graphs.nn.attention.PolynormerAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PolynormerAttention</span></code></a>(channels, heads[, ...])</p></td>
-<td><p>The polynomial-expressive linear global attention from the <a class="reference external" href="https://arxiv.org/abs/2403.01232">&quot;Polynormer: Polynomial-Expressive Graph Transformer in Linear Time&quot;</a> paper, as in PyG.</p></td>
+<td><p></p></td>
 </tr>
 </tbody>
 </table>
@@ -1425,7 +1469,7 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
     <span class="n">reference</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.fused_message_passing.html#mlx_graphs.nn.fused_message_passing" title="mlx_graphs.nn.fused_message_passing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fused_message_passing</span></code></a>([cls, format, ...])</p></td>
 <td><p>Class decorator: lets a <a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.MessagePassing"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessagePassing</span></code></a> layer fuse <code class="docutils literal notranslate"><span class="pre">message</span></code> and <code class="docutils literal notranslate"><span class="pre">aggregate</span></code> into a single sparse x dense matmul (SpMM).</p></td>
@@ -1456,7 +1500,7 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
 <h2>Temporal graph networks<a class="headerlink" href="#temporal-graph-networks" title="Link to this heading">#</a></h2>
 <p>The TGN memory model and its building blocks (<code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn.models.tgn</span></code>, as
 <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.models.tgn</span></code>). See <code class="docutils literal notranslate"><span class="pre">examples/tgn_jodie.py</span></code>.</p>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.TGNMemory.html#mlx_graphs.nn.TGNMemory" title="mlx_graphs.nn.TGNMemory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TGNMemory</span></code></a>(num_nodes, raw_msg_dim, ...)</p></td>
 <td><p>The Temporal Graph Network (TGN) memory model from the <a class="reference external" href="https://arxiv.org/abs/2006.10637">&quot;Temporal Graph Networks for Deep Learning on Dynamic Graphs&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.TGNMemory</span></code>.</p></td>
@@ -1464,7 +1508,7 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
 </tbody>
 </table>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html#mlx_graphs.nn.models.tgn.IdentityMessage" title="mlx_graphs.nn.models.tgn.IdentityMessage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IdentityMessage</span></code></a>(raw_msg_dim, memory_dim, ...)</p></td>
 <td><p>The identity message function of TGN: the concatenation of the source and destination memories, the raw message and the time encoding.</p></td>
@@ -1505,13 +1549,13 @@ layer per edge type and of every other layer per node type, like PyG’s
 <span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">node_features_dict</span><span class="p">)</span>
 </pre></div>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero.html#mlx_graphs.nn.to_hetero" title="mlx_graphs.nn.to_hetero"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hetero</span></code></a>(module, metadata[, aggr, ...])</p></td>
-<td><p>Converts a homogeneous GNN model into its heterogeneous equivalent, in which node representations are learned for each node type in <code class="docutils literal notranslate"><span class="pre">metadata[0]</span></code> and messages are exchanged along each edge type in <code class="docutils literal notranslate"><span class="pre">metadata[1]</span></code>, as in the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper (PyG's <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>).</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero_with_bases.html#mlx_graphs.nn.to_hetero_with_bases" title="mlx_graphs.nn.to_hetero_with_bases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hetero_with_bases</span></code></a>(module, metadata, num_bases)</p></td>
-<td><p>Converts a homogeneous GNN model into its heterogeneous equivalent via the basis-decomposition technique of the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper (PyG's <code class="docutils literal notranslate"><span class="pre">to_hetero_with_bases</span></code>).</p></td>
+<td><p></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ToHeteroModel.html#mlx_graphs.nn.ToHeteroModel" title="mlx_graphs.nn.ToHeteroModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToHeteroModel</span></code></a>(module, metadata[, aggr, ...])</p></td>
 <td><p>Heterogeneous version of a homogeneous model, returned by <a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero.html#mlx_graphs.nn.to_hetero" title="mlx_graphs.nn.to_hetero"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_hetero()</span></code></a>.</p></td>
@@ -1558,7 +1602,7 @@ layer per edge type and of every other layer per node type, like PyG’s
             
             
               
-                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
@@ -1637,8 +1681,8 @@ By mlx-graphs contributors
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5"></script>
 
   <footer class="bd-footer">
   </footer>
