@@ -58,8 +58,13 @@ def benchmark_GCNConv(framework, device=None, **kwargs):
                 edge_index_shape, node_features_shape[0], device, "mlx"
             )
             node_features = get_dummy_features(node_features_shape, device, "mlx")
+            # the defaults of mlx-graphs <= 0.0.11 (no self-loops), kept so that
+            # the results stay comparable with earlier runs
             layer = MLXLayer(
-                mlg_nn.GCNConv, node_features_dim=in_dim, out_features_dim=out_dim
+                mlg_nn.GCNConv,
+                node_features_dim=in_dim,
+                out_features_dim=out_dim,
+                add_self_loops=False,
             )
 
             return measure_runtime(
@@ -86,8 +91,13 @@ def benchmark_GATConv(framework, device=None, **kwargs):
                 edge_index_shape, node_features_shape[0], device, "mlx"
             )
             node_features = get_dummy_features(node_features_shape, device, "mlx")
+            # the defaults of mlx-graphs <= 0.0.11 (no self-loops), kept so that
+            # the results stay comparable with earlier runs
             layer = MLXLayer(
-                mlg_nn.GATConv, node_features_dim=in_dim, out_features_dim=out_dim
+                mlg_nn.GATConv,
+                node_features_dim=in_dim,
+                out_features_dim=out_dim,
+                add_self_loops=False,
             )
 
             return measure_runtime(

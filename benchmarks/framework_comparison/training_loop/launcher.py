@@ -1,5 +1,6 @@
 import platform
 import timeit
+from functools import partial
 from importlib.metadata import version
 
 import dgl
@@ -87,8 +88,10 @@ framework_to_datasets = {
 }
 layer_classes = {
     "mxg": {
-        "GCNConv": mxg_nn.GCNConv,
-        "GATConv": mxg_nn.GATConv,
+        # the defaults of mlx-graphs <= 0.0.11 (no self-loops), kept so that the
+        # results stay comparable with earlier runs
+        "GCNConv": partial(mxg_nn.GCNConv, add_self_loops=False),
+        "GATConv": partial(mxg_nn.GATConv, add_self_loops=False),
     },
     "pyg": {
         "GCNConv": pyg_nn.GCNConv,

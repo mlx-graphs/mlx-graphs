@@ -1,5 +1,7 @@
 import mlx.core as mx
+import numpy as np
 import pytest
+from mlx.utils import tree_flatten
 
 from mlx_graphs.nn.conv.sage_conv import SAGEConv
 
@@ -104,3 +106,99 @@ def test_sage_conv_tuple_of_same_features_matches_single_array(in_dim, out_dim):
     edge_index = mx.array([[0, 1, 2, 3, 5], [1, 1, 2, 4, 0]])
 
     assert mx.allclose(conv(edge_index, x), conv(edge_index, (x, x)), atol=1e-5)
+
+
+@pytest.mark.parametrize("aggr", ["mean", "max", "min", "std", ["mean", "max"]])
+@pytest.mark.parametrize("in_dim, out_dim", [(16, 4), (4, 16)])
+def test_sage_conv_aggregations_match_pyg(aggr, in_dim, out_dim):
+    """Regression: with more input than output features, the projection was
+    applied before aggregating, which is only right for sum / mean (max(Wx) is
+    not W max(x)); and a list of aggregations failed (the neighbor projection
+    did not take the concatenated size)."""
+    torch = pytest.importorskip("torch")
+    pyg_nn = pytest.importorskip("torch_geometric.nn")
+
+    rng = np.random.default_rng(0)
+    edge_index = rng.integers(0, 10, size=(2, 40))
+    x = rng.normal(size=(10, in_dim)).astype(np.float32)
+    torch.manual_seed(0)
+    pyg_conv = pyg_nn.SAGEConv(in_dim, out_dim, aggr=aggr)
+    conv = SAGEConv(in_dim, out_dim, aggr=aggr)
+    # PyG puts the bias on the neighbor projection, mlx-graphs on the root one
+    conv.neigh_proj.weight = mx.array(pyg_conv.lin_l.weight.detach().numpy())
+    conv.self_proj.weight = mx.array(pyg_conv.lin_r.weight.detach().numpy())
+    conv.self_proj.bias = mx.array(pyg_conv.lin_l.bias.detach().numpy())
+
+    with torch.no_grad():
+        expected = pyg_conv(torch.from_numpy(x), torch.from_numpy(edge_index)).numpy()
+    out = conv(mx.array(edge_index), mx.array(x))
+    np.testing.assert_allclose(np.array(out), expected, rtol=1e-2, atol=1e-2)
+
+
+def test_sage_conv_lstm_aggregation_matches_pyg():
+    # As in PyG, aggr="lstm" builds an LSTM aggregation of the input size.
+    torch = pytest.importorskip("torch")
+    pyg_nn = pytest.importorskip("torch_geometric.nn")
+    from tests.pyg_copy import load_torch, lstm_state
+
+    rng = np.random.default_rng(0)
+    edge_index = rng.integers(0, 10, size=(2, 40))
+    edge_index = edge_index[:, np.argsort(edge_index[1], kind="stable")]
+    x = rng.normal(size=(10, 6)).astype(np.float32)
+    torch.manual_seed(0)
+    pyg_conv = pyg_nn.SAGEConv(6, 4, aggr="lstm")
+    conv = SAGEConv(6, 4, aggr="lstm")
+    state = lstm_state("aggr_module.lstm", pyg_conv.aggr_module.lstm)
+    state["neigh_proj.weight"] = pyg_conv.lin_l.weight.detach().numpy()
+    state["self_proj.weight"] = pyg_conv.lin_r.weight.detach().numpy()
+    state["self_proj.bias"] = pyg_conv.lin_l.bias.detach().numpy()
+    load_torch(conv, state)
+
+    with torch.no_grad():
+        expected = pyg_conv(torch.from_numpy(x), torch.from_numpy(edge_index)).numpy()
+    out = conv(mx.array(edge_index), mx.array(x))
+    np.testing.assert_allclose(np.array(out), expected, rtol=1e-2, atol=1e-2)
+
+
+@pytest.mark.parametrize("aggr", ["max", "min"])
+def test_non_linear_aggregation_aggregates_before_projecting(aggr):
+    """max/min do not commute with the neighbor projection: aggregate first."""
+    from mlx_graphs.utils import scatter
+
+    conv = SAGEConv(8, 3, aggr=aggr)  # 8 > 3 would project first for "mean"
+    x = mx.random.normal((5, 8))
+    edge_index = mx.array([[0, 1, 2, 3, 4], [1, 1, 2, 2, 0]])
+    aggregated = scatter(x[edge_index[0]], edge_index[1], 5, aggr)
+    expected = conv.neigh_proj(aggregated) + conv.self_proj(x)
+    assert mx.allclose(conv(edge_index, x), expected, atol=1e-4)
+
+
+@pytest.mark.parametrize("bias", [True, False])
+def test_sage_conv_without_root_weight_matches_pyg(bias):
+    torch = pytest.importorskip("torch")
+    pyg_nn = pytest.importorskip("torch_geometric.nn")
+
+    rng = np.random.default_rng(0)
+    edge_index = rng.integers(0, 10, size=(2, 40))
+    x = rng.normal(size=(10, 6)).astype(np.float32)
+    torch.manual_seed(0)
+    pyg_conv = pyg_nn.SAGEConv(6, 4, root_weight=False, bias=bias)
+    conv = SAGEConv(6, 4, root_weight=False, bias=bias)
+    assert "self_proj" not in conv and ("bias" in conv) == bias
+    conv.neigh_proj.weight = mx.array(pyg_conv.lin_l.weight.detach().numpy())
+    if bias:
+        conv.bias = mx.array(pyg_conv.lin_l.bias.detach().numpy())
+
+    with torch.no_grad():
+        expected = pyg_conv(torch.from_numpy(x), torch.from_numpy(edge_index)).numpy()
+    out = conv(mx.array(edge_index), mx.array(x))
+    np.testing.assert_allclose(np.array(out), expected, rtol=1e-2, atol=1e-2)
+
+
+def test_sage_conv_root_weight_turned_off_after_construction_keeps_the_bias():
+    conv = SAGEConv(6, 4)
+    bias = conv.self_proj.bias
+    conv.root_weight = False
+    assert "self_proj" not in conv and conv.bias is bias
+    params = dict(tree_flatten(conv.parameters()))
+    assert set(params) == {"neigh_proj.weight", "bias"}

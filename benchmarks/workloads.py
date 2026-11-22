@@ -41,9 +41,11 @@ def mlx_conv(name: str, in_dim: int, out_dim: int, heads: int = HEADS):
             )
         )
     if name == "gat":
-        return gnn.GATConv(in_dim, out_dim // heads, heads=heads)
+        return gnn.GATConv(in_dim, out_dim // heads, heads=heads, add_self_loops=False)
     if name == "gatv2":
-        return gnn.GATv2Conv(in_dim, out_dim // heads, heads=heads)
+        return gnn.GATv2Conv(
+            in_dim, out_dim // heads, heads=heads, add_self_loops=False
+        )
     raise ValueError(name)
 
 

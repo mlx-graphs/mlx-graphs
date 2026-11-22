@@ -26,6 +26,21 @@ def test_matches_one_linear_per_node_type():
         assert mx.allclose(out[node_type], x @ lin.weight.T + lin.bias, atol=1e-5)
 
 
+def test_initialized_like_pyg():
+    # PyG's HeteroDictLinear initializes like torch.nn.Linear: weights and
+    # biases uniform in +-1/sqrt(in). (Glorot weights and zero biases made
+    # HGTConv's projections up to 1.7x larger than PyG's, and HGT trained
+    # faster and to a different accuracy than in PyG on DBLP.)
+    mx.random.seed(0)
+    proj = HeteroDictLinear({"author": 64, "paper": 16}, 192)
+    for node_type, dims in (("author", 64), ("paper", 16)):
+        lin = proj.lins[node_type]
+        bound = 1 / dims**0.5
+        for param in (lin.weight, lin.bias):
+            assert mx.abs(param).max().item() <= bound
+            assert mx.abs(param).max().item() > 0.9 * bound
+
+
 def test_missing_node_types_are_skipped():
     proj = HeteroDictLinear({"author": 3, "paper": 7}, 4)
     # paper missing from x_dict, venue has no layer

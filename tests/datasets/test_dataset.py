@@ -159,3 +159,11 @@ def test_dataset_transform(tmp_path):
 
     for i in range(len(dataset)):
         assert dataset[i].feat == "test_transform"
+
+
+def test_downloads_use_https():
+    from mlx_graphs.datasets import OGBMAG, JODIEDataset, QM7bDataset
+
+    assert JODIEDataset.url.startswith("https://")
+    assert OGBMAG.url.startswith("https://")
+    assert QM7bDataset._url.startswith("https://")

@@ -1,0 +1,119 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 360" width="960" height="360" role="img" aria-labelledby="t d">
+  <title id="t">Temporal Graph Networks on JODIE Wikipedia, mlx-graphs vs PyG</title>
+  <desc id="d">JODIE Wikipedia events are split by time and batched by TemporalDataLoader. The TGN model reads node memories (TGNMemory), embeds nodes with a TransformerConv over the 10 latest neighbors, and scores source and destination pairs with LinkPredictor. After the binary cross-entropy loss, the batch events are written to the memory, then Adam updates the weights. Validation and test events are scored with AP and ROC AUC, and the same model is trained with PyG on the CPU for comparison.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .alab { font-size: 11px; fill: #52514e; }
+    .malab { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+    .chip { font-size: 11.5px; font-weight: 600; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="358.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+  <rect x="24" y="52" width="176" height="262" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="224" y="52" width="372" height="262" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="226" y="40">MODEL · TGN</text>
+  <rect x="620" y="52" width="146" height="262" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="622" y="40">TRAIN</text>
+  <rect x="790" y="52" width="146" height="262" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="792" y="40">EVALUATE · VS PYG</text>
+  <!-- data column -->
+  <rect x="34" y="62" width="156" height="74" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="81.6">JODIEDataset</text>
+  <text class="sub" x="42" y="96.6">Wikipedia edits, 1 month</text>
+  <text class="sub" x="42" y="111.1">9,227 nodes · 157k events</text>
+  <text class="sub" x="42" y="125.6">172 features per event</text>
+  <rect x="34" y="146" width="156" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="stitle" x="42" y="162">split by time</text>
+  <rect x="42" y="169" width="95.2" height="7" rx="2" fill="#1baf7a" fill-opacity="1.0"/>
+  <rect x="139.2" y="169" width="20.4" height="7" rx="2" fill="#1baf7a" fill-opacity="0.55"/>
+  <rect x="161.6" y="169" width="20.4" height="7" rx="2" fill="#1baf7a" fill-opacity="0.3"/>
+  <text class="small" x="42" y="187">train 70%</text>
+  <text class="small" x="182" y="187" text-anchor="end">val 15 · test 15</text>
+  <rect x="34" y="202" width="156" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="222.1">TemporalDataLoader</text>
+  <text class="sub" x="42" y="237.1">200 events + negatives</text>
+  <rect x="34" y="258" width="156" height="46" rx="6" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="title" x="42" y="278.1">LastNeighborLoader</text>
+  <text class="sub" x="42" y="293.1">10 latest neighbors</text>
+  <path d="M190,281 L212,281 L212,196 L233,196" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <!-- model column: trainable chain on the left, state on the right -->
+  <rect x="234" y="62" width="200" height="74" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="81.6">TGNMemory</text>
+  <text class="msub" x="242" y="96.6">IdentityMessage</text>
+  <text class="msub" x="242" y="111.1">LastAggregator</text>
+  <text class="msub" x="242" y="125.6">GRUCell</text>
+  <path d="M334,136 L334,166" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="342" y="155" text-anchor="start" stroke="#f2f1ed" stroke-width="4" paint-order="stroke" stroke-linejoin="round">memory of batch nodes</text>
+  <rect x="234" y="166" width="200" height="60" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="185.8">GraphAttentionEmbedding</text>
+  <text class="msub" x="242" y="200.9">TransformerConv</text>
+  <text class="sub" x="242" y="215.4">2 heads · edges: Δt ‖ msg</text>
+  <path d="M334,226 L334,256" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="342" y="245" text-anchor="start" stroke="#f2f1ed" stroke-width="4" paint-order="stroke" stroke-linejoin="round">node embeddings</text>
+  <rect x="234" y="256" width="200" height="48" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="277.1">LinkPredictor</text>
+  <text class="sub" x="242" y="292.1">(src, dst) → score</text>
+  <rect x="458" y="76" width="128" height="46" rx="6" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="stitle" x="466" y="96.1">memory</text>
+  <text class="sub" x="466" y="111.1">9,227 × 100</text>
+  <path d="M458,99 L435,99" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="458" y="173" width="128" height="46" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="466" y="193.1">TimeEncoder</text>
+  <text class="sub" x="466" y="208.1">shared with memory</text>
+  <path d="M458,196 L435,196" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M434,280 L629,280" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="458" y="273" text-anchor="start" stroke="#f2f1ed" stroke-width="4" paint-order="stroke" stroke-linejoin="round">pos &amp; neg scores</text>
+  <!-- train column: per batch, loss, then write events, then Adam -->
+  <rect x="630" y="62" width="126" height="74" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="88.8">Adam</text>
+  <text class="sub" x="638" y="103.9">lr 1e-4 · 10 epochs</text>
+  <text class="msub" x="638" y="118.4">memory.detach()</text>
+  <rect x="630" y="166" width="126" height="60" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="638" y="185.8">write events</text>
+  <text class="msub" x="638" y="200.9">update_state</text>
+  <text class="msub" x="638" y="215.4">insert</text>
+  <rect x="630" y="256" width="126" height="48" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="638" y="277.1">BCE loss</text>
+  <text class="sub" x="638" y="292.1">pos → 1 · neg → 0</text>
+  <path d="M693,256 L693,227" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M693,166 L693,137" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M630,196 L608,196 L608,99 L587,99" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" stroke-dasharray="4 3" marker-end="url(#ah)"/>
+  <!-- evaluate and compare column -->
+  <path d="M770,99 L786,99" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="800" y="62" width="126" height="74" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="81.6">evaluate</text>
+  <text class="sub" x="808" y="96.6">each epoch</text>
+  <text class="sub" x="808" y="111.1">val &amp; test events</text>
+  <text class="sub" x="808" y="125.6">AP · ROC AUC</text>
+  <rect x="800" y="166" width="126" height="26" rx="4" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="chip" x="863" y="182.9" text-anchor="middle">mlx-graphs · GPU</text>
+  <rect x="800" y="200" width="126" height="26" rx="4" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="chip" x="863" y="216.9" text-anchor="middle">PyG · CPU</text>
+  <text class="small" x="802" y="248">same model, data and</text>
+  <text class="small" x="802" y="262">hyperparameters;</text>
+  <text class="small" x="802" y="276">compare AP, s / epoch</text>
+  <path d="M204,99 L220,99" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="351.928" y="329" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="367.928" y="338">data</text>
+  <rect x="408.697" y="329" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="424.697" y="338">trainable weights</text>
+  <rect x="529.925" y="329" width="10" height="10" rx="2.5" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="leg" x="545.925" y="338">state or sampling, no weights</text>
+  <rect x="715.207" y="329" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="731.207" y="338">no weights</text>
+  <rect x="805.212" y="329" width="10" height="10" rx="2.5" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="leg" x="821.212" y="338">mlx-graphs</text>
+  <rect x="897.632" y="329" width="10" height="10" rx="2.5" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="leg" x="913.632" y="338">PyG</text>
+</svg>

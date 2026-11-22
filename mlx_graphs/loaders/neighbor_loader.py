@@ -1,4 +1,4 @@
-from typing import Any, Optional, Union
+from typing import Any, Iterable, Optional, Union
 
 import mlx.core as mx
 import numpy as np
@@ -6,6 +6,7 @@ from mlx_cluster import neighbor_sample
 
 from mlx_graphs.data import GraphData, HeteroGraphData
 
+from ._utils import index_array, to_index
 from .hetero_neighbor_loader import EdgeType, _HeteroNeighborLoader
 
 
@@ -30,13 +31,17 @@ class _HomogeneousNeighborLoader:
             Length determines the number of hops.
             Use ``-1`` to sample all neighbors at a given hop.
             E.g. ``[10, 5]`` samples 10 neighbors at hop-1, 5 at hop-2.
-        input_nodes: 1-D array of seed node indices to iterate over.
-            Typically the indices where ``train_mask`` is ``True``.
-            If ``None``, all nodes are used.
+        input_nodes: Seed nodes to iterate over: a 1-D array of node
+            indices or a boolean mask (e.g. ``train_mask``). If ``None``, all
+            nodes are used.
         batch_size: Number of seed nodes per mini-batch.
         shuffle: Whether to shuffle ``input_nodes`` at the start of each epoch.
         replace: Whether to sample neighbors with replacement.
         directed: Whether to only include edges in the sampling direction.
+        sampler: Iterable yielding positions in ``input_nodes`` for each epoch
+            (e.g. an :class:`ImbalancedSampler`). Overrides ``shuffle``.
+            Duplicate seeds (e.g. drawn with replacement) are kept: each copy
+            is a separate seed among the first ``batch_size`` nodes.
     """
 
     def __init__(
@@ -48,6 +53,7 @@ class _HomogeneousNeighborLoader:
         shuffle: bool = False,
         replace: bool = False,
         directed: bool = True,
+        sampler: Optional[Iterable[int]] = None,
     ):
         self.data = data
         self.num_neighbors = num_neighbors
@@ -55,11 +61,11 @@ class _HomogeneousNeighborLoader:
         self.shuffle = shuffle
         self.replace = replace
         self.directed = directed
+        self.sampler = sampler
 
-        if input_nodes is None:
-            self.input_nodes = mx.arange(data.num_nodes, dtype=mx.int64)
-        else:
-            self.input_nodes = input_nodes.astype(mx.int64)
+        # Node indices, or a boolean mask (as in PyG): `to_index` turns a mask
+        # into the indices of its `True` entries.
+        self.input_nodes = mx.array(to_index(input_nodes, data.num_nodes))
 
         # Pre-compute CSC format once and evaluate for C++ kernel access
         self._colptr, self._row, self._edge_perm = self._to_csc(
@@ -100,20 +106,23 @@ class _HomogeneousNeighborLoader:
 
     def __len__(self) -> int:
         """Number of mini-batches per epoch."""
-        return (len(self.input_nodes) + self.batch_size - 1) // self.batch_size
+        num = len(self.sampler) if self.sampler is not None else len(self.input_nodes)  # type: ignore
+        return (num + self.batch_size - 1) // self.batch_size
 
     def __iter__(self) -> "_HomogeneousNeighborLoader":
         self._current_index = 0
-        if self.shuffle:
+        if self.sampler is not None:
+            self._indices = np.asarray(list(self.sampler), dtype=np.int64)
+        elif self.shuffle:
             np.random.shuffle(self._indices)
         return self
 
     def __next__(self) -> GraphData:
-        if self._current_index >= len(self.input_nodes):
+        if self._current_index >= len(self._indices):
             raise StopIteration
 
         # 1. Select seed nodes
-        end = min(self._current_index + self.batch_size, len(self.input_nodes))
+        end = min(self._current_index + self.batch_size, len(self._indices))
         batch_indices = self._indices[self._current_index : end]
         seed_nodes = self.input_nodes[mx.array(batch_indices)]
         num_seeds = len(batch_indices)
@@ -133,13 +142,15 @@ class _HomogeneousNeighborLoader:
         )
 
         # 3. Build re-indexed edge_index (rows/cols are already local)
+        #    (in the dtype of the graph's edge_index)
+        edge_dtype = self.data.edge_index.dtype
         if len(rows) > 0:
-            edge_index = mx.stack([rows, cols], axis=0)
+            edge_index = mx.stack([rows, cols], axis=0).astype(edge_dtype)
         else:
-            edge_index = mx.zeros((2, 0), dtype=mx.int64)
+            edge_index = mx.zeros((2, 0), dtype=edge_dtype)
 
-        # 4. Slice standard attributes using global node IDs
-        n_id = samples
+        # 4. Slice standard attributes using global node IDs (int32 ids)
+        n_id = index_array(samples, self._colptr.shape[0] - 1)
 
         node_features = None
         if self.data.node_features is not None:
@@ -149,15 +160,19 @@ class _HomogeneousNeighborLoader:
         if self.data.node_labels is not None:
             node_labels = self.data.node_labels[n_id]
 
+        original_edge_ids = index_array(
+            self._edge_perm[np.array(edges, copy=False).astype(np.int64)],
+            self._edge_perm.size,
+        )
         edge_features = None
         if self.data.edge_features is not None and len(edges) > 0:
-            original_edge_ids = mx.array(self._edge_perm[np.array(edges, copy=False)])
             edge_features = self.data.edge_features[original_edge_ids]
 
         # 5. Collect custom per-node attributes (e.g. train_mask)
         kwargs = {
             "batch_size": num_seeds,
             "n_id": n_id,
+            "e_id": original_edge_ids,
         }
         _skip = {
             "edge_index",
@@ -225,8 +240,8 @@ class NeighborLoader:
             edge type to its own list.
         input_nodes: The seed nodes to iterate over.
 
-            - Homogeneous: a 1-D array of node indices, or ``None`` for all
-              nodes.
+            - Homogeneous: a 1-D array of node indices, a boolean mask
+              (e.g. ``data.train_mask``), or ``None`` for all nodes.
             - Heterogeneous (required): the seed node type and which of its
               nodes to use: ``"author"`` (all authors), ``("author", indices)``
               or ``("author", boolean_mask)``.
@@ -235,6 +250,14 @@ class NeighborLoader:
         replace: Whether to sample neighbors with replacement.
         directed: Whether to only include edges in the sampling direction.
             Only ``True`` is supported for heterogeneous graphs.
+        sampler: Iterable yielding, for each epoch, the positions in
+            ``input_nodes`` of the seeds to use, e.g. an
+            :class:`ImbalancedSampler` built with the same ``input_nodes``.
+            Overrides ``shuffle``. Seeds drawn several times in a mini-batch
+            are kept as separate seeds for a :class:`GraphData` (so
+            ``batch_size`` counts them all), but merged for a
+            :class:`HeteroGraphData` (``batch_size`` is then the number of
+            distinct seeds).
 
     Example:
 
@@ -263,6 +286,7 @@ class NeighborLoader:
         shuffle: bool = False,
         replace: bool = False,
         directed: bool = True,
+        sampler: Optional[Iterable[int]] = None,
     ):
         if isinstance(data, HeteroGraphData):
             if input_nodes is None or isinstance(input_nodes, mx.array):
@@ -282,6 +306,7 @@ class NeighborLoader:
                 batch_size=batch_size,
                 shuffle=shuffle,
                 replace=replace,
+                sampler=sampler,
             )
         elif isinstance(data, GraphData):
             if isinstance(num_neighbors, dict):
@@ -303,6 +328,7 @@ class NeighborLoader:
                 shuffle=shuffle,
                 replace=replace,
                 directed=directed,
+                sampler=sampler,
             )
         else:
             raise TypeError(

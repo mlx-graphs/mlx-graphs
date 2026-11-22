@@ -49,7 +49,12 @@ class Linear(nn.Linear):
 
 
 class HeteroDictLinear(nn.Module):
-    """Applies a separate :class:`Linear` layer to each node type.
+    """Applies a separate linear layer to each node type.
+
+    The layers are initialized like PyG's ``HeteroDictLinear`` (and
+    ``torch.nn.Linear``): weights and biases uniform in
+    ``[-1/sqrt(input_dims), 1/sqrt(input_dims)]``, i.e. ``mlx.nn.Linear``'s
+    default.
 
     Node types in a heterogeneous graph usually have different numbers of
     features. This layer maps every node type to the same size, so later layers
@@ -89,7 +94,7 @@ class HeteroDictLinear(nn.Module):
         self.input_dims = dict(input_dims)
         self.output_dims = output_dims
         self.lins = {
-            node_type: Linear(dims, output_dims, bias=bias)
+            node_type: nn.Linear(dims, output_dims, bias=bias)
             for node_type, dims in input_dims.items()
         }
 

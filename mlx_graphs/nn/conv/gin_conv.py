@@ -3,7 +3,6 @@ from typing import Optional
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.linear import Linear
 from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
 
@@ -82,6 +81,9 @@ class GINConv(MessagePassing):
             dtype=float32)
     """
 
+    # what follows the aggregation expects the size of one aggregation (as in PyG)
+    supports_concat_aggr = False
+
     def __init__(
         self,
         mlp: nn.Module,
@@ -98,7 +100,9 @@ class GINConv(MessagePassing):
         self.eps = mx.array([eps]) if learn_eps else eps
 
         if edge_features_dim is not None:
-            self.edge_projection = Linear(
+            # initialized like the projection of PyG's GINEConv (as
+            # torch.nn.Linear), not with Glorot
+            self.edge_projection = nn.Linear(
                 edge_features_dim, node_features_dim, bias=True
             )
 
@@ -143,9 +147,12 @@ class GINConv(MessagePassing):
         edge_features = kwargs.get("edge_features", None)
         if edge_features is not None:
             # GINEConv
-            if "edge_projection" in self:
-                edge_emb = self.edge_projection(edge_features)
+            edge_emb = (
+                self.edge_projection(edge_features)
+                if "edge_projection" in self
+                else edge_features
+            )
             return nn.relu(src_features + edge_emb)
 
         # GINConv
-        return super(self.__class__, self).message(src_features, dst_features, **kwargs)
+        return super(GINConv, self).message(src_features, dst_features, **kwargs)

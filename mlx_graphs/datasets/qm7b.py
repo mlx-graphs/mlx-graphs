@@ -21,7 +21,7 @@ class QM7bDataset(Dataset):
             in the local directory ``.mlx_graphs_data/``.
     """
 
-    _url = "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat"
+    _url = "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm7b.mat"
     _sha1_str = "4102c744bb9d6fd7b40ac67a300e49cd87e28392"
 
     def __init__(self, base_dir: Optional[str] = None):

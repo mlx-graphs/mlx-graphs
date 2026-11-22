@@ -31,7 +31,8 @@ class GCNConv(MessagePassing):
         node_features_dim: size of input node features
         out_features_dim: size of output node embeddings
         bias: whether to add a bias to the output
-        add_self_loops: whether to add a self-loop for each node
+        add_self_loops: whether to add a self-loop for each node. Default:
+            ``True``, as in PyG (``False`` in mlx-graphs 0.0.11 and earlier)
 
     Example:
 
@@ -43,24 +44,30 @@ class GCNConv(MessagePassing):
         edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]])
         node_features = mx.random.uniform(low=0, high=1, shape=(5, 16))
 
-        conv = GCNConv(16, 32, add_self_loops=True)
+        conv = GCNConv(16, 32)
         h = conv(edge_index, node_features)
 
         >>> h.shape
         (5, 32)
     """
 
+    # what follows the aggregation expects the size of one aggregation (as in PyG)
+    supports_concat_aggr = False
+
     def __init__(
         self,
         node_features_dim: int,
         out_features_dim: int,
         bias: bool = True,
-        add_self_loops: bool = False,
+        add_self_loops: bool = True,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
         super(GCNConv, self).__init__(**kwargs)
 
+        # read by wrappers such as DirGNNConv (PyG's in_channels / out_channels)
+        self.node_features_dim = node_features_dim
+        self.out_features_dim = out_features_dim
         self.linear = Linear(node_features_dim, out_features_dim, bias=False)
         if bias:
             self.bias = mx.zeros((out_features_dim,))

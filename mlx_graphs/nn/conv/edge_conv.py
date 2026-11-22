@@ -59,9 +59,6 @@ class EdgeConv(MessagePassing):
         kwargs.setdefault("aggr", "max")
         super(EdgeConv, self).__init__(**kwargs)
 
-        if self.aggr == "softmax":
-            raise ValueError("EdgeConv does not support the 'softmax' aggregation.")
-
         self.mlp = mlp
 
     def __call__(
@@ -93,6 +90,11 @@ class EdgeConv(MessagePassing):
         Returns:
             mx.array: The messages, shape `[num_edges, out_features_dim]`
         """
-        return self.mlp(
-            mx.concatenate([dst_features, src_features - dst_features], axis=-1)
-        )
+        # MLX 0.32 can crash (segfault) when a compiled function, such as
+        # nn.softplus or nn.relu, runs on the output of an empty matmul:
+        # without edges, the MLP is run on a single dummy row instead.
+        features = mx.concatenate([dst_features, src_features - dst_features], axis=-1)
+        num_edges = features.shape[0]
+        if num_edges == 0:
+            features = mx.zeros((1, *features.shape[1:]), dtype=features.dtype)
+        return self.mlp(features)[:num_edges]

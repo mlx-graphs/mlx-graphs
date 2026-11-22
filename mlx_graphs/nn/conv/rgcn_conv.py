@@ -99,6 +99,12 @@ class RGCNConv(MessagePassing):
 
         if self.aggr == "softmax":
             raise ValueError("RGCNConv does not support the 'softmax' aggregation.")
+        if not isinstance(self.aggr, str) or "aggr_module" in self:
+            raise ValueError(
+                "RGCNConv only supports a single scatter aggregation "
+                "('add', 'mean', 'max', 'min', ...), not a list or an Aggregation "
+                f"module (got {self.aggr!r})."
+            )
         if num_relations < 1:
             raise ValueError(f"num_relations must be positive, got {num_relations}")
         if num_bases is not None and num_bases < 1:
