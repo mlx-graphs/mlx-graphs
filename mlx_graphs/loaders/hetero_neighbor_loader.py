@@ -1,10 +1,12 @@
-from typing import Any, Optional, Union
+from typing import Any, Iterable, Optional, Union
 
 import mlx.core as mx
 import numpy as np
 from mlx_cluster import hetero_neighbor_sample
 
 from mlx_graphs.data import HeteroGraphData
+
+from ._utils import check_index_bounds, index_array
 
 EdgeType = tuple[str, str, str]
 
@@ -41,6 +43,10 @@ class _HeteroNeighborLoader:
         batch_size: Number of seed nodes per mini-batch.
         shuffle: Whether to shuffle the seed nodes at the start of each epoch.
         replace: Whether to sample neighbors with replacement.
+        sampler: Iterable yielding positions in ``input_nodes`` for each epoch
+            (e.g. an :class:`ImbalancedSampler`). Overrides ``shuffle``.
+            Duplicate seeds within a mini-batch are merged, so ``batch_size``
+            is then the number of distinct seeds.
 
     Each batch contains:
 
@@ -83,12 +89,14 @@ class _HeteroNeighborLoader:
         batch_size: int = 1,
         shuffle: bool = False,
         replace: bool = False,
+        sampler: Optional[Iterable[int]] = None,
     ):
         self.data = data
         self.num_neighbors = num_neighbors
         self.batch_size = batch_size
         self.shuffle = shuffle
         self.replace = replace
+        self.sampler = sampler
 
         self.num_nodes = data.num_nodes
         self.input_type, self.input_nodes = self._resolve_input_nodes(input_nodes)
@@ -130,29 +138,45 @@ class _HeteroNeighborLoader:
                 )
             nodes = mx.array(np.nonzero(np.asarray(nodes))[0].astype(np.int64))
         else:
+            check_index_bounds(
+                np.asarray(nodes).reshape(-1),
+                self.num_nodes[node_type],
+                f"Input node ('{node_type}')",
+            )
             nodes = nodes.astype(mx.int64)
         return node_type, nodes
 
     def __len__(self) -> int:
         """Number of mini-batches per epoch."""
-        return (len(self.input_nodes) + self.batch_size - 1) // self.batch_size
+        num = len(self.sampler) if self.sampler is not None else len(self.input_nodes)  # type: ignore
+        return (num + self.batch_size - 1) // self.batch_size
 
     def __iter__(self) -> "_HeteroNeighborLoader":
         self._current_index = 0
-        if self.shuffle:
+        if self.sampler is not None:
+            self._indices = np.asarray(list(self.sampler), dtype=np.int64)
+        elif self.shuffle:
             np.random.shuffle(self._indices)
         return self
 
     def __next__(self) -> HeteroGraphData:
-        if self._current_index >= len(self.input_nodes):
+        if self._current_index >= len(self._indices):
             raise StopIteration
 
         # 1. Select seed nodes
-        end = min(self._current_index + self.batch_size, len(self.input_nodes))
+        end = min(self._current_index + self.batch_size, len(self._indices))
         batch_indices = self._indices[self._current_index : end]
         seed_nodes = self.input_nodes[mx.array(batch_indices)]
         num_seeds = len(batch_indices)
         self._current_index = end
+
+        # The heterogeneous sampler rejects duplicate seeds (e.g. drawn with
+        # replacement by a `sampler`): keep the first occurrence of each.
+        seeds_np = np.asarray(seed_nodes)
+        _, first = np.unique(seeds_np, return_index=True)
+        if first.size < num_seeds:
+            seed_nodes = mx.array(seeds_np[np.sort(first)])
+            num_seeds = int(first.size)
 
         # 2. Sample the K-hop neighborhood across all edge types
         out = hetero_neighbor_sample(
@@ -163,18 +187,8 @@ class _HeteroNeighborLoader:
             num_nodes_dict=self.num_nodes,
             replace=self.replace,
         )
-        n_id_dict = out.node_id
-
-        # 3. Local edge indices and original edge ids per edge type
-        edge_index_dict = {}
-        e_id_dict = {}
-        for edge_type in self.data.edge_index_dict:
-            rows, cols = out.row[edge_type], out.col[edge_type]
-            if rows.size > 0:
-                edge_index_dict[edge_type] = mx.stack([rows, cols], axis=0)
-            else:
-                edge_index_dict[edge_type] = mx.zeros((2, 0), dtype=mx.int64)
-            e_id_dict[edge_type] = self._perm_dict[edge_type][out.edge_id[edge_type]]
+        # 3. Sampled node ids, local edge indices and original edge ids
+        n_id_dict, edge_index_dict, e_id_dict = self._format_sample(out)
 
         # 4. Slice standard attributes
         node_features_dict = self._slice_node_dict(
@@ -206,6 +220,30 @@ class _HeteroNeighborLoader:
             graph_labels=self.data.graph_labels,
             **kwargs,
         )
+
+    def _format_sample(self, out: Any) -> tuple[dict, dict, dict]:
+        """``(n_id_dict, edge_index_dict, e_id_dict)`` of a
+        ``hetero_neighbor_sample`` output: int32 ids (see
+        :func:`~mlx_graphs.loaders._utils.index_dtype`), and local edges in
+        the dtype of the graph's ``edge_index`` of each edge type (every edge
+        type is present, possibly empty)."""
+        n_id_dict = {
+            t: index_array(ids, self.num_nodes[t]) for t, ids in out.node_id.items()
+        }
+        edge_index_dict, e_id_dict = {}, {}
+        for edge_type, full_edge_index in self.data.edge_index_dict.items():
+            rows, cols = out.row[edge_type], out.col[edge_type]
+            dtype = full_edge_index.dtype
+            if rows.size > 0:
+                edge_index = mx.stack([rows, cols], axis=0).astype(dtype)
+            else:
+                edge_index = mx.zeros((2, 0), dtype=dtype)
+            edge_index_dict[edge_type] = edge_index
+            e_id_dict[edge_type] = index_array(
+                self._perm_dict[edge_type][out.edge_id[edge_type]],
+                full_edge_index.shape[1],
+            )
+        return n_id_dict, edge_index_dict, e_id_dict
 
     @staticmethod
     def _slice_node_dict(

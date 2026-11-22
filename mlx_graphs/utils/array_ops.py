@@ -3,6 +3,35 @@ from typing import Optional
 import mlx.core as mx
 
 
+def p_norm(
+    x: mx.array, p: float = 2.0, axis: int = -1, keepdims: bool = False
+) -> mx.array:
+    """The p-norm of ``x`` along ``axis``, whose gradient is zero (instead of
+    NaN) where the norm is zero, as with ``torch.linalg.norm``.
+
+    ``mx.linalg.norm`` and ``mx.sqrt((x * x).sum())`` have an infinite
+    derivative at zero, so a row of zeros (e.g. a node whose features were
+    all zeroed by a ReLU or by dropout) gives NaN gradients, which then
+    spread to every parameter.
+
+    Args:
+        x: Input array.
+        p: Order of the norm (``p > 0``). Default: ``2.0``
+        axis: Axis along which to compute the norm. Default: ``-1``
+        keepdims: Whether to keep the reduced axis. Default: ``False``
+    """
+    if p == 2.0:
+        total = (x * x).sum(axis=axis, keepdims=keepdims)
+    else:
+        total = (mx.abs(x) ** p).sum(axis=axis, keepdims=keepdims)
+    # The root is taken of a value clamped away from zero, so its derivative
+    # stays finite; where the norm is zero, the clamp sends no gradient back.
+    tiny = mx.finfo(total.dtype).smallest_normal
+    safe = mx.maximum(total, tiny)
+    root = mx.sqrt(safe) if p == 2.0 else safe ** (1.0 / p)
+    return mx.where(total > 0, root, mx.zeros_like(root))
+
+
 def broadcast(src: mx.array, other: mx.array, dim: int) -> mx.array:
     """
     Make the shape broadcastable between arrays src and other.

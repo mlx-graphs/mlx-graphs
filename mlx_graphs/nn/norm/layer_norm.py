@@ -1,4 +1,4 @@
-from typing import Any, Literal, Optional
+from typing import Literal, Optional
 
 import mlx.core as mx
 import mlx.nn as nn
@@ -21,13 +21,14 @@ class LayerNormalization(nn.Module):
     node channels separately for each object in a mini-batch.
 
     Args:
-        in_channels : Size of each input sample.
-        eps : A value added to the denominator for numerical
+        num_features: Size of each input sample.
+        eps: A value added to the denominator for numerical
             stability. (default: :obj:`1e-5`)
-        affine : If set to :obj:`True`, this module has
-            learnable affine parameters :math:`\gamma` and :math:`\beta`.
+        affine: If set to :obj:`True`, this module has
+            learnable affine parameters :math:`\gamma` and :math:`\beta`
+            (``weight`` and ``bias``, used by both modes, as in PyG).
             (default: :obj:`True`)
-        mode : The normalization mode to use for layer
+        mode: The normalization mode to use for layer
             normalization (:obj:`"graph"` or :obj:`"node"`). If :obj:`"graph"`
             is used, each graph will be considered as an element to be
             normalized. If `"node"` is used, each node will be considered as
@@ -42,70 +43,61 @@ class LayerNormalization(nn.Module):
         mode: Literal["graph", "node"] = "graph",
     ):
         super().__init__()
+        if mode not in ("graph", "node"):
+            raise ValueError(f"Unknown normalization mode: {mode}")
         self.num_features = num_features
         self.eps = eps
         self.affine = affine
         self.mode = mode
 
+        # Used by both modes, as in PyG.
         if affine:
             self.weight = mx.ones((num_features,))
             self.bias = mx.zeros((num_features,))
-
-        self.layernorm = nn.LayerNorm(
-            dims=self.num_features, eps=self.eps, affine=self.affine
-        )
 
     def __call__(
         self,
         features: mx.array,
         batch: Optional[mx.array] = None,
         batch_size: Optional[int] = None,
-    ) -> Any:
-        if self.mode == "graph":
-            # perform graph level normalization
-            if batch is None:
-                features = features - features.mean()
-                features = features / (features.var().sqrt() + self.eps)
-            else:
-                if batch_size is None:
-                    batch_size = batch.max().item() + 1
-                batch_index = batch
-                # try getting degrees of nodes in a batch
-                norm = mx.clip(degree(batch_index), a_min=1, a_max=None)
-                norm = norm * (features.shape[-1])
-                norm = norm.T
-                mean = (
-                    scatter(
-                        features,
-                        batch_index,
-                        batch_index.max().item() + 1,
-                        aggr="add",
-                        axis=0,
-                    ).sum(axis=-1, keepdims=True)
-                    / norm
-                )
+    ) -> mx.array:
+        """Normalizes the features.
 
-                node_features = features - mx.take(mean, batch_index, axis=0)
-                variance = scatter(
-                    node_features * node_features,
-                    batch_index,
-                    batch_index.max().item() + 1,
-                    aggr="add",
-                    axis=0,
-                ).sum(axis=-1, keepdims=True)
-                variance = variance / norm
-                out = node_features / mx.take(
-                    (variance + self.eps).sqrt(), batch_index, axis=0
-                )
-            if self.affine and self.weight is not None and self.bias is not None:
-                out = out * self.weight + self.bias
+        Args:
+            features: Features of shape ``[num_nodes, num_features]``.
+            batch: Graph of each node, of shape ``[num_nodes]`` (``"graph"``
+                mode). Default: ``None`` (all the nodes form one graph).
+            batch_size: Number of graphs. Default: ``None`` (inferred from
+                ``batch``).
 
-            return out
+        Returns:
+            The normalized features.
+        """
+        weight = self.weight if self.affine else None
+        bias = self.bias if self.affine else None
+        if self.mode == "node":
+            return mx.fast.layer_norm(features, weight, bias, self.eps)
 
-        elif self.mode == "node":
-            return self.layernorm(features)
+        # "graph" mode: statistics over all the nodes and channels of a graph
+        if batch is None:
+            features = features - features.mean()
+            out = features / (mx.sqrt(features.var()) + self.eps)
         else:
-            raise ValueError(f"Unknow normalization mode: {self.mode}")
+            if batch_size is None:
+                batch_size = int(batch.max().item()) + 1 if batch.size > 0 else 1
+            count = mx.maximum(degree(batch, batch_size), 1) * features.shape[-1]
+            count = count.astype(features.dtype).reshape(-1, 1)
+            mean = scatter(features, batch, batch_size, "add").sum(
+                axis=-1, keepdims=True
+            )
+            features = features - (mean / count)[batch]
+            var = scatter(features * features, batch, batch_size, "add").sum(
+                axis=-1, keepdims=True
+            )
+            out = features / mx.sqrt(var / count + self.eps)[batch]
+        if self.affine:
+            out = out * weight + bias
+        return out
 
 
 class HeteroLayerNormalization(nn.Module):

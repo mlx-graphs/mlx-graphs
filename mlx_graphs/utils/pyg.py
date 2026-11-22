@@ -41,8 +41,8 @@ def from_pyg(data: "Data") -> "GraphData":
     - ``x`` -> ``node_features``
     - ``edge_attr`` -> ``edge_features``
     - ``edge_weight`` -> ``edge_weights``
-    - ``y`` -> ``node_labels`` if it has one entry per node, ``graph_labels``
-      otherwise
+    - ``y`` -> ``node_labels`` if it has one entry per node (and the graph
+      has more than one node), ``graph_labels`` otherwise
 
     Every other tensor attribute (e.g. ``train_mask``, ``pos``) is converted
     to an ``mx.array`` and kept under the same name, and plain Python scalars
@@ -96,7 +96,8 @@ def from_pyg(data: "Data") -> "GraphData":
             value = torch.from_numpy(value)
         if isinstance(value, torch.Tensor):
             if key == "y":
-                per_node = value.dim() > 0 and value.shape[0] == num_nodes
+                # a one-entry `y` of a single-node graph is a graph label
+                per_node = value.dim() > 0 and value.shape[0] == num_nodes > 1
                 key = "node_labels" if per_node else "graph_labels"
             attributes[_PYG_TO_MLX_NAMES.get(key, key)] = to_mlx(value)
         elif isinstance(value, _SCALAR_TYPES):

@@ -138,3 +138,22 @@ def test_gcn_conv_empty_graph_with_self_loops():
     np.testing.assert_allclose(
         np.array(out), np.array(conv.linear(x) + conv.bias), rtol=2e-2, atol=2e-2
     )
+
+
+def test_gcn_conv_adds_self_loops_by_default():
+    # As PyG's GCNConv (mlx-graphs 0.0.11 and earlier: add_self_loops=False).
+    torch = pytest.importorskip("torch")
+    pyg_nn = pytest.importorskip("torch_geometric.nn")
+    assert GCNConv(4, 3)._add_self_loops
+
+    rng = np.random.default_rng(0)
+    edge_index = rng.integers(0, 10, (2, 30))
+    x = rng.standard_normal((12, 4)).astype(np.float32)
+    ref = pyg_nn.GCNConv(4, 3)
+    conv = GCNConv(4, 3)
+    conv.linear.weight = mx.array(ref.lin.weight.detach().numpy())
+    conv.bias = mx.array(ref.bias.detach().numpy())
+    with torch.no_grad():
+        expected = ref(torch.tensor(x), torch.tensor(edge_index)).numpy()
+    out = conv(mx.array(edge_index), mx.array(x))
+    np.testing.assert_allclose(np.array(out), expected, rtol=2e-2, atol=2e-2)

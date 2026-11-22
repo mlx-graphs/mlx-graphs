@@ -21,9 +21,9 @@ class GCN(nn.Module):
     def __init__(self, in_dim, hidden_dim, out_dim, dropout=0.5):
         super(GCN, self).__init__()
 
-        self.conv1 = GCNConv(in_dim, hidden_dim)
-        self.conv2 = GCNConv(hidden_dim, hidden_dim)
-        self.conv3 = GCNConv(hidden_dim, hidden_dim)
+        self.conv1 = GCNConv(in_dim, hidden_dim, add_self_loops=False)
+        self.conv2 = GCNConv(hidden_dim, hidden_dim, add_self_loops=False)
+        self.conv3 = GCNConv(hidden_dim, hidden_dim, add_self_loops=False)
         self.linear = Linear(hidden_dim, out_dim)
 
         self.dropout = nn.Dropout(p=dropout)

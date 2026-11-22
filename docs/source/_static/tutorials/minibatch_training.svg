@@ -1,0 +1,334 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 564" width="960" height="564" role="img" aria-labelledby="t d">
+  <title id="t">Mini-batch training of GraphSAGE on ogbn-arxiv: full batch, NeighborLoader, ClusterLoader and GraphSAINT</title>
+  <desc id="d">A 3-layer GraphSAGE is trained on ogbn-arxiv (169,343 nodes, 2.3 million undirected edges, 40 classes) with Adam and cross-entropy, and evaluated on the full graph or with layer-wise inference. One training batch is shown for four strategies on the same toy graph: full batch uses every node and edge in one step; NeighborLoader samples 15, 10 and 5 neighbors per hop around 1,024 seed nodes and computes the loss on the seeds only; ClusterLoader merges 25 of 500 precomputed clusters and drops the edges to the other clusters; GraphSAINTRandomWalkSampler takes the subgraph induced by short random walks and weights the loss with node_norm. Full-batch training is compared with PyG on the CPU. ShaDowKHopSampler, RandomNodeLoader, ImbalancedSampler and DynamicBatchSampler are also covered.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .alab { font-size: 11px; fill: #52514e; }
+    .malab { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+    .chip { font-size: 11.5px; font-weight: 600; }
+    .num { font-variant-numeric: tabular-nums; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="562.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+  <rect x="24" y="52" width="176" height="116" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="224" y="52" width="372" height="116" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="226" y="40">MODEL · SAGE</text>
+  <rect x="620" y="52" width="146" height="116" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="622" y="40">TRAIN</text>
+  <rect x="790" y="52" width="146" height="116" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="792" y="40">EVALUATE</text>
+  <rect x="34" y="62" width="156" height="96" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="85.3">OGBDataset</text>
+  <text class="sub" x="42" y="100.4">ogbn-arxiv</text>
+  <text class="sub" x="42" y="114.9">169,343 nodes</text>
+  <text class="sub" x="42" y="129.4">2.3M edges, undirected</text>
+  <text class="sub" x="42" y="143.9">128 feats · 40 classes</text>
+  <rect x="234" y="62" width="352" height="96" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="title" x="244" y="80">SAGE</text>
+  <text class="small" x="576" y="80" text-anchor="end">mean aggregation · ReLU, dropout 0.5</text>
+  <rect x="244" y="98" width="97.3333" height="48" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="252" y="119.1">SAGEConv</text>
+  <text class="sub" x="252" y="134.1">128 → 256</text>
+  <rect x="361.333" y="98" width="97.3333" height="48" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="369.333" y="119.1">SAGEConv</text>
+  <text class="sub" x="369.333" y="134.1">256 → 256</text>
+  <path d="M341.333,122 L360.333,122" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="478.667" y="98" width="97.3333" height="48" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="486.667" y="119.1">SAGEConv</text>
+  <text class="sub" x="486.667" y="134.1">256 → 40</text>
+  <path d="M458.667,122 L477.667,122" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="630" y="62" width="126" height="96" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="85.3">Adam</text>
+  <text class="sub" x="638" y="100.4">lr 0.01</text>
+  <text class="sub" x="638" y="114.9">cross-entropy</text>
+  <text class="sub" x="638" y="129.4">same start weights</text>
+  <text class="sub" x="638" y="143.9">4 ways, below</text>
+  <rect x="800" y="62" width="126" height="44" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="81.1">accuracy</text>
+  <text class="sub" x="808" y="96.1">test at best val</text>
+  <rect x="800" y="114" width="126" height="44" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="133.1">layer-wise eval</text>
+  <text class="sub" x="808" y="148.1">exact, [-1] fan-out</text>
+  <path d="M204,110 L220,110" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M600,110 L616,110" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M770,110 L786,110" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M693,172 L693,198" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <!-- row B: one training batch per strategy, on the same toy graph -->
+  <rect x="24" y="202" width="912" height="216" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="190">TRAIN · ONE BATCH, FOUR WAYS</text>
+  <rect x="34" y="212" width="214" height="196" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="stitle" x="42" y="232">full batch</text>
+  <text class="msub" x="42" y="248">model(edge_index, x)</text>
+  <line x1="71.0" y1="273" x2="85.0" y2="283" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="85.0" y1="283" x2="80.0" y2="300" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="80.0" y1="300" x2="62.0" y2="300" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="62.0" y1="300" x2="57.0" y2="283" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="57.0" y1="283" x2="71.0" y2="273" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="71.0" y1="273" x2="80.0" y2="300" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="121.0" y1="307" x2="135.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="135.0" y1="317" x2="130.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="130.0" y1="334" x2="112.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="112.0" y1="334" x2="107.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="107.0" y1="317" x2="121.0" y2="307" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="121.0" y1="307" x2="130.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="169.0" y1="271" x2="183.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="183.0" y1="281" x2="178.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="178.0" y1="298" x2="160.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="160.0" y1="298" x2="155.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="155.0" y1="281" x2="169.0" y2="271" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="169.0" y1="271" x2="178.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="215.0" y1="305" x2="229.0" y2="315" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="229.0" y1="315" x2="224.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="224.0" y1="332" x2="206.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="206.0" y1="332" x2="201.0" y2="315" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="201.0" y1="315" x2="215.0" y2="305" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="215.0" y1="305" x2="224.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="80.0" y1="300" x2="107.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="85.0" y1="283" x2="155.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="121.0" y1="307" x2="160.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="135.0" y1="317" x2="201.0" y2="315" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="178.0" y1="298" x2="215.0" y2="305" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="130.0" y1="334" x2="206.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <circle cx="71.0" cy="273" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="85.0" cy="283" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="80.0" cy="300" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="62.0" cy="300" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="57.0" cy="283" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="121.0" cy="307" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="135.0" cy="317" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="130.0" cy="334" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="112.0" cy="334" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="107.0" cy="317" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="169.0" cy="271" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="183.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="178.0" cy="298" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="160.0" cy="298" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="155.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="215.0" cy="305" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="229.0" cy="315" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="224.0" cy="332" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="206.0" cy="332" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="201.0" cy="315" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="sub" x="42" y="358">whole graph, 1 step / epoch</text>
+  <text class="sub" x="42" y="373">loss: all train nodes</text>
+  <rect x="42" y="378" width="104" height="22" rx="4" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="chip" x="94" y="392.9" text-anchor="middle">mlx-graphs · GPU</text>
+  <rect x="154" y="378" width="86" height="22" rx="4" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="chip" x="197" y="392.9" text-anchor="middle">PyG · CPU</text>
+  <rect x="260" y="212" width="214" height="196" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="stitle" x="268" y="232">neighbor sampling</text>
+  <text class="msub" x="268" y="248">NeighborLoader</text>
+  <line x1="297.0" y1="273" x2="311.0" y2="283" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="311.0" y1="283" x2="306.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="306.0" y1="300" x2="288.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="288.0" y1="300" x2="283.0" y2="283" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="283.0" y1="283" x2="297.0" y2="273" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="297.0" y1="273" x2="306.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="356.0" y1="334" x2="338.0" y2="334" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="338.0" y1="334" x2="333.0" y2="317" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="333.0" y1="317" x2="347.0" y2="307" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="409.0" y1="281" x2="404.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="404.0" y1="298" x2="386.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="386.0" y1="298" x2="381.0" y2="281" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="381.0" y1="281" x2="395.0" y2="271" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="441.0" y1="305" x2="455.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="455.0" y1="315" x2="450.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="450.0" y1="332" x2="432.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="432.0" y1="332" x2="427.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="427.0" y1="315" x2="441.0" y2="305" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="441.0" y1="305" x2="450.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="306.0" y1="300" x2="333.0" y2="317" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="311.0" y1="283" x2="381.0" y2="281" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="347.0" y1="307" x2="386.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="361.0" y1="317" x2="427.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="404.0" y1="298" x2="441.0" y2="305" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="356.0" y1="334" x2="432.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="347.0" y1="307" x2="356.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="361.0" y1="317" x2="356.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="409.0" y1="281" x2="395.0" y2="271" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="404.0" y1="298" x2="395.0" y2="271" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="361.0" y1="317" x2="347.0" y2="307" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="347.0" y1="307" x2="361.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="395.0" y1="271" x2="409.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="395.0" y1="271" x2="404.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <circle cx="297.0" cy="273" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="311.0" cy="283" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="306.0" cy="300" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="288.0" cy="300" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="283.0" cy="283" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="347.0" cy="307" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="361.0" cy="317" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="356.0" cy="334" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="338.0" cy="334" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="333.0" cy="317" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="395.0" cy="271" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="409.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="404.0" cy="298" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="386.0" cy="298" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="381.0" cy="281" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="441.0" cy="305" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="455.0" cy="315" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="450.0" cy="332" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="432.0" cy="332" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="427.0" cy="315" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <text class="sub" x="268" y="358">1,024 seeds, fan-out [15, 10, 5]</text>
+  <text class="sub" x="268" y="373">→ 69k nodes · 89 steps / epoch</text>
+  <text class="sub" x="268" y="388">loss: seeds only, listed first</text>
+  <rect x="486" y="212" width="214" height="196" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="stitle" x="494" y="232">Cluster-GCN</text>
+  <text class="malab" x="494" y="248">ClusterData, ClusterLoader</text>
+  <circle cx="523.0" cy="289" r="23" fill="none" stroke="#c9c8c0" stroke-width="1" stroke-dasharray="3 2"/>
+  <circle cx="573.0" cy="323" r="23" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1" stroke-dasharray="3 2"/>
+  <circle cx="621.0" cy="287" r="23" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1" stroke-dasharray="3 2"/>
+  <circle cx="667.0" cy="321" r="23" fill="none" stroke="#c9c8c0" stroke-width="1" stroke-dasharray="3 2"/>
+  <line x1="523.0" y1="273" x2="537.0" y2="283" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="537.0" y1="283" x2="532.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="532.0" y1="300" x2="514.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="514.0" y1="300" x2="509.0" y2="283" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="509.0" y1="283" x2="523.0" y2="273" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="523.0" y1="273" x2="532.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="667.0" y1="305" x2="681.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="681.0" y1="315" x2="676.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="676.0" y1="332" x2="658.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="658.0" y1="332" x2="653.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="653.0" y1="315" x2="667.0" y2="305" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="667.0" y1="305" x2="676.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="532.0" y1="300" x2="559.0" y2="317" stroke="#b9b8b0" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <line x1="537.0" y1="283" x2="607.0" y2="281" stroke="#b9b8b0" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <line x1="587.0" y1="317" x2="653.0" y2="315" stroke="#b9b8b0" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <line x1="630.0" y1="298" x2="667.0" y2="305" stroke="#b9b8b0" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <line x1="582.0" y1="334" x2="658.0" y2="332" stroke="#b9b8b0" stroke-width="1.2" stroke-dasharray="3 2"/>
+  <line x1="573.0" y1="307" x2="587.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="587.0" y1="317" x2="582.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="582.0" y1="334" x2="564.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="564.0" y1="334" x2="559.0" y2="317" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="559.0" y1="317" x2="573.0" y2="307" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="573.0" y1="307" x2="582.0" y2="334" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="621.0" y1="271" x2="635.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="635.0" y1="281" x2="630.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="630.0" y1="298" x2="612.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="612.0" y1="298" x2="607.0" y2="281" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="607.0" y1="281" x2="621.0" y2="271" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="621.0" y1="271" x2="630.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="573.0" y1="307" x2="612.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <circle cx="523.0" cy="273" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="537.0" cy="283" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="532.0" cy="300" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="514.0" cy="300" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="509.0" cy="283" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="573.0" cy="307" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="587.0" cy="317" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="582.0" cy="334" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="564.0" cy="334" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="559.0" cy="317" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="621.0" cy="271" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="635.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="630.0" cy="298" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="612.0" cy="298" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="607.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="667.0" cy="305" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="681.0" cy="315" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="676.0" cy="332" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="658.0" cy="332" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="653.0" cy="315" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <text class="sub" x="494" y="358">500 parts, computed once</text>
+  <text class="sub" x="494" y="373">25 per batch → 8.4k nodes · 20 steps</text>
+  <text class="sub" x="494" y="388">edges to other clusters dropped</text>
+  <rect x="712" y="212" width="214" height="196" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="stitle" x="720" y="232">GraphSAINT</text>
+  <text class="malab" x="720" y="248">GraphSAINTRandomWalkSampler</text>
+  <line x1="758.0" y1="300" x2="740.0" y2="300" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="740.0" y1="300" x2="735.0" y2="283" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="735.0" y1="283" x2="749.0" y2="273" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="799.0" y1="307" x2="813.0" y2="317" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="813.0" y1="317" x2="808.0" y2="334" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="808.0" y1="334" x2="790.0" y2="334" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="790.0" y1="334" x2="785.0" y2="317" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="785.0" y1="317" x2="799.0" y2="307" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="799.0" y1="307" x2="808.0" y2="334" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="847.0" y1="271" x2="861.0" y2="281" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="856.0" y1="298" x2="838.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="838.0" y1="298" x2="833.0" y2="281" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="833.0" y1="281" x2="847.0" y2="271" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="847.0" y1="271" x2="856.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="893.0" y1="305" x2="907.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="907.0" y1="315" x2="902.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="758.0" y1="300" x2="785.0" y2="317" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="763.0" y1="283" x2="833.0" y2="281" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="799.0" y1="307" x2="838.0" y2="298" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="813.0" y1="317" x2="879.0" y2="315" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="808.0" y1="334" x2="884.0" y2="332" stroke="#e4e3dd" stroke-width="1.2"/>
+  <line x1="749.0" y1="273" x2="763.0" y2="283" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="763.0" y1="283" x2="758.0" y2="300" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="749.0" y1="273" x2="758.0" y2="300" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="861.0" y1="281" x2="856.0" y2="298" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="902.0" y1="332" x2="884.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="884.0" y1="332" x2="879.0" y2="315" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="879.0" y1="315" x2="893.0" y2="305" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="893.0" y1="305" x2="902.0" y2="332" stroke="#6b6a64" stroke-width="1.3"/>
+  <line x1="856.0" y1="298" x2="893.0" y2="305" stroke="#6b6a64" stroke-width="1.3"/>
+  <circle cx="749.0" cy="273" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="763.0" cy="283" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="758.0" cy="300" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="740.0" cy="300" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="735.0" cy="283" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="799.0" cy="307" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="813.0" cy="317" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="808.0" cy="334" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="790.0" cy="334" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="785.0" cy="317" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="847.0" cy="271" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="861.0" cy="281" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="856.0" cy="298" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="838.0" cy="298" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="833.0" cy="281" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="893.0" cy="305" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="907.0" cy="315" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <circle cx="902.0" cy="332" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="884.0" cy="332" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <circle cx="879.0" cy="315" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="sub" x="720" y="358">20,000 walks of 2 steps</text>
+  <text class="sub" x="720" y="373">→ 44k nodes · 8 steps / epoch</text>
+  <text class="sub" x="720" y="388">loss weighted by node_norm</text>
+  <!-- row C: smaller tools -->
+  <rect x="24" y="452" width="912" height="66" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="440">ALSO IN THIS TUTORIAL</text>
+  <rect x="34" y="462" width="214" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="482.1">ShaDowKHopSampler</text>
+  <text class="sub" x="42" y="497.1">a 2-hop subgraph per root</text>
+  <rect x="260" y="462" width="214" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="268" y="482.1">RandomNodeLoader</text>
+  <text class="sub" x="268" y="497.1">random node parts</text>
+  <rect x="486" y="462" width="214" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="494" y="482.1">ImbalancedSampler</text>
+  <text class="sub" x="494" y="497.1">class-balanced seeds</text>
+  <rect x="712" y="462" width="214" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="720" y="482.1">DynamicBatchSampler</text>
+  <text class="sub" x="720" y="497.1">≤ max_num nodes · follow_batch</text>
+  <circle cx="30" cy="538" r="4" fill="#1baf7a" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="40" y="542">loss nodes</text>
+  <circle cx="116" cy="538" r="4" fill="#ffffff" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="126" y="542">in the batch</text>
+  <circle cx="208" cy="538" r="3.2" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.2"/>
+  <text class="leg" x="218" y="542">not in the batch</text>
+  <rect x="537.21" y="533" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="553.21" y="542">data</text>
+  <rect x="593.98" y="533" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="609.98" y="542">trainable weights</text>
+  <rect x="715.207" y="533" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="731.207" y="542">no weights</text>
+  <rect x="805.212" y="533" width="10" height="10" rx="2.5" fill="#e9f1fb" stroke="#2a78d6" stroke-width="1.5"/>
+  <text class="leg" x="821.212" y="542">mlx-graphs</text>
+  <rect x="897.632" y="533" width="10" height="10" rx="2.5" fill="#fdeee7" stroke="#eb6834" stroke-width="1.5"/>
+  <text class="leg" x="913.632" y="542">PyG</text>
+</svg>

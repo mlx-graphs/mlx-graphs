@@ -1,0 +1,220 @@
+"""PyG's examples/tgn.py (CPU, 2 threads), with --epochs/--seed/--json."""
+
+import json
+import sys
+import time
+from argparse import ArgumentParser
+
+import torch
+import torch_geometric.nn.models.tgn as tgn_module
+from sklearn.metrics import average_precision_score, roc_auc_score
+from torch.nn import Linear
+from torch_geometric.datasets import JODIEDataset
+from torch_geometric.loader import TemporalDataLoader
+from torch_geometric.nn import TGNMemory, TransformerConv
+from torch_geometric.nn.models.tgn import (
+    IdentityMessage,
+    LastAggregator,
+    LastNeighborLoader,
+)
+
+parser = ArgumentParser()
+parser.add_argument("--root", required=True)
+parser.add_argument("--epochs", type=int, default=5)
+parser.add_argument("--seed", type=int, default=0)
+parser.add_argument("--fix_argmax", action="store_true")
+args = parser.parse_args()
+
+if args.fix_argmax:
+    # torch-scatter semantics for empty groups (see the report)
+    def scatter_argmax(src, index, dim=0, dim_size=None):
+        res = src.new_empty(dim_size)
+        res.scatter_reduce_(0, index, src, reduce="amax", include_self=False)
+        out = index.new_full((dim_size,), fill_value=src.size(0))
+        nonzero = (src == res[index]).nonzero().view(-1)
+        out[index[nonzero]] = nonzero
+        return out
+
+    tgn_module.scatter_argmax = scatter_argmax
+
+torch.set_num_threads(2)
+torch.manual_seed(args.seed)
+device = torch.device("cpu")
+
+dataset = JODIEDataset(args.root, name="wikipedia")
+data = dataset[0]
+data = data.to(device)
+
+train_data, val_data, test_data = data.train_val_test_split(
+    val_ratio=0.15, test_ratio=0.15
+)
+train_loader = TemporalDataLoader(train_data, batch_size=200, neg_sampling_ratio=1.0)
+val_loader = TemporalDataLoader(val_data, batch_size=200, neg_sampling_ratio=1.0)
+test_loader = TemporalDataLoader(test_data, batch_size=200, neg_sampling_ratio=1.0)
+neighbor_loader = LastNeighborLoader(data.num_nodes, size=10, device=device)
+
+
+class GraphAttentionEmbedding(torch.nn.Module):
+    def __init__(self, in_channels, out_channels, msg_dim, time_enc):
+        super().__init__()
+        self.time_enc = time_enc
+        edge_dim = msg_dim + time_enc.out_channels
+        self.conv = TransformerConv(
+            in_channels, out_channels // 2, heads=2, dropout=0.1, edge_dim=edge_dim
+        )
+
+    def forward(self, x, last_update, edge_index, t, msg):
+        rel_t = last_update[edge_index[0]] - t
+        rel_t_enc = self.time_enc(rel_t.to(x.dtype))
+        edge_attr = torch.cat([rel_t_enc, msg], dim=-1)
+        return self.conv(x, edge_index, edge_attr)
+
+
+class LinkPredictor(torch.nn.Module):
+    def __init__(self, in_channels):
+        super().__init__()
+        self.lin_src = Linear(in_channels, in_channels)
+        self.lin_dst = Linear(in_channels, in_channels)
+        self.lin_final = Linear(in_channels, 1)
+
+    def forward(self, z_src, z_dst):
+        h = self.lin_src(z_src) + self.lin_dst(z_dst)
+        h = h.relu()
+        return self.lin_final(h)
+
+
+memory_dim = time_dim = embedding_dim = 100
+
+memory = TGNMemory(
+    data.num_nodes,
+    data.msg.size(-1),
+    memory_dim,
+    time_dim,
+    message_module=IdentityMessage(data.msg.size(-1), memory_dim, time_dim),
+    aggregator_module=LastAggregator(),
+).to(device)
+
+gnn = GraphAttentionEmbedding(
+    in_channels=memory_dim,
+    out_channels=embedding_dim,
+    msg_dim=data.msg.size(-1),
+    time_enc=memory.time_enc,
+).to(device)
+
+link_pred = LinkPredictor(in_channels=embedding_dim).to(device)
+
+optimizer = torch.optim.Adam(
+    set(memory.parameters()) | set(gnn.parameters()) | set(link_pred.parameters()),
+    lr=0.0001,
+)
+criterion = torch.nn.BCEWithLogitsLoss()
+
+assoc = torch.empty(data.num_nodes, dtype=torch.long, device=device)
+
+
+def train():
+    memory.train()
+    gnn.train()
+    link_pred.train()
+
+    memory.reset_state()
+    neighbor_loader.reset_state()
+
+    total_loss = 0
+    for batch in train_loader:
+        optimizer.zero_grad()
+        batch = batch.to(device)
+
+        n_id, edge_index, e_id = neighbor_loader(batch.n_id)
+        assoc[n_id] = torch.arange(n_id.size(0), device=device)
+
+        z, last_update = memory(n_id)
+        z = gnn(
+            z,
+            last_update,
+            edge_index,
+            data.t[e_id].to(device),
+            data.msg[e_id].to(device),
+        )
+        pos_out = link_pred(z[assoc[batch.src]], z[assoc[batch.dst]])
+        neg_out = link_pred(z[assoc[batch.src]], z[assoc[batch.neg_dst]])
+
+        loss = criterion(pos_out, torch.ones_like(pos_out))
+        loss += criterion(neg_out, torch.zeros_like(neg_out))
+
+        memory.update_state(batch.src, batch.dst, batch.t, batch.msg)
+        neighbor_loader.insert(batch.src, batch.dst)
+
+        loss.backward()
+        optimizer.step()
+        memory.detach()
+        total_loss += float(loss) * batch.num_events
+
+    return total_loss / train_data.num_events
+
+
+@torch.no_grad()
+def test(loader):
+    memory.eval()
+    gnn.eval()
+    link_pred.eval()
+
+    torch.manual_seed(12345)
+
+    aps, aucs = [], []
+    for batch in loader:
+        batch = batch.to(device)
+
+        n_id, edge_index, e_id = neighbor_loader(batch.n_id)
+        assoc[n_id] = torch.arange(n_id.size(0), device=device)
+
+        z, last_update = memory(n_id)
+        z = gnn(
+            z,
+            last_update,
+            edge_index,
+            data.t[e_id].to(device),
+            data.msg[e_id].to(device),
+        )
+        pos_out = link_pred(z[assoc[batch.src]], z[assoc[batch.dst]])
+        neg_out = link_pred(z[assoc[batch.src]], z[assoc[batch.neg_dst]])
+
+        y_pred = torch.cat([pos_out, neg_out], dim=0).sigmoid().cpu()
+        y_true = torch.cat(
+            [torch.ones(pos_out.size(0)), torch.zeros(neg_out.size(0))], dim=0
+        )
+
+        aps.append(average_precision_score(y_true, y_pred))
+        aucs.append(roc_auc_score(y_true, y_pred))
+
+        memory.update_state(batch.src, batch.dst, batch.t, batch.msg)
+        neighbor_loader.insert(batch.src, batch.dst)
+    return float(torch.tensor(aps).mean()), float(torch.tensor(aucs).mean())
+
+
+history = []
+for epoch in range(1, args.epochs + 1):
+    start = time.perf_counter()
+    loss = train()
+    val_ap, val_auc = test(val_loader)
+    test_ap, test_auc = test(test_loader)
+    seconds = time.perf_counter() - start
+    print(
+        f"Epoch: {epoch:02d}, Loss: {loss:.4f}, Val AP: {val_ap:.4f}, "
+        f"Val AUC: {val_auc:.4f}, Test AP: {test_ap:.4f}, "
+        f"Test AUC: {test_auc:.4f} ({seconds:.1f} s)",
+        file=sys.stderr,
+        flush=True,
+    )
+    history.append(
+        dict(
+            epoch=epoch,
+            loss=loss,
+            val_ap=val_ap,
+            val_auc=val_auc,
+            test_ap=test_ap,
+            test_auc=test_auc,
+            seconds=seconds,
+        )
+    )
+print(json.dumps(history))

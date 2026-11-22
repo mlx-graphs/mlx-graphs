@@ -13,7 +13,7 @@ OGB_NODE_DATASET = Literal[
     "ogbn-proteins",
     "ogbn-arxiv",
     "ogbn-papers100M",
-    # "ogbn-mag", # TODO: requires heterogeneous graphs
+    # "ogbn-mag": heterogeneous, see mlx_graphs.datasets.OGBMAG
 ]
 OGB_EDGE_DATASET = Literal[
     "ogbl-ppa",
@@ -36,7 +36,7 @@ ALL_DATASETS = Literal[
     "ogbn-proteins",
     "ogbn-arxiv",
     "ogbn-papers100M",
-    # "ogbn-mag", # TODO: requires heterogeneous graphs
+    # "ogbn-mag": heterogeneous, see mlx_graphs.datasets.OGBMAG
     "ogbl-ppa",
     "ogbl-collab",
     "ogbl-ddi",
@@ -102,7 +102,8 @@ class OGBDataset(Dataset):
 
     .. note::
 
-        The ogbn-mag, ogbl-wikikg2 and igbl-biokg and the graphs belonging to the
+        ogbn-mag is available as :class:`OGBMAG`. The ogbl-wikikg2 and
+        igbl-biokg and the graphs belonging to the
         largs-scale challenge category are currently not available as
         they require heterogenous graphs which are not yet supported by `mlx-graphs`
 
@@ -123,6 +124,10 @@ class OGBDataset(Dataset):
         split: Optional[Literal["train", "val", "test"]] = None,
         base_dir: Optional[str] = None,
     ):
+        if name == "ogbn-mag":
+            raise ValueError(
+                "ogbn-mag is heterogeneous: use mlx_graphs.datasets.OGBMAG"
+            )
         self.split = split
         self._raw_ogb_dataset = None
         super().__init__(name, base_dir)

@@ -23,11 +23,13 @@ Names at a glance
    * - PyG
      - mlx-graphs
    * - ``Data(x, edge_index, edge_attr, y)``
-     - ``GraphData(edge_index, node_features, edge_features, node_labels / graph_labels)``
+     - ``GraphData(edge_index, node_features, edge_features, node_labels / graph_labels)``;
+       ``data.x``, ``data.edge_attr`` and ``data.y`` also work
    * - ``DataLoader(dataset, batch_size)``
-     - :class:`~mlx_graphs.loaders.Dataloader` ``(dataset, batch_size)``
-   * - ``batch.batch``
-     - ``batch.batch_indices``
+     - :class:`~mlx_graphs.loaders.Dataloader` ``(dataset, batch_size)``, with
+       ``shuffle``, ``drop_last``, ``follow_batch``, ``sampler`` and ``batch_sampler``
+   * - ``batch.batch``, ``batch.ptr``
+     - ``batch.batch_indices`` (``batch.batch`` and ``batch.ptr`` also work)
    * - ``GCNConv(in_channels, out_channels)``
      - ``GCNConv(node_features_dim, out_features_dim)``
    * - ``conv(x, edge_index)``
@@ -38,12 +40,54 @@ Names at a glance
      - :class:`~mlx_graphs.nn.GCN` (also ``GraphSAGE``, ``GIN``, ``GAT``, ``MLP``)
    * - ``Planetoid(root, "Cora")``
      - ``PlanetoidDataset("cora")``
+   * - ``SAGEConv(..., aggr=["mean", "max"])``, ``aggr=SoftmaxAggregation()``
+     - the same: aggregation names, lists and modules
+       (:mod:`mlx_graphs.nn.aggr`)
+   * - ``BatchNorm``, ``LayerNorm``, ``GraphNorm``, ``PairNorm``...
+     - the same names (aliases of ``BatchNormalization``, ...)
    * - ``message(self, x_j, x_i)``
      - ``message(self, src_features, dst_features, **kwargs)``
    * - ``.to(device)``
      - nothing: memory is shared by the CPU and the GPU
 
 The tensors are ``mx.array`` instead of ``torch.Tensor``.
+
+
+Where PyG features live
+-----------------------
+
+Beyond layers and datasets, most of PyG's toolbox has a counterpart with the
+same name:
+
+.. list-table::
+   :header-rows: 1
+   :widths: 40 60
+
+   * - PyG
+     - mlx-graphs
+   * - ``torch_geometric.loader``: ``NeighborLoader``, ``LinkNeighborLoader``,
+       ``HGTLoader``, ``ClusterLoader``, GraphSAINT, ``ShaDowKHopSampler``,
+       ``ImbalancedSampler``, ``DynamicBatchSampler``...
+     - :mod:`mlx_graphs.loaders`, same names. The samplers are built in
+       (no ``pyg-lib`` / ``torch-sparse`` needed).
+   * - ``torch_geometric.nn.to_hetero``, ``to_hetero_with_bases``,
+       ``HeteroConv``, ``HANConv``, ``HGTConv``
+     - :func:`~mlx_graphs.nn.to_hetero`, :func:`~mlx_graphs.nn.to_hetero_with_bases`
+       and the same layers, on :class:`~mlx_graphs.data.HeteroGraphData`
+   * - ``TemporalData``, ``TemporalDataLoader``, ``TGNMemory``
+     - :class:`~mlx_graphs.data.TemporalData`,
+       :class:`~mlx_graphs.loaders.TemporalDataLoader`,
+       :class:`~mlx_graphs.nn.TGNMemory` (see the TGN tutorial)
+   * - ``GPSConv``, ``SGFormer``, ``Polynormer``, ``AddLaplacianEigenvectorPE``,
+       ``AddRandomWalkPE``
+     - the same names in :mod:`mlx_graphs.nn` and :mod:`mlx_graphs.transforms`
+   * - ``torch_geometric.transforms``: ``NormalizeFeatures``, ``ToUndirected``,
+       ``RandomLinkSplit``...
+     - :mod:`mlx_graphs.transforms`, same names
+   * - ``torch_geometric.metrics`` (link prediction), AUC / AP
+     - :mod:`mlx_graphs.metrics`
+   * - ``torch_geometric.utils``
+     - :mod:`mlx_graphs.utils`, mostly the same names
 
 
 Converting data
@@ -121,9 +165,8 @@ And in mlx-graphs:
     class GCN(nn.Module):
         def __init__(self, in_dim, hidden_dim, out_dim):
             super().__init__()
-            # PyG's GCNConv adds self-loops by default, mlx-graphs' doesn't
-            self.conv1 = GCNConv(in_dim, hidden_dim, add_self_loops=True)
-            self.conv2 = GCNConv(hidden_dim, out_dim, add_self_loops=True)
+            self.conv1 = GCNConv(in_dim, hidden_dim)
+            self.conv2 = GCNConv(hidden_dim, out_dim)
             self.dropout = nn.Dropout(p=0.5)
 
         def __call__(self, edge_index, node_features):
@@ -133,11 +176,10 @@ And in mlx-graphs:
             return self.conv2(edge_index, h)
 
 The differences: ``mlx.nn.Module`` and ``__call__`` instead of ``forward``,
-``edge_index`` first in the calls, dropout as a module (it follows
-``model.train()`` / ``model.eval()`` as in PyTorch), and explicit self-loops.
+``edge_index`` first in the calls, and dropout as a module (it follows
+``model.train()`` / ``model.eval()`` as in PyTorch).
 
-The ready-made :class:`~mlx_graphs.nn.GCN` model does the same in one line,
-with self-loops on by default:
+The ready-made :class:`~mlx_graphs.nn.GCN` model does the same in one line:
 
 .. code-block:: python
 
@@ -284,14 +326,35 @@ layers get their speed (see the :doc:`../benchmarks`):
 Things to watch for
 -------------------
 
-- **Self-loops.** ``GCNConv`` doesn't add self-loops unless
-  ``add_self_loops=True`` (the ready-made ``GCN`` model does), and
-  ``GATConv`` / ``GATv2Conv`` never add them: call
-  :func:`~mlx_graphs.utils.add_self_loops` on the graph once beforehand.
+- **Self-loops.** ``GCNConv``, ``GATConv`` and ``GATv2Conv`` add self-loops
+  by default, as in PyG. Before this release they didn't: pass
+  ``add_self_loops=False`` to reproduce older mlx-graphs results.
+- **No lazy sizes.** MLX layers need their input sizes when they are built:
+  there is no ``in_channels=-1``. :func:`~mlx_graphs.nn.to_hetero` takes the
+  input size of each node type with ``input_dims`` (e.g.
+  ``data.num_node_features``).
 - **Lazy evaluation.** MLX builds a graph of operations and runs it when a
   value is needed. Call ``mx.eval`` on the parameters and optimizer state at
   the end of each training step, and ``.item()`` to read a loss.
 - **Optimizer.** ``bias_correction=True`` for ``Adam`` / ``AdamW``, as above.
+- **Unused parameters.** MLX returns a zero gradient for a parameter that
+  doesn't contribute to the loss, where PyTorch leaves its ``.grad`` at
+  ``None`` and the optimizer skips it. With weight decay or an L2 term, such
+  parameters then shrink at every step. To keep part of a model unused for a
+  while (e.g. a warm-up), ``freeze()`` it and call ``optimizer.init(...)``
+  after unfreezing.
+- **Index dtypes.** The built-in datasets and loaders use int32 indices
+  (``edge_index``, ``batch``, the ``n_id`` of sampled subgraphs...), where
+  PyG uses int64. :func:`~mlx_graphs.utils.from_pyg` keeps PyG's dtypes;
+  both work.
+- **Memory with varying shapes.** MLX caches buffers by size. With batches
+  of graphs of different sizes, cap the cache with
+  ``mx.set_cache_limit(...)`` to keep memory bounded.
+- **Compilation.** Most layers work under ``mx.compile``. Layers that need
+  the number of nodes per graph on the host (the LSTM, sort and set
+  transformer aggregations, ``TopKPooling`` / ``SAGPooling``, and
+  ``GPSConv`` / ``SGFormer`` / ``Polynormer`` unless given a precomputed
+  ``layout``) work with ``nn.value_and_grad`` but not inside ``mx.compile``.
 - **Initialization.** Layers are initialized as in PyG (Glorot for GCN and
   GAT, PyTorch's default ``Linear`` initialization for GraphSAGE and
   GraphConv), so a ported model starts from the same distribution.

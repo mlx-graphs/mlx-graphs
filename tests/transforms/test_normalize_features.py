@@ -52,3 +52,46 @@ def test_transform(tmp_path):
             assert mx.array_equal(
                 mx.array(batch_pyg.y.tolist()), batch_mxg.node_labels
             ), "Two arrays(labels) between PyG and mxg are different"
+
+
+def test_normalize_features_pyg_alias():
+    from mlx_graphs.transforms import NormalizeFeatures
+
+    assert str(NormalizeFeatures()) == "NormalizeFeatures()"
+    assert NormalizeFeatures(["x", "edge_attr"]).attributes == [
+        "node_features",
+        "edge_features",
+    ]
+
+    node_features = mx.array([[1.0, 3.0], [0.0, 0.0]])
+    data = GraphData(edge_index=mx.array([[0, 1], [1, 0]]), node_features=node_features)
+    assert NormalizeFeatures()(data).node_features.tolist() == [[0.25, 0.75], [0, 0]]
+
+
+@pytest.mark.parametrize("attrs", [["x"], ["x", "edge_attr"]])
+def test_normalize_features_matches_pyg(attrs):
+    import numpy as np
+
+    pyg_transforms = pytest.importorskip("torch_geometric.transforms")
+    from mlx_graphs.transforms import NormalizeFeatures
+    from mlx_graphs.utils import to_pyg
+
+    rng = np.random.default_rng(0)
+    data = GraphData(
+        edge_index=mx.array([[0, 1, 2], [1, 2, 0]]),
+        node_features=mx.array(rng.normal(size=(3, 4)).astype(np.float32)),
+        edge_features=mx.array(rng.normal(size=(3, 2)).astype(np.float32)),
+    )
+    expected = pyg_transforms.NormalizeFeatures(attrs)(to_pyg(data))
+    out = NormalizeFeatures(attrs)(data)
+    assert np.allclose(np.asarray(out.node_features), expected.x.numpy(), atol=1e-6)
+    assert np.allclose(
+        np.asarray(out.edge_features), expected.edge_attr.numpy(), atol=1e-6
+    )
+
+
+def test_normalize_features_empty():
+    from mlx_graphs.transforms import NormalizeFeatures
+
+    data = GraphData(edge_index=mx.array([[0], [1]]), node_features=mx.zeros((2, 0)))
+    assert NormalizeFeatures()(data).node_features.shape == (2, 0)

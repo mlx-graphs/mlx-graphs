@@ -54,6 +54,9 @@ class SGConv(MessagePassing):
         h = conv(edge_index, node_features)
     """
 
+    # what follows the aggregation expects the size of one aggregation (as in PyG)
+    supports_concat_aggr = False
+
     def __init__(
         self,
         node_features_dim: int,

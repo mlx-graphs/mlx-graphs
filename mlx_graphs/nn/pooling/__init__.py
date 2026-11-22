@@ -6,3 +6,8 @@ from .global_pooling import (
 )
 from .jumping_knowledge import JumpingKnowledge  # noqa
 from .set2set import Set2Set  # noqa
+from .global_pooling import global_sort_pool  # noqa
+from .select import filter_adj, topk  # noqa
+from .topk_pool import TopKPooling  # noqa
+from .sag_pool import SAGPooling  # noqa
+from mlx_graphs.utils.spatial import knn, knn_graph, radius, radius_graph  # noqa
