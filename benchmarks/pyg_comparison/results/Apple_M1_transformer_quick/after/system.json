@@ -1,0 +1,22 @@
+{
+  "chip": "Apple M1",
+  "memory_gb": 8,
+  "os": "macOS 26.1",
+  "python": "3.13.5",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.2.0",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.5.0",
+  "library": {
+    "label": "0.2.0-027a48a",
+    "version": "0.2.0",
+    "commit": "027a48a13b269704777992ba4387d6bba81424a9",
+    "commit_date": "2026-11-21T22:38:06-08:00",
+    "commit_subject": "TransformerConv: attention scores with mlx_cluster.edge_scores, fused SpMM aggregation",
+    "branch": "transformer-edge-scores",
+    "dirty": false,
+    "repo_root": "/Users/vinaypandya/mlx_projects/mlx-graphs",
+    "imported_from": "/Users/vinaypandya/mlx_projects/mlx-graphs/mlx_graphs"
+  }
+}
