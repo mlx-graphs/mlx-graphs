@@ -10,9 +10,12 @@ Utils
 
 	transformations
 	graph
+	generators
+	sparse
 	topology
 	sorting
 	validators
 	scatter
 	array_ops
 	convert
+	spatial

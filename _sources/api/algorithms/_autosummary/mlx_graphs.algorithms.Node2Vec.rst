@@ -8,8 +8,12 @@
 	:show-inheritance:
 
 	
+	
 	.. automethod:: __call__
+	
 
+	
+	
 	
 	.. rubric:: Methods
 

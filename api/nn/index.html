@@ -45,12 +45,14 @@
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'api/nn/index';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="mlx_graphs.nn.Linear" href="_autosummary/mlx_graphs.nn.Linear.html" />
-    <link rel="prev" title="mlx_graphs.transforms.GCNNorm" href="../transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html" />
+    <link rel="prev" title="mlx_graphs.transforms.RemoveTrainingClasses" href="../transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
@@ -153,28 +155,38 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../install.html">Installation</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../guide/message_passing.html">Creating message passing layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../validation.html">Validation against PyG</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="current nav bd-sidenav">
@@ -182,6 +194,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../data/_autosummary/mlx_graphs.data.temporal.TemporalData.html">mlx_graphs.data.temporal.TemporalData</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -208,15 +221,50 @@
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.OGBMAG.html">mlx_graphs.datasets.OGBMAG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.CitationFull.html">mlx_graphs.datasets.CitationFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.CoraFull.html">mlx_graphs.datasets.CoraFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.HeterophilousGraphDataset.html">mlx_graphs.datasets.HeterophilousGraphDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.WebKB.html">mlx_graphs.datasets.WebKB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.WikipediaNetwork.html">mlx_graphs.datasets.WikipediaNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.Actor.html">mlx_graphs.datasets.Actor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.WikiCS.html">mlx_graphs.datasets.WikiCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.FB15k_237.html">mlx_graphs.datasets.FB15k_237</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.WordNet18.html">mlx_graphs.datasets.WordNet18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.WordNet18RR.html">mlx_graphs.datasets.WordNet18RR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.FakeDataset.html">mlx_graphs.datasets.FakeDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.FakeHeteroDataset.html">mlx_graphs.datasets.FakeHeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.JODIEDataset.html">mlx_graphs.datasets.JODIEDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.LRGBDataset.html">mlx_graphs.datasets.LRGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.GNNBenchmarkDataset.html">mlx_graphs.datasets.GNNBenchmarkDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.load_torch_file.html">mlx_graphs.datasets.utils.torch_serialization.load_torch_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix.html">mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.HGTLoader.html">mlx_graphs.loaders.HGTLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.LinkNeighborLoader.html">mlx_graphs.loaders.LinkNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.NegativeSampling.html">mlx_graphs.loaders.NegativeSampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.RandomNodeLoader.html">mlx_graphs.loaders.RandomNodeLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.GraphSAINTSampler.html">mlx_graphs.loaders.GraphSAINTSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.GraphSAINTNodeSampler.html">mlx_graphs.loaders.GraphSAINTNodeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.GraphSAINTEdgeSampler.html">mlx_graphs.loaders.GraphSAINTEdgeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.GraphSAINTRandomWalkSampler.html">mlx_graphs.loaders.GraphSAINTRandomWalkSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.ShaDowKHopSampler.html">mlx_graphs.loaders.ShaDowKHopSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.ClusterData.html">mlx_graphs.loaders.ClusterData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.ClusterLoader.html">mlx_graphs.loaders.ClusterLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.balanced_partition.html">mlx_graphs.loaders.balanced_partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.ImbalancedSampler.html">mlx_graphs.loaders.ImbalancedSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.DynamicBatchSampler.html">mlx_graphs.loaders.DynamicBatchSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.DataListLoader.html">mlx_graphs.loaders.DataListLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.DenseDataLoader.html">mlx_graphs.loaders.DenseDataLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../loaders/_autosummary/mlx_graphs.loaders.TemporalDataLoader.html">mlx_graphs.loaders.TemporalDataLoader</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -234,6 +282,24 @@
 <li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.AddRemainingSelfLoops.html">mlx_graphs.transforms.AddRemainingSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.RemoveDuplicatedEdges.html">mlx_graphs.transforms.RemoveDuplicatedEdges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.IndexToMask.html">mlx_graphs.transforms.IndexToMask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.MaskToIndex.html">mlx_graphs.transforms.MaskToIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.KNNGraph.html">mlx_graphs.transforms.KNNGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.RadiusGraph.html">mlx_graphs.transforms.RadiusGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.NormalizeFeatures.html">mlx_graphs.transforms.NormalizeFeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.TargetIndegree.html">mlx_graphs.transforms.TargetIndegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.LocalDegreeProfile.html">mlx_graphs.transforms.LocalDegreeProfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.AddLaplacianEigenvectorPE.html">mlx_graphs.transforms.AddLaplacianEigenvectorPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.SVDFeatureReduction.html">mlx_graphs.transforms.SVDFeatureReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.SIGN.html">mlx_graphs.transforms.SIGN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.FeaturePropagation.html">mlx_graphs.transforms.FeaturePropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.VirtualNode.html">mlx_graphs.transforms.VirtualNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.TwoHop.html">mlx_graphs.transforms.TwoHop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.LineGraph.html">mlx_graphs.transforms.LineGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.ToDense.html">mlx_graphs.transforms.ToDense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html">mlx_graphs.transforms.RemoveTrainingClasses</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a aria-current="page" class="current reference internal" href="#">Neural Networks</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -254,32 +320,145 @@
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.FastRGCNConv.html">mlx_graphs.nn.FastRGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.RGATConv.html">mlx_graphs.nn.RGATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GENConv.html">mlx_graphs.nn.GENConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MixHopConv.html">mlx_graphs.nn.MixHopConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.FAConv.html">mlx_graphs.nn.FAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GeneralConv.html">mlx_graphs.nn.GeneralConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DirGNNConv.html">mlx_graphs.nn.DirGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HANConv.html">mlx_graphs.nn.HANConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HGTConv.html">mlx_graphs.nn.HGTConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GINEConv.html">mlx_graphs.nn.GINEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GCN2Conv.html">mlx_graphs.nn.GCN2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.SSGConv.html">mlx_graphs.nn.SSGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LGConv.html">mlx_graphs.nn.LGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARMAConv.html">mlx_graphs.nn.ARMAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GatedGraphConv.html">mlx_graphs.nn.GatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ResGatedGraphConv.html">mlx_graphs.nn.ResGatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.NNConv.html">mlx_graphs.nn.NNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.CGConv.html">mlx_graphs.nn.CGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MFConv.html">mlx_graphs.nn.MFConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LEConv.html">mlx_graphs.nn.LEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.FiLMConv.html">mlx_graphs.nn.FiLMConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.AGNNConv.html">mlx_graphs.nn.AGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ClusterGCNConv.html">mlx_graphs.nn.ClusterGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DynamicEdgeConv.html">mlx_graphs.nn.DynamicEdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNAConv.html">mlx_graphs.nn.PNAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GPSConv.html">mlx_graphs.nn.GPSConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNA.html">mlx_graphs.nn.PNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeCNN.html">mlx_graphs.nn.EdgeCNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LINKX.html">mlx_graphs.nn.LINKX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DeepGCNLayer.html">mlx_graphs.nn.DeepGCNLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MaskLabel.html">mlx_graphs.nn.MaskLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.RECT_L.html">mlx_graphs.nn.RECT_L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DeepGraphInfomax.html">mlx_graphs.nn.DeepGraphInfomax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LightGCN.html">mlx_graphs.nn.LightGCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.SGFormer.html">mlx_graphs.nn.SGFormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.Polynormer.html">mlx_graphs.nn.Polynormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.InnerProductDecoder.html">mlx_graphs.nn.InnerProductDecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GAE.html">mlx_graphs.nn.GAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.VGAE.html">mlx_graphs.nn.VGAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGA.html">mlx_graphs.nn.ARGA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGVA.html">mlx_graphs.nn.ARGVA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LabelPropagation.html">mlx_graphs.nn.LabelPropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.CorrectAndSmooth.html">mlx_graphs.nn.CorrectAndSmooth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.KGEModel.html">mlx_graphs.nn.KGEModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.TransE.html">mlx_graphs.nn.TransE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DistMult.html">mlx_graphs.nn.DistMult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ComplEx.html">mlx_graphs.nn.ComplEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.RotatE.html">mlx_graphs.nn.RotatE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.KGTripletLoader.html">mlx_graphs.nn.KGTripletLoader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphNormalization.html">mlx_graphs.nn.GraphNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.PairNormalization.html">mlx_graphs.nn.PairNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphSizeNormalization.html">mlx_graphs.nn.GraphSizeNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html">mlx_graphs.nn.MeanSubtractionNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessageNormalization.html">mlx_graphs.nn.MessageNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.DiffGroupNormalization.html">mlx_graphs.nn.DiffGroupNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.TopKPooling.html">mlx_graphs.nn.TopKPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.SAGPooling.html">mlx_graphs.nn.SAGPooling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_sort_pool.html">mlx_graphs.nn.global_sort_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.topk.html">mlx_graphs.nn.topk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.filter_adj.html">mlx_graphs.nn.filter_adj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.knn.html">mlx_graphs.nn.knn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.knn_graph.html">mlx_graphs.nn.knn_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.radius.html">mlx_graphs.nn.radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.radius_graph.html">mlx_graphs.nn.radius_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.Aggregation.html">mlx_graphs.nn.aggr.Aggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SumAggregation.html">mlx_graphs.nn.aggr.SumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MeanAggregation.html">mlx_graphs.nn.aggr.MeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MaxAggregation.html">mlx_graphs.nn.aggr.MaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MinAggregation.html">mlx_graphs.nn.aggr.MinAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MulAggregation.html">mlx_graphs.nn.aggr.MulAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.VarAggregation.html">mlx_graphs.nn.aggr.VarAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.StdAggregation.html">mlx_graphs.nn.aggr.StdAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html">mlx_graphs.nn.aggr.SoftmaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html">mlx_graphs.nn.aggr.PowerMeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html">mlx_graphs.nn.aggr.MedianAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.QuantileAggregation.html">mlx_graphs.nn.aggr.QuantileAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html">mlx_graphs.nn.aggr.MultiAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html">mlx_graphs.nn.aggr.DegreeScalerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SortAggregation.html">mlx_graphs.nn.aggr.SortAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html">mlx_graphs.nn.aggr.DeepSetsAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html">mlx_graphs.nn.aggr.LSTMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html">mlx_graphs.nn.aggr.GRUAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html">mlx_graphs.nn.aggr.SetTransformerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.GraphMultisetTransformer.html">mlx_graphs.nn.aggr.GraphMultisetTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html">mlx_graphs.nn.aggr.MLPAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html">mlx_graphs.nn.aggr.LCMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.EquilibriumAggregation.html">mlx_graphs.nn.aggr.EquilibriumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.VariancePreservingAggregation.html">mlx_graphs.nn.aggr.VariancePreservingAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html">mlx_graphs.nn.aggr.MultiheadAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html">mlx_graphs.nn.aggr.SetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html">mlx_graphs.nn.aggr.InducedSetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html">mlx_graphs.nn.aggr.PoolingByMultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DenseLayout.html">mlx_graphs.nn.aggr.DenseLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html">mlx_graphs.nn.aggr.aggregation_resolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.PositionalEncoding.html">mlx_graphs.nn.PositionalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.TemporalEncoding.html">mlx_graphs.nn.TemporalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.RWSEEncoder.html">mlx_graphs.nn.RWSEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.LapPEEncoder.html">mlx_graphs.nn.LapPEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html">mlx_graphs.nn.attention.MultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.PerformerAttention.html">mlx_graphs.nn.attention.PerformerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html">mlx_graphs.nn.attention.SGFormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html">mlx_graphs.nn.attention.PolynormerAttention</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.gcn_norm.html">mlx_graphs.nn.gcn_norm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.TGNMemory.html">mlx_graphs.nn.TGNMemory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html">mlx_graphs.nn.models.tgn.IdentityMessage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.LastAggregator.html">mlx_graphs.nn.models.tgn.LastAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.MeanAggregator.html">mlx_graphs.nn.models.tgn.MeanAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.TimeEncoder.html">mlx_graphs.nn.models.tgn.TimeEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.GRUCell.html">mlx_graphs.nn.models.tgn.GRUCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.LastNeighborLoader.html">mlx_graphs.nn.models.tgn.LastNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero.html">mlx_graphs.nn.to_hetero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero_with_bases.html">mlx_graphs.nn.to_hetero_with_bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="_autosummary/mlx_graphs.nn.ToHeteroModel.html">mlx_graphs.nn.ToHeteroModel</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -310,6 +489,41 @@
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.add_remaining_self_loops.html">mlx_graphs.utils.add_remaining_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.segregate_self_loops.html">mlx_graphs.utils.segregate_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.remove_isolated_nodes.html">mlx_graphs.utils.remove_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.contains_self_loops.html">mlx_graphs.utils.contains_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.contains_isolated_nodes.html">mlx_graphs.utils.contains_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.bipartite_subgraph.html">mlx_graphs.utils.bipartite_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.batched_negative_sampling.html">mlx_graphs.utils.batched_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.dropout_path.html">mlx_graphs.utils.dropout_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.shuffle_node.html">mlx_graphs.utils.shuffle_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.mask_feature.html">mlx_graphs.utils.mask_feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.add_random_edge.html">mlx_graphs.utils.add_random_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.unbatch.html">mlx_graphs.utils.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.unbatch_edge_index.html">mlx_graphs.utils.unbatch_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.assortativity.html">mlx_graphs.utils.assortativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.get_ppr.html">mlx_graphs.utils.get_ppr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.normalized_cut.html">mlx_graphs.utils.normalized_cut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_graph/mlx_graphs.utils.train_test_split_edges.html">mlx_graphs.utils.train_test_split_edges</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/generators.html">Graph generators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_generators/mlx_graphs.utils.grid.html">mlx_graphs.utils.grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_generators/mlx_graphs.utils.erdos_renyi_graph.html">mlx_graphs.utils.erdos_renyi_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_generators/mlx_graphs.utils.barabasi_albert_graph.html">mlx_graphs.utils.barabasi_albert_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_generators/mlx_graphs.utils.stochastic_blockmodel_graph.html">mlx_graphs.utils.stochastic_blockmodel_graph</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/sparse.html">Sparse and array helpers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.to_scipy_sparse_matrix.html">mlx_graphs.utils.to_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.from_scipy_sparse_matrix.html">mlx_graphs.utils.from_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.dense_to_sparse.html">mlx_graphs.utils.dense_to_sparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.softmax.html">mlx_graphs.utils.softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.mask_to_index.html">mlx_graphs.utils.mask_to_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.cumsum.html">mlx_graphs.utils.cumsum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.select.html">mlx_graphs.utils.select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_sparse/mlx_graphs.utils.narrow.html">mlx_graphs.utils.narrow</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -336,6 +550,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mul.html">mlx_graphs.utils.scatter.scatter_mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_var.html">mlx_graphs.utils.scatter.scatter_var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_std.html">mlx_graphs.utils.scatter.scatter_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_quantile.html">mlx_graphs.utils.scatter.scatter_quantile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
 </ul>
@@ -355,12 +573,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../utils/spatial.html">Spatial graphs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_spatial/mlx_graphs.utils.knn.html">mlx_graphs.utils.knn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_spatial/mlx_graphs.utils.knn_graph.html">mlx_graphs.utils.knn_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_spatial/mlx_graphs.utils.radius.html">mlx_graphs.utils.radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../utils/_autosummary_spatial/mlx_graphs.utils.radius_graph.html">mlx_graphs.utils.radius_graph</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.roc_auc_score.html">mlx_graphs.metrics.roc_auc_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.average_precision_score.html">mlx_graphs.metrics.average_precision_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredMetric.html">mlx_graphs.metrics.LinkPredMetric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricCollection.html">mlx_graphs.metrics.LinkPredMetricCollection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricData.html">mlx_graphs.metrics.LinkPredMetricData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredPrecision.html">mlx_graphs.metrics.LinkPredPrecision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredRecall.html">mlx_graphs.metrics.LinkPredRecall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredF1.html">mlx_graphs.metrics.LinkPredF1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredMAP.html">mlx_graphs.metrics.LinkPredMAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredNDCG.html">mlx_graphs.metrics.LinkPredNDCG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredMRR.html">mlx_graphs.metrics.LinkPredMRR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredHitRatio.html">mlx_graphs.metrics.LinkPredHitRatio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredCoverage.html">mlx_graphs.metrics.LinkPredCoverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredDiversity.html">mlx_graphs.metrics.LinkPredDiversity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredPersonalization.html">mlx_graphs.metrics.LinkPredPersonalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../metrics/_autosummary/mlx_graphs.metrics.LinkPredAveragePopularity.html">mlx_graphs.metrics.LinkPredAveragePopularity</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../changelog.html">Changelog</a></li>
 </ul>
 
     </div>
@@ -409,7 +657,7 @@
 <div class="article-header-buttons">
 
 
-<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+<a href="https://github.com/mlx-graphs/mlx-graphs" target="_blank"
    class="btn btn-sm btn-source-repository-button"
    title="Source repository"
    data-bs-placement="bottom" data-bs-toggle="tooltip"
@@ -529,12 +777,26 @@
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-layers">Convolution layers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-auto-encoders">Graph auto-encoders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#label-propagation">Label propagation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knowledge-graph-embeddings">Knowledge graph embeddings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-readout">Pooling and readout</a><ul class="nav section-nav flex-column">
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregations">Aggregations</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#positional-encodings">Positional encodings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attention">Attention</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fused-message-passing">Fused message passing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-graph-networks">Temporal graph networks</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heterogeneous-models">Heterogeneous models</a></li>
 </ul>
             </nav>
         </div>
@@ -554,9 +816,9 @@
 <td><p>Linear layer with Xavier Glorot weight initialization and a zero bias.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroDictLinear.html#mlx_graphs.nn.HeteroDictLinear" title="mlx_graphs.nn.HeteroDictLinear"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HeteroDictLinear</span></code></a>(input_dims, output_dims[, bias])</p></td>
-<td><p>Applies a separate <a class="reference internal" href="_autosummary/mlx_graphs.nn.Linear.html#mlx_graphs.nn.Linear" title="mlx_graphs.nn.Linear"><code class="xref py py-class docutils literal notranslate"><span class="pre">Linear</span></code></a> layer to each node type.</p></td>
+<td><p>Applies a separate linear layer to each node type.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.MessagePassing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MessagePassing</span></code></a>([aggr])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.MessagePassing"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MessagePassing</span></code></a>([aggr, aggr_kwargs])</p></td>
 <td><p>Base class for creating Message Passing Neural Networks (MPNNs) [1].</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphNetworkBlock.html#mlx_graphs.nn.GraphNetworkBlock" title="mlx_graphs.nn.GraphNetworkBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphNetworkBlock</span></code></a>([node_model, edge_model, ...])</p></td>
@@ -608,14 +870,92 @@
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RGCNConv.html#mlx_graphs.nn.RGCNConv" title="mlx_graphs.nn.RGCNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RGCNConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
 <td><p>Relational graph convolution layer from <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SimpleConv.html#mlx_graphs.nn.SimpleConv" title="mlx_graphs.nn.SimpleConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleConv</span></code></a>([aggr, combine_root_func])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.FastRGCNConv.html#mlx_graphs.nn.FastRGCNConv" title="mlx_graphs.nn.FastRGCNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FastRGCNConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>Relational graph convolution layer with the same semantics as <a class="reference internal" href="_autosummary/mlx_graphs.nn.RGCNConv.html#mlx_graphs.nn.RGCNConv" title="mlx_graphs.nn.RGCNConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">RGCNConv</span></code></a>, from the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RGATConv.html#mlx_graphs.nn.RGATConv" title="mlx_graphs.nn.RGATConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RGATConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>The relational graph attentional operator from the <a class="reference external" href="https://arxiv.org/abs/1904.05811">&quot;Relational Graph Attention Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GENConv.html#mlx_graphs.nn.GENConv" title="mlx_graphs.nn.GENConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GENConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>The GENeralized Graph Convolution (GENConv) from the <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCN: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MixHopConv.html#mlx_graphs.nn.MixHopConv" title="mlx_graphs.nn.MixHopConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MixHopConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>The Mix-Hop graph convolutional operator from the <a class="reference external" href="https://arxiv.org/abs/1905.00067">&quot;MixHop: Higher-Order Graph Convolutional Architectures via Sparsified Neighborhood Mixing&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.FAConv.html#mlx_graphs.nn.FAConv" title="mlx_graphs.nn.FAConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FAConv</span></code></a>(node_features_dim[, eps, dropout, ...])</p></td>
+<td><p>The Frequency Adaptive Graph Convolution operator from the <a class="reference external" href="https://arxiv.org/abs/2101.00797">&quot;Beyond Low-Frequency Information in Graph Convolutional Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GeneralConv.html#mlx_graphs.nn.GeneralConv" title="mlx_graphs.nn.GeneralConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GeneralConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>A general GNN layer adapted from the <a class="reference external" href="https://arxiv.org/abs/2011.08843">&quot;Design Space for Graph Neural Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DirGNNConv.html#mlx_graphs.nn.DirGNNConv" title="mlx_graphs.nn.DirGNNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DirGNNConv</span></code></a>(conv[, alpha, root_weight, ...])</p></td>
+<td><p>A generic wrapper for computing graph convolution on directed graphs as described in the <a class="reference external" href="https://arxiv.org/abs/2305.10498">&quot;Edge Directionality Improves Learning on Heterophilic Graphs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HANConv.html#mlx_graphs.nn.HANConv" title="mlx_graphs.nn.HANConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HANConv</span></code></a>(node_features_dim, out_features_dim, ...)</p></td>
+<td><p>The Heterogeneous Graph Attention Operator from the <a class="reference external" href="https://arxiv.org/abs/1903.07293">&quot;Heterogenous Graph Attention Network&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HGTConv.html#mlx_graphs.nn.HGTConv" title="mlx_graphs.nn.HGTConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HGTConv</span></code></a>(node_features_dim, out_features_dim, ...)</p></td>
+<td><p>The Heterogeneous Graph Transformer (HGT) operator from the <a class="reference external" href="https://arxiv.org/abs/2003.01332">&quot;Heterogeneous Graph Transformer&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SimpleConv.html#mlx_graphs.nn.SimpleConv" title="mlx_graphs.nn.SimpleConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SimpleConv</span></code></a>([aggr, combine_root_func])</p></td>
 <td><p>A simple non-trainable message passing layer.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroConv.html#mlx_graphs.nn.HeteroConv" title="mlx_graphs.nn.HeteroConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HeteroConv</span></code></a>(convs[, aggr])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroConv.html#mlx_graphs.nn.HeteroConv" title="mlx_graphs.nn.HeteroConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HeteroConv</span></code></a>(convs[, aggr])</p></td>
 <td><p>Wrapper that runs one graph convolution per edge type of a heterogeneous graph and combines the results per destination node type.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html#mlx_graphs.nn.GeneralizedRelationalConv" title="mlx_graphs.nn.GeneralizedRelationalConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GeneralizedRelationalConv</span></code></a>(in_features_dim, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html#mlx_graphs.nn.GeneralizedRelationalConv" title="mlx_graphs.nn.GeneralizedRelationalConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GeneralizedRelationalConv</span></code></a>(in_features_dim, ...)</p></td>
 <td><p>Generalized relational convolution layer from <a class="reference external" href="https://arxiv.org/abs/2106.06935">Neural Bellman-Ford Networks: A General Graph Neural Network Framework       for Link Prediction</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GINEConv.html#mlx_graphs.nn.GINEConv" title="mlx_graphs.nn.GINEConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GINEConv</span></code></a>(mlp[, eps, learn_eps, ...])</p></td>
+<td><p>Graph Isomorphism Network convolution with edge features, from the <a class="reference external" href="https://arxiv.org/abs/1905.12265">&quot;Strategies for Pre-training Graph Neural Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GCN2Conv.html#mlx_graphs.nn.GCN2Conv" title="mlx_graphs.nn.GCN2Conv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GCN2Conv</span></code></a>(node_features_dim, alpha[, theta, ...])</p></td>
+<td><p>Graph convolution with initial residual connections and identity mapping (GCNII) from the <a class="reference external" href="https://arxiv.org/abs/2007.02133">&quot;Simple and Deep Graph Convolutional Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SSGConv.html#mlx_graphs.nn.SSGConv" title="mlx_graphs.nn.SSGConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SSGConv</span></code></a>(node_features_dim, out_features_dim, ...)</p></td>
+<td><p>Simple spectral graph convolution layer from <a class="reference external" href="https://openreview.net/forum?id=CYO5T-YjWZV">&quot;Simple Spectral Graph Convolution&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LGConv.html#mlx_graphs.nn.LGConv" title="mlx_graphs.nn.LGConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LGConv</span></code></a>([normalize])</p></td>
+<td><p>Light graph convolution from the <a class="reference external" href="https://arxiv.org/abs/2002.02126">&quot;LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARMAConv.html#mlx_graphs.nn.ARMAConv" title="mlx_graphs.nn.ARMAConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ARMAConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>ARMA graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1901.01343">&quot;Graph Neural Networks with Convolutional ARMA Filters&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GatedGraphConv.html#mlx_graphs.nn.GatedGraphConv" title="mlx_graphs.nn.GatedGraphConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GatedGraphConv</span></code></a>(out_features_dim, num_layers)</p></td>
+<td><p>Gated graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1511.05493">&quot;Gated Graph Sequence Neural Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ResGatedGraphConv.html#mlx_graphs.nn.ResGatedGraphConv" title="mlx_graphs.nn.ResGatedGraphConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ResGatedGraphConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>Residual gated graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1711.07553">&quot;Residual Gated Graph ConvNets&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.NNConv.html#mlx_graphs.nn.NNConv" title="mlx_graphs.nn.NNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">NNConv</span></code></a>(node_features_dim, out_features_dim, mlp)</p></td>
+<td><p>Edge-conditioned convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1704.01212">&quot;Neural Message Passing for Quantum Chemistry&quot;</a> paper (also known as ECConv, from <a class="reference external" href="https://arxiv.org/abs/1704.02901">&quot;Dynamic Edge-Conditioned Filters in Convolutional Neural Networks on Graphs&quot;</a>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.CGConv.html#mlx_graphs.nn.CGConv" title="mlx_graphs.nn.CGConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CGConv</span></code></a>(node_features_dim[, ...])</p></td>
+<td><p>Crystal graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1710.10324">&quot;Crystal Graph Convolutional Neural Networks for an Accurate and Interpretable Prediction of Material Properties&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MFConv.html#mlx_graphs.nn.MFConv" title="mlx_graphs.nn.MFConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MFConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>Graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1509.09292">&quot;Convolutional Networks on Graphs for Learning Molecular Fingerprints&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LEConv.html#mlx_graphs.nn.LEConv" title="mlx_graphs.nn.LEConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LEConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>Local extremum graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1911.07979">&quot;ASAP: Adaptive Structure Aware Pooling for Learning Hierarchical Graph Representations&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.FiLMConv.html#mlx_graphs.nn.FiLMConv" title="mlx_graphs.nn.FiLMConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">FiLMConv</span></code></a>(node_features_dim, out_features_dim)</p></td>
+<td><p>Feature-wise linear modulation (FiLM) graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1906.12192">&quot;GNN-FiLM: Graph Neural Networks with Feature-wise Linear Modulation&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.AGNNConv.html#mlx_graphs.nn.AGNNConv" title="mlx_graphs.nn.AGNNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AGNNConv</span></code></a>([requires_grad, add_self_loops])</p></td>
+<td><p>Graph attentional propagation layer from the <a class="reference external" href="https://arxiv.org/abs/1803.03735">&quot;Attention-based Graph Neural Network for Semi-Supervised Learning&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ClusterGCNConv.html#mlx_graphs.nn.ClusterGCNConv" title="mlx_graphs.nn.ClusterGCNConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ClusterGCNConv</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>Graph convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1905.07953">&quot;Cluster-GCN: An Efficient Algorithm for Training Deep and Large Graph Convolutional Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DynamicEdgeConv.html#mlx_graphs.nn.DynamicEdgeConv" title="mlx_graphs.nn.DynamicEdgeConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DynamicEdgeConv</span></code></a>(mlp, k, **kwargs)</p></td>
+<td><p>Dynamic edge convolution layer from the <a class="reference external" href="https://arxiv.org/abs/1801.07829">&quot;Dynamic Graph CNN for Learning on Point Clouds&quot;</a> paper (see <a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeConv.html#mlx_graphs.nn.EdgeConv" title="mlx_graphs.nn.EdgeConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeConv</span></code></a>), where the graph is dynamically constructed using the nearest neighbors in the feature space.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNAConv.html#mlx_graphs.nn.PNAConv" title="mlx_graphs.nn.PNAConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PNAConv</span></code></a>(node_features_dim, out_features_dim, ...)</p></td>
+<td><p>Principal Neighbourhood Aggregation graph convolution from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GPSConv.html#mlx_graphs.nn.GPSConv" title="mlx_graphs.nn.GPSConv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GPSConv</span></code></a>(channels, conv[, heads, dropout, ...])</p></td>
+<td><p>The general, powerful, scalable (GPS) graph transformer layer from the <a class="reference external" href="https://arxiv.org/abs/2205.12454">&quot;Recipe for a General, Powerful, Scalable Graph Transformer&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">GPSConv</span></code>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -645,6 +985,105 @@ Jumping Knowledge.</p>
 <tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.BasicGNN.html#mlx_graphs.nn.BasicGNN" title="mlx_graphs.nn.BasicGNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">BasicGNN</span></code></a>(node_features_dim, ...[, ...])</p></td>
 <td><p>Base class of the ready-to-use GNN models.</p></td>
 </tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PNA.html#mlx_graphs.nn.PNA" title="mlx_graphs.nn.PNA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PNA</span></code></a>(node_features_dim, hidden_features_dim, ...)</p></td>
+<td><p>Principal Neighbourhood Aggregation network from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a>, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.PNAConv.html#mlx_graphs.nn.PNAConv" title="mlx_graphs.nn.PNAConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">PNAConv</span></code></a> layers.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Other models and building blocks:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeCNN.html#mlx_graphs.nn.EdgeCNN" title="mlx_graphs.nn.EdgeCNN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EdgeCNN</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>The Dynamic Graph CNN model from the <a class="reference external" href="https://arxiv.org/abs/1801.07829">&quot;Dynamic Graph CNN for Learning on Point Clouds&quot;</a> paper, a stack of <a class="reference internal" href="_autosummary/mlx_graphs.nn.EdgeConv.html#mlx_graphs.nn.EdgeConv" title="mlx_graphs.nn.EdgeConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">EdgeConv</span></code></a> layers, each with a two-layer MLP mapping <code class="docutils literal notranslate"><span class="pre">2</span> <span class="pre">*</span> <span class="pre">in_dim</span></code> features to <code class="docutils literal notranslate"><span class="pre">out_dim</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LINKX.html#mlx_graphs.nn.LINKX" title="mlx_graphs.nn.LINKX"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LINKX</span></code></a>(num_nodes, node_features_dim, ...[, ...])</p></td>
+<td><p>The LINKX model from the <a class="reference external" href="https://arxiv.org/abs/2110.14446">&quot;Large Scale Learning on Non-Homophilous Graphs: New Benchmarks and Strong Simple Methods&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DeepGCNLayer.html#mlx_graphs.nn.DeepGCNLayer" title="mlx_graphs.nn.DeepGCNLayer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeepGCNLayer</span></code></a>([conv, norm, act, block, ...])</p></td>
+<td><p>The skip connection operations from the <a class="reference external" href="https://arxiv.org/abs/1904.03751">&quot;DeepGCNs: Can GCNs Go as Deep as CNNs?&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;All You Need to Train Deeper GCNs&quot;</a> papers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MaskLabel.html#mlx_graphs.nn.MaskLabel" title="mlx_graphs.nn.MaskLabel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MaskLabel</span></code></a>(num_classes, out_features_dim[, ...])</p></td>
+<td><p>The label embedding and masking layer from the <a class="reference external" href="https://arxiv.org/abs/2009.03509">&quot;Masked Label Prediction: Unified Message Passing Model for Semi-Supervised Classification&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RECT_L.html#mlx_graphs.nn.RECT_L" title="mlx_graphs.nn.RECT_L"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RECT_L</span></code></a>(node_features_dim, hidden_features_dim)</p></td>
+<td><p>The RECT model, i.e. its supervised RECT-L part, from the <a class="reference external" href="https://arxiv.org/abs/2007.03545">&quot;Network Embedding with Completely-imbalanced Labels&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DeepGraphInfomax.html#mlx_graphs.nn.DeepGraphInfomax" title="mlx_graphs.nn.DeepGraphInfomax"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeepGraphInfomax</span></code></a>(hidden_features_dim, ...)</p></td>
+<td><p>The Deep Graph Infomax model from the <a class="reference external" href="https://arxiv.org/abs/1809.10341">&quot;Deep Graph Infomax&quot;</a> paper, based on a user-defined encoder <span class="math notranslate nohighlight">\(\mathcal{E}\)</span>, summary (readout) function <span class="math notranslate nohighlight">\(\mathcal{R}\)</span> and corruption function <span class="math notranslate nohighlight">\(\mathcal{C}\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LightGCN.html#mlx_graphs.nn.LightGCN" title="mlx_graphs.nn.LightGCN"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LightGCN</span></code></a>(num_nodes, embedding_dim, num_layers)</p></td>
+<td><p>The LightGCN model from the <a class="reference external" href="https://arxiv.org/abs/2002.02126">&quot;LightGCN: Simplifying and Powering Graph Convolution Network for Recommendation&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SGFormer.html#mlx_graphs.nn.SGFormer" title="mlx_graphs.nn.SGFormer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SGFormer</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>The SGFormer model from the <a class="reference external" href="https://arxiv.org/abs/2306.10759">&quot;SGFormer: Simplifying and Empowering Transformers for Large-Graph Representations&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">SGFormer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.Polynormer.html#mlx_graphs.nn.Polynormer" title="mlx_graphs.nn.Polynormer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Polynormer</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>The Polynormer model from the <a class="reference external" href="https://arxiv.org/abs/2403.01232">&quot;Polynormer: Polynomial-Expressive Graph Transformer in Linear Time&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">Polynormer</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="graph-auto-encoders">
+<h2>Graph auto-encoders<a class="headerlink" href="#graph-auto-encoders" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.InnerProductDecoder.html#mlx_graphs.nn.InnerProductDecoder" title="mlx_graphs.nn.InnerProductDecoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InnerProductDecoder</span></code></a>(*args, **kwargs)</p></td>
+<td><p>The inner product decoder from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GAE.html#mlx_graphs.nn.GAE" title="mlx_graphs.nn.GAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GAE</span></code></a>(encoder[, decoder])</p></td>
+<td><p>The Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper, based on user-defined encoder and decoder models.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.VGAE.html#mlx_graphs.nn.VGAE" title="mlx_graphs.nn.VGAE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VGAE</span></code></a>(encoder[, decoder])</p></td>
+<td><p>The Variational Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1611.07308">&quot;Variational Graph Auto-Encoders&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGA.html#mlx_graphs.nn.ARGA" title="mlx_graphs.nn.ARGA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ARGA</span></code></a>(encoder, discriminator[, decoder])</p></td>
+<td><p>The Adversarially Regularized Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1802.04407">&quot;Adversarially Regularized Graph Autoencoder for Graph Embedding&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ARGVA.html#mlx_graphs.nn.ARGVA" title="mlx_graphs.nn.ARGVA"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ARGVA</span></code></a>(encoder, discriminator[, decoder])</p></td>
+<td><p>The Adversarially Regularized Variational Graph Auto-Encoder model from the <a class="reference external" href="https://arxiv.org/abs/1802.04407">&quot;Adversarially Regularized Graph Autoencoder for Graph Embedding&quot;</a> paper.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="label-propagation">
+<h2>Label propagation<a class="headerlink" href="#label-propagation" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LabelPropagation.html#mlx_graphs.nn.LabelPropagation" title="mlx_graphs.nn.LabelPropagation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LabelPropagation</span></code></a>(num_layers, alpha)</p></td>
+<td><p>The label propagation operator from the <a class="reference external" href="http://mlg.eng.cam.ac.uk/zoubin/papers/CMU-CALD-02-107.pdf">&quot;Learning from Labeled and Unlabeled Data with Label Propagation&quot;</a> paper, in the form used by <a class="reference external" href="https://arxiv.org/abs/2010.13993">&quot;Combining Label Propagation And Simple Models Out-performs Graph Neural Networks&quot;</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.CorrectAndSmooth.html#mlx_graphs.nn.CorrectAndSmooth" title="mlx_graphs.nn.CorrectAndSmooth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">CorrectAndSmooth</span></code></a>(num_correction_layers, ...)</p></td>
+<td><p>The correct and smooth (C&amp;S) post-processing model from the <a class="reference external" href="https://arxiv.org/abs/2010.13993">&quot;Combining Label Propagation And Simple Models Out-performs Graph Neural Networks&quot;</a> paper.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="knowledge-graph-embeddings">
+<h2>Knowledge graph embeddings<a class="headerlink" href="#knowledge-graph-embeddings" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel" title="mlx_graphs.nn.KGEModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KGEModel</span></code></a>(num_nodes, num_relations, ...)</p></td>
+<td><p>Base class of the knowledge graph embedding models.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.TransE.html#mlx_graphs.nn.TransE" title="mlx_graphs.nn.TransE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TransE</span></code></a>(num_nodes, num_relations, ...[, ...])</p></td>
+<td><p>The TransE model from the <a class="reference external" href="https://proceedings.neurips.cc/paper/2013/file/1cecc7a77928ca8133fa24680a88d2f9-Paper.pdf">&quot;Translating Embeddings for Modeling Multi-Relational Data&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DistMult.html#mlx_graphs.nn.DistMult" title="mlx_graphs.nn.DistMult"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DistMult</span></code></a>(num_nodes, num_relations, ...[, margin])</p></td>
+<td><p>The DistMult model from the <a class="reference external" href="https://arxiv.org/abs/1412.6575">&quot;Embedding Entities and Relations for Learning and Inference in Knowledge Bases&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ComplEx.html#mlx_graphs.nn.ComplEx" title="mlx_graphs.nn.ComplEx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComplEx</span></code></a>(num_nodes, num_relations, ...)</p></td>
+<td><p>The ComplEx model from the <a class="reference external" href="https://arxiv.org/abs/1606.06357">&quot;Complex Embeddings for Simple Link Prediction&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RotatE.html#mlx_graphs.nn.RotatE" title="mlx_graphs.nn.RotatE"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RotatE</span></code></a>(num_nodes, num_relations, ...[, margin])</p></td>
+<td><p>The RotatE model from the <a class="reference external" href="https://arxiv.org/abs/1902.10197">&quot;RotatE: Knowledge Graph Embedding by Relational Rotation in Complex Space&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.KGTripletLoader.html#mlx_graphs.nn.KGTripletLoader" title="mlx_graphs.nn.KGTripletLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">KGTripletLoader</span></code></a>(head_index, rel_type, tail_index)</p></td>
+<td><p>Iterates over mini-batches of <code class="docutils literal notranslate"><span class="pre">(head_index,</span> <span class="pre">rel_type,</span> <span class="pre">tail_index)</span></code> triplets.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -668,6 +1107,69 @@ Jumping Knowledge.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html#mlx_graphs.nn.HeteroLayerNormalization" title="mlx_graphs.nn.HeteroLayerNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">HeteroLayerNormalization</span></code></a>(in_channels, num_types)</p></td>
 <td><p>Applies layer normalization over each individual example in a batch of heterogeneous features, as described in the <a class="reference external" href="https://arxiv.org/abs/1607.06450">&quot;Layer Normalization&quot;</a> paper.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphNormalization.html#mlx_graphs.nn.GraphNormalization" title="mlx_graphs.nn.GraphNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphNormalization</span></code></a>(node_features_dim[, eps])</p></td>
+<td><p>Applies graph normalization over individual graphs as described in the <a class="reference external" href="https://arxiv.org/abs/2009.03294">&quot;GraphNorm: A Principled Approach to Accelerating Graph Neural Network Training&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PairNormalization.html#mlx_graphs.nn.PairNormalization" title="mlx_graphs.nn.PairNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PairNormalization</span></code></a>([scale, ...])</p></td>
+<td><p>Applies pair normalization over node features as described in the <a class="reference external" href="https://arxiv.org/abs/1909.12223">&quot;PairNorm: Tackling Oversmoothing in GNNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphSizeNormalization.html#mlx_graphs.nn.GraphSizeNormalization" title="mlx_graphs.nn.GraphSizeNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphSizeNormalization</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Applies graph size normalization over each individual graph in a batch of node features as described in the <a class="reference external" href="https://arxiv.org/abs/2003.00982">&quot;Benchmarking Graph Neural Networks&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html#mlx_graphs.nn.MeanSubtractionNormalization" title="mlx_graphs.nn.MeanSubtractionNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeanSubtractionNormalization</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Applies layer normalization by subtracting the mean from the inputs as described in the <a class="reference external" href="https://arxiv.org/abs/2003.13663">&quot;Revisiting 'Over-smoothing' in Deep GCNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessageNormalization.html#mlx_graphs.nn.MessageNormalization" title="mlx_graphs.nn.MessageNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MessageNormalization</span></code></a>([learn_scale])</p></td>
+<td><p>Applies message normalization over the aggregated messages as described in the <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCNs: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DiffGroupNormalization.html#mlx_graphs.nn.DiffGroupNormalization" title="mlx_graphs.nn.DiffGroupNormalization"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DiffGroupNormalization</span></code></a>(node_features_dim, groups)</p></td>
+<td><p>The differentiable group normalization layer from the <a class="reference external" href="https://arxiv.org/abs/2006.06972">&quot;Towards Deeper Graph Neural Networks with Differentiable Group Normalization&quot;</a> paper, which normalizes node features group-wise via a learnable soft cluster assignment.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Each normalization layer is also available under its PyG name, as an alias
+of the same class:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>PyG name</p></th>
+<th class="head"><p>Class</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">BatchNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.BatchNormalization.html#mlx_graphs.nn.BatchNormalization" title="mlx_graphs.nn.BatchNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">BatchNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">HeteroBatchNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html#mlx_graphs.nn.HeteroBatchNormalization" title="mlx_graphs.nn.HeteroBatchNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeteroBatchNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">InstanceNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.InstanceNormalization.html#mlx_graphs.nn.InstanceNormalization" title="mlx_graphs.nn.InstanceNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">InstanceNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">LayerNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LayerNormalization.html#mlx_graphs.nn.LayerNormalization" title="mlx_graphs.nn.LayerNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">LayerNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">HeteroLayerNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html#mlx_graphs.nn.HeteroLayerNormalization" title="mlx_graphs.nn.HeteroLayerNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">HeteroLayerNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GraphNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphNormalization.html#mlx_graphs.nn.GraphNormalization" title="mlx_graphs.nn.GraphNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">PairNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PairNormalization.html#mlx_graphs.nn.PairNormalization" title="mlx_graphs.nn.PairNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">PairNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GraphSizeNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.GraphSizeNormalization.html#mlx_graphs.nn.GraphSizeNormalization" title="mlx_graphs.nn.GraphSizeNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">GraphSizeNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">MeanSubtractionNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html#mlx_graphs.nn.MeanSubtractionNormalization" title="mlx_graphs.nn.MeanSubtractionNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">MeanSubtractionNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">MessageNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.MessageNormalization.html#mlx_graphs.nn.MessageNormalization" title="mlx_graphs.nn.MessageNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessageNormalization</span></code></a></p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">DiffGroupNorm</span></code></p></td>
+<td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.DiffGroupNormalization.html#mlx_graphs.nn.DiffGroupNormalization" title="mlx_graphs.nn.DiffGroupNormalization"><code class="xref py py-class docutils literal notranslate"><span class="pre">DiffGroupNormalization</span></code></a></p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -685,19 +1187,213 @@ Jumping Knowledge.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.Set2Set.html#mlx_graphs.nn.Set2Set" title="mlx_graphs.nn.Set2Set"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Set2Set</span></code></a>(node_features_dim, processing_steps)</p></td>
 <td><p>Set2Set global pooling from <a class="reference external" href="https://arxiv.org/abs/1511.06391">&quot;Order Matters: Sequence to Sequence for Sets&quot;</a> paper.</p></td>
 </tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.TopKPooling.html#mlx_graphs.nn.TopKPooling" title="mlx_graphs.nn.TopKPooling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TopKPooling</span></code></a>(node_features_dim[, ratio, ...])</p></td>
+<td><p><span class="math notranslate nohighlight">\(\mathrm{top}_k\)</span> pooling operator from the <a class="reference external" href="https://arxiv.org/abs/1905.05178">&quot;Graph U-Nets&quot;</a>, <a class="reference external" href="https://arxiv.org/abs/1811.01287">&quot;Towards Sparse Hierarchical Graph Classifiers&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/1905.02850">&quot;Understanding Attention and Generalization in Graph Neural Networks&quot;</a> papers.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.SAGPooling.html#mlx_graphs.nn.SAGPooling" title="mlx_graphs.nn.SAGPooling"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SAGPooling</span></code></a>(node_features_dim, ratio, GNN, ...)</p></td>
+<td><p>The self-attention pooling operator from the <a class="reference external" href="https://arxiv.org/abs/1904.08082">&quot;Self-Attention Graph Pooling&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/1905.02850">&quot;Understanding Attention and Generalization in Graph Neural Networks&quot;</a> papers.</p></td>
+</tr>
 </tbody>
 </table>
 </div>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_add_pool.html#mlx_graphs.nn.global_add_pool" title="mlx_graphs.nn.global_add_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_add_pool</span></code></a>(node_features[, batch_indices])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_add_pool.html#mlx_graphs.nn.global_add_pool" title="mlx_graphs.nn.global_add_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_add_pool</span></code></a>(node_features[, ...])</p></td>
 <td><p>Sums all node features to obtain a global graph-level representation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_max_pool.html#mlx_graphs.nn.global_max_pool" title="mlx_graphs.nn.global_max_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_max_pool</span></code></a>(node_features[, batch_indices])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_mean_pool.html#mlx_graphs.nn.global_mean_pool" title="mlx_graphs.nn.global_mean_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_mean_pool</span></code></a>(node_features[, ...])</p></td>
+<td><p>Takes the feature-wise mean value along all node features to obtain a global graph-level representation.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_max_pool.html#mlx_graphs.nn.global_max_pool" title="mlx_graphs.nn.global_max_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_max_pool</span></code></a>(node_features[, ...])</p></td>
 <td><p>Takes the feature-wise maximum value along all node features to obtain a global graph-level representation.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_mean_pool.html#mlx_graphs.nn.global_mean_pool" title="mlx_graphs.nn.global_mean_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_mean_pool</span></code></a>(node_features[, batch_indices])</p></td>
-<td><p>Takes the feature-wise mean value along all node features to obtain a global graph-level representation.</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.global_sort_pool.html#mlx_graphs.nn.global_sort_pool" title="mlx_graphs.nn.global_sort_pool"><code class="xref py py-obj docutils literal notranslate"><span class="pre">global_sort_pool</span></code></a>(node_features, batch_indices, k)</p></td>
+<td><p>The global pooling operator from the <a class="reference external" href="https://www.cse.wustl.edu/~muhan/papers/AAAI_2018_DGCNN.pdf">&quot;An End-to-End Deep Learning Architecture for Graph Classification&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.topk.html#mlx_graphs.nn.topk" title="mlx_graphs.nn.topk"><code class="xref py py-obj docutils literal notranslate"><span class="pre">topk</span></code></a>(scores, ratio, batch_indices[, ...])</p></td>
+<td><p>Selects the nodes with the highest scores in each graph.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.filter_adj.html#mlx_graphs.nn.filter_adj" title="mlx_graphs.nn.filter_adj"><code class="xref py py-obj docutils literal notranslate"><span class="pre">filter_adj</span></code></a>(edge_index, edge_features, perm)</p></td>
+<td><p>Keeps the edges between the nodes <code class="docutils literal notranslate"><span class="pre">perm</span></code>, relabeled by their position in <code class="docutils literal notranslate"><span class="pre">perm</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.knn.html#mlx_graphs.nn.knn" title="mlx_graphs.nn.knn"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knn</span></code></a>(x, y, k[, batch_x, batch_y, cosine, ...])</p></td>
+<td><p>Finds for each point of <code class="docutils literal notranslate"><span class="pre">y</span></code> the <code class="docutils literal notranslate"><span class="pre">k</span></code> nearest points of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.knn_graph.html#mlx_graphs.nn.knn_graph" title="mlx_graphs.nn.knn_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">knn_graph</span></code></a>(x, k[, batch_indices, loop, flow, ...])</p></td>
+<td><p>Computes the graph connecting each point to its <code class="docutils literal notranslate"><span class="pre">k</span></code> nearest points.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.radius.html#mlx_graphs.nn.radius" title="mlx_graphs.nn.radius"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius</span></code></a>(x, y, r[, batch_x, batch_y, ...])</p></td>
+<td><p>Finds for each point of <code class="docutils literal notranslate"><span class="pre">y</span></code> the points of <code class="docutils literal notranslate"><span class="pre">x</span></code> within distance <code class="docutils literal notranslate"><span class="pre">r</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.radius_graph.html#mlx_graphs.nn.radius_graph" title="mlx_graphs.nn.radius_graph"><code class="xref py py-obj docutils literal notranslate"><span class="pre">radius_graph</span></code></a>(x, r[, batch_indices, loop, ...])</p></td>
+<td><p>Computes the graph connecting each point to the points within distance <code class="docutils literal notranslate"><span class="pre">r</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="aggregations">
+<h2>Aggregations<a class="headerlink" href="#aggregations" title="Link to this heading">#</a></h2>
+<p>Aggregation operators of <code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn.aggr</span></code> (as <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.aggr</span></code>).
+They reduce a set of elements given by an <code class="docutils literal notranslate"><span class="pre">index</span></code> (<code class="docutils literal notranslate"><span class="pre">aggr(x,</span> <span class="pre">index,</span>
+<span class="pre">dim_size)</span></code>) and can be used as readouts, or passed as <code class="docutils literal notranslate"><span class="pre">aggr</span></code> to any
+<a class="reference internal" href="_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing" title="mlx_graphs.nn.MessagePassing"><code class="xref py py-class docutils literal notranslate"><span class="pre">MessagePassing</span></code></a> layer, alone or as a list (e.g.
+<code class="docutils literal notranslate"><span class="pre">SAGEConv(16,</span> <span class="pre">32,</span> <span class="pre">aggr=[&quot;mean&quot;,</span> <span class="pre">&quot;max&quot;])</span></code>).</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.Aggregation.html#mlx_graphs.nn.aggr.Aggregation" title="mlx_graphs.nn.aggr.Aggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Aggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Base class of the aggregation operators, mirroring <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.aggr.Aggregation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SumAggregation.html#mlx_graphs.nn.aggr.SumAggregation" title="mlx_graphs.nn.aggr.SumAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SumAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Sums the elements of each set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MeanAggregation.html#mlx_graphs.nn.aggr.MeanAggregation" title="mlx_graphs.nn.aggr.MeanAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeanAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Averages the elements of each set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MaxAggregation.html#mlx_graphs.nn.aggr.MaxAggregation" title="mlx_graphs.nn.aggr.MaxAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MaxAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Feature-wise maximum of the elements of each set (0 for empty sets).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MinAggregation.html#mlx_graphs.nn.aggr.MinAggregation" title="mlx_graphs.nn.aggr.MinAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MinAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Feature-wise minimum of the elements of each set (0 for empty sets).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MulAggregation.html#mlx_graphs.nn.aggr.MulAggregation" title="mlx_graphs.nn.aggr.MulAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MulAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Feature-wise product of the elements of each set (1 for empty sets).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.VarAggregation.html#mlx_graphs.nn.aggr.VarAggregation" title="mlx_graphs.nn.aggr.VarAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VarAggregation</span></code></a>([semi_grad])</p></td>
+<td><p>Feature-wise (population) variance of the elements of each set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.StdAggregation.html#mlx_graphs.nn.aggr.StdAggregation" title="mlx_graphs.nn.aggr.StdAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">StdAggregation</span></code></a>([semi_grad])</p></td>
+<td><p>Feature-wise (population) standard deviation of the elements of each set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html#mlx_graphs.nn.aggr.SoftmaxAggregation" title="mlx_graphs.nn.aggr.SoftmaxAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SoftmaxAggregation</span></code></a>([t, learn, semi_grad, ...])</p></td>
+<td><p>Softmax aggregation with an (optionally learnable) inverse temperature, from <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCN: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html#mlx_graphs.nn.aggr.PowerMeanAggregation" title="mlx_graphs.nn.aggr.PowerMeanAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PowerMeanAggregation</span></code></a>([p, learn, channels, ...])</p></td>
+<td><p>Power mean aggregation with an (optionally learnable) power, from <a class="reference external" href="https://arxiv.org/abs/2006.07739">&quot;DeeperGCN: All You Need to Train Deeper GCNs&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html#mlx_graphs.nn.aggr.MedianAggregation" title="mlx_graphs.nn.aggr.MedianAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MedianAggregation</span></code></a>([fill_value])</p></td>
+<td><p>Feature-wise median of the elements of each set.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.QuantileAggregation.html#mlx_graphs.nn.aggr.QuantileAggregation" title="mlx_graphs.nn.aggr.QuantileAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">QuantileAggregation</span></code></a>(q[, interpolation, ...])</p></td>
+<td><p>Feature-wise <span class="math notranslate nohighlight">\(q\)</span>-th quantile of the elements of each set.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html#mlx_graphs.nn.aggr.MultiAggregation" title="mlx_graphs.nn.aggr.MultiAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiAggregation</span></code></a>(aggrs[, aggrs_kwargs, ...])</p></td>
+<td><p>Applies several aggregations and combines their results, as in <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> and <a class="reference external" href="https://arxiv.org/abs/2104.01481">&quot;Adaptive Filters and Aggregator Fusion for Efficient Graph Convolutions&quot;</a> papers.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html#mlx_graphs.nn.aggr.DegreeScalerAggregation" title="mlx_graphs.nn.aggr.DegreeScalerAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DegreeScalerAggregation</span></code></a>(aggr, scaler, deg[, ...])</p></td>
+<td><p>Combines one or more aggregations and rescales their output with one or more degree-based scalers, from <a class="reference external" href="https://arxiv.org/abs/2004.05718">&quot;Principal Neighbourhood Aggregation for Graph Nets&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SortAggregation.html#mlx_graphs.nn.aggr.SortAggregation" title="mlx_graphs.nn.aggr.SortAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SortAggregation</span></code></a>(k)</p></td>
+<td><p>Sort pooling from <a class="reference external" href="https://www.cse.wustl.edu/~muhan/papers/AAAI_2018_DGCNN.pdf">&quot;An End-to-End Deep Learning Architecture for Graph Classification&quot;</a> paper (DGCNN).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html#mlx_graphs.nn.aggr.DeepSetsAggregation" title="mlx_graphs.nn.aggr.DeepSetsAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DeepSetsAggregation</span></code></a>([local_nn, global_nn])</p></td>
+<td><p>Deep Sets aggregation: the elements are transformed by a network <span class="math notranslate nohighlight">\(\phi_{\mathbf{\Theta}}\)</span>, summed, and the sum is transformed by a network <span class="math notranslate nohighlight">\(\rho_{\mathbf{\Theta}}\)</span>, as in <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html#mlx_graphs.nn.aggr.LSTMAggregation" title="mlx_graphs.nn.aggr.LSTMAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LSTMAggregation</span></code></a>(node_features_dim, ...[, bias])</p></td>
+<td><p>Aggregation with an LSTM, from the <a class="reference external" href="https://arxiv.org/abs/1706.02216">&quot;Inductive Representation Learning on Large Graphs&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">LSTMAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html#mlx_graphs.nn.aggr.GRUAggregation" title="mlx_graphs.nn.aggr.GRUAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRUAggregation</span></code></a>(node_features_dim, ...[, bias])</p></td>
+<td><p>Aggregation with a GRU, from the <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">GRUAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html#mlx_graphs.nn.aggr.SetTransformerAggregation" title="mlx_graphs.nn.aggr.SetTransformerAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetTransformerAggregation</span></code></a>(channels[, ...])</p></td>
+<td><p>Aggregation with a Set Transformer, from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">SetTransformerAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.GraphMultisetTransformer.html#mlx_graphs.nn.aggr.GraphMultisetTransformer" title="mlx_graphs.nn.aggr.GraphMultisetTransformer"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GraphMultisetTransformer</span></code></a>(channels, k[, ...])</p></td>
+<td><p>The Graph Multiset Transformer pooling operator from the <a class="reference external" href="https://arxiv.org/abs/2102.11533">&quot;Accurate Learning of Graph Representations with Graph Multiset Pooling&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">GraphMultisetTransformer</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html#mlx_graphs.nn.aggr.MLPAggregation" title="mlx_graphs.nn.aggr.MLPAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MLPAggregation</span></code></a>(node_features_dim, ...[, ...])</p></td>
+<td><p>Aggregation with a multi-layer perceptron on the concatenated elements of each set, from the <a class="reference external" href="https://arxiv.org/abs/2211.04952">&quot;Graph Neural Networks with Adaptive Readouts&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">MLPAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html#mlx_graphs.nn.aggr.LCMAggregation" title="mlx_graphs.nn.aggr.LCMAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LCMAggregation</span></code></a>(node_features_dim, ...[, project])</p></td>
+<td><p>The Learnable Commutative Monoid aggregation from the <a class="reference external" href="https://arxiv.org/abs/2212.08541">&quot;Learnable Commutative Monoids for Graph Neural Networks&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">LCMAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.EquilibriumAggregation.html#mlx_graphs.nn.aggr.EquilibriumAggregation" title="mlx_graphs.nn.aggr.EquilibriumAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">EquilibriumAggregation</span></code></a>(node_features_dim, ...)</p></td>
+<td><p>The equilibrium aggregation layer from the <a class="reference external" href="https://arxiv.org/abs/2202.12795">&quot;Equilibrium Aggregation: Encoding Sets via Optimization&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">EquilibriumAggregation</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.VariancePreservingAggregation.html#mlx_graphs.nn.aggr.VariancePreservingAggregation" title="mlx_graphs.nn.aggr.VariancePreservingAggregation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">VariancePreservingAggregation</span></code></a>(*args, **kwargs)</p></td>
+<td><p>The variance-preserving aggregation from the <a class="reference external" href="https://arxiv.org/abs/2403.04747">&quot;GNN-VPA: A Variance-Preserving Aggregation Strategy for Graph Neural Networks&quot;</a> paper, as in PyG.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Set transformer building blocks:</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html#mlx_graphs.nn.aggr.MultiheadAttentionBlock" title="mlx_graphs.nn.aggr.MultiheadAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiheadAttentionBlock</span></code></a>(channels[, heads, ...])</p></td>
+<td><p>The Multihead Attention Block (MAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer: A Framework for Attention-based Permutation-Invariant Neural Networks&quot;</a> paper, as in PyG.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html#mlx_graphs.nn.aggr.SetAttentionBlock" title="mlx_graphs.nn.aggr.SetAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SetAttentionBlock</span></code></a>(channels[, heads, ...])</p></td>
+<td><p>The Set Attention Block (SAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{SAB}(\mathbf{X}) = \mathrm{MAB}(\mathbf{x}, \mathbf{y})\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html#mlx_graphs.nn.aggr.InducedSetAttentionBlock" title="mlx_graphs.nn.aggr.InducedSetAttentionBlock"><code class="xref py py-obj docutils literal notranslate"><span class="pre">InducedSetAttentionBlock</span></code></a>(channels, ...[, ...])</p></td>
+<td><p>The Induced Set Attention Block (ISAB) from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{ISAB}(\mathbf{X}) = \mathrm{MAB}(\mathbf{x}, \mathbf{h})\)</span> with <span class="math notranslate nohighlight">\(\mathbf{h} = \mathrm{MAB}(\mathbf{I}, \mathbf{x})\)</span> for learnable induced points <span class="math notranslate nohighlight">\(\mathbf{I}\)</span>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html#mlx_graphs.nn.aggr.PoolingByMultiheadAttention" title="mlx_graphs.nn.aggr.PoolingByMultiheadAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PoolingByMultiheadAttention</span></code></a>(channels[, ...])</p></td>
+<td><p>The Pooling by Multihead Attention (PMA) layer from the <a class="reference external" href="https://arxiv.org/abs/1810.00825">&quot;Set Transformer&quot;</a> paper: <span class="math notranslate nohighlight">\(\mathrm{PMA}(\mathbf{X}) = \mathrm{MAB}(\mathbf{S}, \mathrm{ReLU}(\mathbf{X}\mathbf{W}))\)</span> for learnable seed points <span class="math notranslate nohighlight">\(\mathbf{S}\)</span>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Dense layout of grouped elements (used by the set and graph transformers):</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.DenseLayout.html#mlx_graphs.nn.aggr.DenseLayout" title="mlx_graphs.nn.aggr.DenseLayout"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DenseLayout</span></code></a>(index, num_elements[, dim_size, ...])</p></td>
+<td><p>Host-side layout of a set of elements grouped by <code class="docutils literal notranslate"><span class="pre">index</span></code> into a dense <code class="docutils literal notranslate"><span class="pre">[num_sets,</span> <span class="pre">max_set_size,</span> <span class="pre">...]</span></code> array, as PyG's <code class="docutils literal notranslate"><span class="pre">to_dense_batch</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html#mlx_graphs.nn.aggr.aggregation_resolver" title="mlx_graphs.nn.aggr.aggregation_resolver"><code class="xref py py-obj docutils literal notranslate"><span class="pre">aggregation_resolver</span></code></a>(aggr, **kwargs)</p></td>
+<td><p>Returns the <a class="reference internal" href="_autosummary/mlx_graphs.nn.aggr.Aggregation.html#mlx_graphs.nn.aggr.Aggregation" title="mlx_graphs.nn.aggr.Aggregation"><code class="xref py py-class docutils literal notranslate"><span class="pre">Aggregation</span></code></a> described by <code class="docutils literal notranslate"><span class="pre">aggr</span></code>, as PyG's <code class="docutils literal notranslate"><span class="pre">aggregation_resolver</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="positional-encodings">
+<h2>Positional encodings<a class="headerlink" href="#positional-encodings" title="Link to this heading">#</a></h2>
+<p>Encodings of positions and times (<code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.encoding</span></code>), and the
+projections of the random-walk / Laplacian positional encodings used by graph
+transformers such as <a class="reference internal" href="_autosummary/mlx_graphs.nn.GPSConv.html#mlx_graphs.nn.GPSConv" title="mlx_graphs.nn.GPSConv"><code class="xref py py-class docutils literal notranslate"><span class="pre">GPSConv</span></code></a>.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.PositionalEncoding.html#mlx_graphs.nn.PositionalEncoding" title="mlx_graphs.nn.PositionalEncoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PositionalEncoding</span></code></a>(out_features_dim[, ...])</p></td>
+<td><p>The sinusoidal positional encoding from the <a class="reference external" href="https://arxiv.org/abs/1706.03762">&quot;Attention Is All You Need&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">PositionalEncoding</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.TemporalEncoding.html#mlx_graphs.nn.TemporalEncoding" title="mlx_graphs.nn.TemporalEncoding"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TemporalEncoding</span></code></a>(out_features_dim)</p></td>
+<td><p>The time encoding from the <a class="reference external" href="https://openreview.net/forum?id=ayPPc0SyLv1">&quot;Do We Really Need Complicated Model Architectures for Temporal Networks?&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">TemporalEncoding</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.RWSEEncoder.html#mlx_graphs.nn.RWSEEncoder" title="mlx_graphs.nn.RWSEEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">RWSEEncoder</span></code></a>(pe_dim, out_features_dim[, norm])</p></td>
+<td><p>Projection of the random-walk structural encodings (RWSE) of the nodes, as in the GPS example of PyG (<code class="docutils literal notranslate"><span class="pre">examples/graph_gps.py</span></code>) and the <code class="docutils literal notranslate"><span class="pre">RWSE</span></code> node encoder of <a class="reference external" href="https://github.com/rampasek/GraphGPS">GraphGPS</a>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.LapPEEncoder.html#mlx_graphs.nn.LapPEEncoder" title="mlx_graphs.nn.LapPEEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LapPEEncoder</span></code></a>(pe_dim, out_features_dim[, ...])</p></td>
+<td><p>Projection of the Laplacian eigenvector positional encodings (LapPE) of the nodes, as the linear <code class="docutils literal notranslate"><span class="pre">LapPE</span></code> node encoder of <a class="reference external" href="https://github.com/rampasek/GraphGPS">GraphGPS</a>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="attention">
+<h2>Attention<a class="headerlink" href="#attention" title="Link to this heading">#</a></h2>
+<p>Global attention mechanisms of <code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn.attention</span></code> (as
+<code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.attention</span></code>), applied to dense batches of node features
+<code class="docutils literal notranslate"><span class="pre">[batch_size,</span> <span class="pre">num_nodes,</span> <span class="pre">channels]</span></code> with a mask of the real nodes. They are
+also exported by <code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn</span></code>, as in PyG.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html#mlx_graphs.nn.attention.MultiheadAttention" title="mlx_graphs.nn.attention.MultiheadAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MultiheadAttention</span></code></a>(dims, num_heads[, ...])</p></td>
+<td><p>Multi-head scaled dot-product attention with the semantics of <code class="docutils literal notranslate"><span class="pre">torch.nn.MultiheadAttention(...,</span> <span class="pre">batch_first=True)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.PerformerAttention.html#mlx_graphs.nn.attention.PerformerAttention" title="mlx_graphs.nn.attention.PerformerAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PerformerAttention</span></code></a>(channels, heads[, ...])</p></td>
+<td><p>The linear scaled attention mechanism from the <a class="reference external" href="https://arxiv.org/abs/2009.14794">&quot;Rethinking Attention with Performers&quot;</a> paper, as in PyG.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html#mlx_graphs.nn.attention.SGFormerAttention" title="mlx_graphs.nn.attention.SGFormerAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">SGFormerAttention</span></code></a>(channels[, heads, ...])</p></td>
+<td><p>The simple global attention mechanism from the <a class="reference external" href="https://arxiv.org/abs/2306.10759">&quot;SGFormer: Simplifying and Empowering Transformers for Large-Graph Representations&quot;</a> paper, as in PyG.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html#mlx_graphs.nn.attention.PolynormerAttention" title="mlx_graphs.nn.attention.PolynormerAttention"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PolynormerAttention</span></code></a>(channels, heads[, ...])</p></td>
+<td><p>The polynomial-expressive linear global attention from the <a class="reference external" href="https://arxiv.org/abs/2403.01232">&quot;Polynormer: Polynomial-Expressive Graph Transformer in Linear Time&quot;</a> paper, as in PyG.</p></td>
 </tr>
 </tbody>
 </table>
@@ -746,8 +1442,79 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
 <tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.clear_csr_cache.html#mlx_graphs.nn.clear_csr_cache" title="mlx_graphs.nn.clear_csr_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_csr_cache</span></code></a>()</p></td>
 <td><p>Drops all cached CSR conversions used by the <code class="docutils literal notranslate"><span class="pre">&quot;auto&quot;</span></code> and <code class="docutils literal notranslate"><span class="pre">&quot;csr&quot;</span></code> formats of fused message passing.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.clear_norm_cache.html#mlx_graphs.nn.clear_norm_cache" title="mlx_graphs.nn.clear_norm_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_norm_cache</span></code></a>()</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.gcn_norm.html#mlx_graphs.nn.gcn_norm" title="mlx_graphs.nn.gcn_norm"><code class="xref py py-obj docutils literal notranslate"><span class="pre">gcn_norm</span></code></a>(edge_index, num_nodes[, ...])</p></td>
+<td><p>Symmetric GCN normalization of a graph.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.clear_norm_cache.html#mlx_graphs.nn.clear_norm_cache" title="mlx_graphs.nn.clear_norm_cache"><code class="xref py py-obj docutils literal notranslate"><span class="pre">clear_norm_cache</span></code></a>()</p></td>
 <td><p>Drops the cached graph normalizations.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="temporal-graph-networks">
+<h2>Temporal graph networks<a class="headerlink" href="#temporal-graph-networks" title="Link to this heading">#</a></h2>
+<p>The TGN memory model and its building blocks (<code class="docutils literal notranslate"><span class="pre">mlx_graphs.nn.models.tgn</span></code>, as
+<code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.models.tgn</span></code>). See <code class="docutils literal notranslate"><span class="pre">examples/tgn_jodie.py</span></code>.</p>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.TGNMemory.html#mlx_graphs.nn.TGNMemory" title="mlx_graphs.nn.TGNMemory"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TGNMemory</span></code></a>(num_nodes, raw_msg_dim, ...)</p></td>
+<td><p>The Temporal Graph Network (TGN) memory model from the <a class="reference external" href="https://arxiv.org/abs/2006.10637">&quot;Temporal Graph Networks for Deep Learning on Dynamic Graphs&quot;</a> paper, as PyG's <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.TGNMemory</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html#mlx_graphs.nn.models.tgn.IdentityMessage" title="mlx_graphs.nn.models.tgn.IdentityMessage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">IdentityMessage</span></code></a>(raw_msg_dim, memory_dim, ...)</p></td>
+<td><p>The identity message function of TGN: the concatenation of the source and destination memories, the raw message and the time encoding.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.LastAggregator.html#mlx_graphs.nn.models.tgn.LastAggregator" title="mlx_graphs.nn.models.tgn.LastAggregator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LastAggregator</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Keeps, for every node, the message with the latest timestamp (the message stored last among equal timestamps).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.MeanAggregator.html#mlx_graphs.nn.models.tgn.MeanAggregator" title="mlx_graphs.nn.models.tgn.MeanAggregator"><code class="xref py py-obj docutils literal notranslate"><span class="pre">MeanAggregator</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Averages the messages of every node (zeros for nodes without messages).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.TimeEncoder.html#mlx_graphs.nn.models.tgn.TimeEncoder" title="mlx_graphs.nn.models.tgn.TimeEncoder"><code class="xref py py-obj docutils literal notranslate"><span class="pre">TimeEncoder</span></code></a>(out_features_dim)</p></td>
+<td><p>The time encoder of TGN, <span class="math notranslate nohighlight">\(\cos(\mathbf{w} t + \mathbf{b})\)</span>.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.GRUCell.html#mlx_graphs.nn.models.tgn.GRUCell" title="mlx_graphs.nn.models.tgn.GRUCell"><code class="xref py py-obj docutils literal notranslate"><span class="pre">GRUCell</span></code></a>(input_dim, hidden_dim[, bias])</p></td>
+<td><p>A gated recurrent unit cell with the parameters and initialization of <code class="docutils literal notranslate"><span class="pre">torch.nn.GRUCell</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.models.tgn.LastNeighborLoader.html#mlx_graphs.nn.models.tgn.LastNeighborLoader" title="mlx_graphs.nn.models.tgn.LastNeighborLoader"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LastNeighborLoader</span></code></a>(num_nodes, size)</p></td>
+<td><p>Keeps, for every node, its <code class="docutils literal notranslate"><span class="pre">size</span></code> most recent neighbors in an ever-growing (undirected) temporal graph, as PyG's <code class="docutils literal notranslate"><span class="pre">torch_geometric.nn.models.tgn.LastNeighborLoader</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="heterogeneous-models">
+<h2>Heterogeneous models<a class="headerlink" href="#heterogeneous-models" title="Link to this heading">#</a></h2>
+<p><code class="xref py py-func docutils literal notranslate"><span class="pre">to_hetero()</span></code> converts a homogeneous model (e.g. a <code class="xref py py-class docutils literal notranslate"><span class="pre">GraphSAGE</span></code>, or
+a model written with message passing layers, <code class="docutils literal notranslate"><span class="pre">Linear</span></code> layers and
+activations) into a heterogeneous one, with one copy of every message passing
+layer per edge type and of every other layer per node type, like PyG’s
+<code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>. The converted model takes dicts keyed by node and edge types.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">GraphSAGE</span><span class="p">,</span> <span class="n">to_hetero</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">to_hetero</span><span class="p">(</span>
+    <span class="n">GraphSAGE</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">out_features_dim</span><span class="o">=</span><span class="mi">4</span><span class="p">),</span>
+    <span class="n">data</span><span class="o">.</span><span class="n">metadata</span><span class="p">(),</span>
+    <span class="n">input_dims</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">num_node_features</span><span class="p">,</span>  <span class="c1"># no lazy sizes in MLX</span>
+<span class="p">)</span>
+<span class="n">out</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index_dict</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">node_features_dict</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero.html#mlx_graphs.nn.to_hetero" title="mlx_graphs.nn.to_hetero"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hetero</span></code></a>(module, metadata[, aggr, ...])</p></td>
+<td><p>Converts a homogeneous GNN model into its heterogeneous equivalent, in which node representations are learned for each node type in <code class="docutils literal notranslate"><span class="pre">metadata[0]</span></code> and messages are exchanged along each edge type in <code class="docutils literal notranslate"><span class="pre">metadata[1]</span></code>, as in the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper (PyG's <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero_with_bases.html#mlx_graphs.nn.to_hetero_with_bases" title="mlx_graphs.nn.to_hetero_with_bases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_hetero_with_bases</span></code></a>(module, metadata, num_bases)</p></td>
+<td><p>Converts a homogeneous GNN model into its heterogeneous equivalent via the basis-decomposition technique of the <a class="reference external" href="https://arxiv.org/abs/1703.06103">&quot;Modeling Relational Data with Graph Convolutional Networks&quot;</a> paper (PyG's <code class="docutils literal notranslate"><span class="pre">to_hetero_with_bases</span></code>).</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="_autosummary/mlx_graphs.nn.ToHeteroModel.html#mlx_graphs.nn.ToHeteroModel" title="mlx_graphs.nn.ToHeteroModel"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ToHeteroModel</span></code></a>(module, metadata[, aggr, ...])</p></td>
+<td><p>Heterogeneous version of a homogeneous model, returned by <a class="reference internal" href="_autosummary/mlx_graphs.nn.to_hetero.html#mlx_graphs.nn.to_hetero" title="mlx_graphs.nn.to_hetero"><code class="xref py py-func docutils literal notranslate"><span class="pre">to_hetero()</span></code></a>.</p></td>
 </tr>
 </tbody>
 </table>
@@ -767,12 +1534,12 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html"
+       href="../transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mlx_graphs.transforms.GCNNorm</p>
+        <p class="prev-next-title">mlx_graphs.transforms.RemoveTrainingClasses</p>
       </div>
     </a>
     <a class="right-next"
@@ -802,12 +1569,26 @@ modifying an <code class="docutils literal notranslate"><span class="pre">edge_i
   <nav class="bd-toc-nav page-toc">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#convolution-layers">Convolution layers</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#models">Models</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-auto-encoders">Graph auto-encoders</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#label-propagation">Label propagation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#knowledge-graph-embeddings">Knowledge graph embeddings</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#normalization">Normalization</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#pooling-and-readout">Pooling and readout</a><ul class="nav section-nav flex-column">
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#aggregations">Aggregations</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#positional-encodings">Positional encodings</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#attention">Attention</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fused-message-passing">Fused message passing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-graph-networks">Temporal graph networks</a><ul class="nav section-nav flex-column">
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#heterogeneous-models">Heterogeneous models</a></li>
 </ul>
   </nav></div>
 

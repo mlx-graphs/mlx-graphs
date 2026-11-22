@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mlx_graphs.nn.models.kge &#8212; mlx-graphs 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../../../_static/custom.css?v=6c5b376d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../../../_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="../../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = '_modules/mlx_graphs/nn/models/kge';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../../../_static/searchtools.js"></script>
+    <script src="../../../../_static/language_data.js"></script>
+    <script src="../../../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.1.0 documentation - Home"/>
+    <img src="../../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../guide/message_passing.html">Creating message passing layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../datasets.html">Datasets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../validation.html">Validation against PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/data/index.html">Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary/mlx_graphs.data.temporal.TemporalData.html">mlx_graphs.data.temporal.TemporalData</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/data/utils.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/datasets/index.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.AmazonDataset.html">mlx_graphs.datasets.AmazonDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.CoauthorDataset.html">mlx_graphs.datasets.CoauthorDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.OGBMAG.html">mlx_graphs.datasets.OGBMAG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.CitationFull.html">mlx_graphs.datasets.CitationFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.CoraFull.html">mlx_graphs.datasets.CoraFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.HeterophilousGraphDataset.html">mlx_graphs.datasets.HeterophilousGraphDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.WebKB.html">mlx_graphs.datasets.WebKB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.WikipediaNetwork.html">mlx_graphs.datasets.WikipediaNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.Actor.html">mlx_graphs.datasets.Actor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.WikiCS.html">mlx_graphs.datasets.WikiCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.FB15k_237.html">mlx_graphs.datasets.FB15k_237</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.WordNet18.html">mlx_graphs.datasets.WordNet18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.WordNet18RR.html">mlx_graphs.datasets.WordNet18RR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.FakeDataset.html">mlx_graphs.datasets.FakeDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.FakeHeteroDataset.html">mlx_graphs.datasets.FakeHeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.JODIEDataset.html">mlx_graphs.datasets.JODIEDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.LRGBDataset.html">mlx_graphs.datasets.LRGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.GNNBenchmarkDataset.html">mlx_graphs.datasets.GNNBenchmarkDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.load_torch_file.html">mlx_graphs.datasets.utils.torch_serialization.load_torch_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix.html">mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.HGTLoader.html">mlx_graphs.loaders.HGTLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.LinkNeighborLoader.html">mlx_graphs.loaders.LinkNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.NegativeSampling.html">mlx_graphs.loaders.NegativeSampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.RandomNodeLoader.html">mlx_graphs.loaders.RandomNodeLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTSampler.html">mlx_graphs.loaders.GraphSAINTSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTNodeSampler.html">mlx_graphs.loaders.GraphSAINTNodeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTEdgeSampler.html">mlx_graphs.loaders.GraphSAINTEdgeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTRandomWalkSampler.html">mlx_graphs.loaders.GraphSAINTRandomWalkSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.ShaDowKHopSampler.html">mlx_graphs.loaders.ShaDowKHopSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.ClusterData.html">mlx_graphs.loaders.ClusterData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.ClusterLoader.html">mlx_graphs.loaders.ClusterLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.balanced_partition.html">mlx_graphs.loaders.balanced_partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.ImbalancedSampler.html">mlx_graphs.loaders.ImbalancedSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.DynamicBatchSampler.html">mlx_graphs.loaders.DynamicBatchSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.DataListLoader.html">mlx_graphs.loaders.DataListLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.DenseDataLoader.html">mlx_graphs.loaders.DenseDataLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/loaders/_autosummary/mlx_graphs.loaders.TemporalDataLoader.html">mlx_graphs.loaders.TemporalDataLoader</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.Compose.html">mlx_graphs.transforms.Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.ToUndirected.html">mlx_graphs.transforms.ToUndirected</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.AddSelfLoops.html">mlx_graphs.transforms.AddSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveSelfLoops.html">mlx_graphs.transforms.RemoveSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveIsolatedNodes.html">mlx_graphs.transforms.RemoveIsolatedNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.LargestConnectedComponents.html">mlx_graphs.transforms.LargestConnectedComponents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomNodeSplit.html">mlx_graphs.transforms.RandomNodeSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RandomLinkSplit.html">mlx_graphs.transforms.RandomLinkSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.OneHotDegree.html">mlx_graphs.transforms.OneHotDegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRemainingSelfLoops.html">mlx_graphs.transforms.AddRemainingSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveDuplicatedEdges.html">mlx_graphs.transforms.RemoveDuplicatedEdges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.IndexToMask.html">mlx_graphs.transforms.IndexToMask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.MaskToIndex.html">mlx_graphs.transforms.MaskToIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.KNNGraph.html">mlx_graphs.transforms.KNNGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RadiusGraph.html">mlx_graphs.transforms.RadiusGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.NormalizeFeatures.html">mlx_graphs.transforms.NormalizeFeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.TargetIndegree.html">mlx_graphs.transforms.TargetIndegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.LocalDegreeProfile.html">mlx_graphs.transforms.LocalDegreeProfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.AddLaplacianEigenvectorPE.html">mlx_graphs.transforms.AddLaplacianEigenvectorPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.SVDFeatureReduction.html">mlx_graphs.transforms.SVDFeatureReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.SIGN.html">mlx_graphs.transforms.SIGN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturePropagation.html">mlx_graphs.transforms.FeaturePropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.VirtualNode.html">mlx_graphs.transforms.VirtualNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.TwoHop.html">mlx_graphs.transforms.TwoHop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.LineGraph.html">mlx_graphs.transforms.LineGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.ToDense.html">mlx_graphs.transforms.ToDense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html">mlx_graphs.transforms.RemoveTrainingClasses</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransformerConv.html">mlx_graphs.nn.TransformerConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GraphConv.html">mlx_graphs.nn.GraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SGConv.html">mlx_graphs.nn.SGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.APPNP.html">mlx_graphs.nn.APPNP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ChebConv.html">mlx_graphs.nn.ChebConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.FastRGCNConv.html">mlx_graphs.nn.FastRGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RGATConv.html">mlx_graphs.nn.RGATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GENConv.html">mlx_graphs.nn.GENConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MixHopConv.html">mlx_graphs.nn.MixHopConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.FAConv.html">mlx_graphs.nn.FAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GeneralConv.html">mlx_graphs.nn.GeneralConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DirGNNConv.html">mlx_graphs.nn.DirGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HANConv.html">mlx_graphs.nn.HANConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HGTConv.html">mlx_graphs.nn.HGTConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GINEConv.html">mlx_graphs.nn.GINEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GCN2Conv.html">mlx_graphs.nn.GCN2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SSGConv.html">mlx_graphs.nn.SSGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LGConv.html">mlx_graphs.nn.LGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ARMAConv.html">mlx_graphs.nn.ARMAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GatedGraphConv.html">mlx_graphs.nn.GatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ResGatedGraphConv.html">mlx_graphs.nn.ResGatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.NNConv.html">mlx_graphs.nn.NNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.CGConv.html">mlx_graphs.nn.CGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MFConv.html">mlx_graphs.nn.MFConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LEConv.html">mlx_graphs.nn.LEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.FiLMConv.html">mlx_graphs.nn.FiLMConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.AGNNConv.html">mlx_graphs.nn.AGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ClusterGCNConv.html">mlx_graphs.nn.ClusterGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DynamicEdgeConv.html">mlx_graphs.nn.DynamicEdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.PNAConv.html">mlx_graphs.nn.PNAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GPSConv.html">mlx_graphs.nn.GPSConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.PNA.html">mlx_graphs.nn.PNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.EdgeCNN.html">mlx_graphs.nn.EdgeCNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LINKX.html">mlx_graphs.nn.LINKX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DeepGCNLayer.html">mlx_graphs.nn.DeepGCNLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MaskLabel.html">mlx_graphs.nn.MaskLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RECT_L.html">mlx_graphs.nn.RECT_L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DeepGraphInfomax.html">mlx_graphs.nn.DeepGraphInfomax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LightGCN.html">mlx_graphs.nn.LightGCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SGFormer.html">mlx_graphs.nn.SGFormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.Polynormer.html">mlx_graphs.nn.Polynormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.InnerProductDecoder.html">mlx_graphs.nn.InnerProductDecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GAE.html">mlx_graphs.nn.GAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.VGAE.html">mlx_graphs.nn.VGAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ARGA.html">mlx_graphs.nn.ARGA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ARGVA.html">mlx_graphs.nn.ARGVA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LabelPropagation.html">mlx_graphs.nn.LabelPropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.CorrectAndSmooth.html">mlx_graphs.nn.CorrectAndSmooth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html">mlx_graphs.nn.KGEModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransE.html">mlx_graphs.nn.TransE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DistMult.html">mlx_graphs.nn.DistMult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ComplEx.html">mlx_graphs.nn.ComplEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RotatE.html">mlx_graphs.nn.RotatE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGTripletLoader.html">mlx_graphs.nn.KGTripletLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GraphNormalization.html">mlx_graphs.nn.GraphNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.PairNormalization.html">mlx_graphs.nn.PairNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.GraphSizeNormalization.html">mlx_graphs.nn.GraphSizeNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html">mlx_graphs.nn.MeanSubtractionNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.MessageNormalization.html">mlx_graphs.nn.MessageNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DiffGroupNormalization.html">mlx_graphs.nn.DiffGroupNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TopKPooling.html">mlx_graphs.nn.TopKPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.SAGPooling.html">mlx_graphs.nn.SAGPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.global_sort_pool.html">mlx_graphs.nn.global_sort_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.topk.html">mlx_graphs.nn.topk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.filter_adj.html">mlx_graphs.nn.filter_adj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.knn.html">mlx_graphs.nn.knn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.knn_graph.html">mlx_graphs.nn.knn_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.radius.html">mlx_graphs.nn.radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.radius_graph.html">mlx_graphs.nn.radius_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.Aggregation.html">mlx_graphs.nn.aggr.Aggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SumAggregation.html">mlx_graphs.nn.aggr.SumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MeanAggregation.html">mlx_graphs.nn.aggr.MeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MaxAggregation.html">mlx_graphs.nn.aggr.MaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MinAggregation.html">mlx_graphs.nn.aggr.MinAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MulAggregation.html">mlx_graphs.nn.aggr.MulAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.VarAggregation.html">mlx_graphs.nn.aggr.VarAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.StdAggregation.html">mlx_graphs.nn.aggr.StdAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html">mlx_graphs.nn.aggr.SoftmaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html">mlx_graphs.nn.aggr.PowerMeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html">mlx_graphs.nn.aggr.MedianAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.QuantileAggregation.html">mlx_graphs.nn.aggr.QuantileAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html">mlx_graphs.nn.aggr.MultiAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html">mlx_graphs.nn.aggr.DegreeScalerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SortAggregation.html">mlx_graphs.nn.aggr.SortAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html">mlx_graphs.nn.aggr.DeepSetsAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html">mlx_graphs.nn.aggr.LSTMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html">mlx_graphs.nn.aggr.GRUAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html">mlx_graphs.nn.aggr.SetTransformerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.GraphMultisetTransformer.html">mlx_graphs.nn.aggr.GraphMultisetTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html">mlx_graphs.nn.aggr.MLPAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html">mlx_graphs.nn.aggr.LCMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.EquilibriumAggregation.html">mlx_graphs.nn.aggr.EquilibriumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.VariancePreservingAggregation.html">mlx_graphs.nn.aggr.VariancePreservingAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html">mlx_graphs.nn.aggr.MultiheadAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html">mlx_graphs.nn.aggr.SetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html">mlx_graphs.nn.aggr.InducedSetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html">mlx_graphs.nn.aggr.PoolingByMultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DenseLayout.html">mlx_graphs.nn.aggr.DenseLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html">mlx_graphs.nn.aggr.aggregation_resolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.PositionalEncoding.html">mlx_graphs.nn.PositionalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TemporalEncoding.html">mlx_graphs.nn.TemporalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RWSEEncoder.html">mlx_graphs.nn.RWSEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.LapPEEncoder.html">mlx_graphs.nn.LapPEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html">mlx_graphs.nn.attention.MultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.attention.PerformerAttention.html">mlx_graphs.nn.attention.PerformerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html">mlx_graphs.nn.attention.SGFormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html">mlx_graphs.nn.attention.PolynormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.gcn_norm.html">mlx_graphs.nn.gcn_norm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TGNMemory.html">mlx_graphs.nn.TGNMemory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html">mlx_graphs.nn.models.tgn.IdentityMessage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastAggregator.html">mlx_graphs.nn.models.tgn.LastAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.MeanAggregator.html">mlx_graphs.nn.models.tgn.MeanAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.TimeEncoder.html">mlx_graphs.nn.models.tgn.TimeEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.GRUCell.html">mlx_graphs.nn.models.tgn.GRUCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastNeighborLoader.html">mlx_graphs.nn.models.tgn.LastNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.to_hetero.html">mlx_graphs.nn.to_hetero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.to_hetero_with_bases.html">mlx_graphs.nn.to_hetero_with_bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ToHeteroModel.html">mlx_graphs.nn.ToHeteroModel</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/transformations.html">Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/graph.html">Graph utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.subgraph.html">mlx_graphs.utils.subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.k_hop_subgraph.html">mlx_graphs.utils.k_hop_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.negative_sampling.html">mlx_graphs.utils.negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.structured_negative_sampling.html">mlx_graphs.utils.structured_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_edge.html">mlx_graphs.utils.dropout_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_node.html">mlx_graphs.utils.dropout_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_batch.html">mlx_graphs.utils.to_dense_batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.add_remaining_self_loops.html">mlx_graphs.utils.add_remaining_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.segregate_self_loops.html">mlx_graphs.utils.segregate_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.remove_isolated_nodes.html">mlx_graphs.utils.remove_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.contains_self_loops.html">mlx_graphs.utils.contains_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.contains_isolated_nodes.html">mlx_graphs.utils.contains_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.bipartite_subgraph.html">mlx_graphs.utils.bipartite_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.batched_negative_sampling.html">mlx_graphs.utils.batched_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_path.html">mlx_graphs.utils.dropout_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.shuffle_node.html">mlx_graphs.utils.shuffle_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.mask_feature.html">mlx_graphs.utils.mask_feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.add_random_edge.html">mlx_graphs.utils.add_random_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.unbatch.html">mlx_graphs.utils.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.unbatch_edge_index.html">mlx_graphs.utils.unbatch_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.assortativity.html">mlx_graphs.utils.assortativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_ppr.html">mlx_graphs.utils.get_ppr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.normalized_cut.html">mlx_graphs.utils.normalized_cut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_graph/mlx_graphs.utils.train_test_split_edges.html">mlx_graphs.utils.train_test_split_edges</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/generators.html">Graph generators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_generators/mlx_graphs.utils.grid.html">mlx_graphs.utils.grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_generators/mlx_graphs.utils.erdos_renyi_graph.html">mlx_graphs.utils.erdos_renyi_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_generators/mlx_graphs.utils.barabasi_albert_graph.html">mlx_graphs.utils.barabasi_albert_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_generators/mlx_graphs.utils.stochastic_blockmodel_graph.html">mlx_graphs.utils.stochastic_blockmodel_graph</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/sparse.html">Sparse and array helpers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.to_scipy_sparse_matrix.html">mlx_graphs.utils.to_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.from_scipy_sparse_matrix.html">mlx_graphs.utils.from_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.dense_to_sparse.html">mlx_graphs.utils.dense_to_sparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.softmax.html">mlx_graphs.utils.softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.mask_to_index.html">mlx_graphs.utils.mask_to_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.cumsum.html">mlx_graphs.utils.cumsum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.select.html">mlx_graphs.utils.select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sparse/mlx_graphs.utils.narrow.html">mlx_graphs.utils.narrow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.index_to_ptr.html">mlx_graphs.utils.sorting.index_to_ptr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/validators.html">Validators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/scatter.html">Scatter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mul.html">mlx_graphs.utils.scatter.scatter_mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_var.html">mlx_graphs.utils.scatter.scatter_var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_std.html">mlx_graphs.utils.scatter.scatter_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_quantile.html">mlx_graphs.utils.scatter.scatter_quantile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/array_ops.html">Array ops</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.pairwise_distances.html">mlx_graphs.utils.array_ops.pairwise_distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_convert/mlx_graphs.utils.from_pyg.html">mlx_graphs.utils.from_pyg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../../api/utils/spatial.html">Spatial graphs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_spatial/mlx_graphs.utils.knn.html">mlx_graphs.utils.knn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_spatial/mlx_graphs.utils.knn_graph.html">mlx_graphs.utils.knn_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_spatial/mlx_graphs.utils.radius.html">mlx_graphs.utils.radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../../api/utils/_autosummary_spatial/mlx_graphs.utils.radius_graph.html">mlx_graphs.utils.radius_graph</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.roc_auc_score.html">mlx_graphs.metrics.roc_auc_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.average_precision_score.html">mlx_graphs.metrics.average_precision_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetric.html">mlx_graphs.metrics.LinkPredMetric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricCollection.html">mlx_graphs.metrics.LinkPredMetricCollection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricData.html">mlx_graphs.metrics.LinkPredMetricData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPrecision.html">mlx_graphs.metrics.LinkPredPrecision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredRecall.html">mlx_graphs.metrics.LinkPredRecall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredF1.html">mlx_graphs.metrics.LinkPredF1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMAP.html">mlx_graphs.metrics.LinkPredMAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredNDCG.html">mlx_graphs.metrics.LinkPredNDCG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMRR.html">mlx_graphs.metrics.LinkPredMRR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredHitRatio.html">mlx_graphs.metrics.LinkPredHitRatio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredCoverage.html">mlx_graphs.metrics.LinkPredCoverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredDiversity.html">mlx_graphs.metrics.LinkPredDiversity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPersonalization.html">mlx_graphs.metrics.LinkPredPersonalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredAveragePopularity.html">mlx_graphs.metrics.LinkPredAveragePopularity</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../../changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/mlx-graphs/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1></h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <h1>Source code for mlx_graphs.nn.models.kge</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Iterator</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+
+<span class="n">Triplets</span> <span class="o">=</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_glorot_embedding</span><span class="p">(</span><span class="n">num</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">:</span>
+    <span class="n">emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+    <span class="n">emb</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">init</span><span class="o">.</span><span class="n">glorot_uniform</span><span class="p">()(</span><span class="n">emb</span><span class="o">.</span><span class="n">weight</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">emb</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_p_norm</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">axis</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">p</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">))</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">**</span> <span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="n">axis</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">/</span> <span class="n">p</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_normalize</span><span class="p">(</span><span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">p</span><span class="p">:</span> <span class="nb">float</span><span class="p">,</span> <span class="n">eps</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1e-12</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""``x / max(||x||_p, eps)`` along the last axis, like</span>
+<span class="sd">    ``torch.nn.functional.normalize``."""</span>
+    <span class="k">return</span> <span class="n">x</span> <span class="o">/</span> <span class="n">mx</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">_p_norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">p</span><span class="p">)[</span><span class="o">...</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="n">eps</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="KGTripletLoader">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGTripletLoader.html#mlx_graphs.nn.KGTripletLoader">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KGTripletLoader</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Iterates over mini-batches of ``(head_index, rel_type, tail_index)``</span>
+<span class="sd">    triplets.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        head_index: The head indices, shape `[num_triplets]`</span>
+<span class="sd">        rel_type: The relation types, shape `[num_triplets]`</span>
+<span class="sd">        tail_index: The tail indices, shape `[num_triplets]`</span>
+<span class="sd">        batch_size: Number of triplets per batch. Default: ``1``</span>
+<span class="sd">        shuffle: Whether to shuffle the triplets at every epoch (with</span>
+<span class="sd">            ``mx.random``). Default: ``False``</span>
+<span class="sd">        drop_last: Whether to drop the last incomplete batch. Default: ``False``</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        loader = model.loader(</span>
+<span class="sd">            head_index, rel_type, tail_index, batch_size=1000, shuffle=True</span>
+<span class="sd">        )</span>
+<span class="sd">        for head, rel, tail in loader:</span>
+<span class="sd">            ...</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+        <span class="n">drop_last</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="n">head_index</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">rel_type</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">tail_index</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"head_index, rel_type and tail_index differ in size"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">head_index</span> <span class="o">=</span> <span class="n">head_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_type</span> <span class="o">=</span> <span class="n">rel_type</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tail_index</span> <span class="o">=</span> <span class="n">tail_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drop_last</span> <span class="o">=</span> <span class="n">drop_last</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_index</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_last</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">n</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
+        <span class="k">return</span> <span class="n">math</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">n</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Iterator</span><span class="p">[</span><span class="n">Triplets</span><span class="p">]:</span>
+        <span class="n">n</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_index</span><span class="o">.</span><span class="n">size</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">perm</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">permutation</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">perm</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="p">)):</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">perm</span><span class="p">[</span><span class="n">i</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="p">:</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">]</span>
+            <span class="k">yield</span> <span class="bp">self</span><span class="o">.</span><span class="n">head_index</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_type</span><span class="p">[</span><span class="n">index</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">tail_index</span><span class="p">[</span><span class="n">index</span><span class="p">]</span></div>
+
+
+
+<div class="viewcode-block" id="KGEModel">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">KGEModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Base class of the knowledge graph embedding models.</span>
+
+<span class="sd">    Subclasses implement the scoring function :meth:`__call__` (higher is</span>
+<span class="sd">    more plausible) and the training objective :meth:`loss`. Scoring</span>
+<span class="sd">    functions broadcast over their inputs, so :meth:`test` scores many</span>
+<span class="sd">    candidate tails at once.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_nodes: The number of nodes (entities) in the graph.</span>
+<span class="sd">        num_relations: The number of relations in the graph.</span>
+<span class="sd">        hidden_features_dim: The size of the embeddings.</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">=</span> <span class="n">num_nodes</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">num_relations</span> <span class="o">=</span> <span class="n">num_relations</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">hidden_features_dim</span> <span class="o">=</span> <span class="n">hidden_features_dim</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Embedding</span><span class="p">(</span><span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="KGEModel.__call__">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Returns the score of the given triplets.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head_index: The head indices</span>
+<span class="sd">            rel_type: The relation types</span>
+<span class="sd">            tail_index: The tail indices</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            The scores, with the broadcast shape of the inputs.</span>
+<span class="sd">        """</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="KGEModel.loss">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel.loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Returns the loss of the given (positive) triplets, against negative</span>
+<span class="sd">        triplets drawn with :meth:`random_sample`.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head_index: The head indices</span>
+<span class="sd">            rel_type: The relation types</span>
+<span class="sd">            tail_index: The tail indices</span>
+<span class="sd">        """</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
+
+
+<div class="viewcode-block" id="KGEModel.loader">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel.loader">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loader</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">KGTripletLoader</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Returns a mini-batch loader of triplets.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head_index: The head indices</span>
+<span class="sd">            rel_type: The relation types</span>
+<span class="sd">            tail_index: The tail indices</span>
+<span class="sd">            **kwargs: Arguments of :class:`KGTripletLoader`: ``batch_size``,</span>
+<span class="sd">                ``shuffle`` and ``drop_last``.</span>
+<span class="sd">        """</span>
+        <span class="k">return</span> <span class="n">KGTripletLoader</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="KGEModel.test">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel.test">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+        <span class="n">log</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">,</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">,</span> <span class="nb">float</span><span class="p">]:</span>
+<span class="w">        </span><span class="sd">"""Evaluates the model with the Mean Rank, the MRR and the Hits@k of</span>
+<span class="sd">        the true tail among all the possible tail entities.</span>
+
+<span class="sd">        The rank of a triplet is the position (0 for the best) of the true</span>
+<span class="sd">        tail among all entities sorted by decreasing score, as in PyG</span>
+<span class="sd">        (``argsort(descending=True)``). Entities whose score ties with the</span>
+<span class="sd">        true tail's are ordered by index, as a stable sort would: PyG's</span>
+<span class="sd">        unstable sort orders them arbitrarily, so its ranks may differ from</span>
+<span class="sd">        these when scores tie.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head_index: The head indices</span>
+<span class="sd">            rel_type: The relation types</span>
+<span class="sd">            tail_index: The tail indices</span>
+<span class="sd">            batch_size: Maximum number of scores computed at once. Triplets are</span>
+<span class="sd">                evaluated by chunks of ``max(1, batch_size // num_nodes)``.</span>
+<span class="sd">            k: The :math:`k` of Hits@:math:`k`. Default: ``10``</span>
+<span class="sd">            log: Whether to show a progress bar. Default: ``True``</span>
+
+<span class="sd">        Returns:</span>
+<span class="sd">            A tuple ``(mean_rank, mrr, hits_at_k)``.</span>
+<span class="sd">        """</span>
+        <span class="n">head_index</span> <span class="o">=</span> <span class="n">head_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">rel_type</span> <span class="o">=</span> <span class="n">rel_type</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">tail_index</span> <span class="o">=</span> <span class="n">tail_index</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">num_triplets</span> <span class="o">=</span> <span class="n">head_index</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">batch_size</span> <span class="o">//</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span>
+        <span class="n">candidates</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:]</span>
+
+        <span class="n">ranks</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">starts</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">num_triplets</span><span class="p">,</span> <span class="n">chunk</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">starts</span><span class="p">)</span> <span class="k">if</span> <span class="n">log</span> <span class="k">else</span> <span class="n">starts</span><span class="p">:</span>
+            <span class="n">h</span> <span class="o">=</span> <span class="n">head_index</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">r</span> <span class="o">=</span> <span class="n">rel_type</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">t</span> <span class="o">=</span> <span class="n">tail_index</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">chunk</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span>
+            <span class="n">scores</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">stop_gradient</span><span class="p">(</span><span class="bp">self</span><span class="p">(</span><span class="n">h</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">candidates</span><span class="p">))</span>  <span class="c1"># [chunk, num_nodes]</span>
+            <span class="n">true_scores</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="c1"># position of the true tail in a stable descending argsort</span>
+            <span class="n">ahead</span> <span class="o">=</span> <span class="p">(</span><span class="n">scores</span> <span class="o">&gt;</span> <span class="n">true_scores</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span>
+                <span class="p">(</span><span class="n">scores</span> <span class="o">==</span> <span class="n">true_scores</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">candidates</span> <span class="o">&lt;</span> <span class="n">t</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">rank</span> <span class="o">=</span> <span class="n">ahead</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>
+            <span class="n">ranks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rank</span><span class="p">)</span>
+
+        <span class="n">ranks</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">ranks</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">mean_rank</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ranks</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">mrr</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">ranks</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="n">hits_at_k</span> <span class="o">=</span> <span class="nb">float</span><span class="p">((</span><span class="n">ranks</span> <span class="o">&lt;</span> <span class="n">k</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span><span class="o">.</span><span class="n">item</span><span class="p">())</span>
+        <span class="k">return</span> <span class="n">mean_rank</span><span class="p">,</span> <span class="n">mrr</span><span class="p">,</span> <span class="n">hits_at_k</span></div>
+
+
+<div class="viewcode-block" id="KGEModel.random_sample">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html#mlx_graphs.nn.KGEModel.random_sample">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">random_sample</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Triplets</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Samples negative triplets by replacing the head of the first half</span>
+<span class="sd">        of the triplets, and the tail of the second half, with random nodes.</span>
+
+<span class="sd">        Args:</span>
+<span class="sd">            head_index: The head indices</span>
+<span class="sd">            rel_type: The relation types</span>
+<span class="sd">            tail_index: The tail indices</span>
+<span class="sd">        """</span>
+        <span class="n">num_negatives</span> <span class="o">=</span> <span class="n">head_index</span><span class="o">.</span><span class="n">size</span> <span class="o">//</span> <span class="mi">2</span>
+        <span class="n">rnd_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">head_index</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+            <span class="n">head_index</span><span class="o">.</span><span class="n">dtype</span>
+        <span class="p">)</span>
+        <span class="n">first_half</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">head_index</span><span class="o">.</span><span class="n">size</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">head_index</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span> <span class="o">&lt;</span> <span class="p">(</span>
+            <span class="n">num_negatives</span>
+        <span class="p">)</span>
+        <span class="n">head_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">first_half</span><span class="p">,</span> <span class="n">rnd_index</span><span class="p">,</span> <span class="n">head_index</span><span class="p">)</span>
+        <span class="n">tail_index</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">first_half</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">,</span> <span class="n">rnd_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span></div>
+</div>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_margin_ranking_loss</span><span class="p">(</span>
+    <span class="n">pos_score</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">margin</span> <span class="o">-</span> <span class="p">(</span><span class="n">pos_score</span> <span class="o">-</span> <span class="n">neg_score</span><span class="p">))</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">_bce_loss</span><span class="p">(</span><span class="n">pos_score</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">pos_score</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">])</span>
+    <span class="n">target</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">mx</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">pos_score</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">neg_score</span><span class="p">)])</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">binary_cross_entropy</span><span class="p">(</span><span class="n">scores</span><span class="p">,</span> <span class="n">target</span><span class="p">,</span> <span class="n">with_logits</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="TransE">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransE.html#mlx_graphs.nn.TransE">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">TransE</span><span class="p">(</span><span class="n">KGEModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""The TransE model from the `"Translating Embeddings for Modeling</span>
+<span class="sd">    Multi-Relational Data" &lt;https://proceedings.neurips.cc/paper/2013/file/</span>
+<span class="sd">    1cecc7a77928ca8133fa24680a88d2f9-Paper.pdf&gt;`_ paper.</span>
+
+<span class="sd">    Relations are translations from head to tail entities,</span>
+<span class="sd">    :math:`\mathbf{e}_h + \mathbf{e}_r \approx \mathbf{e}_t`, with the score</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        d(h, r, t) = - {\| \mathbf{e}_h + \mathbf{e}_r - \mathbf{e}_t \|}_p</span>
+
+<span class="sd">    where the entity embeddings are normalized to unit :math:`p`-norm. It is</span>
+<span class="sd">    trained with a margin ranking loss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_nodes: The number of nodes (entities) in the graph.</span>
+<span class="sd">        num_relations: The number of relations in the graph.</span>
+<span class="sd">        hidden_features_dim: The size of the embeddings.</span>
+<span class="sd">        margin: The margin of the ranking loss. Default: ``1.0``</span>
+<span class="sd">        p_norm: The order of the embedding and distance norms. Default:</span>
+<span class="sd">            ``1.0``</span>
+
+<span class="sd">    Example:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        import mlx.nn as nn</span>
+<span class="sd">        import mlx.optimizers as optim</span>
+<span class="sd">        from mlx_graphs.nn import TransE</span>
+
+<span class="sd">        model = TransE(num_nodes, num_relations, hidden_features_dim=50)</span>
+<span class="sd">        optimizer = optim.Adam(learning_rate=0.01)</span>
+<span class="sd">        loss_and_grad = nn.value_and_grad(model, lambda m, h, r, t: m.loss(h, r, t))</span>
+
+<span class="sd">        for head, rel, tail in model.loader(</span>
+<span class="sd">            head_index, rel_type, tail_index, batch_size=1000, shuffle=True</span>
+<span class="sd">        ):</span>
+<span class="sd">            loss, grads = loss_and_grad(model, head, rel, tail)</span>
+<span class="sd">            optimizer.update(model, grads)</span>
+
+<span class="sd">        mean_rank, mrr, hits_at_10 = model.test(</span>
+<span class="sd">            test_head, test_rel, test_tail, batch_size=20000, k=10</span>
+<span class="sd">        )</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] `Bordes et al. Translating Embeddings for Modeling Multi-Relational</span>
+<span class="sd">        Data &lt;https://proceedings.neurips.cc/paper/2013/file/</span>
+<span class="sd">        1cecc7a77928ca8133fa24680a88d2f9-Paper.pdf&gt;`_</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_relations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="n">p_norm</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p_norm</span> <span class="o">=</span> <span class="n">p_norm</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
+        <span class="n">bound</span> <span class="o">=</span> <span class="mf">6.0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+            <span class="o">-</span><span class="n">bound</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">_normalize</span><span class="p">(</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="o">-</span><span class="n">bound</span><span class="p">,</span> <span class="n">bound</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span><span class="p">),</span> <span class="n">p_norm</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="TransE.__call__">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransE.html#mlx_graphs.nn.TransE.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="n">_normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">head_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_norm</span><span class="p">)</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="p">(</span><span class="n">rel_type</span><span class="p">)</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="n">_normalize</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">tail_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_norm</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="n">_p_norm</span><span class="p">(</span><span class="n">head</span> <span class="o">+</span> <span class="n">rel</span> <span class="o">-</span> <span class="n">tail</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">p_norm</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="TransE.loss">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransE.html#mlx_graphs.nn.TransE.loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">pos_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">)</span>
+        <span class="n">neg_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_margin_ranking_loss</span><span class="p">(</span><span class="n">pos_score</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="DistMult">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DistMult.html#mlx_graphs.nn.DistMult">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">DistMult</span><span class="p">(</span><span class="n">KGEModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""The DistMult model from the `"Embedding Entities and Relations for</span>
+<span class="sd">    Learning and Inference in Knowledge Bases" &lt;https://arxiv.org/abs/1412.6575&gt;`_</span>
+<span class="sd">    paper.</span>
+
+<span class="sd">    Relations are diagonal matrices, which gives the score</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        d(h, r, t) = \langle \mathbf{e}_h, \mathbf{e}_r, \mathbf{e}_t \rangle</span>
+
+<span class="sd">    It is trained with a margin ranking loss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_nodes: The number of nodes (entities) in the graph.</span>
+<span class="sd">        num_relations: The number of relations in the graph.</span>
+<span class="sd">        hidden_features_dim: The size of the embeddings.</span>
+<span class="sd">        margin: The margin of the ranking loss. Default: ``1.0``</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] `Yang et al. Embedding Entities and Relations for Learning and</span>
+<span class="sd">        Inference in Knowledge Bases &lt;https://arxiv.org/abs/1412.6575&gt;`_</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_relations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DistMult.__call__">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DistMult.html#mlx_graphs.nn.DistMult.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">head</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">head_index</span><span class="p">)</span>
+        <span class="n">rel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="p">(</span><span class="n">rel_type</span><span class="p">)</span>
+        <span class="n">tail</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">tail_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">head</span> <span class="o">*</span> <span class="n">rel</span> <span class="o">*</span> <span class="n">tail</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DistMult.loss">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.DistMult.html#mlx_graphs.nn.DistMult.loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">pos_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">)</span>
+        <span class="n">neg_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_margin_ranking_loss</span><span class="p">(</span><span class="n">pos_score</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="ComplEx">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ComplEx.html#mlx_graphs.nn.ComplEx">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">ComplEx</span><span class="p">(</span><span class="n">KGEModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""The ComplEx model from the `"Complex Embeddings for Simple Link</span>
+<span class="sd">    Prediction" &lt;https://arxiv.org/abs/1606.06357&gt;`_ paper.</span>
+
+<span class="sd">    Entities and relations have complex embeddings, and the score is the real</span>
+<span class="sd">    part of the Hermitian triple product</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        d(h, r, t) = \textrm{Re}(\langle \mathbf{e}_h, \mathbf{e}_r,</span>
+<span class="sd">        \overline{\mathbf{e}_t} \rangle)</span>
+
+<span class="sd">    It is trained with a binary cross entropy loss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_nodes: The number of nodes (entities) in the graph.</span>
+<span class="sd">        num_relations: The number of relations in the graph.</span>
+<span class="sd">        hidden_features_dim: The size of the embeddings (of both their real</span>
+<span class="sd">            and imaginary parts).</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] `Trouillon et al. Complex Embeddings for Simple Link Prediction</span>
+<span class="sd">        &lt;https://arxiv.org/abs/1606.06357&gt;`_</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb_im</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ComplEx.__call__">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ComplEx.html#mlx_graphs.nn.ComplEx.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">head_re</span><span class="p">,</span> <span class="n">head_im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">head_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span><span class="p">(</span><span class="n">head_index</span><span class="p">)</span>
+        <span class="n">rel_re</span><span class="p">,</span> <span class="n">rel_im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="p">(</span><span class="n">rel_type</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb_im</span><span class="p">(</span><span class="n">rel_type</span><span class="p">)</span>
+        <span class="n">tail_re</span><span class="p">,</span> <span class="n">tail_im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">tail_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span><span class="p">(</span><span class="n">tail_index</span><span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">head_re</span> <span class="o">*</span> <span class="n">rel_re</span> <span class="o">*</span> <span class="n">tail_re</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">head_im</span> <span class="o">*</span> <span class="n">rel_re</span> <span class="o">*</span> <span class="n">tail_im</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">+</span> <span class="p">(</span><span class="n">head_re</span> <span class="o">*</span> <span class="n">rel_im</span> <span class="o">*</span> <span class="n">tail_im</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+            <span class="o">-</span> <span class="p">(</span><span class="n">head_im</span> <span class="o">*</span> <span class="n">rel_im</span> <span class="o">*</span> <span class="n">tail_re</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="ComplEx.loss">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.ComplEx.html#mlx_graphs.nn.ComplEx.loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">pos_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">)</span>
+        <span class="n">neg_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_bce_loss</span><span class="p">(</span><span class="n">pos_score</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">)</span></div>
+</div>
+
+
+
+<div class="viewcode-block" id="RotatE">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RotatE.html#mlx_graphs.nn.RotatE">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RotatE</span><span class="p">(</span><span class="n">KGEModel</span><span class="p">):</span>
+<span class="w">    </span><span class="sa">r</span><span class="sd">"""The RotatE model from the `"RotatE: Knowledge Graph Embedding by</span>
+<span class="sd">    Relational Rotation in Complex Space" &lt;https://arxiv.org/abs/1902.10197&gt;`_</span>
+<span class="sd">    paper.</span>
+
+<span class="sd">    Relations are rotations in the complex plane,</span>
+<span class="sd">    :math:`\mathbf{e}_t = \mathbf{e}_h \circ \mathbf{e}_r` with</span>
+<span class="sd">    :math:`|\mathbf{e}_r| = 1`, which gives the score</span>
+
+<span class="sd">    .. math::</span>
+<span class="sd">        d(h, r, t) = \gamma - {\| \mathbf{e}_h \circ \mathbf{e}_r -</span>
+<span class="sd">        \mathbf{e}_t \|}</span>
+
+<span class="sd">    where :math:`\gamma` is the margin. It is trained with a binary cross</span>
+<span class="sd">    entropy loss.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        num_nodes: The number of nodes (entities) in the graph.</span>
+<span class="sd">        num_relations: The number of relations in the graph.</span>
+<span class="sd">        hidden_features_dim: The size of the embeddings (of both their real</span>
+<span class="sd">            and imaginary parts).</span>
+<span class="sd">        margin: The margin :math:`\gamma`. Default: ``1.0``</span>
+
+<span class="sd">    References:</span>
+<span class="sd">        [1] `Sun et al. RotatE: Knowledge Graph Embedding by Relational</span>
+<span class="sd">        Rotation in Complex Space &lt;https://arxiv.org/abs/1902.10197&gt;`_</span>
+<span class="sd">    """</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">num_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">num_relations</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">hidden_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+        <span class="n">margin</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">num_relations</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">=</span> <span class="n">margin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span> <span class="o">=</span> <span class="n">_glorot_embedding</span><span class="p">(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">hidden_features_dim</span><span class="p">)</span>
+        <span class="c1"># relation phases</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">math</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="o">.</span><span class="n">weight</span><span class="o">.</span><span class="n">shape</span>
+        <span class="p">)</span>
+
+<div class="viewcode-block" id="RotatE.__call__">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RotatE.html#mlx_graphs.nn.RotatE.__call__">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">head_re</span><span class="p">,</span> <span class="n">head_im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">head_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span><span class="p">(</span><span class="n">head_index</span><span class="p">)</span>
+        <span class="n">tail_re</span><span class="p">,</span> <span class="n">tail_im</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb</span><span class="p">(</span><span class="n">tail_index</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_emb_im</span><span class="p">(</span><span class="n">tail_index</span><span class="p">)</span>
+        <span class="n">rel_theta</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_emb</span><span class="p">(</span><span class="n">rel_type</span><span class="p">)</span>
+        <span class="n">rel_re</span><span class="p">,</span> <span class="n">rel_im</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">rel_theta</span><span class="p">),</span> <span class="n">mx</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">rel_theta</span><span class="p">)</span>
+        <span class="n">re_score</span> <span class="o">=</span> <span class="p">(</span><span class="n">rel_re</span> <span class="o">*</span> <span class="n">head_re</span> <span class="o">-</span> <span class="n">rel_im</span> <span class="o">*</span> <span class="n">head_im</span><span class="p">)</span> <span class="o">-</span> <span class="n">tail_re</span>
+        <span class="n">im_score</span> <span class="o">=</span> <span class="p">(</span><span class="n">rel_re</span> <span class="o">*</span> <span class="n">head_im</span> <span class="o">+</span> <span class="n">rel_im</span> <span class="o">*</span> <span class="n">head_re</span><span class="p">)</span> <span class="o">-</span> <span class="n">tail_im</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">re_score</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">im_score</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">margin</span> <span class="o">-</span> <span class="n">score</span></div>
+
+
+<div class="viewcode-block" id="RotatE.loss">
+<a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.RotatE.html#mlx_graphs.nn.RotatE.loss">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">loss</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">head_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+        <span class="n">pos_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">)</span>
+        <span class="n">neg_score</span> <span class="o">=</span> <span class="bp">self</span><span class="p">(</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">random_sample</span><span class="p">(</span><span class="n">head_index</span><span class="p">,</span> <span class="n">rel_type</span><span class="p">,</span> <span class="n">tail_index</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">_bce_loss</span><span class="p">(</span><span class="n">pos_score</span><span class="p">,</span> <span class="n">neg_score</span><span class="p">)</span></div>
+</div>
+
+</pre></div>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

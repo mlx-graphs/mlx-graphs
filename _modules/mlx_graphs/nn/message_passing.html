@@ -152,28 +152,38 @@
 </button></div>
         <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
     <div class="bd-toc-item navbar-nav active">
-        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Install</span></p>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Installation</a></li>
-</ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/quickstart.html">Quickstart</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2vec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../guide/message_passing.html">Creating message passing layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 </details></li>
 </ul>
-<p aria-level="2" class="caption" role="heading"><span class="caption-text">Datasets</span></p>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../../../datasets.html">Datasets</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../validation.html">Validation against PyG</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
 <ul class="nav bd-sidenav">
@@ -181,6 +191,7 @@
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/data/_autosummary/mlx_graphs.data.temporal.TemporalData.html">mlx_graphs.data.temporal.TemporalData</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -207,15 +218,50 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.OGBMAG.html">mlx_graphs.datasets.OGBMAG</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.CitationFull.html">mlx_graphs.datasets.CitationFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.CoraFull.html">mlx_graphs.datasets.CoraFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.HeterophilousGraphDataset.html">mlx_graphs.datasets.HeterophilousGraphDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.WebKB.html">mlx_graphs.datasets.WebKB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.WikipediaNetwork.html">mlx_graphs.datasets.WikipediaNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.Actor.html">mlx_graphs.datasets.Actor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.WikiCS.html">mlx_graphs.datasets.WikiCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.FB15k_237.html">mlx_graphs.datasets.FB15k_237</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.WordNet18.html">mlx_graphs.datasets.WordNet18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.WordNet18RR.html">mlx_graphs.datasets.WordNet18RR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.FakeDataset.html">mlx_graphs.datasets.FakeDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.FakeHeteroDataset.html">mlx_graphs.datasets.FakeHeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.JODIEDataset.html">mlx_graphs.datasets.JODIEDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.LRGBDataset.html">mlx_graphs.datasets.LRGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.GNNBenchmarkDataset.html">mlx_graphs.datasets.GNNBenchmarkDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.load_torch_file.html">mlx_graphs.datasets.utils.torch_serialization.load_torch_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix.html">mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.HGTLoader.html">mlx_graphs.loaders.HGTLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.LinkNeighborLoader.html">mlx_graphs.loaders.LinkNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.NegativeSampling.html">mlx_graphs.loaders.NegativeSampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.RandomNodeLoader.html">mlx_graphs.loaders.RandomNodeLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTSampler.html">mlx_graphs.loaders.GraphSAINTSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTNodeSampler.html">mlx_graphs.loaders.GraphSAINTNodeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTEdgeSampler.html">mlx_graphs.loaders.GraphSAINTEdgeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTRandomWalkSampler.html">mlx_graphs.loaders.GraphSAINTRandomWalkSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.ShaDowKHopSampler.html">mlx_graphs.loaders.ShaDowKHopSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.ClusterData.html">mlx_graphs.loaders.ClusterData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.ClusterLoader.html">mlx_graphs.loaders.ClusterLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.balanced_partition.html">mlx_graphs.loaders.balanced_partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.ImbalancedSampler.html">mlx_graphs.loaders.ImbalancedSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.DynamicBatchSampler.html">mlx_graphs.loaders.DynamicBatchSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.DataListLoader.html">mlx_graphs.loaders.DataListLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.DenseDataLoader.html">mlx_graphs.loaders.DenseDataLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/loaders/_autosummary/mlx_graphs.loaders.TemporalDataLoader.html">mlx_graphs.loaders.TemporalDataLoader</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -233,6 +279,24 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddRemainingSelfLoops.html">mlx_graphs.transforms.AddRemainingSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveDuplicatedEdges.html">mlx_graphs.transforms.RemoveDuplicatedEdges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.IndexToMask.html">mlx_graphs.transforms.IndexToMask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.MaskToIndex.html">mlx_graphs.transforms.MaskToIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.KNNGraph.html">mlx_graphs.transforms.KNNGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RadiusGraph.html">mlx_graphs.transforms.RadiusGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.NormalizeFeatures.html">mlx_graphs.transforms.NormalizeFeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.TargetIndegree.html">mlx_graphs.transforms.TargetIndegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.LocalDegreeProfile.html">mlx_graphs.transforms.LocalDegreeProfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.AddLaplacianEigenvectorPE.html">mlx_graphs.transforms.AddLaplacianEigenvectorPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.SVDFeatureReduction.html">mlx_graphs.transforms.SVDFeatureReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.SIGN.html">mlx_graphs.transforms.SIGN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.FeaturePropagation.html">mlx_graphs.transforms.FeaturePropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.VirtualNode.html">mlx_graphs.transforms.VirtualNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.TwoHop.html">mlx_graphs.transforms.TwoHop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.LineGraph.html">mlx_graphs.transforms.LineGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.ToDense.html">mlx_graphs.transforms.ToDense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html">mlx_graphs.transforms.RemoveTrainingClasses</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -253,32 +317,145 @@
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.FastRGCNConv.html">mlx_graphs.nn.FastRGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RGATConv.html">mlx_graphs.nn.RGATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GENConv.html">mlx_graphs.nn.GENConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MixHopConv.html">mlx_graphs.nn.MixHopConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.FAConv.html">mlx_graphs.nn.FAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralConv.html">mlx_graphs.nn.GeneralConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DirGNNConv.html">mlx_graphs.nn.DirGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HANConv.html">mlx_graphs.nn.HANConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HGTConv.html">mlx_graphs.nn.HGTConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GINEConv.html">mlx_graphs.nn.GINEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCN2Conv.html">mlx_graphs.nn.GCN2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SSGConv.html">mlx_graphs.nn.SSGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LGConv.html">mlx_graphs.nn.LGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ARMAConv.html">mlx_graphs.nn.ARMAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GatedGraphConv.html">mlx_graphs.nn.GatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ResGatedGraphConv.html">mlx_graphs.nn.ResGatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.NNConv.html">mlx_graphs.nn.NNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.CGConv.html">mlx_graphs.nn.CGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MFConv.html">mlx_graphs.nn.MFConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LEConv.html">mlx_graphs.nn.LEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.FiLMConv.html">mlx_graphs.nn.FiLMConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.AGNNConv.html">mlx_graphs.nn.AGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ClusterGCNConv.html">mlx_graphs.nn.ClusterGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DynamicEdgeConv.html">mlx_graphs.nn.DynamicEdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.PNAConv.html">mlx_graphs.nn.PNAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GPSConv.html">mlx_graphs.nn.GPSConv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.PNA.html">mlx_graphs.nn.PNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.EdgeCNN.html">mlx_graphs.nn.EdgeCNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LINKX.html">mlx_graphs.nn.LINKX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DeepGCNLayer.html">mlx_graphs.nn.DeepGCNLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MaskLabel.html">mlx_graphs.nn.MaskLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RECT_L.html">mlx_graphs.nn.RECT_L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DeepGraphInfomax.html">mlx_graphs.nn.DeepGraphInfomax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LightGCN.html">mlx_graphs.nn.LightGCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SGFormer.html">mlx_graphs.nn.SGFormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.Polynormer.html">mlx_graphs.nn.Polynormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.InnerProductDecoder.html">mlx_graphs.nn.InnerProductDecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GAE.html">mlx_graphs.nn.GAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.VGAE.html">mlx_graphs.nn.VGAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ARGA.html">mlx_graphs.nn.ARGA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ARGVA.html">mlx_graphs.nn.ARGVA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LabelPropagation.html">mlx_graphs.nn.LabelPropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.CorrectAndSmooth.html">mlx_graphs.nn.CorrectAndSmooth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.KGEModel.html">mlx_graphs.nn.KGEModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TransE.html">mlx_graphs.nn.TransE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DistMult.html">mlx_graphs.nn.DistMult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ComplEx.html">mlx_graphs.nn.ComplEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RotatE.html">mlx_graphs.nn.RotatE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.KGTripletLoader.html">mlx_graphs.nn.KGTripletLoader</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphNormalization.html">mlx_graphs.nn.GraphNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.PairNormalization.html">mlx_graphs.nn.PairNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.GraphSizeNormalization.html">mlx_graphs.nn.GraphSizeNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html">mlx_graphs.nn.MeanSubtractionNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessageNormalization.html">mlx_graphs.nn.MessageNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.DiffGroupNormalization.html">mlx_graphs.nn.DiffGroupNormalization</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TopKPooling.html">mlx_graphs.nn.TopKPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.SAGPooling.html">mlx_graphs.nn.SAGPooling</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.global_sort_pool.html">mlx_graphs.nn.global_sort_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.topk.html">mlx_graphs.nn.topk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.filter_adj.html">mlx_graphs.nn.filter_adj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.knn.html">mlx_graphs.nn.knn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.knn_graph.html">mlx_graphs.nn.knn_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.radius.html">mlx_graphs.nn.radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.radius_graph.html">mlx_graphs.nn.radius_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.Aggregation.html">mlx_graphs.nn.aggr.Aggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SumAggregation.html">mlx_graphs.nn.aggr.SumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MeanAggregation.html">mlx_graphs.nn.aggr.MeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MaxAggregation.html">mlx_graphs.nn.aggr.MaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MinAggregation.html">mlx_graphs.nn.aggr.MinAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MulAggregation.html">mlx_graphs.nn.aggr.MulAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.VarAggregation.html">mlx_graphs.nn.aggr.VarAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.StdAggregation.html">mlx_graphs.nn.aggr.StdAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html">mlx_graphs.nn.aggr.SoftmaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html">mlx_graphs.nn.aggr.PowerMeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html">mlx_graphs.nn.aggr.MedianAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.QuantileAggregation.html">mlx_graphs.nn.aggr.QuantileAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html">mlx_graphs.nn.aggr.MultiAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html">mlx_graphs.nn.aggr.DegreeScalerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SortAggregation.html">mlx_graphs.nn.aggr.SortAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html">mlx_graphs.nn.aggr.DeepSetsAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html">mlx_graphs.nn.aggr.LSTMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html">mlx_graphs.nn.aggr.GRUAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html">mlx_graphs.nn.aggr.SetTransformerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.GraphMultisetTransformer.html">mlx_graphs.nn.aggr.GraphMultisetTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html">mlx_graphs.nn.aggr.MLPAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html">mlx_graphs.nn.aggr.LCMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.EquilibriumAggregation.html">mlx_graphs.nn.aggr.EquilibriumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.VariancePreservingAggregation.html">mlx_graphs.nn.aggr.VariancePreservingAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html">mlx_graphs.nn.aggr.MultiheadAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html">mlx_graphs.nn.aggr.SetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html">mlx_graphs.nn.aggr.InducedSetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html">mlx_graphs.nn.aggr.PoolingByMultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.DenseLayout.html">mlx_graphs.nn.aggr.DenseLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html">mlx_graphs.nn.aggr.aggregation_resolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.PositionalEncoding.html">mlx_graphs.nn.PositionalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TemporalEncoding.html">mlx_graphs.nn.TemporalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.RWSEEncoder.html">mlx_graphs.nn.RWSEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.LapPEEncoder.html">mlx_graphs.nn.LapPEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html">mlx_graphs.nn.attention.MultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.attention.PerformerAttention.html">mlx_graphs.nn.attention.PerformerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html">mlx_graphs.nn.attention.SGFormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html">mlx_graphs.nn.attention.PolynormerAttention</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.gcn_norm.html">mlx_graphs.nn.gcn_norm</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.TGNMemory.html">mlx_graphs.nn.TGNMemory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html">mlx_graphs.nn.models.tgn.IdentityMessage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastAggregator.html">mlx_graphs.nn.models.tgn.LastAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.MeanAggregator.html">mlx_graphs.nn.models.tgn.MeanAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.TimeEncoder.html">mlx_graphs.nn.models.tgn.TimeEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.GRUCell.html">mlx_graphs.nn.models.tgn.GRUCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastNeighborLoader.html">mlx_graphs.nn.models.tgn.LastNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.to_hetero.html">mlx_graphs.nn.to_hetero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.to_hetero_with_bases.html">mlx_graphs.nn.to_hetero_with_bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/nn/_autosummary/mlx_graphs.nn.ToHeteroModel.html">mlx_graphs.nn.ToHeteroModel</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -309,6 +486,41 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.add_remaining_self_loops.html">mlx_graphs.utils.add_remaining_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.segregate_self_loops.html">mlx_graphs.utils.segregate_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.remove_isolated_nodes.html">mlx_graphs.utils.remove_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.contains_self_loops.html">mlx_graphs.utils.contains_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.contains_isolated_nodes.html">mlx_graphs.utils.contains_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.bipartite_subgraph.html">mlx_graphs.utils.bipartite_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.batched_negative_sampling.html">mlx_graphs.utils.batched_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.dropout_path.html">mlx_graphs.utils.dropout_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.shuffle_node.html">mlx_graphs.utils.shuffle_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.mask_feature.html">mlx_graphs.utils.mask_feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.add_random_edge.html">mlx_graphs.utils.add_random_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.unbatch.html">mlx_graphs.utils.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.unbatch_edge_index.html">mlx_graphs.utils.unbatch_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.assortativity.html">mlx_graphs.utils.assortativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.get_ppr.html">mlx_graphs.utils.get_ppr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.normalized_cut.html">mlx_graphs.utils.normalized_cut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_graph/mlx_graphs.utils.train_test_split_edges.html">mlx_graphs.utils.train_test_split_edges</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/generators.html">Graph generators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_generators/mlx_graphs.utils.grid.html">mlx_graphs.utils.grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_generators/mlx_graphs.utils.erdos_renyi_graph.html">mlx_graphs.utils.erdos_renyi_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_generators/mlx_graphs.utils.barabasi_albert_graph.html">mlx_graphs.utils.barabasi_albert_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_generators/mlx_graphs.utils.stochastic_blockmodel_graph.html">mlx_graphs.utils.stochastic_blockmodel_graph</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/sparse.html">Sparse and array helpers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.to_scipy_sparse_matrix.html">mlx_graphs.utils.to_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.from_scipy_sparse_matrix.html">mlx_graphs.utils.from_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.dense_to_sparse.html">mlx_graphs.utils.dense_to_sparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.softmax.html">mlx_graphs.utils.softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.mask_to_index.html">mlx_graphs.utils.mask_to_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.cumsum.html">mlx_graphs.utils.cumsum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.select.html">mlx_graphs.utils.select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_sparse/mlx_graphs.utils.narrow.html">mlx_graphs.utils.narrow</a></li>
 </ul>
 </details></li>
 <li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -335,6 +547,10 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mul.html">mlx_graphs.utils.scatter.scatter_mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_var.html">mlx_graphs.utils.scatter.scatter_var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_std.html">mlx_graphs.utils.scatter.scatter_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_quantile.html">mlx_graphs.utils.scatter.scatter_quantile</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
 </ul>
@@ -354,12 +570,42 @@
 <li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../../../api/utils/spatial.html">Spatial graphs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_spatial/mlx_graphs.utils.knn.html">mlx_graphs.utils.knn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_spatial/mlx_graphs.utils.knn_graph.html">mlx_graphs.utils.knn_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_spatial/mlx_graphs.utils.radius.html">mlx_graphs.utils.radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../../../api/utils/_autosummary_spatial/mlx_graphs.utils.radius_graph.html">mlx_graphs.utils.radius_graph</a></li>
+</ul>
+</details></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.roc_auc_score.html">mlx_graphs.metrics.roc_auc_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.average_precision_score.html">mlx_graphs.metrics.average_precision_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetric.html">mlx_graphs.metrics.LinkPredMetric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricCollection.html">mlx_graphs.metrics.LinkPredMetricCollection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricData.html">mlx_graphs.metrics.LinkPredMetricData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPrecision.html">mlx_graphs.metrics.LinkPredPrecision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredRecall.html">mlx_graphs.metrics.LinkPredRecall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredF1.html">mlx_graphs.metrics.LinkPredF1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMAP.html">mlx_graphs.metrics.LinkPredMAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredNDCG.html">mlx_graphs.metrics.LinkPredNDCG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMRR.html">mlx_graphs.metrics.LinkPredMRR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredHitRatio.html">mlx_graphs.metrics.LinkPredHitRatio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredCoverage.html">mlx_graphs.metrics.LinkPredCoverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredDiversity.html">mlx_graphs.metrics.LinkPredDiversity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPersonalization.html">mlx_graphs.metrics.LinkPredPersonalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/metrics/_autosummary/mlx_graphs.metrics.LinkPredAveragePopularity.html">mlx_graphs.metrics.LinkPredAveragePopularity</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../../../changelog.html">Changelog</a></li>
 </ul>
 
     </div>
@@ -408,7 +654,7 @@
 <div class="article-header-buttons">
 
 
-<a href="https://github.com/TristanBilot/mlx-graphs" target="_blank"
+<a href="https://github.com/mlx-graphs/mlx-graphs" target="_blank"
    class="btn btn-sm btn-source-repository-button"
    title="Source repository"
    data-bs-placement="bottom" data-bs-toggle="tooltip"
@@ -482,9 +728,10 @@
                 <article class="bd-article">
                   
   <h1>Source code for mlx_graphs.nn.message_passing</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">contextlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">contextmanager</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">get_args</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">Any</span><span class="p">,</span> <span class="n">Dict</span><span class="p">,</span> <span class="n">List</span><span class="p">,</span> <span class="n">Literal</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">,</span> <span class="n">Union</span><span class="p">,</span> <span class="n">get_args</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
@@ -617,12 +864,19 @@
         <span class="k">return</span> <span class="n">entry</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">"""CSR of ``edge_index``, converted on first use."""</span>
+<span class="w">        </span><span class="sd">"""CSR of ``edge_index``, converted on first use, or ``None`` (the</span>
+<span class="sd">        COO kernel) when it cannot be converted."""</span>
         <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entry</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span>
-                <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span>
-            <span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">entry</span><span class="o">.</span><span class="n">failed</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="o">=</span> <span class="n">_coo_to_csr</span><span class="p">(</span>
+                    <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="o">=</span><span class="n">num_cols</span>
+                <span class="p">)</span>
+            <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                <span class="c1"># The conversion reads the graph back on the host, which is</span>
+                <span class="c1"># not possible while tracing (edge_index is an input of</span>
+                <span class="c1"># mx.compile): fall back to the COO kernel, as "auto" does.</span>
+                <span class="n">entry</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_if_worth_it</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
@@ -685,7 +939,8 @@
 <span class="sd">    * ``mlx_cluster`` (with ``spmm_coo``) is not installed,</span>
 <span class="sd">    * fused message passing is disabled (:func:`set_fused_message_passing`),</span>
 <span class="sd">    * ``aggr`` is not ``"add"``, ``"mean"``, ``"max"`` or ``"min"`` (i.e. it</span>
-<span class="sd">      is ``"softmax"``; max/min also need a recent mlx-cluster),</span>
+<span class="sd">      is a list or an aggregation module; max/min also need a recent</span>
+<span class="sd">      mlx-cluster),</span>
 <span class="sd">    * any message/aggregate kwarg other than ``edge_weights`` is set</span>
 <span class="sd">      (e.g. ``edge_features``), since messages are then no longer a weighted</span>
 <span class="sd">      sum of neighbour features,</span>
@@ -701,17 +956,17 @@
 <span class="sd">            immediately for graphs with at least a million edges, and once</span>
 <span class="sd">            the same ``edge_index`` array has been used a few times</span>
 <span class="sd">            otherwise (e.g. full-batch training).</span>
+<span class="sd">        allow_message_override: a layer that overrides ``message()`` or</span>
+<span class="sd">            ``aggregate()`` is rejected by default, because the fused kernel</span>
+<span class="sd">            would ignore those overrides. Pass ``True`` only if the override</span>
+<span class="sd">            reduces to the default ``edge_weights * x_j`` / scatter whenever</span>
+<span class="sd">            the extra kwargs are ``None`` (e.g. ``GINConv``).</span>
 
 <span class="sd">    .. note::</span>
 <span class="sd">        Cached conversions are looked up by the identity of the</span>
 <span class="sd">        ``edge_index`` array. Build a new array instead of modifying an</span>
 <span class="sd">        ``edge_index`` in place (``edge_index[0, 3] = 5``) between calls, or</span>
 <span class="sd">        call :func:`clear_csr_cache` after doing so.</span>
-<span class="sd">        allow_message_override: a layer that overrides ``message()`` or</span>
-<span class="sd">            ``aggregate()`` is rejected by default, because the fused kernel</span>
-<span class="sd">            would ignore those overrides. Pass ``True`` only if the override</span>
-<span class="sd">            reduces to the default ``edge_weights * x_j`` / scatter whenever</span>
-<span class="sd">            the extra kwargs are ``None`` (e.g. ``GINConv``).</span>
 
 <span class="sd">    .. code-block:: python</span>
 
@@ -763,7 +1018,36 @@
 <span class="sd">    passing paradigm. This implementation is inspired from PyTorch Geometric [2].</span>
 
 <span class="sd">    Args:</span>
-<span class="sd">        aggr: Aggregation strategy used to aggregate messages</span>
+<span class="sd">        aggr: Aggregation strategy used to aggregate messages. Either:</span>
+
+<span class="sd">            * a reduction of :func:`~mlx_graphs.utils.scatter`: ``"add"``</span>
+<span class="sd">              (or ``"sum"``), ``"mean"``, ``"max"``, ``"min"``, ``"mul"``,</span>
+<span class="sd">              ``"var"``, ``"std"`` or ``"median"``. These use</span>
+<span class="sd">              :func:`~mlx_graphs.utils.scatter` directly, and the fused SpMM</span>
+<span class="sd">              kernels for ``"add"``, ``"mean"``, ``"max"`` and ``"min"``;</span>
+<span class="sd">            * an :class:`~mlx_graphs.nn.aggr.Aggregation` instance, or the</span>
+<span class="sd">              name of one (e.g. ``"softmax"``, ``"powermean"`` or</span>
+<span class="sd">              ``"lstm"``), stored in ``self.aggr_module``. As in PyG,</span>
+<span class="sd">              ``"softmax"`` is :class:`~mlx_graphs.nn.aggr.SoftmaxAggregation`</span>
+<span class="sd">              (one output per node), not the per-message normalization of</span>
+<span class="sd">              ``scatter(..., "softmax")``. A name given with ``aggr_kwargs``</span>
+<span class="sd">              (even a scatter reduction) also builds its aggregation module,</span>
+<span class="sd">              with these arguments;</span>
+<span class="sd">            * a list of names and/or aggregations, combined with</span>
+<span class="sd">              :class:`~mlx_graphs.nn.aggr.MultiAggregation` (concatenated</span>
+<span class="sd">              along the last axis by default), stored in ``self.aggr_module``.</span>
+<span class="sd">              As in PyG, only layers built for it accept concatenated</span>
+<span class="sd">              aggregations (``supports_concat_aggr``, e.g.</span>
+<span class="sd">              :class:`~mlx_graphs.nn.SAGEConv` and</span>
+<span class="sd">              :class:`~mlx_graphs.nn.GENConv`, which size their projection</span>
+<span class="sd">              accordingly, or layers without a projection after aggregating);</span>
+<span class="sd">              the others raise a ``ValueError``, and accept a list combined</span>
+<span class="sd">              without changing the size (``aggr_kwargs={"mode": "sum"}``).</span>
+
+<span class="sd">            Default: ``"add"``</span>
+<span class="sd">        aggr_kwargs: Arguments used to build the aggregation module from a</span>
+<span class="sd">            name or a list (e.g. ``{"mode": "sum"}`` for a list). Default:</span>
+<span class="sd">            ``None``</span>
 
 <span class="sd">    References:</span>
 <span class="sd">        [1] `Gilmer et al. Neural Message Passing for Quantum Chemistry.\</span>
@@ -776,6 +1060,14 @@
     <span class="c1"># Set by the @fused_message_passing decorator; None = gather-scatter only.</span>
     <span class="n">_fused_format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
+    <span class="c1">#: Whether the layer works with a list of aggregations whose outputs are</span>
+    <span class="c1">#: concatenated (``MultiAggregation`` in ``"cat"`` mode), i.e. whether</span>
+    <span class="c1">#: what follows the aggregation accepts ``len(aggr)`` times more features.</span>
+    <span class="c1">#: Layers whose projections are sized for a single aggregation set it to</span>
+    <span class="c1">#: ``False``, and then raise a clear error instead of a shape error (or,</span>
+    <span class="c1">#: for multi-head attention, a silently wrong output).</span>
+    <span class="n">supports_concat_aggr</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
+
     <span class="k">def</span><span class="w"> </span><span class="nf">__init_subclass__</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__init_subclass__</span><span class="p">(</span><span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="c1"># A subclass of a fused layer inherits _fused_format, but the fused</span>
@@ -787,19 +1079,69 @@
         <span class="k">if</span> <span class="n">overrides</span> <span class="ow">and</span> <span class="s2">"message_and_aggregate"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">cls</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">:</span>
             <span class="bp">cls</span><span class="o">.</span><span class="n">_fused_format</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">aggr</span><span class="p">:</span> <span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">aggr</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">ScatterAggregations</span><span class="p">,</span> <span class="n">List</span><span class="p">[</span><span class="n">Union</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]],</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"add"</span><span class="p">,</span>
+        <span class="n">aggr_kwargs</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">Dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">aggr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">"Invalid aggregation function."</span><span class="p">,</span>
-                <span class="sa">f</span><span class="s2">"Available values are </span><span class="si">{</span><span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span><span class="p">:</span> <span class="n">ScatterAggregations</span> <span class="o">=</span> <span class="n">aggr</span>
+        <span class="k">if</span> <span class="n">aggr</span> <span class="o">==</span> <span class="s2">"sum"</span><span class="p">:</span>  <span class="c1"># PyG's name of "add"</span>
+            <span class="n">aggr</span> <span class="o">=</span> <span class="s2">"add"</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="n">aggr</span> <span class="ow">in</span> <span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span>
+            <span class="c1"># scatter's "softmax" normalizes the messages (one output per</span>
+            <span class="c1"># edge): as an aggregation it means SoftmaxAggregation, as in PyG.</span>
+            <span class="ow">and</span> <span class="n">aggr</span> <span class="o">!=</span> <span class="s2">"softmax"</span>
+            <span class="c1"># arguments are only taken by aggregation modules</span>
+            <span class="ow">and</span> <span class="ow">not</span> <span class="n">aggr_kwargs</span>
+        <span class="p">):</span>
+            <span class="c1"># Plain reductions go straight to `scatter` (and to the fused</span>
+            <span class="c1"># kernels when possible), without an aggregation module.</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">=</span> <span class="n">aggr</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.aggr</span><span class="w"> </span><span class="kn">import</span> <span class="n">Aggregation</span><span class="p">,</span> <span class="n">MultiAggregation</span>
+            <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.aggr.resolver</span><span class="w"> </span><span class="kn">import</span> <span class="n">aggregation_resolver</span>
+
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">,</span> <span class="p">(</span><span class="nb">list</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">aggr_module</span> <span class="o">=</span> <span class="n">MultiAggregation</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">aggr</span><span class="p">),</span> <span class="o">**</span><span class="p">(</span><span class="n">aggr_kwargs</span> <span class="ow">or</span> <span class="p">{}))</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">=</span> <span class="p">[</span><span class="nb">str</span><span class="p">(</span><span class="n">a</span><span class="p">)</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">aggr</span><span class="p">]</span>
+                <span class="n">module</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr_module</span>
+                <span class="k">if</span> <span class="p">(</span>
+                    <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">supports_concat_aggr</span>
+                    <span class="ow">and</span> <span class="n">module</span><span class="o">.</span><span class="n">mode</span> <span class="o">==</span> <span class="s2">"cat"</span>
+                    <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">aggrs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>
+                <span class="p">):</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2"> does not support a list of "</span>
+                        <span class="s2">"aggregations whose outputs are concatenated: its "</span>
+                        <span class="s2">"layers expect the size of one aggregation (as in "</span>
+                        <span class="s2">"PyG). Combine them without changing the size, e.g. "</span>
+                        <span class="s2">"aggr_kwargs={'mode': 'sum'} ('mean', 'max', ...), or "</span>
+                        <span class="s2">"use a layer that supports it, such as SAGEConv or "</span>
+                        <span class="s2">"GENConv."</span>
+                    <span class="p">)</span>
+            <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">aggr</span><span class="p">,</span> <span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">Aggregation</span><span class="p">)):</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">aggr_module</span> <span class="o">=</span> <span class="n">aggregation_resolver</span><span class="p">(</span><span class="n">aggr</span><span class="p">,</span> <span class="o">**</span><span class="p">(</span><span class="n">aggr_kwargs</span> <span class="ow">or</span> <span class="p">{}))</span>
+                <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                        <span class="s2">"Invalid aggregation function."</span><span class="p">,</span>
+                        <span class="sa">f</span><span class="s2">"Available values are </span><span class="si">{</span><span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+                        <span class="s2">"a list of them, or an Aggregation"</span><span class="p">,</span>
+                    <span class="p">)</span> <span class="kn">from</span><span class="w"> </span><span class="kc">None</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">aggr</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                    <span class="s2">"Invalid aggregation function."</span><span class="p">,</span>
+                    <span class="sa">f</span><span class="s2">"Available values are </span><span class="si">{</span><span class="n">get_args</span><span class="p">(</span><span class="n">ScatterAggregations</span><span class="p">)</span><span class="si">}</span><span class="s2">, "</span>
+                    <span class="sa">f</span><span class="s2">"a list of them, or an Aggregation (got </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">aggr</span><span class="p">)</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">)"</span><span class="p">,</span>
+                <span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">=</span> <span class="kc">None</span>
 
 <div class="viewcode-block" id="MessagePassing.__call__">
 <a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing.__call__">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">node_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">:</span> <span class="n">Any</span><span class="p">):</span>
         <span class="k">raise</span> <span class="ne">NotImplementedError</span></div>
 
 
@@ -897,7 +1239,11 @@
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">is_fused_message_passing_enabled</span><span class="p">():</span>
             <span class="k">return</span> <span class="kc">False</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_FUSED_AGGRS</span><span class="p">:</span>
+        <span class="c1"># only plain string reductions have a fused kernel (not lists or</span>
+        <span class="c1"># aggregation modules, nor "mul"/"var"/"std"/"median")</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aggr</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">_FUSED_AGGRS</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">False</span>
+        <span class="k">if</span> <span class="s2">"aggr_module"</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
             <span class="k">return</span> <span class="kc">False</span>
         <span class="n">message_kwargs</span> <span class="o">=</span> <span class="n">message_kwargs</span> <span class="ow">or</span> <span class="p">{}</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">message_kwargs</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"edge_weights"</span><span class="p">):</span>
@@ -951,24 +1297,87 @@
 <span class="sd">                edge and head (e.g. attention coefficients).</span>
 <span class="sd">        """</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">node_features</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span> <span class="k">else</span> <span class="n">node_features</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">edge_weights</span>
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>  <span class="c1"># one scalar per edge</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"max"</span><span class="p">,</span> <span class="s2">"min"</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_extremum</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_spmm</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fused_extremum</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Fused max/min whose gradient is split equally among tied messages,</span>
+<span class="sd">        as :func:`~mlx_graphs.utils.scatter` max/min. The kernels give the</span>
+<span class="sd">        full gradient to each tied message, so the backward pass divides the</span>
+<span class="sd">        gradient of each output by its number of ties first."""</span>
+        <span class="n">src</span><span class="p">,</span> <span class="n">dst</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">spmm</span><span class="p">(</span><span class="o">*</span><span class="n">primals</span><span class="p">):</span>
+            <span class="n">w</span> <span class="o">=</span> <span class="n">primals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">primals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="kc">None</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_spmm</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">primals</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="k">def</span><span class="w"> </span><span class="nf">split_vjp</span><span class="p">(</span><span class="n">primals</span><span class="p">,</span> <span class="n">cotangent</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">primals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">src</span><span class="p">]</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">primals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">w</span> <span class="o">=</span> <span class="n">primals</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="n">w</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">w</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span> <span class="o">*</span> <span class="p">(</span><span class="n">msg</span><span class="o">.</span><span class="n">ndim</span> <span class="o">-</span> <span class="n">w</span><span class="o">.</span><span class="n">ndim</span><span class="p">))</span> <span class="o">*</span> <span class="n">msg</span>
+            <span class="n">num_ties</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">mx</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">output</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mx</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
+                <span class="o">.</span><span class="n">at</span><span class="p">[</span><span class="n">dst</span><span class="p">]</span>
+                <span class="o">.</span><span class="n">add</span><span class="p">((</span><span class="n">msg</span> <span class="o">==</span> <span class="n">output</span><span class="p">[</span><span class="n">dst</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">int32</span><span class="p">))</span>
+            <span class="p">)</span>
+            <span class="n">split</span> <span class="o">=</span> <span class="n">cotangent</span> <span class="o">/</span> <span class="n">mx</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">num_ties</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">cotangent</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">vjp</span><span class="p">(</span><span class="n">spmm</span><span class="p">,</span> <span class="nb">list</span><span class="p">(</span><span class="n">primals</span><span class="p">),</span> <span class="p">[</span><span class="n">split</span><span class="p">])[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+            <span class="nd">@mx</span><span class="o">.</span><span class="n">custom_function</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">extremum</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_spmm</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+            <span class="nd">@extremum</span><span class="o">.</span><span class="n">vjp</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">extremum_vjp</span><span class="p">(</span><span class="n">primals</span><span class="p">,</span> <span class="n">cotangent</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="n">primals</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">primals</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">)</span> <span class="k">else</span> <span class="n">primals</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">split_vjp</span><span class="p">((</span><span class="n">x</span><span class="p">,),</span> <span class="n">cotangent</span><span class="p">,</span> <span class="n">output</span><span class="p">))</span>
+
+            <span class="k">return</span> <span class="n">extremum</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+        <span class="nd">@mx</span><span class="o">.</span><span class="n">custom_function</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">weighted_extremum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_spmm</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">w</span><span class="p">)</span>
+
+        <span class="nd">@weighted_extremum</span><span class="o">.</span><span class="n">vjp</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">weighted_extremum_vjp</span><span class="p">(</span><span class="n">primals</span><span class="p">,</span> <span class="n">cotangent</span><span class="p">,</span> <span class="n">output</span><span class="p">):</span>
+            <span class="k">return</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">split_vjp</span><span class="p">(</span><span class="nb">tuple</span><span class="p">(</span><span class="n">primals</span><span class="p">),</span> <span class="n">cotangent</span><span class="p">,</span> <span class="n">output</span><span class="p">))</span>
+
+        <span class="k">return</span> <span class="n">weighted_extremum</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">weights</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_fused_spmm</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">x</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">weights</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The SpMM kernels, on source features ``x`` and optional weights</span>
+<span class="sd">        (one per edge, flattened, or ``[num_edges, heads]``)."""</span>
         <span class="n">reduce</span> <span class="o">=</span> <span class="s2">"sum"</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">==</span> <span class="s2">"add"</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span>  <span class="c1"># mean / max / min</span>
         <span class="n">num_edges</span> <span class="o">=</span> <span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">out_shape</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="o">*</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
-
-        <span class="n">weights</span> <span class="o">=</span> <span class="n">edge_weights</span>
         <span class="n">per_head</span> <span class="o">=</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">weights</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">num_edges</span>
-        <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">per_head</span><span class="p">:</span>
-            <span class="n">weights</span> <span class="o">=</span> <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
 
         <span class="c1"># The kernels work on [num_nodes, features]: with one weight per</span>
         <span class="c1"># (edge, head) each head is its own SpMM, otherwise heads and channels</span>
-        <span class="c1"># are flattened into the feature axis.</span>
+        <span class="c1"># are flattened into the feature axis (explicit sizes: reshape cannot</span>
+        <span class="c1"># infer them for 0 nodes).</span>
         <span class="k">if</span> <span class="n">per_head</span><span class="p">:</span>
             <span class="n">heads</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">heads</span><span class="p">)]</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="n">x</span><span class="p">[:,</span> <span class="n">h</span><span class="p">]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">2</span><span class="p">:]))</span>
+                <span class="k">for</span> <span class="n">h</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">heads</span><span class="p">)</span>
+            <span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">heads</span> <span class="o">=</span> <span class="mi">1</span>
-            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="o">-</span><span class="mi">1</span><span class="p">)]</span>
+            <span class="n">xs</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">math</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]))]</span>
 
         <span class="n">csr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_csr</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">csr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -1007,8 +1416,7 @@
             <span class="p">]</span>
 
         <span class="n">out</span> <span class="o">=</span> <span class="n">outs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="n">heads</span> <span class="o">==</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">mx</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">outs</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out_shape</span><span class="p">)</span></div>
-
+        <span class="k">return</span> <span class="n">out</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">out_shape</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_fused_csr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_src_nodes</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">"""CSR form of the graph for the fused kernel, or ``None`` for COO."""</span>
@@ -1054,14 +1462,17 @@
 <div class="viewcode-block" id="MessagePassing.aggregate">
 <a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html#mlx_graphs.nn.MessagePassing.aggregate">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">aggregate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">messages</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">indices</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
-<span class="w">        </span><span class="sd">"""Aggregates the messages using the `self.aggr` strategy.</span>
+<span class="w">        </span><span class="sd">"""Aggregates the messages using the `self.aggr` strategy, or</span>
+<span class="sd">        `self.aggr_module` when `aggr` is a list or an aggregation module.</span>
 
 <span class="sd">        Args:</span>
 <span class="sd">            messages: Computed messages</span>
 <span class="sd">            indices: Indices representing the nodes that receive messages</span>
 <span class="sd">            **kwargs: Optional args to aggregate messages</span>
 <span class="sd">        """</span>
-        <span class="k">return</span> <span class="n">scatter</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span><span class="p">)</span></div>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">aggr</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">"aggr_module"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">scatter</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr_module</span><span class="p">(</span><span class="n">messages</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">dim_size</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="MessagePassing.update_nodes">

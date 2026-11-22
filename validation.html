@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Validation against PyG &#8212; mlx-graphs 0.1.0 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=384b581d" />
+    <link rel="stylesheet" type="text/css" href="_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="_static/custom.css?v=6c5b376d" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="_static/documentation_options.js?v=a1637f0b"></script>
+    <script src="_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'validation';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Data" href="api/data/index.html" />
+    <link rel="prev" title="Benchmarks" href="benchmarks.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="_static/searchtools.js"></script>
+    <script src="_static/language_data.js"></script>
+    <script src="searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.1.0 documentation - Home"/>
+    <img src="_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.1.0 documentation - Home"/>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Getting started</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/from_pyg.html">Coming from PyTorch Geometric</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="guide/message_passing.html">Creating message passing layers</a></li>
+<li class="toctree-l1"><a class="reference internal" href="datasets.html">Datasets</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="benchmarks.html">Benchmarks</a></li>
+<li class="toctree-l1 current active"><a aria-current="page" class="current reference internal" href="#">Validation against PyG</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">API</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/data/index.html">Data</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/data/data.html">Data Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary/mlx_graphs.data.data.GraphData.html">mlx_graphs.data.data.GraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html">mlx_graphs.data.data.HeteroGraphData</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary/mlx_graphs.data.temporal.TemporalData.html">mlx_graphs.data.temporal.TemporalData</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/data/batch.html">Batch Objects</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary_batch/mlx_graphs.data.batch.GraphDataBatch.html">mlx_graphs.data.batch.GraphDataBatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary_batch/mlx_graphs.data.batch.batch.html">mlx_graphs.data.batch.batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary_batch/mlx_graphs.data.batch.unbatch.html">mlx_graphs.data.batch.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary_collate/mlx_graphs.data.collate.collate.html">mlx_graphs.data.collate.collate</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/data/utils.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/data/_autosummary_data_utils/mlx_graphs.data.utils.validate_list_of_graph_data.html">mlx_graphs.data.utils.validate_list_of_graph_data</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/datasets/index.html">Datasets</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html">mlx_graphs.datasets.Dataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html">mlx_graphs.datasets.HeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.KarateClubDataset.html">mlx_graphs.datasets.KarateClubDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.PlanetoidDataset.html">mlx_graphs.datasets.PlanetoidDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.AmazonDataset.html">mlx_graphs.datasets.AmazonDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.CoauthorDataset.html">mlx_graphs.datasets.CoauthorDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.QM7bDataset.html">mlx_graphs.datasets.QM7bDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.TUDataset.html">mlx_graphs.datasets.TUDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.SuperPixelDataset.html">mlx_graphs.datasets.SuperPixelDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.OGBDataset.html">mlx_graphs.datasets.OGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.OGBMAG.html">mlx_graphs.datasets.OGBMAG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.EllipticBitcoinDataset.html">mlx_graphs.datasets.EllipticBitcoinDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.MovieLens100K.html">mlx_graphs.datasets.MovieLens100K</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.IMDB.html">mlx_graphs.datasets.IMDB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html">mlx_graphs.datasets.DBLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.CitationFull.html">mlx_graphs.datasets.CitationFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.CoraFull.html">mlx_graphs.datasets.CoraFull</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.HeterophilousGraphDataset.html">mlx_graphs.datasets.HeterophilousGraphDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.WebKB.html">mlx_graphs.datasets.WebKB</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.WikipediaNetwork.html">mlx_graphs.datasets.WikipediaNetwork</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.Actor.html">mlx_graphs.datasets.Actor</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.WikiCS.html">mlx_graphs.datasets.WikiCS</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.FB15k_237.html">mlx_graphs.datasets.FB15k_237</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.WordNet18.html">mlx_graphs.datasets.WordNet18</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.WordNet18RR.html">mlx_graphs.datasets.WordNet18RR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.FakeDataset.html">mlx_graphs.datasets.FakeDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.FakeHeteroDataset.html">mlx_graphs.datasets.FakeHeteroDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.JODIEDataset.html">mlx_graphs.datasets.JODIEDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.LRGBDataset.html">mlx_graphs.datasets.LRGBDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.GNNBenchmarkDataset.html">mlx_graphs.datasets.GNNBenchmarkDataset</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.load_torch_file.html">mlx_graphs.datasets.utils.torch_serialization.load_torch_file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/datasets/_autosummary/mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix.html">mlx_graphs.datasets.utils.torch_serialization.SparseCOOMatrix</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/loaders/index.html">Loaders</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html">mlx_graphs.loaders.Dataloader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.NeighborLoader.html">mlx_graphs.loaders.NeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.HGTLoader.html">mlx_graphs.loaders.HGTLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.LinkNeighborLoader.html">mlx_graphs.loaders.LinkNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.NegativeSampling.html">mlx_graphs.loaders.NegativeSampling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.RandomNodeLoader.html">mlx_graphs.loaders.RandomNodeLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTSampler.html">mlx_graphs.loaders.GraphSAINTSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTNodeSampler.html">mlx_graphs.loaders.GraphSAINTNodeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTEdgeSampler.html">mlx_graphs.loaders.GraphSAINTEdgeSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.GraphSAINTRandomWalkSampler.html">mlx_graphs.loaders.GraphSAINTRandomWalkSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.ShaDowKHopSampler.html">mlx_graphs.loaders.ShaDowKHopSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.ClusterData.html">mlx_graphs.loaders.ClusterData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.ClusterLoader.html">mlx_graphs.loaders.ClusterLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.balanced_partition.html">mlx_graphs.loaders.balanced_partition</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.ImbalancedSampler.html">mlx_graphs.loaders.ImbalancedSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.DynamicBatchSampler.html">mlx_graphs.loaders.DynamicBatchSampler</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.DataListLoader.html">mlx_graphs.loaders.DataListLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.DenseDataLoader.html">mlx_graphs.loaders.DenseDataLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/loaders/_autosummary/mlx_graphs.loaders.TemporalDataLoader.html">mlx_graphs.loaders.TemporalDataLoader</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/transforms/index.html">Transforms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.BaseTransform.html">mlx_graphs.transforms.BaseTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.Compose.html">mlx_graphs.transforms.Compose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.FeaturesNormalizedTransform.html">mlx_graphs.transforms.FeaturesNormalizedTransform</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.ToUndirected.html">mlx_graphs.transforms.ToUndirected</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.AddSelfLoops.html">mlx_graphs.transforms.AddSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RemoveSelfLoops.html">mlx_graphs.transforms.RemoveSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RemoveIsolatedNodes.html">mlx_graphs.transforms.RemoveIsolatedNodes</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.LargestConnectedComponents.html">mlx_graphs.transforms.LargestConnectedComponents</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RandomNodeSplit.html">mlx_graphs.transforms.RandomNodeSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RandomLinkSplit.html">mlx_graphs.transforms.RandomLinkSplit</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.OneHotDegree.html">mlx_graphs.transforms.OneHotDegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.Constant.html">mlx_graphs.transforms.Constant</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.AddRandomWalkPE.html">mlx_graphs.transforms.AddRandomWalkPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.GCNNorm.html">mlx_graphs.transforms.GCNNorm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.AddRemainingSelfLoops.html">mlx_graphs.transforms.AddRemainingSelfLoops</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RemoveDuplicatedEdges.html">mlx_graphs.transforms.RemoveDuplicatedEdges</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.IndexToMask.html">mlx_graphs.transforms.IndexToMask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.MaskToIndex.html">mlx_graphs.transforms.MaskToIndex</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.KNNGraph.html">mlx_graphs.transforms.KNNGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RadiusGraph.html">mlx_graphs.transforms.RadiusGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.NormalizeFeatures.html">mlx_graphs.transforms.NormalizeFeatures</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.TargetIndegree.html">mlx_graphs.transforms.TargetIndegree</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.LocalDegreeProfile.html">mlx_graphs.transforms.LocalDegreeProfile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.AddLaplacianEigenvectorPE.html">mlx_graphs.transforms.AddLaplacianEigenvectorPE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.SVDFeatureReduction.html">mlx_graphs.transforms.SVDFeatureReduction</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.SIGN.html">mlx_graphs.transforms.SIGN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.FeaturePropagation.html">mlx_graphs.transforms.FeaturePropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.VirtualNode.html">mlx_graphs.transforms.VirtualNode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.TwoHop.html">mlx_graphs.transforms.TwoHop</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.LineGraph.html">mlx_graphs.transforms.LineGraph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.ToDense.html">mlx_graphs.transforms.ToDense</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/transforms/_autosummary/mlx_graphs.transforms.RemoveTrainingClasses.html">mlx_graphs.transforms.RemoveTrainingClasses</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/nn/index.html">Neural Networks</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.Linear.html">mlx_graphs.nn.Linear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HeteroDictLinear.html">mlx_graphs.nn.HeteroDictLinear</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MessagePassing.html">mlx_graphs.nn.MessagePassing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphNetworkBlock.html">mlx_graphs.nn.GraphNetworkBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GCNConv.html">mlx_graphs.nn.GCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SAGEConv.html">mlx_graphs.nn.SAGEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GINConv.html">mlx_graphs.nn.GINConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GATConv.html">mlx_graphs.nn.GATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GATv2Conv.html">mlx_graphs.nn.GATv2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TransformerConv.html">mlx_graphs.nn.TransformerConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphConv.html">mlx_graphs.nn.GraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SGConv.html">mlx_graphs.nn.SGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.APPNP.html">mlx_graphs.nn.APPNP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ChebConv.html">mlx_graphs.nn.ChebConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TAGConv.html">mlx_graphs.nn.TAGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.EdgeConv.html">mlx_graphs.nn.EdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.RGCNConv.html">mlx_graphs.nn.RGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.FastRGCNConv.html">mlx_graphs.nn.FastRGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.RGATConv.html">mlx_graphs.nn.RGATConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GENConv.html">mlx_graphs.nn.GENConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MixHopConv.html">mlx_graphs.nn.MixHopConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.FAConv.html">mlx_graphs.nn.FAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GeneralConv.html">mlx_graphs.nn.GeneralConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DirGNNConv.html">mlx_graphs.nn.DirGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HANConv.html">mlx_graphs.nn.HANConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HGTConv.html">mlx_graphs.nn.HGTConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SimpleConv.html">mlx_graphs.nn.SimpleConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HeteroConv.html">mlx_graphs.nn.HeteroConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GeneralizedRelationalConv.html">mlx_graphs.nn.GeneralizedRelationalConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GINEConv.html">mlx_graphs.nn.GINEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GCN2Conv.html">mlx_graphs.nn.GCN2Conv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SSGConv.html">mlx_graphs.nn.SSGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LGConv.html">mlx_graphs.nn.LGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ARMAConv.html">mlx_graphs.nn.ARMAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GatedGraphConv.html">mlx_graphs.nn.GatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ResGatedGraphConv.html">mlx_graphs.nn.ResGatedGraphConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.NNConv.html">mlx_graphs.nn.NNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.CGConv.html">mlx_graphs.nn.CGConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MFConv.html">mlx_graphs.nn.MFConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LEConv.html">mlx_graphs.nn.LEConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.FiLMConv.html">mlx_graphs.nn.FiLMConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.AGNNConv.html">mlx_graphs.nn.AGNNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ClusterGCNConv.html">mlx_graphs.nn.ClusterGCNConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DynamicEdgeConv.html">mlx_graphs.nn.DynamicEdgeConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.PNAConv.html">mlx_graphs.nn.PNAConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GPSConv.html">mlx_graphs.nn.GPSConv</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GCN.html">mlx_graphs.nn.GCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphSAGE.html">mlx_graphs.nn.GraphSAGE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GIN.html">mlx_graphs.nn.GIN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GAT.html">mlx_graphs.nn.GAT</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MLP.html">mlx_graphs.nn.MLP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.BasicGNN.html">mlx_graphs.nn.BasicGNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.PNA.html">mlx_graphs.nn.PNA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.EdgeCNN.html">mlx_graphs.nn.EdgeCNN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LINKX.html">mlx_graphs.nn.LINKX</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DeepGCNLayer.html">mlx_graphs.nn.DeepGCNLayer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MaskLabel.html">mlx_graphs.nn.MaskLabel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.RECT_L.html">mlx_graphs.nn.RECT_L</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DeepGraphInfomax.html">mlx_graphs.nn.DeepGraphInfomax</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LightGCN.html">mlx_graphs.nn.LightGCN</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SGFormer.html">mlx_graphs.nn.SGFormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.Polynormer.html">mlx_graphs.nn.Polynormer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.InnerProductDecoder.html">mlx_graphs.nn.InnerProductDecoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GAE.html">mlx_graphs.nn.GAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.VGAE.html">mlx_graphs.nn.VGAE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ARGA.html">mlx_graphs.nn.ARGA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ARGVA.html">mlx_graphs.nn.ARGVA</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LabelPropagation.html">mlx_graphs.nn.LabelPropagation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.CorrectAndSmooth.html">mlx_graphs.nn.CorrectAndSmooth</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.KGEModel.html">mlx_graphs.nn.KGEModel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TransE.html">mlx_graphs.nn.TransE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DistMult.html">mlx_graphs.nn.DistMult</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ComplEx.html">mlx_graphs.nn.ComplEx</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.RotatE.html">mlx_graphs.nn.RotatE</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.KGTripletLoader.html">mlx_graphs.nn.KGTripletLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.BatchNormalization.html">mlx_graphs.nn.BatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HeteroBatchNormalization.html">mlx_graphs.nn.HeteroBatchNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.InstanceNormalization.html">mlx_graphs.nn.InstanceNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LayerNormalization.html">mlx_graphs.nn.LayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.HeteroLayerNormalization.html">mlx_graphs.nn.HeteroLayerNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphNormalization.html">mlx_graphs.nn.GraphNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.PairNormalization.html">mlx_graphs.nn.PairNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.GraphSizeNormalization.html">mlx_graphs.nn.GraphSizeNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MeanSubtractionNormalization.html">mlx_graphs.nn.MeanSubtractionNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.MessageNormalization.html">mlx_graphs.nn.MessageNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.DiffGroupNormalization.html">mlx_graphs.nn.DiffGroupNormalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.JumpingKnowledge.html">mlx_graphs.nn.JumpingKnowledge</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.AttentionalAggregation.html">mlx_graphs.nn.AttentionalAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.Set2Set.html">mlx_graphs.nn.Set2Set</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TopKPooling.html">mlx_graphs.nn.TopKPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.SAGPooling.html">mlx_graphs.nn.SAGPooling</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.global_add_pool.html">mlx_graphs.nn.global_add_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.global_mean_pool.html">mlx_graphs.nn.global_mean_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.global_max_pool.html">mlx_graphs.nn.global_max_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.global_sort_pool.html">mlx_graphs.nn.global_sort_pool</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.topk.html">mlx_graphs.nn.topk</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.filter_adj.html">mlx_graphs.nn.filter_adj</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.knn.html">mlx_graphs.nn.knn</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.knn_graph.html">mlx_graphs.nn.knn_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.radius.html">mlx_graphs.nn.radius</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.radius_graph.html">mlx_graphs.nn.radius_graph</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.Aggregation.html">mlx_graphs.nn.aggr.Aggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.SumAggregation.html">mlx_graphs.nn.aggr.SumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MeanAggregation.html">mlx_graphs.nn.aggr.MeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MaxAggregation.html">mlx_graphs.nn.aggr.MaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MinAggregation.html">mlx_graphs.nn.aggr.MinAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MulAggregation.html">mlx_graphs.nn.aggr.MulAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.VarAggregation.html">mlx_graphs.nn.aggr.VarAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.StdAggregation.html">mlx_graphs.nn.aggr.StdAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.SoftmaxAggregation.html">mlx_graphs.nn.aggr.SoftmaxAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.PowerMeanAggregation.html">mlx_graphs.nn.aggr.PowerMeanAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MedianAggregation.html">mlx_graphs.nn.aggr.MedianAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.QuantileAggregation.html">mlx_graphs.nn.aggr.QuantileAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MultiAggregation.html">mlx_graphs.nn.aggr.MultiAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.DegreeScalerAggregation.html">mlx_graphs.nn.aggr.DegreeScalerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.SortAggregation.html">mlx_graphs.nn.aggr.SortAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html">mlx_graphs.nn.aggr.DeepSetsAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.LSTMAggregation.html">mlx_graphs.nn.aggr.LSTMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.GRUAggregation.html">mlx_graphs.nn.aggr.GRUAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.SetTransformerAggregation.html">mlx_graphs.nn.aggr.SetTransformerAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.GraphMultisetTransformer.html">mlx_graphs.nn.aggr.GraphMultisetTransformer</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MLPAggregation.html">mlx_graphs.nn.aggr.MLPAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.LCMAggregation.html">mlx_graphs.nn.aggr.LCMAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.EquilibriumAggregation.html">mlx_graphs.nn.aggr.EquilibriumAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.VariancePreservingAggregation.html">mlx_graphs.nn.aggr.VariancePreservingAggregation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.MultiheadAttentionBlock.html">mlx_graphs.nn.aggr.MultiheadAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.SetAttentionBlock.html">mlx_graphs.nn.aggr.SetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.InducedSetAttentionBlock.html">mlx_graphs.nn.aggr.InducedSetAttentionBlock</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html">mlx_graphs.nn.aggr.PoolingByMultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.DenseLayout.html">mlx_graphs.nn.aggr.DenseLayout</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.aggr.aggregation_resolver.html">mlx_graphs.nn.aggr.aggregation_resolver</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.PositionalEncoding.html">mlx_graphs.nn.PositionalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TemporalEncoding.html">mlx_graphs.nn.TemporalEncoding</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.RWSEEncoder.html">mlx_graphs.nn.RWSEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.LapPEEncoder.html">mlx_graphs.nn.LapPEEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.attention.MultiheadAttention.html">mlx_graphs.nn.attention.MultiheadAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.attention.PerformerAttention.html">mlx_graphs.nn.attention.PerformerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.attention.SGFormerAttention.html">mlx_graphs.nn.attention.SGFormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html">mlx_graphs.nn.attention.PolynormerAttention</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.fused_message_passing.html">mlx_graphs.nn.fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.set_fused_message_passing.html">mlx_graphs.nn.set_fused_message_passing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html">mlx_graphs.nn.fused_message_passing_mode</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.is_fused_message_passing_enabled.html">mlx_graphs.nn.is_fused_message_passing_enabled</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.clear_csr_cache.html">mlx_graphs.nn.clear_csr_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.gcn_norm.html">mlx_graphs.nn.gcn_norm</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.clear_norm_cache.html">mlx_graphs.nn.clear_norm_cache</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.TGNMemory.html">mlx_graphs.nn.TGNMemory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.IdentityMessage.html">mlx_graphs.nn.models.tgn.IdentityMessage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastAggregator.html">mlx_graphs.nn.models.tgn.LastAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.MeanAggregator.html">mlx_graphs.nn.models.tgn.MeanAggregator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.TimeEncoder.html">mlx_graphs.nn.models.tgn.TimeEncoder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.GRUCell.html">mlx_graphs.nn.models.tgn.GRUCell</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.models.tgn.LastNeighborLoader.html">mlx_graphs.nn.models.tgn.LastNeighborLoader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.to_hetero.html">mlx_graphs.nn.to_hetero</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.to_hetero_with_bases.html">mlx_graphs.nn.to_hetero_with_bases</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/nn/_autosummary/mlx_graphs.nn.ToHeteroModel.html">mlx_graphs.nn.ToHeteroModel</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/utils/index.html">Utils</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/transformations.html">Transformations</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_edge_index.html">mlx_graphs.utils.transformations.to_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_sparse_adjacency_matrix.html">mlx_graphs.utils.transformations.to_sparse_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_adjacency_matrix.html">mlx_graphs.utils.transformations.to_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_src_dst_features.html">mlx_graphs.utils.transformations.get_src_dst_features</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_unique_edge_indices.html">mlx_graphs.utils.transformations.get_unique_edge_indices</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.add_self_loops.html">mlx_graphs.utils.transformations.add_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_self_loops.html">mlx_graphs.utils.transformations.remove_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.to_undirected.html">mlx_graphs.utils.transformations.to_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.remove_duplicate_directed_edges.html">mlx_graphs.utils.transformations.remove_duplicate_directed_edges</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.coalesce.html">mlx_graphs.utils.transformations.coalesce</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.get_isolated_nodes_mask.html">mlx_graphs.utils.transformations.get_isolated_nodes_mask</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_isolated_nodes.html">mlx_graphs.utils.transformations.has_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_transformations/mlx_graphs.utils.transformations.has_self_loops.html">mlx_graphs.utils.transformations.has_self_loops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/graph.html">Graph utilities</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.subgraph.html">mlx_graphs.utils.subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.k_hop_subgraph.html">mlx_graphs.utils.k_hop_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.negative_sampling.html">mlx_graphs.utils.negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.structured_negative_sampling.html">mlx_graphs.utils.structured_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.dropout_edge.html">mlx_graphs.utils.dropout_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.dropout_node.html">mlx_graphs.utils.dropout_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_batch.html">mlx_graphs.utils.to_dense_batch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.to_dense_adj.html">mlx_graphs.utils.to_dense_adj</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.get_laplacian.html">mlx_graphs.utils.get_laplacian</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.homophily.html">mlx_graphs.utils.homophily</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.add_remaining_self_loops.html">mlx_graphs.utils.add_remaining_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.segregate_self_loops.html">mlx_graphs.utils.segregate_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.remove_isolated_nodes.html">mlx_graphs.utils.remove_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.contains_self_loops.html">mlx_graphs.utils.contains_self_loops</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.contains_isolated_nodes.html">mlx_graphs.utils.contains_isolated_nodes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.bipartite_subgraph.html">mlx_graphs.utils.bipartite_subgraph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.batched_negative_sampling.html">mlx_graphs.utils.batched_negative_sampling</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.dropout_path.html">mlx_graphs.utils.dropout_path</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.shuffle_node.html">mlx_graphs.utils.shuffle_node</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.mask_feature.html">mlx_graphs.utils.mask_feature</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.add_random_edge.html">mlx_graphs.utils.add_random_edge</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.unbatch.html">mlx_graphs.utils.unbatch</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.unbatch_edge_index.html">mlx_graphs.utils.unbatch_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.assortativity.html">mlx_graphs.utils.assortativity</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.get_ppr.html">mlx_graphs.utils.get_ppr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.normalized_cut.html">mlx_graphs.utils.normalized_cut</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_graph/mlx_graphs.utils.train_test_split_edges.html">mlx_graphs.utils.train_test_split_edges</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/generators.html">Graph generators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_generators/mlx_graphs.utils.grid.html">mlx_graphs.utils.grid</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_generators/mlx_graphs.utils.erdos_renyi_graph.html">mlx_graphs.utils.erdos_renyi_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_generators/mlx_graphs.utils.barabasi_albert_graph.html">mlx_graphs.utils.barabasi_albert_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_generators/mlx_graphs.utils.stochastic_blockmodel_graph.html">mlx_graphs.utils.stochastic_blockmodel_graph</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/sparse.html">Sparse and array helpers</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.to_scipy_sparse_matrix.html">mlx_graphs.utils.to_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.from_scipy_sparse_matrix.html">mlx_graphs.utils.from_scipy_sparse_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.dense_to_sparse.html">mlx_graphs.utils.dense_to_sparse</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.softmax.html">mlx_graphs.utils.softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.mask_to_index.html">mlx_graphs.utils.mask_to_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.cumsum.html">mlx_graphs.utils.cumsum</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.select.html">mlx_graphs.utils.select</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sparse/mlx_graphs.utils.narrow.html">mlx_graphs.utils.narrow</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/topology.html">Topology</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_undirected.html">mlx_graphs.utils.topology.is_undirected</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_topology/mlx_graphs.utils.topology.is_directed.html">mlx_graphs.utils.topology.is_directed</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_topology/mlx_graphs.utils.topology.get_num_hops.html">mlx_graphs.utils.topology.get_num_hops</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/sorting.html">Sorting</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.index_to_ptr.html">mlx_graphs.utils.sorting.index_to_ptr</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index.html">mlx_graphs.utils.sorting.sort_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_sorting/mlx_graphs.utils.sorting.sort_edge_index_and_features.html">mlx_graphs.utils.sorting.sort_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/validators.html">Validators</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_adjacency_matrix.html">mlx_graphs.utils.validators.validate_adjacency_matrix</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index.html">mlx_graphs.utils.validators.validate_edge_index</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_validators/mlx_graphs.utils.validators.validate_edge_index_and_features.html">mlx_graphs.utils.validators.validate_edge_index_and_features</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/scatter.html">Scatter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter.html">mlx_graphs.utils.scatter.scatter</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_add.html">mlx_graphs.utils.scatter.scatter_add</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_max.html">mlx_graphs.utils.scatter.scatter_max</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mean.html">mlx_graphs.utils.scatter.scatter_mean</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_softmax.html">mlx_graphs.utils.scatter.scatter_softmax</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_mul.html">mlx_graphs.utils.scatter.scatter_mul</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_var.html">mlx_graphs.utils.scatter.scatter_var</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_std.html">mlx_graphs.utils.scatter.scatter_std</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.scatter_quantile.html">mlx_graphs.utils.scatter.scatter_quantile</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.degree.html">mlx_graphs.utils.scatter.degree</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_scatter/mlx_graphs.utils.scatter.invert_sqrt_degree.html">mlx_graphs.utils.scatter.invert_sqrt_degree</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/array_ops.html">Array ops</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.broadcast.html">mlx_graphs.utils.array_ops.broadcast</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.expand.html">mlx_graphs.utils.array_ops.expand</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.one_hot.html">mlx_graphs.utils.array_ops.one_hot</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.pairwise_distances.html">mlx_graphs.utils.array_ops.pairwise_distances</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_array-ops/mlx_graphs.utils.array_ops.index_to_mask.html">mlx_graphs.utils.array_ops.index_to_mask</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/convert.html">Convert</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_convert/mlx_graphs.utils.convert.to_networkx.html">mlx_graphs.utils.convert.to_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_convert/mlx_graphs.utils.convert.from_networkx.html">mlx_graphs.utils.convert.from_networkx</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_convert/mlx_graphs.utils.from_pyg.html">mlx_graphs.utils.from_pyg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_convert/mlx_graphs.utils.to_pyg.html">mlx_graphs.utils.to_pyg</a></li>
+</ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="api/utils/spatial.html">Spatial graphs</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_spatial/mlx_graphs.utils.knn.html">mlx_graphs.utils.knn</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_spatial/mlx_graphs.utils.knn_graph.html">mlx_graphs.utils.knn_graph</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_spatial/mlx_graphs.utils.radius.html">mlx_graphs.utils.radius</a></li>
+<li class="toctree-l3"><a class="reference internal" href="api/utils/_autosummary_spatial/mlx_graphs.utils.radius_graph.html">mlx_graphs.utils.radius_graph</a></li>
+</ul>
+</details></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.roc_auc_score.html">mlx_graphs.metrics.roc_auc_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.average_precision_score.html">mlx_graphs.metrics.average_precision_score</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetric.html">mlx_graphs.metrics.LinkPredMetric</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricCollection.html">mlx_graphs.metrics.LinkPredMetricCollection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricData.html">mlx_graphs.metrics.LinkPredMetricData</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPrecision.html">mlx_graphs.metrics.LinkPredPrecision</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredRecall.html">mlx_graphs.metrics.LinkPredRecall</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredF1.html">mlx_graphs.metrics.LinkPredF1</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMAP.html">mlx_graphs.metrics.LinkPredMAP</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredNDCG.html">mlx_graphs.metrics.LinkPredNDCG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMRR.html">mlx_graphs.metrics.LinkPredMRR</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredHitRatio.html">mlx_graphs.metrics.LinkPredHitRatio</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredCoverage.html">mlx_graphs.metrics.LinkPredCoverage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredDiversity.html">mlx_graphs.metrics.LinkPredDiversity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredPersonalization.html">mlx_graphs.metrics.LinkPredPersonalization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredAveragePopularity.html">mlx_graphs.metrics.LinkPredAveragePopularity</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Project</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="changelog.html">Changelog</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+<a href="https://github.com/mlx-graphs/mlx-graphs" target="_blank"
+   class="btn btn-sm btn-source-repository-button"
+   title="Source repository"
+   data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+
+</a>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/validation.rst" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.rst</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div>
+
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Validation against PyG</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method">Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layers">Layers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#node-classification">Node classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-level-heterogeneous-link-and-knowledge-graph-models">Graph-level, heterogeneous, link and knowledge graph models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplers-and-loaders">Samplers and loaders</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-graph-networks">Temporal graph networks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gps-on-peptides-func">GPS on Peptides-func</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#to-hetero-on-dblp"><code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> on DBLP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remaining-mismatches">Remaining mismatches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bugs-found-and-fixed">Bugs found and fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#where-mlx-graphs-differs-from-pyg-on-purpose">Where mlx-graphs differs from PyG on purpose</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#not-covered">Not covered</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="validation-against-pyg">
+<span id="validation"></span><h1>Validation against PyG<a class="headerlink" href="#validation-against-pyg" title="Link to this heading">#</a></h1>
+<p>mlx-graphs follows <a class="reference external" href="https://pyg.org">PyTorch Geometric</a> (PyG), and every
+layer, sampler and model added for PyG parity was checked against PyG: layers
+by copying PyG’s weights and comparing outputs and gradients, samplers
+statistically, and models by training them in both frameworks on the same
+data. This page describes how, summarizes the results, lists the bugs these
+checks found, and shows how to rerun them.</p>
+<p>The full result tables are in the repository, under
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/tree/main/benchmarks/quality">benchmarks/quality</a>.
+The speed comparison is on the <a class="reference internal" href="benchmarks.html"><span class="doc">Benchmarks</span></a> page.</p>
+<nav class="contents local" id="contents">
+<ul class="simple">
+<li><p><a class="reference internal" href="#method" id="id1">Method</a></p></li>
+<li><p><a class="reference internal" href="#results" id="id2">Results</a></p>
+<ul>
+<li><p><a class="reference internal" href="#layers" id="id3">Layers</a></p></li>
+<li><p><a class="reference internal" href="#node-classification" id="id4">Node classification</a></p></li>
+<li><p><a class="reference internal" href="#graph-level-heterogeneous-link-and-knowledge-graph-models" id="id5">Graph-level, heterogeneous, link and knowledge graph models</a></p></li>
+<li><p><a class="reference internal" href="#samplers-and-loaders" id="id6">Samplers and loaders</a></p></li>
+<li><p><a class="reference internal" href="#temporal-graph-networks" id="id7">Temporal graph networks</a></p></li>
+<li><p><a class="reference internal" href="#gps-on-peptides-func" id="id8">GPS on Peptides-func</a></p></li>
+<li><p><a class="reference internal" href="#to-hetero-on-dblp" id="id9"><code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> on DBLP</a></p></li>
+<li><p><a class="reference internal" href="#remaining-mismatches" id="id10">Remaining mismatches</a></p></li>
+<li><p><a class="reference internal" href="#bugs-found-and-fixed" id="id11">Bugs found and fixed</a></p></li>
+<li><p><a class="reference internal" href="#where-mlx-graphs-differs-from-pyg-on-purpose" id="id12">Where mlx-graphs differs from PyG on purpose</a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#reproducing" id="id13">Reproducing</a></p></li>
+<li><p><a class="reference internal" href="#not-covered" id="id14">Not covered</a></p></li>
+</ul>
+</nav>
+<section id="method">
+<h2><a class="toc-backref" href="#id1" role="doc-backlink">Method</a><a class="headerlink" href="#method" title="Link to this heading">#</a></h2>
+<p>The checks work at three levels:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 22.0%" />
+<col style="width: 48.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Level</p></th>
+<th class="head"><p>What is compared</p></th>
+<th class="head"><p>Where</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Layers</p></td>
+<td><p>The same layer is built in both frameworks and PyG’s weights are copied
+into the mlx-graphs one. Both run on the same random graph, with
+duplicate edges, self-loops and isolated nodes, and the outputs (and
+for many layers the gradients) must agree.</p></td>
+<td><p>The unit tests, <code class="docutils literal notranslate"><span class="pre">tests/</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Samplers and loaders</p></td>
+<td><p>Exact comparisons with PyG’s pure-Python code paths where they exist,
+and otherwise statistical properties: coverage of every node once per
+epoch, uniform neighbour sampling, unbiased normalizations. Then
+mini-batch training against full-batch training.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">benchmarks/quality/sampler_quality.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Training quality</p></td>
+<td><p>The same model is trained in both frameworks, with the same data,
+splits and hyperparameters, over several seeds. The test metric is
+read at the epoch of best validation metric.</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">benchmarks/quality/node_quality.py</span></code>,
+<code class="docutils literal notranslate"><span class="pre">benchmarks/quality/graph_quality.py</span></code>, and the TGN, GPS and
+<code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> comparisons</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A training configuration <strong>passes</strong> when the gap between the means is within
+1 point, or within 2 standard deviations of PyG’s results:
+<span class="math notranslate nohighlight">\(|\mathrm{gap}| \le 1\)</span> or <span class="math notranslate nohighlight">\(|\mathrm{gap}| \le 2\,\sigma_{\mathrm{PyG}}\)</span>.
+The node classification table also marks <em>pass (noise)</em> a gap within 2
+standard errors of the difference of the means.</p>
+<p class="rubric">Keeping the comparison fair</p>
+<ul class="simple">
+<li><p><strong>Same model and data.</strong> Both frameworks train the same architecture with
+the same hyperparameters, on identical arrays: the data is loaded once and
+handed to both, and the splits are the same. Each framework keeps its own
+default initialization, and mlx-graphs layers are initialized as in PyG.</p></li>
+<li><p><strong>Adam’s bias correction.</strong> MLX’s <code class="docutils literal notranslate"><span class="pre">Adam</span></code> is created with
+<code class="docutils literal notranslate"><span class="pre">bias_correction=True</span></code>, which is the update rule of <code class="docutils literal notranslate"><span class="pre">torch.optim.Adam</span></code>.
+MLX’s default has no bias correction and takes much larger first steps: it
+lowered GAT’s accuracy on Cora by about 4 points in the speed benchmarks,
+and gave GPS on Peptides-func a clearly higher training loss.</p></li>
+<li><p><strong>L2 penalty vs weight decay.</strong> <code class="docutils literal notranslate"><span class="pre">torch.optim.Adam(weight_decay=...)</span></code> adds
+<code class="docutils literal notranslate"><span class="pre">weight_decay</span> <span class="pre">*</span> <span class="pre">p</span></code> to the gradients (an L2 penalty), which is not the
+decoupled weight decay of <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>. The harnesses reproduce it in MLX by
+adding the same term to the gradients. Where the PyG script uses
+<code class="docutils literal notranslate"><span class="pre">AdamW</span></code> (the <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> comparison), both frameworks use <code class="docutils literal notranslate"><span class="pre">AdamW</span></code>.</p></li>
+<li><p><strong>Devices.</strong> mlx-graphs runs on the GPU and PyG on the CPU (with one or
+two torch threads per run), except for the slow deep models of the node
+classification harness (GCNII, DeeperGCN), for which PyG runs on MPS. The
+device changes the speed, not what is compared.</p></li>
+<li><p><strong>One process per run.</strong> Every configuration and seed runs in its own
+process under a memory cap.</p></li>
+</ul>
+<p class="rubric">Numerical tolerance</p>
+<p>MLX’s float32 matmul on the Mac’s GPU has a relative error of about 1e-3,
+where NumPy and torch on the CPU have about 1e-7. This is MLX behaviour, not
+mlx-graphs’, and it is the source of the ~1e-3 differences of the forward
+passes. It can be larger for gradients that go through a cancellation:
+EdgeConv’s first layer, whose inputs are differences <code class="docutils literal notranslate"><span class="pre">x_j</span> <span class="pre">-</span> <span class="pre">x_i</span></code>, has
+gradient differences of up to about 10 %. The layer tests therefore use a
+tolerance of 2e-2: a wrong formula is off by far more. It did not change any
+training result.</p>
+</section>
+<section id="results">
+<h2><a class="toc-backref" href="#id2" role="doc-backlink">Results</a><a class="headerlink" href="#results" title="Link to this heading">#</a></h2>
+<section id="layers">
+<h3><a class="toc-backref" href="#id3" role="doc-backlink">Layers</a><a class="headerlink" href="#layers" title="Link to this heading">#</a></h3>
+<p>108 of the 151 test files compare mlx-graphs with PyG or use PyG as a
+reference:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 20.0%" />
+<col style="width: 40.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Tests</p></th>
+<th class="head"><p>Files using PyG</p></th>
+<th class="head"><p>Examples</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Convolution layers (<code class="docutils literal notranslate"><span class="pre">tests/nn/conv</span></code>)</p></td>
+<td><p>39 of 44</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_gat_conv.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_gine_conv.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_pna_conv.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Models (<code class="docutils literal notranslate"><span class="pre">tests/nn/models</span></code>)</p></td>
+<td><p>7 of 8</p></td>
+<td><p>autoencoders, KGE, LightGCN, label propagation, TGN</p></td>
+</tr>
+<tr class="row-even"><td><p>Norms (<code class="docutils literal notranslate"><span class="pre">tests/nn/norm</span></code>)</p></td>
+<td><p>8 of 9</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">GraphNorm</span></code>, <code class="docutils literal notranslate"><span class="pre">PairNorm</span></code>, <code class="docutils literal notranslate"><span class="pre">LayerNorm</span></code>, <code class="docutils literal notranslate"><span class="pre">MessageNorm</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Pooling (<code class="docutils literal notranslate"><span class="pre">tests/nn/pooling</span></code>)</p></td>
+<td><p>5 of 6</p></td>
+<td><p>TopK pooling, <code class="docutils literal notranslate"><span class="pre">Set2Set</span></code>, global pooling</p></td>
+</tr>
+<tr class="row-even"><td><p>Aggregations (<code class="docutils literal notranslate"><span class="pre">tests/nn/aggr</span></code>)</p></td>
+<td><p>2 of 2</p></td>
+<td><p>the aggregation modules, including the learnable ones</p></td>
+</tr>
+<tr class="row-odd"><td><p>Message passing, <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>, graph transformers (<code class="docutils literal notranslate"><span class="pre">tests/nn</span></code>)</p></td>
+<td><p>3 of 5</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_to_hetero.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_message_passing_aggr.py</span></code></p></td>
+</tr>
+<tr class="row-even"><td><p>Transforms, utilities, data, loaders, metrics</p></td>
+<td><p>27 of 52</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">test_scatter_reductions.py</span></code>, <code class="docutils literal notranslate"><span class="pre">test_pyg_reference.py</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Datasets (slow tests, <code class="docutils literal notranslate"><span class="pre">pytest</span> <span class="pre">--datasets</span></code>)</p></td>
+<td><p>17 of 23</p></td>
+<td><p>a dataset’s arrays against PyG’s version of it</p></td>
+</tr>
+<tr class="row-even"><td><p>Other (<code class="docutils literal notranslate"><span class="pre">tests/algorithms</span></code>, <code class="docutils literal notranslate"><span class="pre">tests/test_hetero_linear.py</span></code>)</p></td>
+<td><p>0 of 2</p></td>
+<td><p>(mlx-graphs only)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>12 of these files also compare gradients with torch’s autograd, among them
+the GAT, GATv2, AGNN, GEN, MF and DirGNN convolutions, the aggregations, the
+scatter reductions and <code class="docutils literal notranslate"><span class="pre">TGNMemory</span></code>. The <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> tests copy PyG’s
+weights into converted models, including on the full DBLP and IMDB graphs
+(slow tests). <code class="docutils literal notranslate"><span class="pre">tests/pyg_copy.py</span></code> holds the helpers that convert PyG
+state dicts. <a class="reference internal" href="guide/message_passing.html#message-passing-guide"><span class="std std-ref">Creating message passing layers</span></a> shows how to write such a test.</p>
+<p>Some layers were also checked with copied weights on full datasets:</p>
+<ul class="simple">
+<li><p>On Cora: PairNorm, GraphNorm and GENConv (with and without MessageNorm)
+agree with PyG to GPU matmul precision, forward and input gradients;
+CorrectAndSmooth agrees to 3e-5; LabelPropagation gives identical
+accuracies.</p></li>
+<li><p>On PubMed: PNAConv’s output and input gradients agree with PyG’s to 1e-4
+and 1e-8 (relative ~1e-3).</p></li>
+<li><p>On DBLP: the HGT model’s forward pass matches PyG’s on the full graph.</p></li>
+<li><p>On Peptides-func: the full GPS model gives the same train-mode loss
+(0.70363 vs 0.70362 on 16 graphs) and gradients within ~1 %.</p></li>
+</ul>
+</section>
+<section id="node-classification">
+<h3><a class="toc-backref" href="#id4" role="doc-backlink">Node classification</a><a class="headerlink" href="#node-classification" title="Link to this heading">#</a></h3>
+<p>38 model configurations on the public splits of Cora, CiteSeer and PubMed,
+5 seeds each
+(one deterministic run for <code class="docutils literal notranslate"><span class="pre">LabelPropagation</span></code>): <strong>99 configurations, 96
+pass</strong>. 81 of the 99 gaps are within 1 point.</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 40.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Family</p></th>
+<th class="head"><p>Models</p></th>
+<th class="head"><p>Configs</p></th>
+<th class="head"><p>Pass</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GCN and propagation</p></td>
+<td><p>GCN, GCNII (64 layers), SSGConv, LGConv, ARMAConv, ClusterGCNConv,
+MixHopConv, SIGN, MaskLabel, NormalizeFeatures and Laplacian PE
+pipelines</p></td>
+<td><p>29</p></td>
+<td><p>29</p></td>
+</tr>
+<tr class="row-odd"><td><p>Other convolutions</p></td>
+<td><p>GatedGraphConv, ResGatedGraphConv, NNConv, CGConv, MFConv, LEConv,
+FiLMConv, GeneralConv</p></td>
+<td><p>24</p></td>
+<td><p>24</p></td>
+</tr>
+<tr class="row-even"><td><p>Attention</p></td>
+<td><p>AGNNConv, FAConv (FAGCN), GeneralConv with attention</p></td>
+<td><p>7</p></td>
+<td><p>7</p></td>
+</tr>
+<tr class="row-odd"><td><p>Aggregations</p></td>
+<td><p>GENConv (softmax), lists of aggregations in SAGEConv and GENConv,
+PNAConv, PNA, DeeperGCN</p></td>
+<td><p>15</p></td>
+<td><p>13</p></td>
+</tr>
+<tr class="row-even"><td><p>Directed graphs</p></td>
+<td><p>DirGNNConv with GCNConv and SAGEConv</p></td>
+<td><p>6</p></td>
+<td><p>5</p></td>
+</tr>
+<tr class="row-odd"><td><p>Norms (4-layer GCN)</p></td>
+<td><p>no norm, GraphNorm, PairNorm, DiffGroupNorm, and MessageNorm in GENConv</p></td>
+<td><p>10</p></td>
+<td><p>10</p></td>
+</tr>
+<tr class="row-even"><td><p>Label propagation and non-GNN models</p></td>
+<td><p>LabelPropagation, CorrectAndSmooth, LINKX</p></td>
+<td><p>8</p></td>
+<td><p>8</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>A few rows (test accuracy in %, mean ± std over seeds):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+<col style="width: 15.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Dataset</p></th>
+<th class="head"><p>PyG</p></th>
+<th class="head"><p>mlx-graphs</p></th>
+<th class="head"><p>Gap</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GCNConv x2 (reference)</p></td>
+<td><p>Cora</p></td>
+<td><p>80.5 ± 0.6</p></td>
+<td><p>80.9 ± 0.5</p></td>
+<td><p>+0.4</p></td>
+</tr>
+<tr class="row-odd"><td><p>GCNII: 64 GCN2Conv layers</p></td>
+<td><p>Cora</p></td>
+<td><p>82.7 ± 1.4</p></td>
+<td><p>83.0 ± 1.0</p></td>
+<td><p>+0.3</p></td>
+</tr>
+<tr class="row-even"><td><p>DeeperGCN: 7 GENConv layers</p></td>
+<td><p>Cora</p></td>
+<td><p>75.2 ± 0.9</p></td>
+<td><p>75.4 ± 1.3</p></td>
+<td><p>+0.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>SAGEConv(aggr=[“mean”, “max”]) x2</p></td>
+<td><p>PubMed</p></td>
+<td><p>78.1 ± 0.7</p></td>
+<td><p>78.3 ± 0.4</p></td>
+<td><p>+0.1</p></td>
+</tr>
+<tr class="row-even"><td><p>LabelPropagation (deterministic)</p></td>
+<td><p>CiteSeer</p></td>
+<td><p>49.9</p></td>
+<td><p>49.9</p></td>
+<td><p>+0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>DirGNNConv(GCNConv) x2</p></td>
+<td><p>CiteSeer</p></td>
+<td><p>66.9 ± 0.7</p></td>
+<td><p>68.7 ± 1.4</p></td>
+<td><p>+1.8, mismatch</p></td>
+</tr>
+<tr class="row-even"><td><p>PNAConv x2</p></td>
+<td><p>Cora</p></td>
+<td><p>75.0 ± 2.0</p></td>
+<td><p>70.4 ± 1.8</p></td>
+<td><p>-4.6, mismatch</p></td>
+</tr>
+<tr class="row-odd"><td><p>PNAConv x2</p></td>
+<td><p>CiteSeer</p></td>
+<td><p>52.0 ± 2.8</p></td>
+<td><p>58.8 ± 2.1</p></td>
+<td><p>+6.8, mismatch</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Full table, with the training losses of both frameworks:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/node_results.md">node_results.md</a>
+(setup and notes:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/node_notes.md">node_notes.md</a>).</p>
+</section>
+<section id="graph-level-heterogeneous-link-and-knowledge-graph-models">
+<h3><a class="toc-backref" href="#id5" role="doc-backlink">Graph-level, heterogeneous, link and knowledge graph models</a><a class="headerlink" href="#graph-level-heterogeneous-link-and-knowledge-graph-models" title="Link to this heading">#</a></h3>
+<p><strong>34 configurations, all pass</strong>, most of them set up after PyG’s example
+scripts:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 45.0%" />
+<col style="width: 12.0%" />
+<col style="width: 13.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Task</p></th>
+<th class="head"><p>Models and datasets</p></th>
+<th class="head"><p>Configs</p></th>
+<th class="head"><p>Pass</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Graph classification</p></td>
+<td><p>GINE, PNA, TopK and SAG pooling, DGCNN, MultiAggregation, GraphNorm,
+Set2Set, DeepSets on MUTAG (10 seeds) and PROTEINS (5 seeds)</p></td>
+<td><p>17</p></td>
+<td><p>17</p></td>
+</tr>
+<tr class="row-odd"><td><p>Heterogeneous graphs</p></td>
+<td><p>HAN on IMDB, HGT on DBLP, RGAT and FastRGCN on DBLP as a homogeneous
+graph</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-even"><td><p>Link prediction</p></td>
+<td><p>GAE and VGAE on Cora and CiteSeer (and GAE with
+<code class="docutils literal notranslate"><span class="pre">train_test_split_edges</span></code>), LightGCN on MovieLens100K</p></td>
+<td><p>6</p></td>
+<td><p>6</p></td>
+</tr>
+<tr class="row-odd"><td><p>Self-supervised</p></td>
+<td><p>DeepGraphInfomax on Cora</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p>Knowledge graph embeddings</p></td>
+<td><p>TransE, DistMult, ComplEx, RotatE on FB15k-237</p></td>
+<td><p>4</p></td>
+<td><p>4</p></td>
+</tr>
+<tr class="row-odd"><td><p>Point clouds</p></td>
+<td><p>EdgeCNN and DynamicEdgeConv on synthetic point clouds</p></td>
+<td><p>2</p></td>
+<td><p>2</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For example, HGT on DBLP reaches 71.8 ± 1.8 % in PyG and 73.0 ± 2.5 % in
+mlx-graphs, GAE on Cora a test AUC of 90.7 % in both, and LightGCN a
+<a class="reference external" href="mailto:recall&#37;&#52;&#48;20">recall<span>&#64;</span>20</a> of 27.4 % in both. MUTAG has only 19-20 test graphs per split, so
+its accuracies move in steps of 5 points and its gaps are larger (up to 6
+points), within 1.5 paired standard errors. Full table:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/graph_results.md">graph_results.md</a>.</p>
+</section>
+<section id="samplers-and-loaders">
+<h3><a class="toc-backref" href="#id6" role="doc-backlink">Samplers and loaders</a><a class="headerlink" href="#samplers-and-loaders" title="Link to this heading">#</a></h3>
+<p>PyG’s own neighbour samplers, GraphSAINT, ShaDow, <code class="docutils literal notranslate"><span class="pre">ClusterData</span></code> and
+<code class="docutils literal notranslate"><span class="pre">knn</span></code> / <code class="docutils literal notranslate"><span class="pre">radius</span></code> need compiled extensions (<code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code>,
+<code class="docutils literal notranslate"><span class="pre">torch_sparse</span></code>, <code class="docutils literal notranslate"><span class="pre">torch_cluster</span></code>), so the samplers are checked against
+references that don’t:</p>
+<ul class="simple">
+<li><p><strong>Exactly, in the test suite</strong>: <code class="docutils literal notranslate"><span class="pre">RandomNodeLoader</span></code>, <code class="docutils literal notranslate"><span class="pre">ClusterLoader</span></code>,
+<code class="docutils literal notranslate"><span class="pre">DynamicBatchSampler</span></code> and <code class="docutils literal notranslate"><span class="pre">ImbalancedSampler</span></code> against PyG’s
+pure-Python classes; ShaDow subgraphs and full-fan-out <code class="docutils literal notranslate"><span class="pre">NeighborLoader</span></code>
+against PyG’s <code class="docutils literal notranslate"><span class="pre">k_hop_subgraph</span></code>; <code class="docutils literal notranslate"><span class="pre">knn</span></code> / <code class="docutils literal notranslate"><span class="pre">radius</span></code> against SciPy’s
+KD-tree; <code class="docutils literal notranslate"><span class="pre">KNNGraph</span></code> / <code class="docutils literal notranslate"><span class="pre">RadiusGraph</span></code> against PyG’s transforms.</p></li>
+<li><p><strong>Statistically</strong>: every seed node or item covered exactly once per epoch
+(<code class="docutils literal notranslate"><span class="pre">NeighborLoader</span></code>, <code class="docutils literal notranslate"><span class="pre">LinkNeighborLoader</span></code>, <code class="docutils literal notranslate"><span class="pre">ShaDowKHopSampler</span></code>,
+<code class="docutils literal notranslate"><span class="pre">RandomNodeLoader</span></code>, <code class="docutils literal notranslate"><span class="pre">ClusterLoader</span></code>); uniform neighbour sampling
+(chi-squared tests on the highest-degree nodes of Cora); class balance of
+<code class="docutils literal notranslate"><span class="pre">ImbalancedSampler</span></code>; batch budgets of <code class="docutils literal notranslate"><span class="pre">DynamicBatchSampler</span></code>; and the
+bias of GraphSAINT’s normalizations.</p></li>
+<li><p><strong>By training</strong>: a 2-layer GraphSAGE trained with each mini-batch method
+against full-batch training.</p></li>
+</ul>
+<p>Every mini-batch method lands within one standard deviation of full-batch
+training (test accuracy in %, 5 seeds):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 50.0%" />
+<col style="width: 25.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Training</p></th>
+<th class="head"><p>Cora</p></th>
+<th class="head"><p>PubMed</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Full batch, PyG</p></td>
+<td><p>80.3 ± 0.7</p></td>
+<td><p>76.9 ± 0.8</p></td>
+</tr>
+<tr class="row-odd"><td><p>Full batch, mlx-graphs</p></td>
+<td><p>80.2 ± 0.7</p></td>
+<td><p>77.3 ± 0.8</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">NeighborLoader</span></code> [10, 10]</p></td>
+<td><p>80.3 ± 0.9</p></td>
+<td><p>76.6 ± 0.4</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">GraphSAINTRandomWalkSampler</span></code></p></td>
+<td><p>80.3 ± 1.1</p></td>
+<td><p>77.0 ± 0.9</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">ClusterLoader</span></code> (20 parts, 5 per batch)</p></td>
+<td><p>79.4 ± 1.4</p></td>
+<td><p>76.9 ± 0.6</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">ShaDowKHopSampler</span></code> (depth 2, 10)</p></td>
+<td><p>80.2 ± 0.8</p></td>
+<td><p>76.9 ± 0.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>For link prediction, <code class="docutils literal notranslate"><span class="pre">LinkNeighborLoader</span></code> reaches a test AUC of
+84.3 ± 1.4 % on Cora (full batch: 84.4 ± 3.2 % in mlx-graphs, 83.3 ± 1.6 %
+in PyG) and 89.2 ± 0.7 % on PubMed (full batch: 90.1 % in both). Full
+results:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/sampler_results.md">sampler_results.md</a>.</p>
+</section>
+<section id="temporal-graph-networks">
+<h3><a class="toc-backref" href="#id7" role="doc-backlink">Temporal graph networks</a><a class="headerlink" href="#temporal-graph-networks" title="Link to this heading">#</a></h3>
+<p>TGN link prediction on JODIE Wikipedia, <code class="docutils literal notranslate"><span class="pre">examples/tgn_jodie.py</span></code> against
+PyG’s <code class="docutils literal notranslate"><span class="pre">examples/tgn.py</span></code>, with the same hyperparameters, 8 epochs, seeds 0
+and 1:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 40.0%" />
+<col style="width: 30.0%" />
+<col style="width: 30.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Run</p></th>
+<th class="head"><p>Test AP, seeds 0 / 1</p></th>
+<th class="head"><p>Test AUC, seeds 0 / 1</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>mlx-graphs</p></td>
+<td><p>0.957 / 0.955</p></td>
+<td><p>0.953 / 0.951</p></td>
+</tr>
+<tr class="row-odd"><td><p>PyG</p></td>
+<td><p>0.950 / 0.949</p></td>
+<td><p>0.946 / 0.948</p></td>
+</tr>
+<tr class="row-even"><td><p>PyG with the torch-scatter <code class="docutils literal notranslate"><span class="pre">scatter_argmax</span></code></p></td>
+<td><p>0.952 / 0.952</p></td>
+<td><p>0.949 / 0.952</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Without torch-scatter, PyG’s fallback <code class="docutils literal notranslate"><span class="pre">scatter_argmax</span></code> gives empty groups
+the index <code class="docutils literal notranslate"><span class="pre">dim_size</span> <span class="pre">-</span> <span class="pre">1</span></code>, so its <code class="docutils literal notranslate"><span class="pre">LastAggregator</span></code> copies an unrelated
+message to the nodes that have none instead of zeros. mlx-graphs follows the
+torch-scatter semantics, so the comparison also runs PyG with that function
+patched. Results:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/tgn_comparison/results.json">results.json</a>.
+The <a class="reference internal" href="tutorials/notebooks/temporal_graph_networks.html"><span class="doc">TGN tutorial</span></a>
+compares the two in more detail.</p>
+</section>
+<section id="gps-on-peptides-func">
+<h3><a class="toc-backref" href="#id8" role="doc-backlink">GPS on Peptides-func</a><a class="headerlink" href="#gps-on-peptides-func" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">GPSConv</span></code> (<code class="docutils literal notranslate"><span class="pre">examples/graph_gps_peptides.py</span></code>) against a PyG twin of the
+same model: 4 GPS layers (GINE and 4-head attention), the same data with
+random-walk encodings, Adam (lr 1e-3, L2 1e-5), 10 epochs, seeds 0 and 1.
+Average precision over the 10 tasks:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 30.0%" />
+<col style="width: 25.0%" />
+<col style="width: 20.0%" />
+<col style="width: 25.0%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Run</p></th>
+<th class="head"><p>Final train loss</p></th>
+<th class="head"><p>Best val AP</p></th>
+<th class="head"><p>Test AP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>PyG, seed 0</p></td>
+<td><p>0.2522</p></td>
+<td><p>0.4044</p></td>
+<td><p>0.3881</p></td>
+</tr>
+<tr class="row-odd"><td><p>PyG, seed 1</p></td>
+<td><p>0.2613</p></td>
+<td><p>0.4194</p></td>
+<td><p>0.4079</p></td>
+</tr>
+<tr class="row-even"><td><p>mlx-graphs, seed 0</p></td>
+<td><p>0.2588</p></td>
+<td><p>0.4447</p></td>
+<td><p>0.4288</p></td>
+</tr>
+<tr class="row-odd"><td><p>mlx-graphs, seed 1</p></td>
+<td><p>0.2553</p></td>
+<td><p>0.4437</p></td>
+<td><p>0.4268</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The full-model gradient check (above) gives the same loss and gradients
+within ~1 %. Details:
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/gps_peptides/README.md">benchmarks/gps_peptides</a>.</p>
+</section>
+<section id="to-hetero-on-dblp">
+<h3><a class="toc-backref" href="#id9" role="doc-backlink"><code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> on DBLP</a><a class="headerlink" href="#to-hetero-on-dblp" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">benchmarks/to_hetero/compare_dblp.py</span></code> trains <code class="docutils literal notranslate"><span class="pre">to_hetero(GraphSAGE)</span></code> and
+<code class="docutils literal notranslate"><span class="pre">to_hetero(GAT)</span></code> for author classification on DBLP, full batch, in both
+frameworks with the same data, architecture and optimizer (AdamW, lr 0.005,
+weight decay 0.001), and reports the test accuracy at the best validation
+epoch over several seeds. Mini-batch training (<code class="docutils literal notranslate"><span class="pre">NeighborLoader</span></code>,
+<code class="docutils literal notranslate"><span class="pre">HGTLoader</span></code>) runs in mlx-graphs only, since PyG’s heterogeneous samplers
+need <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code> or <code class="docutils literal notranslate"><span class="pre">torch-sparse</span></code>. Its results are not committed to the
+repository. The models it converts are also checked with copied weights in
+<code class="docutils literal notranslate"><span class="pre">tests/nn/test_to_hetero.py</span></code>, including on the full DBLP and IMDB graphs.</p>
+</section>
+<section id="remaining-mismatches">
+<h3><a class="toc-backref" href="#id10" role="doc-backlink">Remaining mismatches</a><a class="headerlink" href="#remaining-mismatches" title="Link to this heading">#</a></h3>
+<p>Three node classification configurations don’t pass.</p>
+<p><strong>PNAConv on Cora (-4.6) and CiteSeer (+6.8).</strong> The gaps have opposite
+signs. PNAConv on raw features, with amplification scalers, trains with large
+loss spikes in both frameworks: PyG’s seed 0 on PubMed jumps to a loss of
+3.0, and mlx-graphs’ seed 3 to 4.9 near the end. With copied weights on
+PubMed, the layer’s output and input gradients agree with PyG’s to 1e-4 and
+1e-8 (relative ~1e-3): the layer computes the same function, which points to
+the unstable training rather than to the layer. The PubMed row passes
+(-0.2), and so do the PNA model on Cora and CiteSeer (+1.7, +3.1) and PNA on
+MUTAG and PROTEINS.</p>
+<p><strong>DirGNNConv(GCNConv) on CiteSeer (+1.8).</strong> mlx-graphs is ahead: 68.7 ±
+1.4 % against PyG’s 66.9 ± 0.7 %, beyond 1 point and twice PyG’s small
+standard deviation. The training losses are close (0.006 / 0.008 over epochs
+25-75, 0.011 / 0.008 at the end, PyG / mlx-graphs), the Cora (+0.6) and
+PubMed (-0.4) rows pass, and with copied weights the layer gives the same
+outputs as PyG’s <code class="docutils literal notranslate"><span class="pre">DirGNNConv</span></code> (<code class="docutils literal notranslate"><span class="pre">tests/nn/conv/test_dir_gnn_conv.py</span></code>). No
+cause has been identified.</p>
+</section>
+<section id="bugs-found-and-fixed">
+<h3><a class="toc-backref" href="#id11" role="doc-backlink">Bugs found and fixed</a><a class="headerlink" href="#bugs-found-and-fixed" title="Link to this heading">#</a></h3>
+<p>Found by the training and sampler comparisons, each fixed with a regression
+test:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">SAGEConv</span></code> with a non-linear aggregation (<code class="docutils literal notranslate"><span class="pre">&quot;max&quot;</span></code>, <code class="docutils literal notranslate"><span class="pre">&quot;min&quot;</span></code>,
+<code class="docutils literal notranslate"><span class="pre">&quot;std&quot;</span></code>, lists, modules) and more input than output features projected
+the features before aggregating (<code class="docutils literal notranslate"><span class="pre">max(W</span> <span class="pre">x)</span></code> instead of PyG’s <code class="docutils literal notranslate"><span class="pre">W</span>
+<span class="pre">max(x)</span></code>), a trick only valid for sum and mean. Max error against PyG with
+copied weights: 1.7.</p></li>
+<li><p>Lists of aggregations: <code class="docutils literal notranslate"><span class="pre">SAGEConv</span></code> crashed, and <code class="docutils literal notranslate"><span class="pre">GENConv</span></code> did not
+accept them. Both now size their projections like PyG’s. The other layers
+with a projection after the aggregation crashed with a shape error, or for
+<code class="docutils literal notranslate"><span class="pre">GATConv</span></code> / <code class="docutils literal notranslate"><span class="pre">GATv2Conv</span></code> returned twice as many rows; they now refuse
+concatenating lists with a clear error (<code class="docutils literal notranslate"><span class="pre">supports_concat_aggr</span></code>).</p></li>
+<li><p>NaN gradients from L2 norms at zero in <code class="docutils literal notranslate"><span class="pre">AGNNConv</span></code>, <code class="docutils literal notranslate"><span class="pre">MessageNorm</span></code> and
+<code class="docutils literal notranslate"><span class="pre">GENConv(msg_norm=True)</span></code>: a node whose features are all zero (common
+after ReLU and dropout) made every gradient NaN. Seen as AGNN on PubMed
+going NaN at epoch 145, and GENConv with MessageNorm reaching 66 % instead
+of 79 % on Cora (one seed).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MixHopConv</span></code> stored its per-power layers in a dict that <code class="docutils literal notranslate"><span class="pre">load_weights</span></code>
+could not load.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">AddLaplacianEigenvectorPE</span></code> did not converge on Cora (float64 eigensolver
+on float32 values).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DirGNNConv(GCNConv(...))</span></code>, PyG’s usual way to build it, raised an error.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">DirGNNConv(SAGEConv)</span></code> trained 2-3 points below PyG with twice its
+training loss: <code class="docutils literal notranslate"><span class="pre">SAGEConv</span></code> had no <code class="docutils literal notranslate"><span class="pre">root_weight</span></code>, so both directions kept
+a root projection. <code class="docutils literal notranslate"><span class="pre">SAGEConv</span></code> now has PyG’s <code class="docutils literal notranslate"><span class="pre">root_weight</span></code>, and the rows
+pass (+0.9 / +0.7 / +0.5).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">TUDataset</span></code> dropped edge labels (e.g. MUTAG’s bond types) and did not
+reorder edge features with the edges. MUTAG, PROTEINS and NCI1 now equal
+PyG’s arrays.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">IMDB</span></code> stored its labels under <code class="docutils literal notranslate"><span class="pre">&quot;movies&quot;</span></code> instead of the <code class="docutils literal notranslate"><span class="pre">&quot;movie&quot;</span></code>
+node type.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">HeteroDictLinear</span></code> (used by <code class="docutils literal notranslate"><span class="pre">HGTConv</span></code>) initialized with Glorot
+weights instead of <code class="docutils literal notranslate"><span class="pre">torch.nn.Linear</span></code>’s: HGT on DBLP reached 76.9 ± 2.3 %
+against PyG’s 71.8 ± 1.8 %. With PyG’s initialization it reaches
+73.0 ± 2.5 %.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GINEConv</span></code>’s edge projection was also initialized with Glorot weights
+(GINE on MUTAG: 80.0 ± 10.5 % before the fix, 82.0 ± 7.1 % after,
+78.0 ± 13.6 % in PyG).</p></li>
+<li><p>GraphSAINT’s <code class="docutils literal notranslate"><span class="pre">edge_norm</span></code> used the count of the edge’s source node, as
+PyG does, instead of its target (the paper’s definition). On Cora, the
+median relative error of the normalized aggregation was about 50 % with
+the source count; with the target count it is sampling noise that shrinks
+with <code class="docutils literal notranslate"><span class="pre">sample_coverage</span></code>.</p></li>
+</ul>
+<p>Other differences from PyG fixed in the same release (see the
+<a class="reference external" href="https://github.com/mlx-graphs/mlx-graphs/blob/main/CHANGELOG.md">changelog</a>):</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">LayerNormalization(mode=&quot;graph&quot;)</span></code> gave wrong shapes with batch indices,
+and <code class="docutils literal notranslate"><span class="pre">mode=&quot;node&quot;</span></code> ignored its own <code class="docutils literal notranslate"><span class="pre">weight</span></code> and <code class="docutils literal notranslate"><span class="pre">bias</span></code>. Both now match
+PyG’s <code class="docutils literal notranslate"><span class="pre">LayerNorm</span></code>.</p></li>
+<li><p>Max and min aggregations gave the full gradient to every tied value (e.g.
+the identical messages of duplicate edges). They now split it equally, as
+PyG does.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">MultiAggregation(mode=&quot;std&quot;)</span></code> had a NaN gradient for sets of a single
+element.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">GIN</span></code> and <code class="docutils literal notranslate"><span class="pre">EdgeCNN</span></code> did not apply the model’s <code class="docutils literal notranslate"><span class="pre">act</span></code> and <code class="docutils literal notranslate"><span class="pre">norm</span></code> to
+the MLPs inside their convolutions, as PyG does.</p></li>
+</ul>
+</section>
+<section id="where-mlx-graphs-differs-from-pyg-on-purpose">
+<h3><a class="toc-backref" href="#id12" role="doc-backlink">Where mlx-graphs differs from PyG on purpose</a><a class="headerlink" href="#where-mlx-graphs-differs-from-pyg-on-purpose" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong>GraphSAINT normalization</strong>: target count in <code class="docutils literal notranslate"><span class="pre">edge_norm</span></code> (see above).</p></li>
+<li><p><strong>GraphSAINT edge sampler</strong>: mlx-graphs samples edges with the paper’s
+probabilities, <span class="math notranslate nohighlight">\(1/\deg(u) + 1/\deg(v)\)</span>. PyG’s
+<code class="docutils literal notranslate"><span class="pre">GraphSAINTEdgeSampler</span></code> computes the inverse weighting, which favours
+edges between hubs. At the same number of edges, the paper’s
+probabilities give a 3.5-4.4x smaller standard deviation of the estimated
+aggregation.</p></li>
+<li><p><strong>DynamicBatchSampler</strong> with <code class="docutils literal notranslate"><span class="pre">skip_too_big=True</span></code> yields every graph once;
+PyG re-yields the graphs that follow a skipped one. Without
+<code class="docutils literal notranslate"><span class="pre">skip_too_big</span></code>, the batches are the same as PyG’s.</p></li>
+<li><p><strong>TGN’s</strong> <code class="docutils literal notranslate"><span class="pre">LastAggregator</span></code> gives zeros to nodes without messages, as PyG
+does with torch-scatter (see above).</p></li>
+<li><p><strong>TopK and SAG pooling</strong> break ties between equal scores differently. Both
+are valid, and training quality is the same.</p></li>
+</ul>
+</section>
+</section>
+<section id="reproducing">
+<h2><a class="toc-backref" href="#id13" role="doc-backlink">Reproducing</a><a class="headerlink" href="#reproducing" title="Link to this heading">#</a></h2>
+<p>Install the test and benchmark dependencies (some harnesses also use
+scikit-learn), then run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s1">'.[test,benchmarks]'</span>
+
+<span class="c1"># layer-level parity (add --datasets for the slow tests that download data)</span>
+pytest<span class="w"> </span>tests
+
+<span class="c1"># node classification (--configs gcn arma ... for a subset, --summarize for the table only)</span>
+python<span class="w"> </span>benchmarks/quality/node_quality.py
+
+<span class="c1"># graph-level, heterogeneous, link and KG models (--groups tu kge ... for a subset)</span>
+python<span class="w"> </span>benchmarks/quality/graph_quality.py
+
+<span class="c1"># samplers and loaders (about 15 minutes)</span>
+python<span class="w"> </span>benchmarks/run_capped.py<span class="w"> </span>--gb<span class="w"> </span><span class="m">6</span><span class="w"> </span>--<span class="w"> </span>python<span class="w"> </span>benchmarks/quality/sampler_quality.py<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>--data-dir<span class="w"> </span>.mlx_graphs_data<span class="w"> </span>--seeds<span class="w"> </span><span class="m">0</span><span class="w"> </span><span class="m">1</span><span class="w"> </span><span class="m">2</span><span class="w"> </span><span class="m">3</span><span class="w"> </span><span class="m">4</span>
+
+<span class="c1"># TGN on JODIE Wikipedia</span>
+python<span class="w"> </span>benchmarks/tgn_comparison/compare.py<span class="w"> </span>--data<span class="w"> </span>&lt;data_dir&gt;<span class="w"> </span>--epochs<span class="w"> </span><span class="m">8</span>
+
+<span class="c1"># GPS on Peptides-func: export the data, train both, check the gradients</span>
+python<span class="w"> </span>benchmarks/gps_peptides/export_npz.py<span class="w"> </span>&lt;data_dir&gt;
+python<span class="w"> </span>examples/graph_gps_peptides.py<span class="w"> </span>--data_dir<span class="w"> </span>&lt;data_dir&gt;<span class="w"> </span>--epochs<span class="w"> </span><span class="m">10</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">0</span>
+python<span class="w"> </span>benchmarks/gps_peptides/gps_pyg.py<span class="w"> </span>--data_dir<span class="w"> </span>&lt;data_dir&gt;<span class="w"> </span>--epochs<span class="w"> </span><span class="m">10</span><span class="w"> </span>--seed<span class="w"> </span><span class="m">0</span>
+python<span class="w"> </span>benchmarks/gps_peptides/grad_parity.py<span class="w"> </span>&lt;data_dir&gt;
+
+<span class="c1"># to_hetero on DBLP</span>
+python<span class="w"> </span>benchmarks/to_hetero/compare_dblp.py<span class="w"> </span>--data_dir<span class="w"> </span>.mlx_graphs_data
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The harnesses run every configuration in its own process under a hard
+memory cap, and kill it above the cap: 6 GB by default for the node and
+graph harnesses (<code class="docutils literal notranslate"><span class="pre">--memory-gb</span></code>), 4 GB for the TGN and <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>
+comparisons. The memory is the process’ physical footprint, as shown by
+Activity Monitor, which, unlike RSS, includes the GPU (Metal)
+allocations of MLX and PyTorch MPS. Run any other script the same
+way with <code class="docutils literal notranslate"><span class="pre">python</span> <span class="pre">benchmarks/run_capped.py</span> <span class="pre">--gb</span> <span class="pre">&lt;cap&gt;</span> <span class="pre">--</span> <span class="pre">&lt;command&gt;</span></code>.
+Mini-batches of varying shapes make MLX’s buffer cache grow: the
+sampler harness caps it with <code class="docutils literal notranslate"><span class="pre">mx.set_cache_limit</span></code>.</p>
+</div>
+<p>The node and graph harnesses append one line per run to
+<code class="docutils literal notranslate"><span class="pre">node_results.jsonl</span></code> / <code class="docutils literal notranslate"><span class="pre">graph_results.jsonl</span></code> and skip the runs already
+there, so an interrupted run resumes where it stopped.</p>
+</section>
+<section id="not-covered">
+<h2><a class="toc-backref" href="#id14" role="doc-backlink">Not covered</a><a class="headerlink" href="#not-covered" title="Link to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Training quality on large graphs</strong> (Amazon, ogbn): out of the memory
+budget of these checks. They are part of the speed <a class="reference internal" href="benchmarks.html"><span class="doc">Benchmarks</span></a>,
+which also record accuracy.</p></li>
+<li><p><strong>Mini-batch training in the node classification harness</strong>, which trains
+full batch only. Mini-batch training is checked for GraphSAGE by the
+sampler harness, and for <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> models in mlx-graphs only.</p></li>
+<li><p><strong>PyG’s compiled samplers and operations</strong>: PyG’s neighbour samplers,
+GraphSAINT, ShaDow, <code class="docutils literal notranslate"><span class="pre">ClusterData</span></code> (METIS), <code class="docutils literal notranslate"><span class="pre">DynamicEdgeConv</span></code> and
+<code class="docutils literal notranslate"><span class="pre">knn_graph</span></code> need <code class="docutils literal notranslate"><span class="pre">pyg-lib</span></code>, <code class="docutils literal notranslate"><span class="pre">torch_sparse</span></code> or <code class="docutils literal notranslate"><span class="pre">torch_cluster</span></code>,
+which were not installed. The samplers were checked against references
+instead, and <code class="docutils literal notranslate"><span class="pre">ClusterLoader</span></code> was trained with the dependency-free
+balanced partitioner, not METIS.</p></li>
+<li><p><strong>NCI1</strong> graph classification, which did not fit in the time budget.</p></li>
+<li><p><strong>Converged knowledge graph embeddings</strong>: the KGE models trained for 20-40
+epochs instead of PyG’s 500, so the comparison covers the early training
+trajectories, not converged models.</p></li>
+<li><p><strong>Attention variants of GeneralConv</strong> on CiteSeer and PubMed (Cora only).</p></li>
+<li><p><strong>Compilation</strong>: <code class="docutils literal notranslate"><span class="pre">mx.compile</span></code> for mlx-graphs and <code class="docutils literal notranslate"><span class="pre">torch.compile</span></code> for
+PyG.</p></li>
+</ul>
+</section>
+</section>
+
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="benchmarks.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Benchmarks</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/data/index.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Data</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal" tabindex="-1"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#method">Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#results">Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#layers">Layers</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#node-classification">Node classification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#graph-level-heterogeneous-link-and-knowledge-graph-models">Graph-level, heterogeneous, link and knowledge graph models</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#samplers-and-loaders">Samplers and loaders</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-graph-networks">Temporal graph networks</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#gps-on-peptides-func">GPS on Peptides-func</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#to-hetero-on-dblp"><code class="docutils literal notranslate"><span class="pre">to_hetero</span></code> on DBLP</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remaining-mismatches">Remaining mismatches</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#bugs-found-and-fixed">Bugs found and fixed</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#where-mlx-graphs-differs-from-pyg-on-purpose">Where mlx-graphs differs from PyG on purpose</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reproducing">Reproducing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#not-covered">Not covered</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By mlx-graphs contributors
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2024, mlx-graphs contributors.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

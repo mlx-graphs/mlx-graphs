@@ -14,6 +14,8 @@
 
 	.. autosummary::
 	
+	     ~Dataset.index_select
+	     ~Dataset.shuffle
 	
 	
 
@@ -24,8 +26,10 @@
 	.. autosummary::
 	
 	  ~Dataset.name
+	  ~Dataset.num_classes
 	  ~Dataset.num_edge_classes
 	  ~Dataset.num_edge_features
+	  ~Dataset.num_features
 	  ~Dataset.num_graph_classes
 	  ~Dataset.num_graph_features
 	  ~Dataset.num_graphs
