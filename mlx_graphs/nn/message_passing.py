@@ -6,6 +6,10 @@ from typing import Any, Dict, List, Literal, Optional, Tuple, Union, get_args
 import mlx.core as mx
 import mlx.nn as nn
 
+from mlx_graphs.nn.kernels.csr_softmax_spmm import (
+    csr_softmax_spmm,
+    supports_metal_csr_softmax_spmm,
+)
 from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 # Fused SpMM kernels live in mlx-cluster. They are optional: without them (or
@@ -44,6 +48,7 @@ if HAS_FUSED_KERNELS:
 # Global switch, mainly for benchmarks and tests (same model, both paths).
 _fused_enabled: bool = True
 _fused_format_override: Optional[FusedFormat] = None
+_fused_softmax_spmm: bool = False
 
 
 def set_fused_message_passing(
@@ -70,21 +75,31 @@ def is_fused_message_passing_enabled() -> bool:
 
 
 @contextmanager
-def fused_message_passing_mode(enabled: bool, format: Optional[FusedFormat] = None):
+def fused_message_passing_mode(
+    enabled: bool,
+    format: Optional[FusedFormat] = None,
+    *,
+    softmax_spmm: Optional[bool] = None,
+):
     """Context manager version of :func:`set_fused_message_passing`.
+
+    Pass ``softmax_spmm=True`` to try the experimental fused neighbor softmax
+    and weighted sum. It requires CSR and skips active attention dropout.
 
     .. code-block:: python
 
         with fused_message_passing_mode(False):
             out_reference = model(edge_index, x)  # gather-scatter
     """
-    global _fused_enabled, _fused_format_override
-    previous = (_fused_enabled, _fused_format_override)
+    global _fused_enabled, _fused_format_override, _fused_softmax_spmm
+    previous = (_fused_enabled, _fused_format_override, _fused_softmax_spmm)
     set_fused_message_passing(enabled, format)
+    if softmax_spmm is not None:
+        _fused_softmax_spmm = softmax_spmm
     try:
         yield
     finally:
-        _fused_enabled, _fused_format_override = previous
+        _fused_enabled, _fused_format_override, _fused_softmax_spmm = previous
 
 
 class _CSREntry:
@@ -160,6 +175,15 @@ class _CSRCache:
             # possible while tracing (edge_index is an input of mx.compile).
             entry.failed = True
         return entry.csr
+
+    def get_cached(self, edge_index: mx.array, num_rows: int, num_cols: int):
+        """Return prepared CSR without converting or counting a new use."""
+        key = (id(edge_index), num_rows, num_cols)
+        entry = self._entries.get(key)
+        if entry is not None and entry.csr is not None:
+            self._entries.move_to_end(key)
+            return entry.csr
+        return None
 
     def clear(self):
         self._entries.clear()
@@ -476,6 +500,54 @@ class MessagePassing(nn.Module):
         )
 
         return output
+
+    def _softmax_aggregate(
+        self,
+        edge_index: mx.array,
+        logits: mx.array,
+        node_features: Union[mx.array, Tuple[mx.array, mx.array]],
+        dropout: Optional[nn.Dropout],
+    ) -> mx.array:
+        """Normalize incoming edge logits and apply their weights to source values."""
+        values, destinations = (
+            node_features
+            if isinstance(node_features, tuple)
+            else (node_features, node_features)
+        )
+        num_rows = destinations.shape[0]
+        if (
+            _fused_softmax_spmm
+            and self.aggr == "add"
+            and (dropout is None or not dropout.training)
+            and type(self).propagate is MessagePassing.propagate
+            and type(self).message_and_aggregate is MessagePassing.message_and_aggregate
+            and self._can_fuse(
+                edge_index, node_features, {"edge_weights": logits}, None
+            )
+            and supports_metal_csr_softmax_spmm(logits, values, num_rows)
+        ):
+            fmt = _fused_format_override or self._fused_format
+            if fmt == "csr":
+                csr = _csr_cache.get(edge_index, num_rows, values.shape[0])
+            elif fmt == "auto":
+                csr = _csr_cache.get_cached(edge_index, num_rows, values.shape[0])
+            else:
+                csr = None
+            if csr is not None:
+                self.num_nodes = num_rows
+                aggregated = csr_softmax_spmm(
+                    csr.rowptr, csr.col, logits, values, permutation=csr.perm
+                )
+                return self.update_nodes(aggregated=aggregated)
+
+        weights = scatter(logits, edge_index[1], num_rows, aggr="softmax")
+        if dropout is not None:
+            weights = dropout(weights)
+        return self.propagate(
+            edge_index=edge_index,
+            node_features=node_features,
+            message_kwargs={"edge_weights": weights},
+        )
 
     def _can_fuse(
         self,
