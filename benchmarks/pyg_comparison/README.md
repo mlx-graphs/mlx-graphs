@@ -5,7 +5,7 @@ both of PyTorch's backends: MPS (the Apple GPU) and CPU.
 
 ```bash
 pip install -e '.[benchmarks]'   # or: pip install torch torch_geometric ogb matplotlib
-python benchmarks/pyg_comparison/run.py       # ~1.5 hours -> results/<chip>/<version>/
+python -m benchmarks.pyg_comparison.run      # ~1.5 hours -> results/<chip>/<version>/
 python benchmarks/pyg_comparison/plot.py      # figures/, results.md and the docs page of that version
 python benchmarks/pyg_comparison/history.py   # results/<chip>/history.md: all versions
 ```
@@ -29,10 +29,12 @@ PyG / OGB and only uses layers that exist in every version, and workers import
 release, run the harness from a worktree of it:
 
 ```bash
-git worktree add ../mlx-graphs-v0.0.11 v0.0.11      # any branch, tag or commit
-cp -r benchmarks/pyg_comparison ../mlx-graphs-v0.0.11/benchmarks/  # if it has no harness
-python ../mlx-graphs-v0.0.11/benchmarks/pyg_comparison/run.py \
-    --out benchmarks/pyg_comparison/results/<chip>/<label>   # keep results here
+git worktree add ../mlx-graphs-v0.0.11 v0.0.11
+cp benchmarks/__init__.py benchmarks/common.py benchmarks/versions.py \
+    benchmarks/workloads.py ../mlx-graphs-v0.0.11/benchmarks/
+cp -r benchmarks/pyg_comparison ../mlx-graphs-v0.0.11/benchmarks/
+output="$PWD/benchmarks/pyg_comparison/results/CHIP/LABEL"
+(cd ../mlx-graphs-v0.0.11 && python -m benchmarks.pyg_comparison.run --out "$output")
 python benchmarks/pyg_comparison/history.py
 ```
 

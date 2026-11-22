@@ -5,6 +5,8 @@ This folder contains benchmarks for mlx-graphs.
 They're divided in
 - pyg_comparison: the current end-to-end comparison with PyTorch Geometric
   (layers, node classification, graph classification), with figures. Start here.
+- [kernels](kernels/README.md) compares implementations of individual kernels
+  and measures their impact on training.
 - architectural: used to make architectural decisions
 - framework comparison: older comparisons with other frameworks. The DGL and
   torch_cluster scripts need `pip install dgl torch_cluster`, which are not
