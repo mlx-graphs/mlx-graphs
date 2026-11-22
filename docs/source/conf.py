@@ -1,5 +1,6 @@
 import os
 import sys
+from importlib.metadata import version as package_version
 
 sys.path.insert(0, os.path.abspath("../.."))
 autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster", "torch", "torch_geometric"]
@@ -9,7 +10,7 @@ autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster", "torch", "torch_geomet
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.1.0"
+release = package_version("mlx-graphs")
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration

@@ -1,52 +1,201 @@
 name: Release Python Package
 
 on:
-  release:
-    types: [published]
+  workflow_run:
+    workflows: [Main checks]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
 
+# Completion events can arrive out of order. The planner reads main in order.
+concurrency:
+  group: pypi-release
+  queue: max
+
+permissions: {}
 
 jobs:
-  build:
-    name: Build distribution 📦
+  prepare:
+    if: >-
+      github.repository == 'mlx-graphs/mlx-graphs' && github.ref == 'refs/heads/main' &&
+      (github.event_name == 'workflow_dispatch' || (github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_repository.full_name == github.repository))
     runs-on: ubuntu-latest
-
+    permissions:
+      actions: read
+      contents: read
+    outputs:
+      sha: ${{ steps.plan.outputs.sha }}
+      previous_tag: ${{ steps.plan.outputs.previous_tag }}
+      tag: ${{ steps.plan.outputs.tag || steps.version.outputs.tag }}
+      artifact_run_id: ${{ steps.plan.outputs.artifact_run_id || github.run_id }}
+      artifact_id: ${{ steps.plan.outputs.artifact_id || steps.upload.outputs.artifact-id }}
     steps:
-    - uses: actions/checkout@v4
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: "3.12"
-    - name: Install pypa/build
-      run: >-
-        python3 -m
-        pip install
-        build
-        --user
-    - name: Build a binary wheel and a source tarball
-      run: python3 -m build
-    - name: Store the distribution packages
-      uses: actions/upload-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Select next green commit
+        id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python .github/scripts/prepare_release.py
+      - name: Calculate and validate the release version
+        id: version
+        if: steps.plan.outputs.sha != '' && steps.plan.outputs.tag == ''
+        env:
+          RELEASE_SHA: ${{ steps.plan.outputs.sha }}
+          PREVIOUS_TAG: ${{ steps.plan.outputs.previous_tag }}
+        run: |
+          git switch -C main "$RELEASE_SHA"
+          python -m pip install 'python-semantic-release==10.7.0' build twine
+          version=$(semantic-release version --print)
+          if [[ "v$version" == "$PREVIOUS_TAG" ]]; then
+            version=$(semantic-release version --patch --print)
+          fi
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ || "v$version" == "$PREVIOUS_TAG" ]]; then
+            echo "::error::Python Semantic Release did not produce a new stable version"
+            exit 1
+          fi
+          git tag "v$version" "$RELEASE_SHA"
+          echo "tag=v$version" >> "$GITHUB_OUTPUT"
+      - name: Build and check distribution files
+        if: steps.version.outputs.tag != ''
+        env:
+          RELEASE_TAG: ${{ steps.version.outputs.tag }}
+        run: |
+          python -m build
+          python -m twine check --strict dist/*
+          version=${RELEASE_TAG#v}
+          test -f "dist/mlx_graphs-$version-py3-none-any.whl"
+          test -f "dist/mlx_graphs-$version.tar.gz"
+      - uses: actions/upload-artifact@v4
+        id: upload
+        if: steps.version.outputs.tag != ''
+        with:
+          name: python-package-distributions-${{ steps.version.outputs.tag }}-${{ github.run_attempt }}
+          path: dist/
+          if-no-files-found: error
+
+  reserve:
+    needs: prepare
+    if: needs.prepare.outputs.artifact_id != ''
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Tag the tested commit and record its build artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ needs.prepare.outputs.sha }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          ARTIFACT_RUN_ID: ${{ needs.prepare.outputs.artifact_run_id }}
+          ARTIFACT_ID: ${{ needs.prepare.outputs.artifact_id }}
+        run: |
+          message="mlx-graphs release artifact: $ARTIFACT_RUN_ID $ARTIFACT_ID"
+          ref="repos/$GITHUB_REPOSITORY/git/ref/tags/$RELEASE_TAG"
+          if tag_object=$(gh api "$ref" --jq '.object.sha' 2>/dev/null); then
+            gh api "repos/$GITHUB_REPOSITORY/git/tags/$tag_object" |
+              jq -e --arg sha "$RELEASE_SHA" --arg message "$message" \
+                '.object.sha == $sha and (.message | rtrimstr("\n")) == $message'
+            exit
+          fi
+          tag_object=$(gh api "repos/$GITHUB_REPOSITORY/git/tags" \
+            -f tag="$RELEASE_TAG" -f message="$message" -f object="$RELEASE_SHA" \
+            -f type=commit --jq .sha)
+          gh api "repos/$GITHUB_REPOSITORY/git/refs" \
+            -f ref="refs/tags/$RELEASE_TAG" -f sha="$tag_object" --silent
 
   publish-to-pypi:
-    name: >-
-      Publish Python 🐍 distribution 📦 to PyPI
-    needs:
-    - build
+    needs: [prepare, reserve]
     runs-on: ubuntu-latest
     environment:
       name: release
-      url: https://pypi.org/p/mlx-graphs
+      url: https://pypi.org/project/mlx-graphs/
     permissions:
+      actions: read
       id-token: write
-
     steps:
-    - name: Download all the dists
-      uses: actions/download-artifact@v4
-      with:
-        name: python-package-distributions
-        path: dist/
-    - name: Publish distribution 📦 to PyPI
-      uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: actions/download-artifact@v5
+        with:
+          artifact-ids: ${{ needs.prepare.outputs.artifact_id }}
+          run-id: ${{ needs.prepare.outputs.artifact_run_id }}
+          github-token: ${{ github.token }}
+          path: dist/
+      - name: Verify files already on PyPI before a retry
+        id: pypi
+        env:
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import os
+          from pathlib import Path
+          from urllib.error import HTTPError
+          from urllib.request import urlopen
+
+          version = os.environ['RELEASE_TAG'].removeprefix('v')
+          local = {path.name: hashlib.sha256(path.read_bytes()).hexdigest()
+                   for path in Path('dist').iterdir()}
+          expected = {f'mlx_graphs-{version}-py3-none-any.whl', f'mlx_graphs-{version}.tar.gz'}
+          if local.keys() != expected:
+              raise SystemExit(f'Unexpected distribution files for {version}')
+          try:
+              with urlopen(f'https://pypi.org/pypi/mlx-graphs/{version}/json', timeout=30) as response:
+                  published = json.load(response)['urls']
+          except HTTPError as error:
+              if error.code != 404:
+                  raise
+              published = []
+          for file in published:
+              if local.get(file['filename']) != file['digests']['sha256']:
+                  raise SystemExit(f"PyPI already has a different file for {version}: {file['filename']}")
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              print(f'complete={str(len(published) == len(expected)).lower()}', file=output)
+          PY
+      - name: Publish missing distributions to PyPI
+        if: steps.pypi.outputs.complete != 'true'
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          skip-existing: true
+
+  publish-docs:
+    needs: [prepare, publish-to-pypi]
+    uses: ./.github/workflows/publish_docs.yml
+    permissions:
+      contents: write
+    with:
+      ref: refs/tags/${{ needs.prepare.outputs.tag }}
+
+  finish:
+    needs: [prepare, publish-docs]
+    runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: write
+    steps:
+      - name: Publish the GitHub Release and continue the queue
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_SHA: ${{ needs.prepare.outputs.sha }}
+          RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
+          PREVIOUS_TAG: ${{ needs.prepare.outputs.previous_tag }}
+        run: |
+          if draft=$(gh release view "$RELEASE_TAG" --json isDraft --jq .isDraft 2>/dev/null); then
+            if [[ "$draft" == true ]]; then
+              gh release edit "$RELEASE_TAG" --draft=false --latest
+            fi
+          else
+            gh release create "$RELEASE_TAG" --verify-tag --generate-notes \
+              --notes-start-tag "$PREVIOUS_TAG" --title "$RELEASE_TAG" --latest
+          fi
+          main_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
+          if [[ "$main_sha" != "$RELEASE_SHA" ]]; then
+            gh workflow run release.yml --ref main
+          fi

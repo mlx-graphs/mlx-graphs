@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools>=80", "setuptools-scm>=9.2,<10"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlx-graphs"
-version = "0.2.0"
+dynamic = ["version"]
 description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
@@ -43,7 +43,7 @@ test = [
 ]
 docs = [
   "ipython==8.21.0",
-  "sphinx>=7.2.6",
+  "sphinx>=7.2.6,<8.2", # sphinx-autodoc-typehints 1.25.2 patches the older API.
   "sphinx-book-theme==1.1.0",
   "sphinx-autodoc-typehints==1.25.2",
   "nbsphinx==0.9.3",
@@ -62,6 +62,24 @@ Homepage = "https://mlx-graphs.github.io/mlx-graphs/"
 Documentation = "https://mlx-graphs.github.io/mlx-graphs/"
 Repository = "https://github.com/mlx-graphs/mlx-graphs"
 Issues = "https://github.com/mlx-graphs/mlx-graphs/issues"
+
+[tool.setuptools_scm]
+parentdir_prefix_version = "mlx-graphs-"
+
+[tool.semantic_release]
+commit_parser = "conventional"
+tag_format = "v{version}"
+allow_zero_version = true
+major_on_zero = false
+
+[tool.semantic_release.branches.main]
+match = "^main$"
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["feat", "build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
+minor_tags = ["feat"]
+patch_tags = ["build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
+parse_squash_commits = false
 
 
 [tool.ruff]
