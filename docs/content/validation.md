@@ -119,6 +119,18 @@ All six are within 2 PyG standard deviations (3 to 7 points with 5 random splits
 
 PointNet++ (PyG's `examples/pointnet2_classification.py`: `fps`, `radius`, `PointNetConv`) trained for 5 epochs on ModelNet10, on the same fixed clouds of 1024 points sampled through mlx-graphs' `ModelNet` and `SamplePoints`, reaches a test accuracy of 80.9 % in mlx-graphs and 82.5 % in PyG (best epoch: 80.9 % and 82.9 %), with training losses of 0.26 and 0.31. DGCNN (`DynamicEdgeConv`, PyG's `examples/dgcnn_classification.py`) reaches 78.0 % and 80.2 % after 3 epochs. The point cloud layers, `fps`, `voxel_grid`, `nearest`, `graclus` and the point cloud transforms are also compared with PyG in the test suite (`fps` picks the same points as PyG with `random_start=False`, in 1.9 ms with its Metal kernel against 132 ms for `torch_cluster` on the CPU, for 32 clouds of 1024 points). Full table: [pointcloud_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/pointcloud_results.md).
 
+### Molecular models
+
+SchNet, DimeNet, DimeNet++ and AttentiveFP match PyG with copied weights (outputs, and gradients with respect to the parameters and to the atom positions, `tests/nn/models/test_molecular.py`). They were also trained in both frameworks (`benchmarks/quality/molecular_quality.py`, small budget): SchNet and DimeNet++ on the HOMO-LUMO gap of a random QM9 subset, AttentiveFP on ESOL (one-hot `from_smiles` features, random 80/10/10 splits).
+
+| Model       | Task                                                     | PyG           | mlx-graphs    |
+|-------------|----------------------------------------------------------|---------------|---------------|
+| SchNet      | QM9 gap, 10k molecules, 10 epochs, test MAE (eV), 2 seeds | 0.377 ± 0.004 | 0.384 ± 0.019 |
+| DimeNet++   | QM9 gap, 5k molecules, 6 epochs, test MAE (eV), 1 seed    | 0.270         | 0.279         |
+| AttentiveFP | ESOL, 100 epochs, test RMSE, 3 seeds                      | 0.606 ± 0.058 | 0.593 ± 0.034 |
+
+Full table, with the time per epoch: [molecular_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/molecular_results.md).
+
 ### Samplers and loaders
 
 PyG's own neighbour samplers, GraphSAINT, ShaDow, `ClusterData` and `knn` / `radius` need compiled extensions (`pyg-lib`, `torch_sparse`, `torch_cluster`), so the samplers are checked against references that don't:
@@ -265,6 +277,9 @@ python benchmarks/quality/pooling_quality.py
 
 # PointNet++ and DGCNN on ModelNet10 (--models pointnet2 --epochs 5 for a subset)
 python benchmarks/quality/pointcloud_quality.py
+
+# SchNet and DimeNet++ on QM9, AttentiveFP on ESOL (--tasks attentivefp for a subset)
+python benchmarks/quality/molecular_quality.py
 
 # large graphs: datasets equal to PyG's, GraphSAGE training, temporal sampling, feature store
 python benchmarks/run_capped.py --gb 24 -- python benchmarks/quality/dataset_parity.py \

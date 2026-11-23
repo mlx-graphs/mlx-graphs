@@ -442,6 +442,17 @@ def main():
         }
     )
 
+    # Molecules (MoleculeNet needs rdkit)
+    from mlx_graphs.datasets import QM9, ZINC, MoleculeNet
+
+    dataset_registry.update(
+        {
+            "qm9": ("QM9", QM9, {}),
+            "zinc": ("ZINC", ZINC, {}),
+            "esol": ("MoleculeNet", MoleculeNet, {"name": "ESOL"}),
+        }
+    )
+
     if args.dataset:
         if args.dataset not in dataset_registry:
             print(f"Unknown dataset: {args.dataset}")

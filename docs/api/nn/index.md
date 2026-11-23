@@ -119,6 +119,22 @@ SGFormer
 Polynormer
 <!-- /api -->
 
+## Molecular and 3D models
+
+Models for molecules, on atom types and 3D positions `pos`
+([`SchNet`][mlx_graphs.nn.SchNet], [`DimeNet`][mlx_graphs.nn.DimeNet],
+[`DimeNetPlusPlus`][mlx_graphs.nn.DimeNetPlusPlus]) or on the atom and bond
+features of [`from_smiles`][mlx_graphs.utils.from_smiles]
+([`AttentiveFP`][mlx_graphs.nn.AttentiveFP]), e.g. on
+[`QM9`][mlx_graphs.datasets.QM9] or [`MoleculeNet`][mlx_graphs.datasets.MoleculeNet].
+
+<!-- api mlx_graphs.nn -->
+SchNet
+DimeNet
+DimeNetPlusPlus
+AttentiveFP
+<!-- /api -->
+
 ## Graph auto-encoders
 
 <!-- api mlx_graphs.nn -->

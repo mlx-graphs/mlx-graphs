@@ -45,6 +45,9 @@ LRGBDataset
 GNNBenchmarkDataset
 ModelNet
 ShapeNet
+QM9
+ZINC
+MoleculeNet
 Reddit
 Reddit2
 Flickr
