@@ -95,7 +95,6 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    tutorials/notebooks/graph_classification.ipynb
    tutorials/notebooks/node2vec.ipynb
    tutorials/notebooks/metapath2vec.ipynb
-   tutorials/examples/index.rst
    tutorials/notebooks/minibatch_training.ipynb
    tutorials/notebooks/link_prediction.ipynb
    tutorials/notebooks/temporal_graph_networks.ipynb
