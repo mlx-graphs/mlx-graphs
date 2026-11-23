@@ -415,8 +415,8 @@ NDCG@10 as py-tgb's evaluators, ties included.
 
 TGN with the TGB protocol (``examples/tgn_tgbl.py`` / ``tgn_tgbn.py``
 against py-tgb's PyG TGN examples, ``benchmarks/tgn_comparison/compare_tgb.py``),
-same hyperparameters, 10 epochs, seeds 1 to 3 (mean ± std; time per epoch on
-a shared M-series machine, PyG on the CPU with 4 threads):
+same hyperparameters, 10 epochs, seeds 1 to 5 (mean ± sample std; time per
+epoch on a shared M-series machine, PyG on the CPU with 4 threads):
 
 .. list-table::
    :header-rows: 1
@@ -428,31 +428,35 @@ a shared M-series machine, PyG on the CPU with 4 threads):
      - Train s/epoch
      - Val s/epoch
    * - ``tgbl-wiki`` MRR, mlx-graphs
-     - 0.331 ± 0.021
-     - 0.310 ± 0.014
-     - 7.5
-     - 2.4
+     - 0.312 ± 0.039
+     - 0.281 ± 0.042
+     - 6.5
+     - 2.0
    * - ``tgbl-wiki`` MRR, PyG
-     - 0.258 ± 0.058
-     - 0.234 ± 0.061
-     - 19.9
-     - 13.1
+     - 0.275 ± 0.062
+     - 0.253 ± 0.062
+     - 15.6
+     - 10.7
    * - ``tgbn-trade`` NDCG@10, mlx-graphs
-     - 0.395 ± 0.002
-     - 0.375 ± 0.003
-     - 8.7
-     - 1.2
+     - 0.394 ± 0.002
+     - 0.374 ± 0.003
+     - 7.2
+     - 1.0
    * - ``tgbn-trade`` NDCG@10, PyG
-     - 0.393 ± 0.001
-     - 0.373 ± 0.000
-     - 12.5
-     - 2.7
+     - 0.388 ± 0.009
+     - 0.368 ± 0.010
+     - 9.8
+     - 2.1
 
-On ``tgbl-wiki`` both are still improving at epoch 10 and vary a lot between
-seeds (one PyG seed reaches only 0.177). PyG scores the events of a
-mini-batch together; on the same seed this gives the same MRR as the
-edge-by-edge loop of the TGB example (val 0.0513, test 0.0559 after one
-epoch), whose validation pass takes 275 s instead of 7 s. Results:
+The differences are within seed noise (Welch's t-test: p = 0.30 and 0.43
+for the ``tgbl-wiki`` validation and test MRR, p = 0.24 and 0.27 for
+``tgbn-trade``). On ``tgbl-wiki`` both are still improving at epoch 10, the
+best epoch is 9 or 10 in every run, and the MRR at a fixed early epoch
+varies a lot with the seed (validation 0.25 to 0.35 in mlx-graphs, 0.18 to
+0.34 in PyG). PyG scores the events of a mini-batch together; on the same
+seed this gives the same MRR as the edge-by-edge loop of the TGB example
+(val 0.0513, test 0.0559 after one epoch), whose validation pass takes
+275 s instead of 7 s. Results:
 `results_tgb.json <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/tgn_comparison/results_tgb.json>`_.
 
 GPS on Peptides-func
