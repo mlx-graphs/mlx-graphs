@@ -88,6 +88,18 @@ Point clouds and meshes
 - ``benchmarks/quality/pointcloud_quality.py`` trains PointNet++ and DGCNN on
   ModelNet10 with mlx-graphs and PyG.
 
+Added
+~~~~~
+
+- Molecular and 3D models, checked against PyG with copied weights (outputs and
+  gradients) and by training both on QM9 and ESOL
+  (``benchmarks/quality/molecular_quality.py``): ``SchNet``, ``DimeNet``,
+  ``DimeNetPlusPlus`` and ``AttentiveFP``.
+- Molecular datasets matching PyG's: ``QM9``, ``ZINC`` (subset and full) and
+  ``MoleculeNet`` (ESOL, FreeSolv, Lipophilicity, BACE, BBBP, HIV, Tox21, ...).
+- ``from_smiles``, ``to_smiles``, ``from_rdmol`` and ``to_rdmol`` with PyG's
+  ``x_map`` / ``e_map`` featurization (``rdkit`` is an optional dependency).
+
 0.5.2
 -----
 

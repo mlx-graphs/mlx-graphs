@@ -96,13 +96,14 @@ def torch_grads(
     module,
     renames: Sequence[Tuple[str, str]] = (),
     rename_fn: Optional[Callable[[str], str]] = None,
+    drop: Sequence[str] = (),
 ) -> dict:
     """The gradients (``.grad``) of the parameters of a torch module, as numpy
     arrays named like :func:`torch_state` names them (parameters without a
-    gradient are skipped)."""
+    gradient, or matching a pattern of ``drop``, are skipped)."""
     out = {}
     for key, param in module.named_parameters():
-        if param.grad is None:
+        if param.grad is None or any(re.search(p, key) for p in drop):
             continue
         for pattern, repl in renames:
             key = re.sub(pattern, repl, key)
@@ -110,3 +111,18 @@ def torch_grads(
             key = rename_fn(key)
         out[key] = param.grad.detach().cpu().numpy()
     return out
+
+
+def assert_grads_close(mlx_grads, torch_grads: dict, rtol: float = 2e-2):
+    """Checks the gradients of an mlx module (a tree, e.g. from
+    ``nn.value_and_grad``) against :func:`torch_grads`, parameter by
+    parameter, in relative norm."""
+    flat = dict(tree_flatten(mlx_grads))
+    assert torch_grads, "no torch gradients"
+    for key, expected in torch_grads.items():
+        assert key in flat, f"missing gradient {key}"
+        got = np.array(flat[key])
+        assert got.shape == expected.shape, (key, got.shape, expected.shape)
+        diff = np.linalg.norm(got - expected)
+        scale = max(np.linalg.norm(expected), 1e-6)
+        assert diff <= rtol * scale, f"{key}: relative error {diff / scale:.2e}"

@@ -82,3 +82,4 @@ from .encoding import (  # noqa
     RWSEEncoder,
     TemporalEncoding,
 )
+from .models import AttentiveFP, DimeNet, DimeNetPlusPlus, SchNet  # noqa

@@ -14,3 +14,6 @@ from .pna import PNA  # noqa
 from .tgn import TGNMemory  # noqa
 from .graph_transformers import Polynormer, SGFormer  # noqa
 from .graph_unet import GraphUNet  # noqa
+from .schnet import SchNet  # noqa
+from .dimenet import DimeNet, DimeNetPlusPlus  # noqa
+from .attentive_fp import AttentiveFP  # noqa
