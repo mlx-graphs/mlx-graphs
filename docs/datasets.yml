@@ -1,7 +1,11 @@
-# The "Available datasets" table of getting-started/datasets.md. gen.py builds
-# the table from this file (the statistics come from
-# examples/compute_dataset_stats.py) and checks that every class exists and
-# accepts the arguments. A new dataset needs one entry.
+# The "Available datasets" table of tutorials/guides/datasets.md. gen.py builds
+# the table from this file and checks that every class exists and accepts the
+# arguments. A new dataset needs one entry. The statistics come from
+#   python examples/compute_dataset_stats.py --dataset <key>
+# with the conventions of that script: avg_degree = 2 * edges / nodes;
+# collections give the number of graphs and "~" averages per graph (over the
+# split that "Load with" loads); heterogeneous graphs count the nodes and edges
+# of all types; temporal graphs count each event as an edge.
 
 - name: Karate Club
   class: KarateClubDataset
@@ -77,10 +81,10 @@
 - name: QM7b
   class: QM7bDataset
   graphs: "7,211"
-  nodes: "~15"
-  edges: "~130"
-  avg_degree: "~8.67"
-  features: node, edge
+  nodes: "~15.4"
+  edges: "~245.0"
+  avg_degree: "~31.77"
+  features: edge
   labels: graph
 - name: Elliptic Bitcoin
   class: EllipticBitcoinDataset
@@ -275,37 +279,115 @@
   features: edge
   labels: edge
 
-# Collections and heterogeneous graphs: one example each, no statistics
-# (see the class page for the others)
+# Collections, heterogeneous and temporal graphs: one example each (see the
+# class page for the other datasets it loads). All the statistics below were
+# computed with the classes (November 2026); none is copied from a paper.
 - name: MUTAG (TU datasets)
   class: TUDataset
   args: '"MUTAG"'
+  graphs: "188"
+  nodes: "~17.9"
+  edges: "~39.6"
+  avg_degree: "~4.42"
+  features: node, edge
+  labels: graph
 - name: ogbn-arxiv (OGB)
   class: OGBDataset
   args: '"ogbn-arxiv"'
+  graphs: "1"
+  nodes: "169,343"
+  edges: "1,166,243"
+  avg_degree: "13.77"
+  features: node
+  labels: node
+# 4 node types (paper, author, institution, field_of_study), 4 edge types
 - name: ogbn-mag (OGB, heterogeneous)
   class: OGBMAG
+  graphs: "1"
+  nodes: "1,939,743"
+  edges: "21,111,007"
+  avg_degree: "21.77"
+  features: node
+  labels: node
+# 3 node types (movie, director, actor), 4 edge types
 - name: IMDB (heterogeneous)
   class: IMDB
+  graphs: "1"
+  nodes: "11,616"
+  edges: "34,212"
+  avg_degree: "5.89"
+  features: node
+  labels: node
+# 4 node types (author, paper, term, conference), 6 edge types
 - name: DBLP (heterogeneous)
   class: DBLP
-- name: Peptides-func (LRGB)
+  graphs: "1"
+  nodes: "26,128"
+  edges: "239,566"
+  avg_degree: "18.34"
+  features: node
+  labels: node
+- name: Peptides-func (LRGB, train split)
   class: LRGBDataset
   args: '"peptides-func"'
-- name: PATTERN (GNN benchmark)
+  graphs: "10,873"
+  nodes: "~151.5"
+  edges: "~308.5"
+  avg_degree: "~4.07"
+  features: node, edge
+  labels: graph
+- name: PATTERN (GNN benchmark, train split)
   class: GNNBenchmarkDataset
   args: '"PATTERN"'
-- name: MNIST superpixels
+  graphs: "10,000"
+  nodes: "~118.9"
+  edges: "~6,079.9"
+  avg_degree: "~102.26"
+  features: node
+  labels: node
+- name: MNIST superpixels (train split)
   class: SuperPixelDataset
   args: '"MNIST", "train"'
+  graphs: "60,000"
+  nodes: "~70.6"
+  edges: "~564.5"
+  avg_degree: "~16.00"
+  features: node, edge
+  labels: graph
 - name: WordNet18
   class: WordNet18
+  graphs: "1"
+  nodes: "40,943"
+  edges: "151,442"
+  avg_degree: "7.40"
+  features: none
+  labels: edge (type)
+# y is 1 for every event (true edges): the task predicts links, no labels
 - name: tgbl-wiki (TGB, link property prediction)
   class: TGBLinkPropPredDataset
   args: '"tgbl-wiki"'
+  graphs: "1"
+  nodes: "9,227"
+  edges: "157,474"
+  avg_degree: "34.13"
+  features: edge
+  labels: none
+# node labels at label timestamps (node_labels / get_node_label)
 - name: tgbn-trade (TGB, node property prediction)
   class: TGBNodePropPredDataset
   args: '"tgbn-trade"'
+  graphs: "1"
+  nodes: "255"
+  edges: "468,245"
+  avg_degree: "3,672.51"
+  features: edge
+  labels: node (over time)
 - name: JODIE MOOC (temporal)
   class: JODIEDataset
   args: '"mooc"'
+  graphs: "1"
+  nodes: "7,144"
+  edges: "411,749"
+  avg_degree: "115.27"
+  features: edge
+  labels: edge

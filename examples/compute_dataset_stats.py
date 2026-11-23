@@ -9,21 +9,77 @@ Usage:
     python compute_dataset_stats.py --dataset karate_club  # Stats for one dataset
     python compute_dataset_stats.py --format markdown  # Output as markdown table
     python compute_dataset_stats.py --format rst       # Output as RST table
+    python compute_dataset_stats.py --base-dir DIR     # Datasets stored in DIR
+
+Heterogeneous graphs count the nodes and edges of all types, temporal graphs
+count each event as an edge, and datasets of several graphs give the averages
+per graph ("~"). docs/datasets.yml holds the numbers shown in the docs.
 
 Designed for issue #158: Dataset statistics in the docs
 https://github.com/mlx-graphs/mlx-graphs/issues/158
 """
 
 import argparse
+import inspect
 import sys
+from typing import Optional
 
 import mlx.core as mx
 
-from mlx_graphs.data import GraphData
+from mlx_graphs.data import GraphData, HeteroGraphData, TemporalData
+
+
+def _present(*values) -> bool:
+    return any(v is not None and (not isinstance(v, dict) or v) for v in values)
+
+
+def compute_hetero_graph_stats(data: HeteroGraphData) -> dict:
+    """Statistics of a heterogeneous graph: totals over all node and edge types."""
+    num_nodes = sum(data.num_nodes.values())
+    num_edges = sum(data.num_edges.values())
+    kinds = {
+        "features": [
+            ("node", data.node_features_dict),
+            ("edge", data.edge_features_dict),
+            ("graph", data.graph_features),
+        ],
+        "labels": [
+            ("node", data.node_labels_dict),
+            ("edge", data.edge_labels_dict),
+            ("graph", data.graph_labels),
+        ],
+    }
+    stats = {
+        "num_nodes": num_nodes,
+        "num_edges": num_edges,
+        "avg_node_degree": round(2.0 * num_edges / num_nodes, 2) if num_nodes else 0.0,
+        "node_types": len(data.node_types),
+        "edge_types": len(data.edge_types),
+    }
+    for key, items in kinds.items():
+        found = [kind for kind, value in items if _present(value)]
+        stats[key] = ", ".join(found) if found else "none"
+    return stats
+
+
+def compute_temporal_graph_stats(data: TemporalData) -> dict:
+    """Statistics of a temporal graph: each event is an edge."""
+    num_nodes, num_edges = data.num_nodes, data.num_events
+    return {
+        "num_nodes": num_nodes,
+        "num_edges": num_edges,
+        "avg_node_degree": round(2.0 * num_edges / num_nodes, 2) if num_nodes else 0.0,
+        "features": "edge" if "msg" in data else "none",
+        "labels": "edge" if "y" in data else "none",
+    }
 
 
 def compute_graph_stats(data: GraphData) -> dict:
     """Compute statistics for a single graph."""
+    if isinstance(data, HeteroGraphData):
+        return compute_hetero_graph_stats(data)
+    if isinstance(data, TemporalData):
+        return compute_temporal_graph_stats(data)
     stats = {}
 
     # Number of nodes
@@ -75,11 +131,18 @@ def compute_graph_stats(data: GraphData) -> dict:
 
 
 def compute_dataset_stats(
-    dataset, dataset_name: str, num_samples: int = 1
+    dataset, dataset_name: str, num_samples: Optional[int] = None
 ) -> list[dict]:
-    """Compute statistics for all graphs in a dataset."""
+    """Compute statistics for the graphs of a dataset (all of them by default).
+
+    For a dataset of several graphs, nodes and edges are averages per graph,
+    prefixed with "~", and the average degree is 2 * edges / nodes over all
+    the graphs.
+    """
     all_stats = []
     num_graphs = len(dataset)
+    if num_samples is None:
+        num_samples = num_graphs
 
     for i in range(min(num_samples, num_graphs)):
         data = dataset[i]
@@ -90,21 +153,28 @@ def compute_dataset_stats(
 
     # Aggregate stats
     if all_stats:
+        total_nodes = sum(s["num_nodes"] for s in all_stats)
+        total_edges = sum(s["num_edges"] for s in all_stats)
+        if num_graphs == 1:
+            nodes, edges = f"{total_nodes:,}", f"{total_edges:,}"
+            degree = f"{2.0 * total_edges / total_nodes:.2f}"
+        else:
+            n = len(all_stats)
+            nodes = f"~{total_nodes / n:,.1f}"
+            edges = f"~{total_edges / n:,.1f}"
+            degree = f"~{2.0 * total_edges / total_nodes:.2f}"
         agg = {
             "dataset": dataset_name,
-            "num_graphs": num_graphs,
-            "num_nodes": (
-                int(mx.mean(mx.array([s["num_nodes"] for s in all_stats])).item())
-            ),
-            "num_edges": (
-                int(mx.mean(mx.array([s["num_edges"] for s in all_stats])).item())
-            ),
-            "avg_node_degree": round(
-                float(mx.mean(mx.array([s["avg_node_degree"] for s in all_stats]))), 2
-            ),
+            "num_graphs": f"{num_graphs:,}",
+            "num_nodes": nodes,
+            "num_edges": edges,
+            "avg_node_degree": degree,
             "features": all_stats[0]["features"],
             "labels": all_stats[0]["labels"],
         }
+        for key in ("node_types", "edge_types"):
+            if key in all_stats[0]:
+                agg[key] = all_stats[0][key]
         # Add class counts from first sample
         for key in all_stats[0]:
             if key.startswith("num_") and key.endswith("_classes"):
@@ -218,6 +288,12 @@ def main():
         default="text",
         help="Output format",
     )
+    parser.add_argument(
+        "--base-dir",
+        type=str,
+        default=None,
+        help="Directory of the downloaded datasets. Default: ./.mlx_graphs_data",
+    )
     args = parser.parse_args()
 
     # Import datasets lazily to avoid unnecessary downloads
@@ -285,6 +361,61 @@ def main():
     dataset_registry["fb15k_237"] = ("FB15k_237", FB15k_237, {})
     dataset_registry["wordnet18rr"] = ("WordNet18RR", WordNet18RR, {})
 
+    # Collections (one example each; the split is the one the docs table loads),
+    # heterogeneous and temporal graphs
+    from mlx_graphs.datasets import (
+        DBLP,
+        IMDB,
+        OGBMAG,
+        GNNBenchmarkDataset,
+        JODIEDataset,
+        LRGBDataset,
+        OGBDataset,
+        SuperPixelDataset,
+        TGBLinkPropPredDataset,
+        TGBNodePropPredDataset,
+        TUDataset,
+        WordNet18,
+    )
+
+    dataset_registry.update(
+        {
+            "mutag": ("TUDataset", TUDataset, {"name": "MUTAG"}),
+            "ogbn_arxiv": ("OGBDataset", OGBDataset, {"name": "ogbn-arxiv"}),
+            "ogbn_mag": ("OGBMAG", OGBMAG, {}),
+            "imdb": ("IMDB", IMDB, {}),
+            "dblp_hetero": ("DBLP", DBLP, {}),
+            "peptides_func": (
+                "LRGBDataset",
+                LRGBDataset,
+                {"name": "peptides-func", "split": "train"},
+            ),
+            "pattern": (
+                "GNNBenchmarkDataset",
+                GNNBenchmarkDataset,
+                {"name": "PATTERN", "split": "train"},
+            ),
+            "mnist_superpixels": (
+                "SuperPixelDataset",
+                SuperPixelDataset,
+                {"name": "MNIST", "split": "train"},
+            ),
+            "wordnet18": ("WordNet18", WordNet18, {}),
+            "jodie_wikipedia": ("JODIEDataset", JODIEDataset, {"name": "wikipedia"}),
+            "jodie_mooc": ("JODIEDataset", JODIEDataset, {"name": "mooc"}),
+            "tgbl_wiki": (
+                "TGBLinkPropPredDataset",
+                TGBLinkPropPredDataset,
+                {"name": "tgbl-wiki"},
+            ),
+            "tgbn_trade": (
+                "TGBNodePropPredDataset",
+                TGBNodePropPredDataset,
+                {"name": "tgbn-trade"},
+            ),
+        }
+    )
+
     if args.dataset:
         if args.dataset not in dataset_registry:
             print(f"Unknown dataset: {args.dataset}")
@@ -298,6 +429,8 @@ def main():
     for name, (cls_name, cls, kwargs) in targets.items():
         try:
             print(f"Loading {name}...", file=sys.stderr)
+            if args.base_dir and "base_dir" in inspect.signature(cls).parameters:
+                kwargs = {**kwargs, "base_dir": args.base_dir}
             ds = cls(**kwargs)
             stats = compute_dataset_stats(ds, name)
             all_stats.extend(stats)

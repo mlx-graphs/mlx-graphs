@@ -20,7 +20,11 @@ Each name links the API page of the class that loads it; `Load with` is the call
 
 </div>
 
-The last rows are collections and heterogeneous graphs, with one example each and no statistics: their class page lists the other datasets they load.
+The average degree is 2 × edges / nodes. The last rows are collections, heterogeneous and temporal graphs, one example each; their class page lists the other datasets they load:
+
+- for a collection, `Graphs` is the number of graphs (of the split that `Load with` loads) and the other numbers are averages per graph (\~);
+- a heterogeneous graph counts the nodes and edges of all types: ogbn-mag has 4 node types (paper, author, institution, field of study) and 4 edge types, IMDB 3 node types (movie, director, actor) and 4 edge types, DBLP 4 node types (author, paper, term, conference) and 6 edge types;
+- a temporal graph counts each event as an edge.
 
 --8<-- "datasets_other.md"
 
