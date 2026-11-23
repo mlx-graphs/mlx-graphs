@@ -399,6 +399,62 @@ patched. Results:
 The :doc:`TGN tutorial <tutorials/notebooks/temporal_graph_networks>`
 compares the two in more detail.
 
+Temporal Graph Benchmark
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+The TGB datasets are checked against the official ``py-tgb`` package
+(``tests/datasets/test_tgb.py``): for ``tgbl-wiki``, ``tgbl-review``,
+``tgbn-trade`` and ``tgbn-genre``, the events (``src``, ``dst``, ``t``,
+``msg``, ``w``), the split masks, the negative samples of every validation
+and test event and the node label streams are identical to py-tgb's. The
+large datasets (``tgbl-coin``, ``tgbl-comment``, ``tgbl-flight``,
+``tgbn-reddit``, ``tgbn-token``) are checked on the first 200,000 events of
+their raw files (``benchmarks/tgn_comparison/check_tgb_slices.py``), without
+their negative samples. ``TGBEvaluator`` returns the same MRR, Hits@10 and
+NDCG@10 as py-tgb's evaluators, ties included.
+
+TGN with the TGB protocol (``examples/tgn_tgbl.py`` / ``tgn_tgbn.py``
+against py-tgb's PyG TGN examples, ``benchmarks/tgn_comparison/compare_tgb.py``),
+same hyperparameters, 10 epochs, seeds 1 to 3 (mean ± std; time per epoch on
+a shared M-series machine, PyG on the CPU with 4 threads):
+
+.. list-table::
+   :header-rows: 1
+   :widths: 30 20 20 15 15
+
+   * - Run
+     - Val
+     - Test
+     - Train s/epoch
+     - Val s/epoch
+   * - ``tgbl-wiki`` MRR, mlx-graphs
+     - 0.331 ± 0.021
+     - 0.310 ± 0.014
+     - 7.5
+     - 2.4
+   * - ``tgbl-wiki`` MRR, PyG
+     - 0.258 ± 0.058
+     - 0.234 ± 0.061
+     - 19.9
+     - 13.1
+   * - ``tgbn-trade`` NDCG@10, mlx-graphs
+     - 0.395 ± 0.002
+     - 0.375 ± 0.003
+     - 8.7
+     - 1.2
+   * - ``tgbn-trade`` NDCG@10, PyG
+     - 0.393 ± 0.001
+     - 0.373 ± 0.000
+     - 12.5
+     - 2.7
+
+On ``tgbl-wiki`` both are still improving at epoch 10 and vary a lot between
+seeds (one PyG seed reaches only 0.177). PyG scores the events of a
+mini-batch together; on the same seed this gives the same MRR as the
+edge-by-edge loop of the TGB example (val 0.0513, test 0.0559 after one
+epoch), whose validation pass takes 275 s instead of 7 s. Results:
+`results_tgb.json <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/tgn_comparison/results_tgb.json>`_.
+
 GPS on Peptides-func
 ~~~~~~~~~~~~~~~~~~~~
 

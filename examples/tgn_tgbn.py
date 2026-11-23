@@ -159,6 +159,10 @@ class Runner:
 
 
 def main(args):
+    # The label batches have a different number of nodes at every label
+    # timestamp, and MLX would otherwise keep many GB of buffers of all these
+    # sizes in its cache (the active memory stays below 0.3 GB).
+    mx.set_cache_limit(1 << 30)
     mx.random.seed(args.seed)
     np.random.seed(args.seed)
     dataset = TGBNodePropPredDataset(args.dataset, base_dir=args.base_dir)
