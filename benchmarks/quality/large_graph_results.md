@@ -83,4 +83,26 @@ neighborhoods, same fan-outs) at the epoch of best validation accuracy, time
 per epoch (sampling, gathering, forward, backward, optimizer step; median
 over epochs). PyG on the CPU with 8 threads.
 
-RESULTS_TRAINING
+| dataset | framework | seeds × epochs | test acc | val acc | s / epoch |
+|---|---|---|---|---|---|
+| Flickr | mlx-graphs | 3 × 10 | 0.5095 ± 0.0001 | 0.5095 | 3.6 |
+| Flickr | mlx-graphs, `MemmapFeatureStore` | 3 × 10 | 0.5101 ± 0.0026 | 0.5095 | 8.7 |
+| Flickr | PyG | 3 × 10 | 0.5120 ± 0.0015 | 0.5108 | 11.5 |
+| Reddit | mlx-graphs | 1 × 3 | 0.9558 | 0.9575 | 27.6 |
+| Reddit | PyG | 1 × 3 | 0.9583 | 0.9593 | 79.7 |
+
+Training losses follow each other (Reddit, mean loss per epoch: 0.451 /
+0.210 / 0.187 for mlx-graphs, 0.450 / 0.215 / 0.189 for PyG). On Reddit
+(115M edges), the largest of the two runs (one after the other, not
+measured separately) peaked at a 21 GB footprint; Reddit was trained for
+one seed and three epochs only, as the machine was shared.
+
+Reproduce:
+
+```
+PYTHONPATH=<pyg-lib dir> python benchmarks/run_capped.py --gb 16 -- \
+    python benchmarks/quality/large_graph_training.py --datasets flickr --seeds 0 1 2 --epochs 10
+PYTHONPATH=<pyg-lib dir> python benchmarks/run_capped.py --gb 22 -- \
+    python benchmarks/quality/large_graph_training.py --datasets reddit --seeds 0 --epochs 3 \
+    --frameworks mlx pyg
+```
