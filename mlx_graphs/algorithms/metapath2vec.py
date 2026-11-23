@@ -4,17 +4,11 @@ import mlx.core as mx
 import mlx.nn as nn
 import numpy as np
 
-try:
-    from mlx_cluster import (
-        build_metapath_csr,
-        metapath_node_types,
-        metapath_random_walk,
-    )
-except ImportError:
-    raise ImportError(
-        "mlx_cluster>=0.1.2 is required for meta-path random walks, "
-        "run `pip install -U mlx_cluster`"
-    )
+from mlx_graphs.sampling import (
+    build_metapath_csr,
+    metapath_node_types,
+    metapath_random_walk,
+)
 
 NodeType = str
 EdgeType = Tuple[str, str, str]
@@ -37,7 +31,8 @@ class MetaPath2Vec(nn.Module):
     embeddings of one node type.
 
     .. note::
-        This feature is experimental and requires ``mlx_cluster>=0.1.2``.
+        This feature is experimental. Walks use ``mlx_cluster>=0.1.2`` when
+        it is installed and MLX operations otherwise (e.g. on Linux).
 
     Args:
         edge_index_dict: ``(src, rel, dst) -> [2, num_edges]`` edge indices,

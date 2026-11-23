@@ -5,6 +5,7 @@ from typing import Optional
 
 import mlx.core as mx
 
+from mlx_graphs.backend import use_metal_kernels
 from mlx_graphs.utils import scatter
 
 _SIMD_WIDTH = 32
@@ -239,8 +240,7 @@ def supports_metal_csr_softmax_spmm(logits, values, rows):
         and values.shape[-1] > 0
         and logits.dtype == values.dtype == mx.float32
         and 0 < rows <= (2**31 - 1) // _SIMD_WIDTH
-        and mx.default_device().type == mx.gpu
-        and mx.metal.is_available()
+        and use_metal_kernels()
     )
 
 

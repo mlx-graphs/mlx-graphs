@@ -8,6 +8,7 @@
   <a href="https://pypi.org/project/mlx-graphs/"><img alt="PyPI" src="https://img.shields.io/pypi/v/mlx-graphs?color=2a78d6"></a>
   <a href="https://pypi.org/project/mlx-graphs/"><img alt="Python 3.10+" src="https://img.shields.io/badge/python-3.10%2B-3776ab"></a>
   <img alt="macOS on Apple Silicon" src="https://img.shields.io/badge/macOS-Apple%20Silicon-555">
+  <img alt="Linux: MLX CPU and CUDA" src="https://img.shields.io/badge/Linux-MLX%20CPU%20%7C%20CUDA-555">
   <a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/license-MIT-green"></a>
   <a href="https://github.com/ml-explore/mlx"><img alt="Built on MLX" src="https://img.shields.io/badge/built%20on-MLX-black?logo=apple"></a>
   <a href="https://discord.gg/K3mWFCxxM7"><img alt="Discord" src="https://img.shields.io/badge/Discord-join-5865F2?logo=discord&logoColor=white"></a>
@@ -23,7 +24,8 @@
 
 MLX-graphs is a library for Graph Neural Networks (GNNs) on Apple Silicon, built on Apple's [MLX](https://github.com/ml-explore/mlx).
 It runs message passing on your Mac's GPU with fused sparse kernels, which
-PyTorch Geometric lacks on MPS.
+PyTorch Geometric lacks on MPS. It also runs on Linux, with MLX's CPU and CUDA
+backends.
 
 **On an M5 Pro, mlx-graphs trains GNNs 5.6× faster than PyTorch Geometric on
 MPS and 5.8× faster than on CPU, with the same accuracy** (median of 35
@@ -36,9 +38,21 @@ hyperparameters in every framework, 3 seeds. See [benchmarks](#benchmarks-vs-pyt
 
 
 ## Installation
+On a Mac with Apple Silicon:
 ```
 pip install mlx-graphs
 ```
+On Linux, choose an [MLX backend](https://ml-explore.github.io/mlx/build/html/install.html):
+```
+pip install "mlx-graphs[cpu]"    # MLX CPU backend
+pip install "mlx-graphs[cuda]"   # MLX CUDA backend (CUDA 12; use [cuda13] for CUDA 13)
+```
+mlx-graphs supports Python 3.10 to 3.13. The Metal kernels and the
+[`mlx-cluster`](https://github.com/mlx-graphs/mlx_cluster) extension (fused
+SpMM, neighbor sampling, random walks) only exist on macOS; elsewhere, the same
+layers, loaders and algorithms run on portable MLX / NumPy implementations that
+give the same results, more slowly. The test suite runs on macOS and on Linux
+(MLX CPU) in CI; the CUDA backend is not tested in CI.
 
 ## Features
 

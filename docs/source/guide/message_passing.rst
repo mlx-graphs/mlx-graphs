@@ -514,7 +514,7 @@ built-in GCN, GraphSAGE, GIN, GAT and GATv2 layers, among others, use it.
 The decorator only enables the fused path. ``propagate`` decides at every
 call, and falls back to gather-scatter, with the same result, when:
 
-- ``mlx_cluster`` is not installed, or fused message passing is turned off
+- ``mlx_cluster`` is not installed (e.g. on Linux), or fused message passing is turned off
   (:func:`~mlx_graphs.nn.set_fused_message_passing`,
   :func:`~mlx_graphs.nn.fused_message_passing_mode`);
 - ``aggr`` is not ``"add"``, ``"mean"``, ``"max"`` or ``"min"``, e.g. a list

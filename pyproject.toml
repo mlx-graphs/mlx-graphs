@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "mlx-graphs"
 dynamic = ["version"]
-description = "Graph Neural Network library made for Apple Silicon"
+description = "Graph Neural Network library for MLX, made for Apple silicon and running on Linux"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
 license = {file = "LICENSE"}
@@ -14,13 +14,18 @@ classifiers = [
     "Development Status :: 3 - Alpha",
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS",
+    "Operating System :: POSIX :: Linux",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
 ]
+# On Linux, MLX needs a backend: install mlx-graphs[cpu] or mlx-graphs[cuda].
+# mlx_cluster (fused sparse kernels, samplers) only has macOS wheels; without
+# it mlx-graphs uses portable MLX / NumPy fallbacks.
 dependencies = [
-    "mlx>=0.32; sys_platform == 'darwin'",
+    "mlx>=0.32",
     "numpy>=1.26.3",
     "requests>=2.31.0",
     "fsspec>=2024.2.0",
@@ -29,6 +34,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+cpu = ["mlx[cpu]>=0.32"]
+cuda = ["mlx[cuda]>=0.32"]
+cuda12 = ["mlx[cuda12]>=0.32"]
+cuda13 = ["mlx[cuda13]>=0.32"]
 dev = [
   "pre-commit==3.6.0",
 ]

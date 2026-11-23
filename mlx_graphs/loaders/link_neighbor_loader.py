@@ -3,9 +3,9 @@ from typing import Any, Iterable, Literal, Optional, Union
 
 import mlx.core as mx
 import numpy as np
-from mlx_cluster import hetero_neighbor_sample, neighbor_sample
 
 from mlx_graphs.data import GraphData, HeteroGraphData
+from mlx_graphs.sampling import hetero_neighbor_sample, neighbor_sample
 
 from ._utils import (
     check_index_bounds,

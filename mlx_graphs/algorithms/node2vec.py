@@ -1,16 +1,9 @@
 import mlx.core as mx
 import mlx.nn as nn
-
-from mlx_graphs.utils.sorting import index_to_ptr, sort_edge_index
-
-try:
-    from mlx_cluster import random_walk, rejection_sampling
-except ImportError:
-    raise ImportError(
-        "mlx_cluster is required for performing random walks",
-        "run `pip install mlx_cluster`",
-    )
 import numpy as np
+
+from mlx_graphs.sampling import random_walk, rejection_sampling
+from mlx_graphs.utils.sorting import index_to_ptr, sort_edge_index
 
 
 class Node2Vec(nn.Module):
@@ -22,7 +15,9 @@ class Node2Vec(nn.Module):
 
     .. note::
         Random-walk sampling uses the kernels of ``mlx_cluster``, a
-        dependency of mlx-graphs on macOS.
+        dependency of mlx-graphs on macOS. Without it (e.g. on Linux), the
+        walks are sampled with MLX / NumPy operations, see
+        :mod:`mlx_graphs.sampling`.
 
     Args:
         edge_index : The edge indices.

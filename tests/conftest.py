@@ -1,3 +1,6 @@
+import os
+
+import mlx.core as mx
 import pytest
 
 
@@ -9,6 +12,11 @@ def pytest_addoption(parser):
 
 def pytest_configure(config):
     config.addinivalue_line("markers", "slow: mark test as slow to run")
+    # MLX_GRAPHS_TEST_DEVICE=cpu runs the whole suite on the CPU, as on a
+    # machine without a GPU backend (e.g. Linux with mlx[cpu]).
+    device = os.environ.get("MLX_GRAPHS_TEST_DEVICE")
+    if device:
+        mx.set_default_device(getattr(mx, device))
 
 
 def pytest_collection_modifyitems(config, items):

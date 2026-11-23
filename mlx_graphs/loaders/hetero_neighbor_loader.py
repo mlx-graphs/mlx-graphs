@@ -2,9 +2,9 @@ from typing import Any, Iterable, Optional, Union
 
 import mlx.core as mx
 import numpy as np
-from mlx_cluster import hetero_neighbor_sample
 
 from mlx_graphs.data import HeteroGraphData
+from mlx_graphs.sampling import hetero_neighbor_sample
 
 from ._utils import check_index_bounds, index_array
 
@@ -19,10 +19,11 @@ class _HeteroNeighborLoader:
 
     Mini-batch loader for node-level tasks on a single large heterogeneous graph.
 
-    Uses heterogeneous neighbor sampling (``mlx_cluster.hetero_neighbor_sample``)
-    to extract K-hop subgraphs around seed nodes of one node type. Each
-    iteration yields a :class:`HeteroGraphData` holding the sampled subgraph,
-    with edges re-indexed locally per node type.
+    Uses heterogeneous neighbor sampling
+    (:func:`~mlx_graphs.sampling.hetero_neighbor_sample`) to extract K-hop
+    subgraphs around seed nodes of one node type. Each iteration yields a
+    :class:`HeteroGraphData` holding the sampled subgraph, with edges
+    re-indexed locally per node type.
 
     The first ``batch_size`` nodes of the seed node type are always the seed
     nodes. During training, compute the loss only on these nodes::

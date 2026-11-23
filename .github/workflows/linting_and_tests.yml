@@ -41,7 +41,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.10", "3.11", "3.12", "3.13"]
 
     steps:
     - uses: actions/checkout@v4
@@ -58,4 +58,33 @@ jobs:
         python -m pip install '.[test]'
     - name: Test with pytest
       run: |
+        pytest
+
+  test-linux:
+    # MLX CPU backend: no Metal and no mlx_cluster (macOS-only wheels), so
+    # this runs every portable fallback.
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.10", "3.12", "3.13"]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v5
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        # CPU-only PyTorch for the PyG comparison tests (no CUDA download).
+        python -m pip install torch --index-url https://download.pytorch.org/whl/cpu
+        python -m pip install '.[cpu,test]'
+    - name: Test with pytest
+      run: |
+        python -c "import mlx.core as mx; print(mx.__version__, mx.default_device())"
         pytest

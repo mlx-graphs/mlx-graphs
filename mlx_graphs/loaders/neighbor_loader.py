@@ -2,9 +2,9 @@ from typing import Any, Iterable, Optional, Union
 
 import mlx.core as mx
 import numpy as np
-from mlx_cluster import neighbor_sample
 
 from mlx_graphs.data import GraphData, HeteroGraphData
+from mlx_graphs.sampling import neighbor_sample
 
 from ._utils import index_array, to_index
 from .hetero_neighbor_loader import EdgeType, _HeteroNeighborLoader

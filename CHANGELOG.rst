@@ -4,6 +4,28 @@ Changelog
 Unreleased
 ----------
 
+Platforms
+~~~~~~~~~
+
+- mlx-graphs installs and runs on Linux with MLX's CPU and CUDA backends:
+  ``pip install "mlx-graphs[cpu]"`` or ``"mlx-graphs[cuda]"`` (``[cuda12]``,
+  ``[cuda13]``). ``mlx`` is now a dependency on every platform and
+  ``mlx_cluster`` stays a macOS-only dependency. Python 3.13 is supported.
+- Without Metal or ``mlx_cluster``, every code path falls back to a portable
+  implementation with the same results: gather-scatter message passing, MLX
+  versions of the GATv2 score and fused neighbor-softmax Metal kernels, and
+  the new ``mlx_graphs.sampling`` module, which runs neighbor sampling
+  (``NeighborLoader``, ``LinkNeighborLoader``, ``HGTLoader``) with NumPy and
+  the random walks of ``Node2Vec`` and ``MetaPath2Vec`` with MLX / NumPy.
+  ``Node2Vec`` and ``MetaPath2Vec`` no longer fail to import without
+  ``mlx_cluster``.
+- ``mlx_graphs.backend`` reports what the platform provides;
+  ``MLX_GRAPHS_DISABLE_METAL_KERNELS=1`` and ``MLX_GRAPHS_DISABLE_MLX_CLUSTER=1``
+  force the fallbacks, and ``MLX_GRAPHS_TEST_DEVICE=cpu`` runs the test suite
+  on the CPU.
+- CI runs the test suite on Linux (MLX CPU, Python 3.10, 3.12, 3.13) and on
+  macOS with Python 3.13.
+
 Documentation
 ~~~~~~~~~~~~~
 

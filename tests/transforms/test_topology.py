@@ -95,13 +95,21 @@ def test_two_hop_keeps_edge_features_aligned():
 
 @pytest.mark.parametrize("seed", range(4))
 @pytest.mark.parametrize("edge_features", [False, True])
-def test_two_hop_matches_pyg(seed, edge_features):
+def test_two_hop_matches_pyg(seed, edge_features, monkeypatch):
+    torch = pytest.importorskip("torch")
     pyg_transforms = pytest.importorskip("torch_geometric.transforms")
     graph = random_graph(seed)
     if edge_features:
         # PyG sorts the edges by source without permuting `edge_attr`, so the
-        # comparison needs edges that are already sorted.
+        # comparison needs edges that are already sorted, and a stable sort:
+        # x86 builds of torch sort ties in an unspecified order.
         graph = graph.coalesce()
+        unstable_sort = torch.Tensor.sort
+
+        def stable_sort(self, *args, **kwargs):
+            return unstable_sort(self, *args, **{**kwargs, "stable": True})
+
+        monkeypatch.setattr(torch.Tensor, "sort", stable_sort)
         graph.edge_features = mx.random.normal((graph.num_edges, 2))
 
     expected = pyg_transforms.TwoHop()(to_pyg(graph))

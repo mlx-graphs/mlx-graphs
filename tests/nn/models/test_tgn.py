@@ -67,6 +67,18 @@ def pyg_tgn(monkeypatch):
         return out
 
     monkeypatch.setattr(tgn, "scatter_argmax", scatter_argmax)
+
+    # PyG's LastNeighborLoader.insert sorts nodes with `Tensor.sort()`, whose
+    # order of ties is unspecified: x86 builds of torch use an unstable SIMD
+    # sort, so the neighbors kept when a node gets more than `size` events
+    # depend on the CPU. mlx-graphs follows the stable order.
+    stable_sort = torch.Tensor.sort
+
+    def sort(self, *args, **kwargs):
+        kwargs.setdefault("stable", True)
+        return stable_sort(self, *args, **kwargs)
+
+    monkeypatch.setattr(torch.Tensor, "sort", sort)
     torch.manual_seed(0)
     return torch, tgn
 

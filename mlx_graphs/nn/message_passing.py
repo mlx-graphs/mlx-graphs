@@ -6,6 +6,7 @@ from typing import Any, Dict, List, Literal, Optional, Tuple, Union, get_args
 import mlx.core as mx
 import mlx.nn as nn
 
+from mlx_graphs.backend import HAS_MLX_CLUSTER, MLX_CLUSTER_IMPORT_ERROR
 from mlx_graphs.nn.kernels.csr_softmax_spmm import (
     csr_softmax_spmm,
     supports_metal_csr_softmax_spmm,
@@ -13,8 +14,11 @@ from mlx_graphs.nn.kernels.csr_softmax_spmm import (
 from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 # Fused SpMM kernels live in mlx-cluster. They are optional: without them (or
-# with an older mlx-cluster) every layer keeps the gather-scatter path.
+# with an older mlx-cluster, e.g. on Linux) every layer keeps the
+# gather-scatter path.
 try:
+    if not HAS_MLX_CLUSTER:
+        raise ImportError(str(MLX_CLUSTER_IMPORT_ERROR))
     from mlx_cluster import coo_to_csr as _coo_to_csr
     from mlx_cluster import spmm_coo as _spmm_coo
     from mlx_cluster import spmm_csr as _spmm_csr

@@ -6,6 +6,8 @@ from typing import Optional
 
 import mlx.core as mx
 
+from mlx_graphs.backend import use_metal_kernels
+
 # One Apple GPU SIMD group handles the channels of an edge and head. In the
 # backward pass each threadgroup reduces its attention-vector contributions
 # locally before writing a partial sum.
@@ -249,8 +251,7 @@ def gatv2_edge_scores(
         and src_feats.dtype == dst_feats.dtype == att.dtype == mx.float32
         and isinstance(slope, (int, float))
         and isfinite(slope)
-        and mx.default_device().type == mx.gpu
-        and mx.metal.is_available()
+        and use_metal_kernels()
     ):
         return _metal_scores(float(slope))(src_feats, dst_feats, att, edge_index)
     return _reference_scores(src_feats, dst_feats, att, edge_index, slope, edge_feats)
