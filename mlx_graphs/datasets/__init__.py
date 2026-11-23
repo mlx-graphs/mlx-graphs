@@ -29,4 +29,8 @@ from .large_graph import (  # noqa
     Reddit,
     Reddit2,
     Yelp,
+from .tgb import (  # noqa
+    TGBLinkPropPredDataset,
+    TGBNegativeEdgeSampler,
+    TGBNodePropPredDataset,
 )

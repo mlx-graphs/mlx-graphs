@@ -24,6 +24,20 @@ Large graphs
   ``MemmapGraphStore``) implementations. ``NeighborLoader((feature_store,
   graph_store), ...)`` gathers only the rows of the sampled nodes, so node
   features larger than the memory can be used for training.
+Features
+~~~~~~~~
+
+- Temporal Graph Benchmark (TGB) datasets: ``TGBLinkPropPredDataset``
+  (``tgbl-wiki``, ``tgbl-review``, ``tgbl-coin``, ``tgbl-comment``,
+  ``tgbl-flight``) with TGB's chronological splits and precomputed
+  one-vs-many negative samples (``TGBNegativeEdgeSampler``), and
+  ``TGBNodePropPredDataset`` (``tgbn-trade``, ``tgbn-genre``,
+  ``tgbn-reddit``, ``tgbn-token``) with its label stream. ``TGBEvaluator``
+  computes MRR / Hits@k and NDCG@10 as py-tgb. The events, splits, negative
+  samples and labels of ``tgbl-wiki``, ``tgbl-review``, ``tgbn-trade`` and
+  ``tgbn-genre`` were checked to be identical to py-tgb's. New examples
+  ``tgn_tgbl.py`` and ``tgn_tgbn.py`` train TGN with the TGB protocol
+  (compared with py-tgb's PyG examples in ``benchmarks/tgn_comparison``).
 
 Documentation
 ~~~~~~~~~~~~~

@@ -78,7 +78,9 @@ match = "^main$"
 [tool.semantic_release.commit_parser_options]
 allowed_tags = ["feat", "build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
 minor_tags = ["feat"]
-patch_tags = ["build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
+# Only these make a release. Days with only build, chore, ci, docs, refactor,
+# revert, style or test commits make none.
+patch_tags = ["fix", "perf"]
 parse_squash_commits = false
 
 
