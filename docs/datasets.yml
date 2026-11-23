@@ -252,6 +252,48 @@
   avg_degree: "73.79"
   features: node
   labels: node
+# Reddit to AmazonProducts and PPI: the node and edge counts are those of the
+# class docstrings (#217), the average degree is 2 * edges / nodes.
+- name: Reddit
+  class: Reddit
+  graphs: "1"
+  nodes: "232,965"
+  edges: "114,615,892"
+  avg_degree: "983.98"
+  features: node
+  labels: node
+- name: Reddit2
+  class: Reddit2
+  graphs: "1"
+  nodes: "232,965"
+  edges: "23,213,838"
+  avg_degree: "199.29"
+  features: node
+  labels: node
+- name: Flickr
+  class: Flickr
+  graphs: "1"
+  nodes: "89,250"
+  edges: "899,756"
+  avg_degree: "20.16"
+  features: node
+  labels: node
+- name: Yelp
+  class: Yelp
+  graphs: "1"
+  nodes: "716,847"
+  edges: "13,954,819"
+  avg_degree: "38.93"
+  features: node
+  labels: node (multi-label)
+- name: AmazonProducts
+  class: AmazonProducts
+  graphs: "1"
+  nodes: "1,569,960"
+  edges: "264,339,468"
+  avg_degree: "336.75"
+  features: node
+  labels: node (multi-label)
 - name: FB15k-237 (train)
   class: FB15k_237
   args: 'split="train"'
@@ -354,6 +396,16 @@
   avg_degree: "~16.00"
   features: node, edge
   labels: graph
+# 20 training graphs with 44,906 nodes and 1,226,368 edges in total
+- name: PPI (train split)
+  class: PPI
+  args: '"train"'
+  graphs: "20"
+  nodes: "~2,245.3"
+  edges: "~61,318.4"
+  avg_degree: "~54.62"
+  features: node
+  labels: node (multi-label)
 - name: WordNet18
   class: WordNet18
   graphs: "1"
