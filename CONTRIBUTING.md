@@ -43,3 +43,24 @@ The title becomes the squash commit message and determines the version bump.
 Use `!` for breaking changes, as in `feat(loaders)!: change the default sampler`.
 
 Add migration details to `CHANGELOG.rst` in the PR that introduces them.
+
+## Releases
+
+Releases are automatic and happen at most once a day (23:00 UTC). Each one
+ships everything merged to `main` since the previous release, up to the newest
+commit whose post-merge checks passed. The PR titles decide the version:
+
+| PR titles since the last release | Release |
+|---|---|
+| a `feat` | minor, e.g. `0.5.3` → `0.6.0` |
+| only `fix` / `perf` | patch, e.g. `0.5.3` → `0.5.4` |
+| only `docs`, `test`, `ci`, `chore`, `build`, `refactor`, `style`, `revert` | no release |
+
+A breaking change (`!` in the title) is a minor bump while the version is
+`0.x`, and a major bump from `1.0.0` on.
+
+To release right away, run the **Release Python Package** workflow from the
+Actions tab ("Run workflow"), or `gh workflow run release.yml --ref main`. Its
+`bump` input is `auto` by default (the rules above); `patch`, `minor` or `major`
+force that bump, e.g. `gh workflow run release.yml --ref main -f bump=major`
+for `1.0.0`.
