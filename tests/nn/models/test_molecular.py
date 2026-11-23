@@ -366,7 +366,11 @@ def test_attentive_fp_dropout_and_training():
     x, edge_index, e, batch = (mx.array(a) for a in small_molecules(1))
     model.eval()
     ref = model(x, edge_index, e, batch)
-    np.testing.assert_allclose(np.array(model(x, edge_index, e, batch)), np.array(ref))
+    # No dropout in eval mode: the same output up to the order of the GPU's
+    # atomic additions (dropout would change it far more than this tolerance).
+    np.testing.assert_allclose(
+        np.array(model(x, edge_index, e, batch)), np.array(ref), rtol=1e-5, atol=1e-6
+    )
     model.train()
     target = mx.array([[1.0], [0.0], [-1.0], [2.0]])
     optimizer = optim.Adam(learning_rate=1e-2)
