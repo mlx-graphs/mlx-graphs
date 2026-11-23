@@ -6,6 +6,7 @@ name: Linting and tests
 on:
   pull_request:
     branches: [ "main" ]
+  workflow_call:
 
 jobs:
   linting:
@@ -18,6 +19,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:
@@ -30,6 +33,7 @@ jobs:
     - name: Run lint
       run: |
         pre-commit run --all-files
+        python -m unittest discover -s .github/scripts
 
   test:
 
@@ -41,6 +45,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        persist-credentials: false
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v5
       with:

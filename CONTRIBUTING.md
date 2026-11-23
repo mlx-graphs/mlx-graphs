@@ -34,3 +34,12 @@ To open a PR:
 - Run tests locally to make sure you're not introducing breaking changes.
 - Format the code using pre-commit.
 - Every PR should have passing CI tests and at least one review.
+
+### Pull request titles
+
+Use a [Conventional Commit](https://www.conventionalcommits.org/) title for each
+PR, for example `fix(loaders): handle empty batches` or `feat: add a dataset`.
+The title becomes the squash commit message and determines the version bump.
+Use `!` for breaking changes, as in `feat(loaders)!: change the default sampler`.
+
+Add migration details to `CHANGELOG.rst` in the PR that introduces them.

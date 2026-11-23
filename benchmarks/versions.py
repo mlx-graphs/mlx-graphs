@@ -16,7 +16,7 @@ import re
 import subprocess
 from typing import Optional
 
-REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+REPO_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 
 
 def _git(*args: str) -> str:
@@ -62,16 +62,6 @@ def library_info() -> dict:
     }
 
 
-def worker_env() -> dict:
-    """Environment for worker processes: this checkout's ``mlx_graphs`` comes
-    first on the path, whatever version is installed in the environment."""
-    env = dict(os.environ)
-    env["PYTHONPATH"] = os.pathsep.join(
-        [REPO_ROOT] + [p for p in env.get("PYTHONPATH", "").split(os.pathsep) if p]
-    )
-    return env
-
-
 def check_imported_library(python: str) -> str:
     """Path of the ``mlx_graphs`` package a worker imports; raises if it is
     not the one of this checkout (the measured code would not be the one
@@ -84,8 +74,7 @@ def check_imported_library(python: str) -> str:
         ],
         capture_output=True,
         text=True,
-        env=worker_env(),
-        cwd=REPO_ROOT,  # as the workers: no other checkout in the current dir
+        cwd=REPO_ROOT,
     )
     path = out.stdout.strip()
     expected = os.path.join(REPO_ROOT, "mlx_graphs")

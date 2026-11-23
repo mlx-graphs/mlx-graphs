@@ -1,0 +1,24 @@
+name: Main checks
+
+on:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  commit-title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate squash commit title
+        run: python .github/scripts/check_commit_title.py "$(git log -1 --format=%s)"
+
+  checks:
+    uses: ./.github/workflows/linting_and_tests.yml
