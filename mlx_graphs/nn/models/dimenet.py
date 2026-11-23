@@ -555,6 +555,13 @@ class DimeNet(nn.Module):
     :func:`triplets`), the distances and angles on the device, so that the
     output can be differentiated with respect to ``pos``.
 
+    .. note::
+
+        The mini-batches of molecules all have different numbers of atoms,
+        edges and triplets, so MLX rarely reuses the buffers it frees and its buffer
+        cache can grow to tens of GB during training. Bound it, e.g. with
+        ``mx.set_cache_limit(1024**3)`` before training.
+
     Args:
         hidden_channels: Hidden embedding size.
         out_channels: Size of each output sample.

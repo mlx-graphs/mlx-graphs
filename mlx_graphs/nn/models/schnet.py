@@ -233,6 +233,13 @@ class SchNet(nn.Module):
     (with :func:`~mlx_graphs.utils.radius_graph`, which keeps the
     ``max_num_neighbors`` *closest* neighbors when there are more).
 
+    .. note::
+
+        The mini-batches of molecules all have different numbers of atoms
+        and edges, so MLX rarely reuses the buffers it frees and its buffer
+        cache can grow to tens of GB during training. Bound it, e.g. with
+        ``mx.set_cache_limit(1024**3)`` before training.
+
     Args:
         hidden_channels: Hidden embedding size. Default: ``128``
         num_filters: The number of filters to use. Default: ``128``

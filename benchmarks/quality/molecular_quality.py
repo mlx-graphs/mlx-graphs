@@ -6,8 +6,10 @@ SchNet and DimeNet++ on a QM9 target, AttentiveFP on MoleculeNet ESOL.
     python benchmarks/quality/molecular_quality.py --summary         # table only
 
 Each configuration (task, framework, seed) trains in its own subprocess
-(``--worker``). mlx-graphs runs on the GPU and PyG on the CPU
-(``--torch-threads`` threads). Results are appended to
+(``--worker``), killed if its memory footprint exceeds ``--memory-gb``
+(``benchmarks/run_capped.py``). The MLX runs bound MLX's buffer cache (the
+mini-batches of molecules all have different shapes). mlx-graphs runs on the
+GPU and PyG on the CPU (``--torch-threads`` threads). Results are appended to
 ``molecular_results.jsonl`` (finished configurations are skipped, so an
 interrupted run resumes), and the table is written to
 ``molecular_results.md``.
@@ -247,6 +249,10 @@ def run_mlx(task, cfg, data, seed, stats):
     from mlx_graphs.data.batch import GraphDataBatch
     from mlx_graphs.nn import AttentiveFP, DimeNetPlusPlus, SchNet
 
+    # Every mini-batch of molecules has different numbers of atoms, edges and
+    # triplets, so freed buffers are rarely reused: bound MLX's buffer cache,
+    # or it grows without limit (to ~50 GB for DimeNet++).
+    mx.set_cache_limit(1024**3)
     mx.random.seed(seed)
     mean, std = stats
     if task == "schnet":
@@ -326,6 +332,8 @@ def run_mlx(task, cfg, data, seed, stats):
             count += len(idx)
         times.append(time.perf_counter() - start)
         selector.add(epoch, evaluate("val"), evaluate("test"), total / count)
+        mx.clear_cache()
+    selector.peak_memory_gb = mx.get_peak_memory() / 1024**3
     return selector, times
 
 
@@ -450,6 +458,7 @@ def worker(args):
                 # the first epoch includes warm-up (e.g. kernel compilation)
                 epoch_time=float(np.median(times[1:] if len(times) > 1 else times)),
                 first_epoch_time=times[0],
+                peak_memory_gb=getattr(selector, "peak_memory_gb", None),
                 curve=selector.curve,
             )
         )
@@ -484,11 +493,14 @@ def summarize():
         "`molecular_quality.py` with the same architectures, hyperparameters,",
         "data and mini-batch order. Test metric at the best validation epoch,",
         "mean ± std over seeds; time per epoch is the median training time of",
-        "an epoch (the first one, with warm-up, excluded).",
+        "an epoch (the first one, with warm-up, excluded). PyG runs without",
+        "pyg-lib / torch-cluster / torch-sparse (pure-torch radius graph and",
+        "triplets). Peak memory: `mx.get_peak_memory()` with MLX's buffer",
+        "cache bounded to 1 GB. Shared machine: the times vary by ~30%.",
         "",
         "| model | dataset | metric | PyG | mlx-graphs | PyG s/epoch "
-        "| mlx-graphs s/epoch | seeds |",
-        "|---|---|---|---|---|---|---|---|",
+        "| mlx-graphs s/epoch | mlx-graphs peak memory (GB) | seeds |",
+        "|---|---|---|---|---|---|---|---|---|",
     ]
 
     def fmt(values):
@@ -510,6 +522,8 @@ def summarize():
             fw: np.mean([r["epoch_time"] for r in rs]) if rs else float("nan")
             for fw, rs in rows.items()
         }
+        peaks = [r.get("peak_memory_gb") or 0.0 for r in rows["mlx"]]
+        peak = max(peaks) if peaks else float("nan")
         if cfg["sizes"]:
             dataset += " {}/{}/{}".format(*cfg["sizes"])
         lines.append(
@@ -517,6 +531,7 @@ def summarize():
             f"| {fmt([r['test'] for r in rows['pyg']])} "
             f"| {fmt([r['test'] for r in rows['mlx']])} "
             f"| {times['pyg']:.1f} | {times['mlx']:.1f} "
+            f"| {peak:.2f} "
             f"| {len(rows['pyg'])}/{len(rows['mlx'])} |"
         )
     text = "\n".join(lines) + "\n"
@@ -531,6 +546,9 @@ def main():
     parser.add_argument("--frameworks", nargs="+", default=["pyg", "mlx"])
     parser.add_argument("--data-dir", default=os.path.join(REPO, ".mlx_graphs_data"))
     parser.add_argument("--torch-threads", type=int, default=4)
+    parser.add_argument(
+        "--memory-gb", type=float, default=16, help="memory cap of each run"
+    )
     parser.add_argument("--summary", action="store_true")
     parser.add_argument("--worker", action="store_true", help=argparse.SUPPRESS)
     parser.add_argument("--task", help=argparse.SUPPRESS)
@@ -552,6 +570,11 @@ def main():
                     continue
                 print(f"{task} {framework} seed={seed} ...", flush=True)
                 cmd = [
+                    sys.executable,
+                    os.path.join(REPO, "benchmarks", "run_capped.py"),
+                    "--gb",
+                    str(args.memory_gb),
+                    "--",
                     sys.executable,
                     __file__,
                     "--worker",
