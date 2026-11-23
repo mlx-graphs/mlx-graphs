@@ -22,6 +22,14 @@ from .fake import FakeDataset, FakeHeteroDataset  # noqa
 from .jodie import JODIEDataset  # noqa
 from .lrgb import LRGBDataset  # noqa
 from .gnn_benchmark import GNNBenchmarkDataset  # noqa
+from .large_graph import (  # noqa
+    PPI,
+    AmazonProducts,
+    Flickr,
+    Reddit,
+    Reddit2,
+    Yelp,
+)
 from .tgb import (  # noqa
     TGBLinkPropPredDataset,
     TGBNegativeEdgeSampler,

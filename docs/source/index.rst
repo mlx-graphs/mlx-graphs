@@ -110,6 +110,7 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    :maxdepth: 1
 
    guide/message_passing
+   guide/large_graphs
    datasets
 
 

@@ -48,6 +48,12 @@ Datasets
 	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	Reddit
+	Reddit2
+	Flickr
+	Yelp
+	AmazonProducts
+	PPI
 
 
 .. autosummary::
