@@ -14,7 +14,11 @@ MLX-graphs provides several built-in datasets for graph machine learning tasks.
 
 Each name links the API page of the class that loads it; `Load with` is the call. The table is built from [`docs-site/datasets.yml`](https://github.com/mlx-graphs/mlx-graphs/blob/main/docs-site/datasets.yml).
 
+<div class="mg-datasets" markdown>
+
 --8<-- "datasets_table.md"
+
+</div>
 
 The last rows are collections and heterogeneous graphs, with one example each and no statistics: their class page lists the other datasets they load.
 

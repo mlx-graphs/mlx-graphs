@@ -66,13 +66,14 @@
   opacity: 1;
 }
 .md-typeset .md-button.mg-discord {
-  border-color: rgba(88, 101, 242, 0.45);
+  border-color: rgba(88, 101, 242, 0.35);
   color: #4752c4;
-  background: transparent;
+  background: rgba(88, 101, 242, 0.1);
 }
 [data-md-color-scheme="slate"] .md-typeset .md-button.mg-discord {
-  color: #9aa2ff;
-  border-color: rgba(154, 162, 255, 0.45);
+  color: #b4baff;
+  border-color: rgba(154, 162, 255, 0.35);
+  background: rgba(88, 101, 242, 0.18);
 }
 .md-typeset .md-button.mg-discord:hover,
 .md-typeset .md-button.mg-discord:focus-visible {
@@ -82,6 +83,18 @@
 }
 .md-typeset .md-button.mg-discord .twemoji svg {
   fill: currentColor;
+}
+
+/* datasets table: the calls of the Load with column stay on one line */
+.md-typeset .mg-datasets td:nth-child(2) code {
+  white-space: nowrap;
+}
+.md-typeset .mg-datasets table:not([class]) {
+  font-size: 0.64rem;
+}
+.md-typeset .mg-datasets table:not([class]) th,
+.md-typeset .mg-datasets table:not([class]) td {
+  padding: 0.5em 0.8em;
 }
 
 /* changelog: date and links under each version */
