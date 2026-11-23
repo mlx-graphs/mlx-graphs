@@ -866,8 +866,12 @@ def url_ok(url: str) -> bool:
 def release_body_md(body: str, broken_images: list[str]) -> str:
     """A GitHub release body (GitHub-flavoured Markdown) -> Python-Markdown."""
     text = body.replace("\r\n", "\n").strip()
-    # headings go under the version's h2
-    text = re.sub(r"^(#{1,4})\s+", lambda m: "#" * min(6, len(m.group(1)) + 2) + " ", text, flags=re.M)
+    # GitHub's generated heading: a label, not an entry of the table of contents
+    text = re.sub(r"^#+\s+What's Changed\s*$", "**What's Changed**", text, flags=re.M)
+    # the other headings go under the version's h2: the top level becomes h3
+    levels = [len(h) for h in re.findall(r"^(#{1,6})\s", text, re.M)]
+    shift = 3 - min(levels) if levels else 0
+    text = re.sub(r"^(#{1,6})\s+", lambda m: "#" * min(6, len(m.group(1)) + shift) + " ", text, flags=re.M)
     # bare links of pull requests, compare views and users, as GitHub renders them
     text = re.sub(
         rf"(?<![(<\"\[]){re.escape(GITHUB)}/pull/(\d+)", rf"[#\1]({GITHUB}/pull/\1)", text
