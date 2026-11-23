@@ -15,3 +15,4 @@ from .link_pred import (  # noqa
     LinkPredPrecision,
     LinkPredRecall,
 )
+from .tgb import TGBEvaluator, tgb_mrr_hits, tgb_ndcg  # noqa
