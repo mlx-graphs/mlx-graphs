@@ -11,3 +11,8 @@ from .select import filter_adj, topk  # noqa
 from .topk_pool import TopKPooling  # noqa
 from .sag_pool import SAGPooling  # noqa
 from mlx_graphs.utils.spatial import knn, knn_graph, radius, radius_graph  # noqa
+from .dense_pool import DMoNPooling, dense_diff_pool, dense_mincut_pool  # noqa
+from .edge_pool import EdgePooling, UnpoolInfo  # noqa
+from .asap import ASAPooling  # noqa
+from .mem_pool import MemPooling  # noqa
+from .pan_pool import PANPooling  # noqa

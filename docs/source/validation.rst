@@ -279,6 +279,11 @@ scripts:
        Set2Set, DeepSets on MUTAG (10 seeds) and PROTEINS (5 seeds)
      - 17
      - 17
+   * - Hierarchical pooling
+     - DiffPool, MinCutPool, DMoN, ASAPooling, EdgePooling, GraphUNet on
+       PROTEINS (5 seeds, ``pooling_quality.py``)
+     - 6
+     - 6
    * - Heterogeneous graphs
      - HAN on IMDB, HGT on DBLP, RGAT and FastRGCN on DBLP as a homogeneous
        graph
@@ -631,6 +636,9 @@ scikit-learn), then run:
 
    # graph-level, heterogeneous, link and KG models (--groups tu kge ... for a subset)
    python benchmarks/quality/graph_quality.py
+
+   # hierarchical and dense pooling on PROTEINS (--models diffpool asap ... for a subset)
+   python benchmarks/quality/pooling_quality.py
 
    # samplers and loaders (about 15 minutes)
    python benchmarks/run_capped.py --gb 6 -- python benchmarks/quality/sampler_quality.py \
