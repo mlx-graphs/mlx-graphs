@@ -46,7 +46,7 @@ MLX's float32 matmul on the Mac's GPU has a relative error of about 1e-3, where 
 | Datasets (slow tests, `pytest --datasets`)                    | 17 of 23        | a dataset's arrays against PyG's version of it              |
 | Other (`tests/algorithms`, `tests/test_hetero_linear.py`)     | 0 of 2          | (mlx-graphs only)                                           |
 
-12 of these files also compare gradients with torch's autograd, among them the GAT, GATv2, AGNN, GEN, MF and DirGNN convolutions, the aggregations, the scatter reductions and `TGNMemory`. The `to_hetero` tests copy PyG's weights into converted models, including on the full DBLP and IMDB graphs (slow tests). `tests/pyg_copy.py` holds the helpers that convert PyG state dicts. [Message passing](guide/message-passing.md) shows how to write such a test.
+12 of these files also compare gradients with torch's autograd, among them the GAT, GATv2, AGNN, GEN, MF and DirGNN convolutions, the aggregations, the scatter reductions and `TGNMemory`. The `to_hetero` tests copy PyG's weights into converted models, including on the full DBLP and IMDB graphs (slow tests). `tests/pyg_copy.py` holds the helpers that convert PyG state dicts. [Message passing](getting-started/writing-layers.md) shows how to write such a test.
 
 Some layers were also checked with copied weights on full datasets:
 

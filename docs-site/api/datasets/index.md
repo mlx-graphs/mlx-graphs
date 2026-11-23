@@ -1,6 +1,6 @@
 # Datasets { #mlx_graphs.datasets }
 
-Base classes and built-in datasets of `mlx_graphs.datasets`. The [datasets guide](../../guide/datasets.md) lists their sizes.
+Base classes and built-in datasets of `mlx_graphs.datasets`. The [datasets guide](../../getting-started/datasets.md) lists their sizes.
 
 ## Base classes
 

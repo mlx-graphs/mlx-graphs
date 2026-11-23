@@ -269,3 +269,9 @@ for epoch in range(200):
     Create MLX's `Adam` / `AdamW` with `bias_correction=True`. MLX's default (no bias correction) takes much larger first steps than PyTorch's Adam, which can cost accuracy (about 4 points for GAT on Cora in our runs).
 
 The message passing of the built-in layers runs as fused sparse kernels on the GPU; see [Neural networks](../api/nn/index.md) for how to control it, and the [Benchmarks](../benchmarks.md) for how it compares with PyTorch Geometric.
+
+## Next steps
+
+- [Writing your own layers](writing-layers.md): the `MessagePassing` contract, aggregations, attention layers, fused kernels and how to check a layer against PyG.
+- [Datasets](datasets.md): the built-in datasets and their sizes.
+- [Tutorials](../tutorials/index.md): notebooks that train complete models, most of them side by side with PyTorch Geometric.

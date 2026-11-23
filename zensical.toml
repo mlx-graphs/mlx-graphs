@@ -44,10 +44,8 @@ nav = [
     { "Installation" = "getting-started/installation.md" },
     { "Quickstart" = "getting-started/quickstart.md" },
     { "Coming from PyG" = "getting-started/from-pyg.md" },
-  ] },
-  { "User guide" = [
-    { "Message passing" = "guide/message-passing.md" },
-    { "Datasets" = "guide/datasets.md" },
+    { "Writing your own layers" = "getting-started/writing-layers.md" },
+    { "Datasets" = "getting-started/datasets.md" },
   ] },
   { "Tutorials" = [
     "tutorials/index.md",

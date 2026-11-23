@@ -1051,14 +1051,17 @@ SPHINX_PAGES = {
     "tutorials/quickstart.html": "getting-started/quickstart",
     "tutorials/from_pyg.html": "getting-started/from-pyg",
     "tutorials/examples/index.html": "tutorials/examples",
-    "guide/message_passing.html": "guide/message-passing",
-    "datasets.html": "guide/datasets",
+    "guide/message_passing.html": "getting-started/writing-layers",
+    "datasets.html": "getting-started/datasets",
     # linked from the README, not a page of the Sphinx site
     "tutorials/graph_classification.html": "tutorials/notebooks/graph_classification",
     "benchmarks.html": "benchmarks",
     "validation.html": "validation",
     "changelog.html": "changelog",
     "genindex.html": "api",
+    # pages of this site that moved: the User guide is now in Getting started
+    "guide/message-passing/index.html": "getting-started/writing-layers",
+    "guide/datasets/index.html": "getting-started/datasets",
     "search.html": "",
 }
 
@@ -1208,12 +1211,12 @@ def check_lists() -> None:
     for script in sorted((ROOT / "examples").glob("*.py")):
         if f"examples/{script.name})" not in examples:
             problems.append(f"tutorials/examples.md does not list examples/{script.name}")
-    datasets_page = (CONTENT / "guide" / "datasets.md").read_text()
+    datasets_page = (CONTENT / "getting-started" / "datasets.md").read_text()
     pkg = load_package()
     base = {"BaseDataset", "Dataset", "HeteroDataset"}
     for name in public_exports(pkg, "mlx_graphs.datasets"):
         if name not in base and f"[mlx_graphs.datasets.{name}]" not in datasets_page:
-            problems.append(f"guide/datasets.md does not list mlx_graphs.datasets.{name}")
+            problems.append(f"getting-started/datasets.md does not list mlx_graphs.datasets.{name}")
     if problems:
         raise SystemExit("\n".join(problems))
     print("lists: examples and datasets pages match examples/ and mlx_graphs.datasets")

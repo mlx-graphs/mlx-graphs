@@ -21,7 +21,7 @@ reload on their own. CI builds with `python docs-site/scripts/check_api.py`,
 
 | Path | What |
 |---|---|
-| `content/` | hand-written pages (Markdown): home, getting started, guide, tutorials index, benchmarks, validation |
+| `content/` | hand-written pages (Markdown): home, getting started (with writing layers and datasets), tutorials index, benchmarks, validation |
 | `content/tutorials/notebooks/*.ipynb` | the tutorial notebooks, rendered with their stored outputs (never executed) |
 | `content/assets/` | CSS, JavaScript, images, tutorial figures (`assets/tutorials/`) |
 | `api/` | templates of the API reference: one Markdown page per section, with `<!-- api -->` blocks |

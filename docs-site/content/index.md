@@ -164,7 +164,7 @@ Layers that override `message()` with something other than a weighted sum of
 neighbour features (e.g. attention computed per edge) simply drop the
 decorator, and `propagate` gathers per-edge messages and scatters them.
 
-[Write your own layers :lucide-arrow-right:](guide/message-passing.md){ .md-button }
+[Write your own layers :lucide-arrow-right:](getting-started/writing-layers.md){ .md-button }
 
 </div>
 
