@@ -1,9 +1,9 @@
 """Check that the API reference lists every public name, and only existing ones.
 
-    python docs-site/scripts/check_api.py
+    python docs/scripts/check_api.py
 
 The API pages list their classes and functions by hand, in the
-``<!-- api <module> -->`` blocks of ``docs-site/api/**/*.md``. This check fails
+``<!-- api <module> -->`` blocks of ``docs/api/**/*.md``. This check fails
 (exit code 1) when
 
 - a public name exported by the ``__init__.py`` of a ``mlx_graphs`` subpackage
@@ -12,7 +12,7 @@ The API pages list their classes and functions by hand, in the
 - a block lists a name that does not exist (any more).
 
 Static analysis only (griffe): mlx and torch need not be installed. CI runs
-it before building the site (.github/workflows/docs_site.yml).
+it before building the site (.github/workflows/docs.yml).
 """
 
 from __future__ import annotations
@@ -106,7 +106,7 @@ def main() -> int:
                 module = module.rsplit(".", 1)[0]
                 votes = by_module.get(module)
             hint = votes.most_common(1)[0][0] if votes else None
-            where = f"{hint[0]}, section '{hint[1]}'" if hint else "a page of docs-site/api/"
+            where = f"{hint[0]}, section '{hint[1]}'" if hint else "a page of docs/api/"
             missing.append(
                 f"  {package.path}.{name}  (defined in {path.rsplit('.', 1)[0]})"
                 f"\n      -> add it to an <!-- api {package.path} --> block of {where}"
@@ -117,7 +117,7 @@ def main() -> int:
     if missing:
         print(f"{len(missing)} public name(s) are in no API block:", *missing, sep="\n")
     if stale or missing:
-        print("\nSee docs-site/README.md, 'Adding a class or function to the API reference'.")
+        print("\nSee docs/README.md, 'Adding a class or function to the API reference'.")
         return 1
     print(f"API reference: all {len(listed)} listed names exist and every public name is listed")
     return 0

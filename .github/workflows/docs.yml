@@ -1,6 +1,6 @@
-name: build-docs-site
+name: docs-pr
 
-# Builds the Zensical documentation site (zensical.toml, docs-site/) on pull
+# Builds the Zensical documentation site (zensical.toml, docs/) on pull
 # requests. Build only: publish_docs.yml builds and deploys the site at each
 # release.
 
@@ -31,14 +31,14 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install $(python -c "import tomllib; print(' '.join(tomllib.load(open('pyproject.toml', 'rb'))['project']['optional-dependencies']['docs']))")
       - name: Check that the API reference lists every public name
-        # fails on a public class or function missing from docs-site/api/,
+        # fails on a public class or function missing from docs/api/,
         # and on a listed name that no longer exists
-        run: python docs-site/scripts/check_api.py
+        run: python docs/scripts/check_api.py
       - name: Generate the API, notebook, changelog and benchmark pages
         env:
           # the changelog shows the notes of the GitHub releases
           GITHUB_TOKEN: ${{ github.token }}
-        run: python docs-site/scripts/gen.py
+        run: python docs/scripts/gen.py
       - name: Build the site (strict)
         run: zensical build --strict --clean
       - name: Upload the site

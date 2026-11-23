@@ -2,6 +2,5 @@
 prune .github
 prune benchmarks
 prune docs
-prune docs-site
 prune examples
 exclude zensical.toml .gitignore .pre-commit-config.yaml ACKNOWLEDGMENTS.md CONTRIBUTING.md

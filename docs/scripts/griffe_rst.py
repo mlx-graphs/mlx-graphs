@@ -13,7 +13,7 @@ Markdown, so this extension rewrites, before griffe parses the sections:
 - ````code```` -> ```code```, ```text <url>`_`` -> ``[text](url)``
 - ``References:`` blocks -> a "References" admonition
 
-The documented objects come from ``docs-site/.generated/api_objects.json``,
+The documented objects come from ``docs/.generated/api_objects.json``,
 written by ``gen.py`` before the build. It runs on static analysis only: mlx,
 torch, etc. never need to be importable.
 """

@@ -33,12 +33,12 @@ jobs:
           python -m pip install --upgrade pip
           python -m pip install $(python -c "import tomllib; print(' '.join(tomllib.load(open('pyproject.toml', 'rb'))['project']['optional-dependencies']['docs']))")
       - name: Check that the API reference lists every public name
-        run: python docs-site/scripts/check_api.py
+        run: python docs/scripts/check_api.py
       - name: Generate the API, notebook, changelog and benchmark pages
         env:
           # the Changelog page shows the notes of the GitHub releases
           GITHUB_TOKEN: ${{ github.token }}
-        run: python docs-site/scripts/gen.py
+        run: python docs/scripts/gen.py
       - name: Build the site (Zensical, strict)
         run: zensical build --strict --clean
       - name: Check whether this release has already deployed

@@ -7,15 +7,15 @@ root) and this directory. Published at <https://mlx-graphs.github.io/mlx-graphs/
 
 ```shell
 pip install -e '.[docs]'
-python docs-site/scripts/gen.py      # generated pages (see below)
+python docs/scripts/gen.py      # generated pages (see below)
 zensical serve                       # http://localhost:8000/mlx-graphs/, live reload
 ```
 
 Re-run `gen.py` after changing an API template, a notebook, `tutorials.yml`,
 `CHANGELOG.rst` or the benchmark results; edits to the hand-written pages
-reload on their own. CI builds with `python docs-site/scripts/check_api.py`,
+reload on their own. CI builds with `python docs/scripts/check_api.py`,
 `gen.py` and `zensical build --strict --clean`
-(`.github/workflows/docs_site.yml`); run the same before opening a PR.
+(`.github/workflows/docs.yml`); run the same before opening a PR.
 
 ## Where things are
 

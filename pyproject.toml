@@ -42,7 +42,7 @@ test = [
   "scikit-learn>=1.3",
 ]
 docs = [
-  # the documentation site (zensical.toml, docs-site/). Static analysis only:
+  # the documentation site (zensical.toml, docs/). Static analysis only:
   # mlx and torch need not be installed to build it.
   "zensical==0.1.3",
   "mkdocstrings==1.0.8",

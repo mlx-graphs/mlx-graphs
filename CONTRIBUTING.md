@@ -53,20 +53,20 @@ guide), add a section titled with the version number to `CHANGELOG.rst`
 ## Documentation
 
 The documentation site (<https://mlx-graphs.github.io/mlx-graphs/>) is built
-with [Zensical](https://zensical.org); see [`docs-site/README.md`](docs-site/README.md).
+with [Zensical](https://zensical.org); see [`docs/README.md`](docs/README.md).
 
-- **Pages** are Markdown files in `docs-site/content/`.
+- **Pages** are Markdown files in `docs/content/`.
 - **A new public class or function** goes in an `<!-- api <module> -->` block
-  of the right page of `docs-site/api/` (e.g. `docs-site/api/nn/index.md` for a
+  of the right page of `docs/api/` (e.g. `docs/api/nn/index.md` for a
   layer); its page is generated from the docstring (Google style). CI fails
   when a public name is missing from these blocks, or a listed one no longer
   exists.
-- **A tutorial notebook** goes in `docs-site/content/tutorials/notebooks/` with
+- **A tutorial notebook** goes in `docs/content/tutorials/notebooks/` with
   its outputs (it is not executed), its figure in
-  `docs-site/content/assets/tutorials/`, a card in `docs-site/tutorials.yml`
+  `docs/content/assets/tutorials/`, a card in `docs/tutorials.yml`
   and an entry in the `nav` of `zensical.toml`.
 - **Preview** with `pip install -e '.[docs]'`, then
-  `python docs-site/scripts/gen.py` and `zensical serve`.
+  `python docs/scripts/gen.py` and `zensical serve`.
 
 ## Releases
 

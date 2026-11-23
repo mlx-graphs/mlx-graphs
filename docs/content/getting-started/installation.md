@@ -41,7 +41,7 @@ The site is built with [Zensical](https://zensical.org). The API reference is ge
 
 ```shell
 pip install -e '.[docs]'
-python docs-site/scripts/gen.py   # API pages, notebooks, changelog, benchmark sections
+python docs/scripts/gen.py   # API pages, notebooks, changelog, benchmark sections
 zensical serve                    # live preview on http://localhost:8000/mlx-graphs/
 zensical build --strict --clean   # static site in site/
 ```
