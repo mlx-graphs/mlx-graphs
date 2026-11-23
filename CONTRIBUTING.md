@@ -70,7 +70,7 @@ with [Zensical](https://zensical.org); see [`docs/README.md`](docs/README.md).
 
 ## Releases
 
-Releases are automatic and happen at most once a day (23:00 UTC). Each one
+Releases are automatic and happen at most once a day (midnight UTC). Each one
 ships everything merged to `main` since the previous release, up to the newest
 commit whose post-merge checks passed. The PR titles decide the version:
 

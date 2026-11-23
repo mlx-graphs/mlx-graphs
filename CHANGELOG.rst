@@ -13,6 +13,27 @@ Changelog
 Unreleased
 ----------
 
+Large graphs
+~~~~~~~~~~~~
+
+- **Datasets**: ``Reddit``, ``Reddit2``, ``Flickr``, ``Yelp``,
+  ``AmazonProducts`` and ``PPI``, with PyG's files, edges, labels and splits
+  (checked equal to PyG's, ``benchmarks/quality/dataset_parity.py``). Single
+  large graphs are stored as safetensors after processing. ``PPI`` is read
+  from the GraphSAGE release, as DGL's server is down.
+- **Temporal sampling**: ``NeighborLoader`` and ``LinkNeighborLoader`` take
+  PyG's ``time_attr``, ``input_time`` / ``edge_label_time`` and
+  ``temporal_strategy`` (``"uniform"`` / ``"last"``): only neighbors not later
+  than their seed are sampled, with node- or edge-level timestamps, each seed
+  getting its own subgraph (``disjoint=True``, also available without time).
+  Implemented as a vectorized numpy sampler; ``"last"`` gives the same
+  mini-batches as PyG with pyg-lib.
+- **Feature and graph stores**: ``FeatureStore`` / ``GraphStore`` (PyG's
+  remote backend API) with in-memory and on-disk (``MemmapFeatureStore``,
+  ``MemmapGraphStore``) implementations. ``NeighborLoader((feature_store,
+  graph_store), ...)`` gathers only the rows of the sampled nodes, so node
+  features larger than the memory can be used for training.
+
 Features
 ~~~~~~~~
 
@@ -27,6 +48,45 @@ Features
   ``tgbn-genre`` were checked to be identical to py-tgb's. New examples
   ``tgn_tgbl.py`` and ``tgn_tgbn.py`` train TGN with the TGB protocol
   (compared with py-tgb's PyG examples in ``benchmarks/tgn_comparison``).
+
+New API
+~~~~~~~
+
+- Hierarchical and dense pooling, checked against PyG (outputs, auxiliary
+  losses and gradients) and by training on PROTEINS in both frameworks
+  (``benchmarks/quality/pooling_quality.py``):
+
+  - dense pooling ``dense_diff_pool``, ``dense_mincut_pool`` and
+    ``DMoNPooling``, with the dense layers ``DenseGCNConv``,
+    ``DenseSAGEConv``, ``DenseGINConv`` and ``DenseGraphConv``;
+  - sparse hierarchical pooling ``EdgePooling`` (with ``unpool``),
+    ``ASAPooling``, ``MemPooling`` and ``PANPooling`` (with ``PANConv``),
+    and the ``GraphUNet`` model;
+  - ``GCNConv(improved=True)`` (self-loops of weight 2).
+
+Point clouds and meshes
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Layers ``PointNetConv`` (alias ``PointConv``), ``PointTransformerConv``,
+  ``PPFConv``, ``XConv``, ``SplineConv`` (B-spline basis in MLX, any degree up
+  to 3), ``GMMConv`` and ``FeaStConv``, checked against PyG with copied weights
+  (outputs and gradients).
+- Sampling and clustering: ``fps`` (farthest point sampling, one Metal
+  threadgroup per point cloud; the same points as PyG with
+  ``random_start=False``), ``voxel_grid``, ``nearest``, ``graclus`` (parallel
+  matching), ``consecutive_cluster``, and the cluster poolings ``avg_pool``,
+  ``max_pool``, ``avg_pool_x`` and ``max_pool_x``.
+- Transforms ``SamplePoints``, ``FixedPoints``, ``NormalizeScale``, ``Center``,
+  ``LinearTransformation``, ``RandomJitter``, ``RandomRotate``,
+  ``RandomScale``, ``FaceToEdge``, ``Cartesian``, ``Distance``, ``Polar`` and
+  ``PointPairFeatures``.
+- Datasets ``ModelNet`` (ModelNet10 and ModelNet40) and ``ShapeNet`` (part
+  segmentation, downloaded from a Hugging Face mirror since the original URL is
+  offline).
+- ``GraphData`` gets its number of nodes from ``pos`` when it has no node
+  features, and offsets mesh triangles ``face`` in batches, as PyG does.
+- ``benchmarks/quality/pointcloud_quality.py`` trains PointNet++ and DGCNN on
+  ModelNet10 with mlx-graphs and PyG.
 
 0.5.2
 -----

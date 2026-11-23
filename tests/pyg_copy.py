@@ -90,3 +90,23 @@ def gru_state(prefix: str, gru, suffix: str = "_l0") -> dict:
         )
         out[f"{prefix}.bhn"] = b_hh[2 * hidden :]
     return out
+
+
+def torch_grads(
+    module,
+    renames: Sequence[Tuple[str, str]] = (),
+    rename_fn: Optional[Callable[[str], str]] = None,
+) -> dict:
+    """The gradients (``.grad``) of the parameters of a torch module, as numpy
+    arrays named like :func:`torch_state` names them (parameters without a
+    gradient are skipped)."""
+    out = {}
+    for key, param in module.named_parameters():
+        if param.grad is None:
+            continue
+        for pattern, repl in renames:
+            key = re.sub(pattern, repl, key)
+        if rename_fn is not None:
+            key = rename_fn(key)
+        out[key] = param.grad.detach().cpu().numpy()
+    return out
