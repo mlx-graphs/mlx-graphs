@@ -260,6 +260,48 @@ Available Datasets
      - 34.13
      - edge
      - edge
+   * - Reddit
+     - 1
+     - 232,965
+     - 114,615,892
+     - 491.99
+     - node
+     - node
+   * - Reddit2
+     - 1
+     - 232,965
+     - 23,213,838
+     - 99.64
+     - node
+     - node
+   * - Flickr
+     - 1
+     - 89,250
+     - 899,756
+     - 10.08
+     - node
+     - node
+   * - Yelp
+     - 1
+     - 716,847
+     - 13,954,819
+     - 19.47
+     - node
+     - node (multi-label)
+   * - AmazonProducts
+     - 1
+     - 1,569,960
+     - 264,339,468
+     - 168.37
+     - node
+     - node (multi-label)
+   * - PPI (train)
+     - 20
+     - ~2,245
+     - ~61,318
+     - ~27.31
+     - node
+     - node (multi-label)
 
 .. _dataset-classes:
 
@@ -302,6 +344,12 @@ Dataset Classes
    ZINC
    MoleculeNet
    OGBMAG
+   Reddit
+   Reddit2
+   Flickr
+   Yelp
+   AmazonProducts
+   PPI
 
 KarateClubDataset
 ^^^^^^^^^^^^^^^^^
@@ -523,6 +571,54 @@ OGBMAG
 ^^^^^^
 
 .. autoclass:: OGBMAG
+   :members:
+   :show-inheritance:
+   :no-index:
+
+Reddit
+^^^^^^
+
+.. autoclass:: Reddit
+   :members:
+   :show-inheritance:
+   :no-index:
+
+Reddit2
+^^^^^^^
+
+.. autoclass:: Reddit2
+   :members:
+   :show-inheritance:
+   :no-index:
+
+Flickr
+^^^^^^
+
+.. autoclass:: Flickr
+   :members:
+   :show-inheritance:
+   :no-index:
+
+Yelp
+^^^^
+
+.. autoclass:: Yelp
+   :members:
+   :show-inheritance:
+   :no-index:
+
+AmazonProducts
+^^^^^^^^^^^^^^
+
+.. autoclass:: AmazonProducts
+   :members:
+   :show-inheritance:
+   :no-index:
+
+PPI
+^^^
+
+.. autoclass:: PPI
    :members:
    :show-inheritance:
    :no-index:

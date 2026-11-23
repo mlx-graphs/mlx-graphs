@@ -1,13 +1,19 @@
 name: Release Python Package
 
+# One release a day bundles everything merged that day. Days with only docs,
+# tests, CI or chores make no release. "Run workflow" releases right away and
+# can force the size of the version bump.
 on:
-  workflow_run:
-    workflows: [Main checks]
-    branches: [main]
-    types: [completed]
+  schedule:
+    - cron: '0 23 * * *'
   workflow_dispatch:
+    inputs:
+      bump:
+        description: Version bump (auto follows the PR titles since the last release)
+        type: choice
+        options: [auto, patch, minor, major]
+        default: auto
 
-# Completion events can arrive out of order. The planner reads main in order.
 concurrency:
   group: pypi-release
   queue: max
@@ -16,10 +22,7 @@ permissions: {}
 
 jobs:
   prepare:
-    if: >-
-      github.repository == 'mlx-graphs/mlx-graphs' && github.ref == 'refs/heads/main' &&
-      (github.event_name == 'workflow_dispatch' || (github.event.workflow_run.event == 'push' &&
-      github.event.workflow_run.head_repository.full_name == github.repository))
+    if: github.repository == 'mlx-graphs/mlx-graphs' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       actions: read
@@ -50,14 +53,20 @@ jobs:
         env:
           RELEASE_SHA: ${{ steps.plan.outputs.sha }}
           PREVIOUS_TAG: ${{ steps.plan.outputs.previous_tag }}
+          BUMP: ${{ inputs.bump || 'auto' }}
         run: |
           git switch -C main "$RELEASE_SHA"
           python -m pip install 'python-semantic-release==10.7.0' build twine
-          version=$(semantic-release version --print)
-          if [[ "v$version" == "$PREVIOUS_TAG" ]]; then
-            version=$(semantic-release version --patch --print)
+          if [[ "$BUMP" == auto ]]; then
+            version=$(semantic-release version --print)
+          else
+            version=$(semantic-release version --print "--$BUMP")
           fi
-          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ || "v$version" == "$PREVIOUS_TAG" ]]; then
+          if [[ "v$version" == "$PREVIOUS_TAG" ]]; then
+            echo "No feat, fix, perf or breaking change since $PREVIOUS_TAG: nothing to release."
+            exit 0
+          fi
+          if [[ ! "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
             echo "::error::Python Semantic Release did not produce a new stable version"
             exit 1
           fi
@@ -176,14 +185,12 @@ jobs:
     needs: [prepare, publish-docs]
     runs-on: ubuntu-latest
     permissions:
-      actions: write
       contents: write
     steps:
-      - name: Publish the GitHub Release and continue the queue
+      - name: Publish the GitHub Release
         env:
           GH_REPO: ${{ github.repository }}
           GH_TOKEN: ${{ github.token }}
-          RELEASE_SHA: ${{ needs.prepare.outputs.sha }}
           RELEASE_TAG: ${{ needs.prepare.outputs.tag }}
           PREVIOUS_TAG: ${{ needs.prepare.outputs.previous_tag }}
         run: |
@@ -194,8 +201,4 @@ jobs:
           else
             gh release create "$RELEASE_TAG" --verify-tag --generate-notes \
               --notes-start-tag "$PREVIOUS_TAG" --title "$RELEASE_TAG" --latest
-          fi
-          main_sha=$(gh api "repos/$GITHUB_REPOSITORY/git/ref/heads/main" --jq .object.sha)
-          if [[ "$main_sha" != "$RELEASE_SHA" ]]; then
-            gh workflow run release.yml --ref main
           fi

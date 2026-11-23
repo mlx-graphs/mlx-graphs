@@ -44,11 +44,26 @@ Datasets
 	FakeDataset
 	FakeHeteroDataset
 	JODIEDataset
+	TGBLinkPropPredDataset
+	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
 	QM9
 	ZINC
 	MoleculeNet
+	Reddit
+	Reddit2
+	Flickr
+	Yelp
+	AmazonProducts
+	PPI
+
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	TGBNegativeEdgeSampler
 
 
 Utilities

@@ -60,34 +60,43 @@ class ReleaseSelectionTests(unittest.TestCase):
             }
         ]
 
-    def test_waits_for_earlier_checks_and_selects_in_merge_order(self):
+    def test_bundles_everything_up_to_the_newest_green_commit(self):
         self.commit("Pre-rollout commit")
         earlier = self.activate()
         later = self.commit("feat: add a loader")
-        self.check(earlier, None, status="in_progress")
-        self.check(later, "success")
-        self.assertIsNone(select_release())
         self.check(earlier, "success")
-        self.assertEqual(select_release(), Release(earlier, BASE_TAG))
+        self.check(later, "success")
+        self.assertEqual(select_release(), Release(later, BASE_TAG))
 
-    def test_uses_completion_event_if_api_has_not_updated(self):
+    def test_leaves_unfinished_and_failed_commits_for_the_next_run(self):
+        green = self.activate()
+        running = self.commit("feat: add a loader")
+        failed = self.commit("fix: an unfinished fix")
+        self.check(green, "success")
+        self.check(running, None, status="in_progress")
+        self.check(failed, "failure")
+        self.assertEqual(select_release(), Release(green, BASE_TAG))
+
+    def test_uses_the_latest_attempt_of_the_checks(self):
         sha = self.activate()
-        self.check(sha, "success")
-        completion = self.runs[sha][0]
-        self.check(sha, None, status="in_progress")
-        self.assertEqual(select_release(completion), Release(sha, BASE_TAG))
-        self.check(sha, None, status="in_progress", attempt=2)
-        self.assertIsNone(select_release(completion))
+        self.check(sha, "failure")
+        self.runs[sha].append(
+            dict(self.runs[sha][0], conclusion="success", run_attempt=2)
+        )
+        self.assertEqual(select_release(), Release(sha, BASE_TAG))
 
-    def test_moves_past_failed_commit_and_completed_release(self):
+    def test_nothing_to_release_without_a_new_green_commit(self):
         first = self.activate()
         self.git("tag", "v0.2.1", first)
         self.released_tags.add("v0.2.1")
+        self.assertIsNone(select_release())
         failed = self.commit("fix: an unfinished fix")
-        green = self.commit("fix: finish the fix")
         self.check(failed, "failure")
-        self.check(green, "success")
-        self.assertEqual(select_release(), Release(green, "v0.2.1"))
+        self.assertIsNone(select_release())
+
+    def test_ignores_commits_from_before_the_release_rollout(self):
+        self.commit("feat: before the post-merge checks existed")
+        self.assertIsNone(select_release())
 
     def test_resumes_with_the_original_artifact_before_moving_on(self):
         first = self.activate()
