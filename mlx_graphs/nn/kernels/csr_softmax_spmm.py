@@ -1,6 +1,7 @@
 """Row-wise softmax of sparse logits followed by sparse–dense multiplication."""
 
 from functools import lru_cache
+from typing import Optional
 
 import mlx.core as mx
 
@@ -249,7 +250,7 @@ def csr_softmax_spmm(
     logits: mx.array,
     values: mx.array,
     *,
-    permutation: mx.array | None = None,
+    permutation: Optional[mx.array] = None,
 ) -> mx.array:
     """Sum source values using softmax weights over each destination's edges.
 
