@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.nn.conv.gatv2_conv &#8212; mlx-graphs 0.2.3 documentation</title>
+    <title>mlx_graphs.nn.conv.gatv2_conv &#8212; mlx-graphs 0.3.0 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../../../_static/documentation_options.js?v=6808a718"></script>
+    <script src="../../../../_static/documentation_options.js?v=83a61292"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -178,8 +178,8 @@
       
     
     
-    <img src="../../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.2.3 documentation - Home"/>
-    <img src="../../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.2.3 documentation - Home"/>
+    <img src="../../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
   
   
 </a></div>
@@ -776,6 +776,7 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.conv._norm</span><span class="w"> </span><span class="kn">import</span> <span class="n">SelfLoopFillValue</span><span class="p">,</span> <span class="n">attention_self_loops</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.kernels.gatv2_edge_scores</span><span class="w"> </span><span class="kn">import</span> <span class="n">_reference_scores</span><span class="p">,</span> <span class="n">gatv2_edge_scores</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.linear</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span><span class="p">,</span> <span class="n">glorot</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.message_passing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagePassing</span><span class="p">,</span> <span class="n">fused_message_passing</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter</span>
@@ -920,27 +921,24 @@
             <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">,</span> <span class="n">removed_loops</span> <span class="o">=</span> <span class="n">attention_self_loops</span><span class="p">(</span>
                 <span class="n">edge_index</span><span class="p">,</span> <span class="n">src_x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_features</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fill_value</span>
             <span class="p">)</span>
-        <span class="n">src_idx</span><span class="p">,</span> <span class="n">dst_idx</span> <span class="o">=</span> <span class="n">edge_index</span>
+        <span class="n">dst_idx</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">src_feats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_src</span><span class="p">(</span><span class="n">src_x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
         <span class="n">dst_feats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">W_dst</span><span class="p">(</span><span class="n">dst_x</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">H</span><span class="p">,</span> <span class="n">C</span><span class="p">)</span>
 
-        <span class="c1"># Dynamic attention: alpha = att . leaky_relu(z), with one z per edge,</span>
-        <span class="c1"># z = W_src x_j + W_dst x_i (+ edge features). Writing</span>
-        <span class="c1"># leaky_relu(z) = slope * z + (1 - slope) * relu(z) leaves a term that</span>
-        <span class="c1"># is linear in z, computed per node and gathered as [num_edges, heads]</span>
-        <span class="c1"># scalars, and a relu term, whose backward pass is cheaper than the</span>
-        <span class="c1"># leaky relu's on the large [num_edges, heads, channels] array.</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="n">src_feats</span><span class="p">[</span><span class="n">src_idx</span><span class="p">]</span> <span class="o">+</span> <span class="n">dst_feats</span><span class="p">[</span><span class="n">dst_idx</span><span class="p">]</span>
-        <span class="n">linear</span> <span class="o">=</span> <span class="p">(</span><span class="n">src_feats</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)[</span><span class="n">src_idx</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">dst_feats</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-            <span class="o">-</span><span class="mi">1</span>
-        <span class="p">)[</span><span class="n">dst_idx</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">edge_feats</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_compute_edge_features</span><span class="p">(</span><span class="n">edge_features</span><span class="p">)</span>
-            <span class="n">z</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">edge_feats</span>
-            <span class="n">linear</span> <span class="o">=</span> <span class="n">linear</span> <span class="o">+</span> <span class="p">(</span><span class="n">edge_feats</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-        <span class="n">slope</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_slope</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="n">slope</span> <span class="o">*</span> <span class="n">linear</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">slope</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">att</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">edge_feats</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_compute_edge_features</span><span class="p">(</span><span class="n">edge_features</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+            <span class="k">else</span> <span class="kc">None</span>
+        <span class="p">)</span>
+        <span class="c1"># Tie the Metal score path to the existing fused message-passing mode.</span>
+        <span class="n">score</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">gatv2_edge_scores</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_fuse</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">src_feats</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+            <span class="k">else</span> <span class="n">_reference_scores</span>
+        <span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">score</span><span class="p">(</span>
+            <span class="n">src_feats</span><span class="p">,</span> <span class="n">dst_feats</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">att</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">negative_slope</span><span class="p">,</span> <span class="n">edge_feats</span>
+        <span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_add_self_loops</span><span class="p">:</span>
             <span class="c1"># the input self-loops are replaced by the added ones</span>
             <span class="n">alpha</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">removed_loops</span><span class="p">[:,</span> <span class="kc">None</span><span class="p">],</span> <span class="o">-</span><span class="nb">float</span><span class="p">(</span><span class="s2">"inf"</span><span class="p">),</span> <span class="n">alpha</span><span class="p">)</span>
