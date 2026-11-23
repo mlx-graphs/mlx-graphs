@@ -55,11 +55,3 @@ on first use.
        <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/compute_dataset_stats.py>`_
      - Statistics (graphs, nodes, edges, features, labels) of the built-in
        datasets.
-
-Notebook examples:
-
-.. toctree::
-	:maxdepth: 1
-
-	qm9_tutorial.ipynb
-	graph_rag_g_reasoner.ipynb
