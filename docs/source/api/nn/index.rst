@@ -65,6 +65,27 @@ Convolution layers
 	PNAConv
 	GPSConv
 
+Point cloud and mesh layers
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Layers for point clouds and meshes, which take node positions ``pos`` (and
+normals or pseudo-coordinates), e.g. from
+:class:`~mlx_graphs.datasets.ModelNet` with
+:class:`~mlx_graphs.transforms.SamplePoints`. ``PointConv`` is an alias of
+:class:`PointNetConv`.
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	PointNetConv
+	PointTransformerConv
+	PPFConv
+	XConv
+	SplineConv
+	GMMConv
+	FeaStConv
+
 Models
 ------
 
@@ -212,6 +233,21 @@ Pooling and readout
 	knn_graph
 	radius
 	radius_graph
+
+Point cloud sampling and cluster pooling (``fps``, ``voxel_grid``,
+``graclus`` and ``nearest`` are also in :mod:`mlx_graphs.utils`):
+
+.. autosummary::
+	:toctree: _autosummary
+
+	fps
+	voxel_grid
+	graclus
+	nearest
+	avg_pool
+	max_pool
+	avg_pool_x
+	max_pool_x
 
 Aggregations
 ------------

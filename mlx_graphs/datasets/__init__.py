@@ -22,3 +22,5 @@ from .fake import FakeDataset, FakeHeteroDataset  # noqa
 from .jodie import JODIEDataset  # noqa
 from .lrgb import LRGBDataset  # noqa
 from .gnn_benchmark import GNNBenchmarkDataset  # noqa
+from .modelnet import ModelNet  # noqa
+from .shapenet import ShapeNet  # noqa

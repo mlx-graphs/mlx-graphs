@@ -19,3 +19,18 @@ from .spectral import AddLaplacianEigenvectorPE, SVDFeatureReduction  # noqa
 from .propagation import SIGN, FeaturePropagation  # noqa
 from .topology import LineGraph, ToDense, TwoHop, VirtualNode  # noqa
 from .labels import RemoveTrainingClasses  # noqa
+from .point_cloud import (  # noqa
+    Cartesian,
+    Center,
+    Distance,
+    FaceToEdge,
+    FixedPoints,
+    LinearTransformation,
+    NormalizeScale,
+    PointPairFeatures,
+    Polar,
+    RandomJitter,
+    RandomRotate,
+    RandomScale,
+    SamplePoints,
+)

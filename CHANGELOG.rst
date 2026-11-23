@@ -4,6 +4,30 @@ Changelog
 Unreleased
 ----------
 
+Point clouds and meshes
+~~~~~~~~~~~~~~~~~~~~~~~
+
+- Layers ``PointNetConv`` (alias ``PointConv``), ``PointTransformerConv``,
+  ``PPFConv``, ``XConv``, ``SplineConv`` (B-spline basis in MLX, any degree up
+  to 3), ``GMMConv`` and ``FeaStConv``, checked against PyG with copied weights
+  (outputs and gradients).
+- Sampling and clustering: ``fps`` (farthest point sampling, one Metal
+  threadgroup per point cloud; the same points as PyG with
+  ``random_start=False``), ``voxel_grid``, ``nearest``, ``graclus`` (parallel
+  matching), ``consecutive_cluster``, and the cluster poolings ``avg_pool``,
+  ``max_pool``, ``avg_pool_x`` and ``max_pool_x``.
+- Transforms ``SamplePoints``, ``FixedPoints``, ``NormalizeScale``, ``Center``,
+  ``LinearTransformation``, ``RandomJitter``, ``RandomRotate``,
+  ``RandomScale``, ``FaceToEdge``, ``Cartesian``, ``Distance``, ``Polar`` and
+  ``PointPairFeatures``.
+- Datasets ``ModelNet`` (ModelNet10 and ModelNet40) and ``ShapeNet`` (part
+  segmentation, downloaded from a Hugging Face mirror since the original URL is
+  offline).
+- ``GraphData`` gets its number of nodes from ``pos`` when it has no node
+  features, and offsets mesh triangles ``face`` in batches, as PyG does.
+- ``benchmarks/quality/pointcloud_quality.py`` trains PointNet++ and DGCNN on
+  ModelNet10 with mlx-graphs and PyG.
+
 Documentation
 ~~~~~~~~~~~~~
 

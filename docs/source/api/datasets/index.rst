@@ -46,6 +46,8 @@ Datasets
 	JODIEDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	ModelNet
+	ShapeNet
 
 
 Utilities

@@ -42,3 +42,27 @@ Transforms
 	LineGraph
 	ToDense
 	RemoveTrainingClasses
+
+Point clouds and meshes
+-----------------------
+
+Transforms of node positions ``pos`` and mesh triangles ``face``. Random
+transforms draw from ``mx.random``.
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: transform-class-template.rst
+
+	SamplePoints
+	FixedPoints
+	NormalizeScale
+	Center
+	LinearTransformation
+	RandomJitter
+	RandomRotate
+	RandomScale
+	FaceToEdge
+	Cartesian
+	Distance
+	Polar
+	PointPairFeatures
