@@ -7,6 +7,7 @@ from mlx_cluster import hetero_neighbor_sample, neighbor_sample
 
 from mlx_graphs.data import GraphData, HeteroGraphData
 
+from ._disjoint_sampler import build_csc, disjoint_neighbor_sample, graph_time
 from ._utils import (
     check_index_bounds,
     index_array,
@@ -89,6 +90,32 @@ class NegativeSampling:
 
     def sample_dst(self, num: int, num_nodes: int) -> np.ndarray:
         return self._sample(num, num_nodes, self.dst_weight)
+
+    def sample_in_time(
+        self,
+        endpoint: Literal["src", "dst"],
+        seed_time: np.ndarray,
+        num_nodes: int,
+        node_time: Optional[np.ndarray],
+    ) -> np.ndarray:
+        """``ceil(amount)`` negatives per seed (in blocks of one negative per
+        seed, as in PyG), drawn among the nodes whose time is not later than
+        the seed's when ``node_time`` is given: invalid draws are redrawn up
+        to 5 times, then replaced by the earliest node (as in PyG)."""
+        sample = self.sample_src if endpoint == "src" else self.sample_dst
+        per_seed = math.ceil(self.amount)
+        times = np.tile(seed_time, per_seed)
+        out = sample(times.size, num_nodes)
+        if node_time is None:
+            return out
+        invalid = np.nonzero(node_time[out] > times)[0]
+        for _ in range(5):
+            if invalid.size == 0:
+                break
+            out[invalid] = sample(invalid.size, num_nodes)
+            invalid = invalid[node_time[out[invalid]] > times[invalid]]
+        out[invalid] = int(np.argmin(node_time))
+        return out
 
     @classmethod
     def cast(
@@ -180,12 +207,32 @@ class _HomogeneousLinkNeighborLoader:
         neg_sampling: Optional[NegativeSampling],
         replace: bool,
         directed: bool,
+        time_attr: Optional[str] = None,
+        edge_label_time: Optional[mx.array] = None,
+        temporal_strategy: str = "uniform",
+        disjoint: bool = False,
     ):
         self.data = data
         self.num_neighbors = num_neighbors
         self.neg_sampling = neg_sampling
         self.replace = replace
         self.directed = directed
+        self.temporal_strategy = temporal_strategy
+        if temporal_strategy not in ("uniform", "last"):
+            raise ValueError(
+                "`temporal_strategy` must be 'uniform' or 'last' "
+                f"(got '{temporal_strategy}')"
+            )
+        # As in PyG, temporal sampling always samples one subgraph per seed.
+        self.disjoint = disjoint or time_attr is not None
+        if self.disjoint and not directed:
+            raise ValueError(
+                "`directed=False` is not supported with disjoint sampling."
+            )
+        self._node_time, self._edge_time = graph_time(data, time_attr)
+        self.edge_label_time = (
+            None if edge_label_time is None else to_numpy(edge_label_time).reshape(-1)
+        )
 
         self.num_nodes = data.num_nodes
         self.num_edges = data.num_edges
@@ -195,12 +242,115 @@ class _HomogeneousLinkNeighborLoader:
         check_index_bounds(self.edge_label_index, self.num_nodes, "edge_label_index")
         self.edge_label = edge_label
 
+        if self.disjoint:
+            edges = to_numpy(data.edge_index).astype(np.int64)
+            (
+                self._np_colptr,
+                self._np_row,
+                self._edge_perm,
+                self._csc_time,
+            ) = build_csc(
+                edges[0], edges[1], self.num_nodes, self._node_time, self._edge_time
+            )
+            return
         self._colptr, self._row, self._edge_perm = _HomogeneousNeighborLoader._to_csc(
             data.edge_index, self.num_nodes
         )
         mx.eval(self._colptr, self._row)
 
+    def _sample_disjoint(self, input_id: np.ndarray) -> GraphData:
+        """One subgraph per seed node (temporal sampling), with PyG's
+        layout: the seeds are the sources then the destinations of the
+        supervision edges (negatives included), without merging."""
+        src, dst = self.edge_label_index[:, input_id]
+        num_pos = src.size
+        label = None
+        if self.edge_label is not None:
+            label = self.edge_label[mx.array(input_id)]
+        time = None
+        if self.edge_label_time is not None:
+            time = self.edge_label_time[input_id]
+        src_time = dst_time = time
+        neg = self.neg_sampling
+        meta: dict[str, Any] = {}
+        seed_t = time if time is not None else np.zeros(num_pos)
+        node_time = self._node_time if time is not None else None
+
+        if neg is not None and neg.is_binary():
+            num_neg = math.ceil(num_pos * neg.amount)
+            src_neg = neg.sample_in_time("src", seed_t, self.num_nodes, node_time)
+            dst_neg = neg.sample_in_time("dst", seed_t, self.num_nodes, node_time)
+            src = np.concatenate([src, src_neg[:num_neg]])
+            dst = np.concatenate([dst, dst_neg[:num_neg]])
+            if label is None:
+                label = mx.ones(num_pos)
+            neg_label = mx.zeros((num_neg, *label.shape[1:]), dtype=label.dtype)
+            label = mx.concatenate([label, neg_label])
+            if time is not None:
+                reps = 1 + math.ceil(neg.amount)
+                src_time = dst_time = np.tile(time, reps)[: num_pos + num_neg]
+        elif neg is not None and neg.is_triplet():
+            dst_neg = neg.sample_in_time("dst", seed_t, self.num_nodes, node_time)
+            dst = np.concatenate([dst, dst_neg])
+            if time is not None:
+                dst_time = np.tile(time, 1 + int(neg.amount))
+
+        seeds = np.concatenate([src, dst])
+        seed_time = None
+        if time is not None:
+            seed_time = np.concatenate([src_time, dst_time])  # type: ignore
+        out = disjoint_neighbor_sample(
+            self._np_colptr,
+            self._np_row,
+            seeds,
+            self.num_neighbors,
+            seed_time=seed_time,
+            csc_time=self._csc_time,
+            replace=self.replace,
+            temporal_strategy=self.temporal_strategy,
+        )
+        num_seeds = seeds.size
+        if neg is not None and neg.is_triplet():
+            dst_neg_index = np.arange(2 * num_pos, num_seeds).reshape(-1, num_pos).T
+            if dst_neg_index.shape[1] == 1:
+                dst_neg_index = dst_neg_index.reshape(-1)
+            meta["src_index"] = index_array(np.arange(num_pos), num_seeds)
+            meta["dst_pos_index"] = index_array(
+                np.arange(num_pos, 2 * num_pos), num_seeds
+            )
+            meta["dst_neg_index"] = index_array(dst_neg_index, num_seeds)
+            if time is not None:
+                meta["seed_time"] = mx.array(src_time)
+        else:
+            meta["edge_label_index"] = index_array(
+                np.arange(num_seeds).reshape(2, -1), num_seeds
+            )
+            if label is not None:
+                meta["edge_label"] = label
+            if time is not None:
+                meta["edge_label_time"] = mx.array(src_time)
+
+        n_id = out.node
+        e_id = self._edge_perm[out.edge]
+        return slice_graph(
+            self.data,
+            n_id,
+            e_id,
+            np.stack([out.row, out.col]),
+            num_nodes=self.num_nodes,
+            num_edges=self.num_edges,
+            n_id=index_array(n_id, self.num_nodes),
+            e_id=index_array(e_id, self.num_edges),
+            input_id=index_array(input_id, self.edge_label_index.shape[1]),
+            batch=index_array(out.batch % max(num_pos, 1), max(num_pos, 1)),
+            num_sampled_nodes=out.num_sampled_nodes,
+            num_sampled_edges=out.num_sampled_edges,
+            **meta,
+        )
+
     def sample(self, input_id: np.ndarray) -> GraphData:
+        if self.disjoint:
+            return self._sample_disjoint(input_id)
         src, dst = self.edge_label_index[:, input_id]
         label = None
         if self.edge_label is not None:
@@ -386,6 +536,18 @@ class LinkNeighborLoader:
 
     Supervision edges are not removed from the message-passing graph.
 
+    **Temporal sampling** (homogeneous graphs), as in PyG: with
+    ``time_attr`` and ``edge_label_time``, the seeds of every supervision
+    edge (and of its negatives) only sample neighbors whose timestamp is not
+    later than the edge's time, and negatives are drawn among nodes whose
+    timestamp is not later either (node-level ``time_attr``). Every seed
+    then gets its own subgraph (``disjoint=True``): the sources come first,
+    then the destinations, without merging, so ``edge_label_index`` is
+    ``arange(2 * num_edges).reshape(2, -1)`` and ``batch.batch`` holds, for
+    every node, the position in the mini-batch of its supervision edge.
+    Mini-batches also hold ``edge_label_time`` (``seed_time`` for
+    ``"triplet"`` negative sampling).
+
     Args:
         data: The full graph, a :class:`GraphData` or a
             :class:`HeteroGraphData`.
@@ -408,6 +570,15 @@ class LinkNeighborLoader:
             Only ``True`` is supported for heterogeneous graphs.
         sampler: Iterable yielding positions in ``edge_label_index`` for each
             epoch. Overrides ``shuffle``.
+        edge_label_time: Timestamp of every supervision edge (requires
+            ``time_attr``).
+        time_attr: Name of the node-level or edge-level timestamp attribute
+            of ``data`` used for temporal sampling (requires
+            ``edge_label_time``). Homogeneous graphs only.
+        temporal_strategy: ``"uniform"`` or ``"last"`` (see
+            :class:`NeighborLoader`).
+        disjoint: Whether every seed gets its own subgraph (always the case
+            with ``time_attr``). Homogeneous graphs only.
 
     Example:
 
@@ -443,7 +614,16 @@ class LinkNeighborLoader:
         replace: bool = False,
         directed: bool = True,
         sampler: Optional[Iterable[int]] = None,
+        edge_label_time: Optional[mx.array] = None,
+        time_attr: Optional[str] = None,
+        temporal_strategy: str = "uniform",
+        disjoint: bool = False,
     ):
+        if (edge_label_time is None) != (time_attr is None):
+            raise ValueError(
+                "Received conflicting 'edge_label_time' and 'time_attr' "
+                "arguments: temporal sampling needs both."
+            )
         if neg_sampling_ratio is not None and neg_sampling_ratio != 0.0:
             if neg_sampling is not None:
                 raise ValueError(
@@ -473,6 +653,11 @@ class LinkNeighborLoader:
                 raise ValueError(
                     "`directed=False` is not supported for heterogeneous graphs."
                 )
+            if time_attr is not None or disjoint:
+                raise NotImplementedError(
+                    "Temporal and disjoint sampling are only supported for "
+                    "homogeneous graphs."
+                )
             self._impl: Any = _HeteroLinkNeighborLoader(
                 data,
                 num_neighbors,
@@ -495,6 +680,10 @@ class LinkNeighborLoader:
                 neg,
                 replace,
                 directed,
+                time_attr=time_attr,
+                edge_label_time=edge_label_time,
+                temporal_strategy=temporal_strategy,
+                disjoint=disjoint,
             )
         else:
             raise TypeError(
@@ -507,6 +696,11 @@ class LinkNeighborLoader:
             raise ValueError(
                 f"`edge_label` has {edge_label.shape[0]} entries but there are "
                 f"{num_label_edges} supervision edges."
+            )
+        if edge_label_time is not None and edge_label_time.size != num_label_edges:
+            raise ValueError(
+                f"`edge_label_time` has {edge_label_time.size} entries but "
+                f"there are {num_label_edges} supervision edges."
             )
 
         self.data = data

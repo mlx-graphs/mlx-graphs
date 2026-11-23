@@ -13,6 +13,27 @@ Changelog
 Unreleased
 ----------
 
+Large graphs
+~~~~~~~~~~~~
+
+- **Datasets**: ``Reddit``, ``Reddit2``, ``Flickr``, ``Yelp``,
+  ``AmazonProducts`` and ``PPI``, with PyG's files, edges, labels and splits
+  (checked equal to PyG's, ``benchmarks/quality/dataset_parity.py``). Single
+  large graphs are stored as safetensors after processing. ``PPI`` is read
+  from the GraphSAGE release, as DGL's server is down.
+- **Temporal sampling**: ``NeighborLoader`` and ``LinkNeighborLoader`` take
+  PyG's ``time_attr``, ``input_time`` / ``edge_label_time`` and
+  ``temporal_strategy`` (``"uniform"`` / ``"last"``): only neighbors not later
+  than their seed are sampled, with node- or edge-level timestamps, each seed
+  getting its own subgraph (``disjoint=True``, also available without time).
+  Implemented as a vectorized numpy sampler; ``"last"`` gives the same
+  mini-batches as PyG with pyg-lib.
+- **Feature and graph stores**: ``FeatureStore`` / ``GraphStore`` (PyG's
+  remote backend API) with in-memory and on-disk (``MemmapFeatureStore``,
+  ``MemmapGraphStore``) implementations. ``NeighborLoader((feature_store,
+  graph_store), ...)`` gathers only the rows of the sampled nodes, so node
+  features larger than the memory can be used for training.
+
 Features
 ~~~~~~~~
 
