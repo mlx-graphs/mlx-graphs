@@ -6,7 +6,6 @@ import mlx.nn as nn
 from mlx_graphs.nn.conv._norm import SelfLoopFillValue, attention_self_loops
 from mlx_graphs.nn.linear import Linear, glorot
 from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
-from mlx_graphs.utils import scatter
 
 
 @fused_message_passing
@@ -178,18 +177,13 @@ class GATConv(MessagePassing):
         if self._add_self_loops:
             # the input self-loops are replaced by the added ones
             alpha = mx.where(removed_loops[:, None], -float("inf"), alpha)
-        alpha = scatter(alpha, dst_idx, dst_features.shape[0], aggr="softmax")
-
-        if "dropout" in self:
-            alpha = self.dropout(alpha)
-
-        # Weighted sum of neighbor features, one weight per (edge, head).
-        node_features = self.propagate(
+        node_features = self._softmax_aggregate(
+            edge_index=edge_index,
+            logits=alpha,
             node_features=(
                 features if dst_features is features else (features, dst_features)
             ),
-            edge_index=edge_index,
-            message_kwargs={"edge_weights": alpha},
+            dropout=self.dropout if "dropout" in self else None,
         )
 
         if self.concat:

@@ -1,5 +1,20 @@
 # Kernel benchmarks
 
+## CSR softmax SpMM
+
+`csr_softmax_spmm` normalizes edge logits within each destination row and
+applies them to source values. It accepts logits from any scoring function.
+GAT and GATv2 can opt in with
+`fused_message_passing_mode(True, format="csr", softmax_spmm=True)`.
+Active attention dropout and unsupported inputs use the existing path.
+
+The benchmark compares the two paths through complete GAT and GATv2 layers.
+Both runs use the same initialized parameters and prepare CSR during warm-up.
+
+```bash
+uv run --python 3.13 python -m benchmarks.kernels.csr_softmax_spmm --large
+```
+
 ## GATv2 edge scores
 
 On an Apple Silicon Mac, run the 100k-edge layer comparison from the repo root.
