@@ -54,6 +54,7 @@ nav = [
       { "Writing your own layers" = "tutorials/guides/writing-layers.md" },
       { "Custom GPU kernels" = "tutorials/guides/custom-kernels.md" },
       { "Datasets" = "tutorials/guides/datasets.md" },
+      { "Large graphs" = "tutorials/guides/large-graphs.md" },
     ] },
     { "Notebooks" = [
       { "Graph classification" = "tutorials/notebooks/graph_classification.md" },

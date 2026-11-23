@@ -43,6 +43,12 @@ TGBLinkPropPredDataset
 TGBNodePropPredDataset
 LRGBDataset
 GNNBenchmarkDataset
+Reddit
+Reddit2
+Flickr
+Yelp
+AmazonProducts
+PPI
 <!-- /api -->
 
 Negative samples of the TGB link property prediction datasets:
