@@ -1,0 +1,22 @@
+{
+  "chip": "Apple M5 Pro",
+  "memory_gb": 64,
+  "os": "macOS 27.2.1",
+  "python": "3.12.14",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.1.0",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.8.1",
+  "library": {
+    "label": "0.2.0-52afd7c",
+    "version": "0.2.0",
+    "commit": "52afd7c6588444ed10b486d1e1caf64847b13b11",
+    "commit_date": "2026-11-22T13:10:40+01:00",
+    "commit_subject": "0.2.0: Bring 235 new APIs close to PyG (mini-batch loaders, heterogeneous, temporal and graph transformer models) (#205)",
+    "branch": "v0.2.0",
+    "dirty": false,
+    "repo_root": "/private/tmp/claude-502/-Users-tristan-Documents-Repos-mlx-graphs/7d280047-bb95-4e9d-bdba-45badd2cfadf/scratchpad/mlx-graphs-main",
+    "imported_from": "/private/tmp/claude-502/-Users-tristan-Documents-Repos-mlx-graphs/7d280047-bb95-4e9d-bdba-45badd2cfadf/scratchpad/mlx-graphs-main/mlx_graphs"
+  }
+}

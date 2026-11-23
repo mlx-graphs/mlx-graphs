@@ -17,6 +17,7 @@ import json
 import math
 import os
 from collections import defaultdict
+from datetime import datetime, timezone
 
 import plot
 from plot import (
@@ -64,8 +65,17 @@ def load_versions(chip_dir):
         with open(path) as f:
             records = [json.loads(line) for line in f if line.strip()]
         versions.append((label, system, records))
-    versions.sort(key=lambda v: (v[1].get("library") or {}).get("commit_date") or "")
+    versions.sort(key=lambda v: _commit_time(v[1]))
     return versions
+
+
+def _commit_time(system):
+    """Commit date as a datetime: ISO strings with different UTC offsets do
+    not sort chronologically as text."""
+    date = (system.get("library") or {}).get("commit_date")
+    if not date:
+        return datetime.min.replace(tzinfo=timezone.utc)
+    return datetime.fromisoformat(date)
 
 
 def version_name(label, system):

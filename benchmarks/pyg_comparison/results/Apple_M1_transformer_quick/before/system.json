@@ -1,0 +1,22 @@
+{
+  "chip": "Apple M1",
+  "memory_gb": 8,
+  "os": "macOS 26.1",
+  "python": "3.13.5",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.2.0",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.5.0",
+  "library": {
+    "label": "0.2.0-50fc1a1",
+    "version": "0.2.0",
+    "commit": "50fc1a11ac0eade37532de9a6023ab59a8d8d54d",
+    "commit_date": "2026-11-21T10:57:30+00:00",
+    "commit_subject": "PyG parity: samplers and loaders, heterogeneous, temporal and transformer models, 26 new convolutions, 18 datasets",
+    "branch": null,
+    "dirty": false,
+    "repo_root": "/var/folders/1v/2jb1z6sn7mjd_5htj815zbp40000gn/T/tmp.G3EWrriBER/before",
+    "imported_from": "/private/var/folders/1v/2jb1z6sn7mjd_5htj815zbp40000gn/T/tmp.G3EWrriBER/before/mlx_graphs"
+  }
+}
