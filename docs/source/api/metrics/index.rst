@@ -16,6 +16,8 @@ scalar ``mx.array`` from ``compute``.
 
 	roc_auc_score
 	average_precision_score
+	tgb_mrr_hits
+	tgb_ndcg
 
 
 .. autosummary::
@@ -36,3 +38,4 @@ scalar ``mx.array`` from ``compute``.
 	LinkPredDiversity
 	LinkPredPersonalization
 	LinkPredAveragePopularity
+	TGBEvaluator

@@ -40,6 +40,14 @@ on first use.
        <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/tgn_jodie.py>`_
      - A Temporal Graph Network on a JODIE dataset, after PyG's
        ``examples/tgn.py``.
+   * - `tgn_tgbl.py
+       <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/tgn_tgbl.py>`_
+     - TGN on a TGB link property prediction dataset (``tgbl-wiki``) with
+       the official one-vs-many MRR evaluation, after py-tgb's TGN example.
+   * - `tgn_tgbn.py
+       <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/tgn_tgbn.py>`_
+     - TGN on a TGB node property prediction dataset (``tgbn-trade``),
+       evaluated with NDCG@10, after py-tgb's TGN example.
    * - `graph_gps_peptides.py
        <https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/graph_gps_peptides.py>`_
      - The GPS graph transformer with random-walk encodings on Peptides-func,

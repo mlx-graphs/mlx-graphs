@@ -22,3 +22,8 @@ from .fake import FakeDataset, FakeHeteroDataset  # noqa
 from .jodie import JODIEDataset  # noqa
 from .lrgb import LRGBDataset  # noqa
 from .gnn_benchmark import GNNBenchmarkDataset  # noqa
+from .tgb import (  # noqa
+    TGBLinkPropPredDataset,
+    TGBNegativeEdgeSampler,
+    TGBNodePropPredDataset,
+)
