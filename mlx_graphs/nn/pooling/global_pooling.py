@@ -100,7 +100,7 @@ def global_sort_pool(
 ) -> mx.array:
     r"""The global pooling operator from the `"An End-to-End Deep Learning
     Architecture for Graph Classification"
-    <https://www.cse.wustl.edu/~muhan/papers/AAAI_2018_DGCNN.pdf>`_ paper.
+    <https://doi.org/10.1609/aaai.v32i1.11782>`_ paper.
 
     The nodes of each graph are sorted in descending order of their last
     feature, and the features of the first ``k`` nodes are concatenated. Graphs

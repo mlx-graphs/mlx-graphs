@@ -42,7 +42,31 @@ PR, for example `fix(loaders): handle empty batches` or `feat: add a dataset`.
 The title becomes the squash commit message and determines the version bump.
 Use `!` for breaking changes, as in `feat(loaders)!: change the default sampler`.
 
-Add migration details to `CHANGELOG.rst` in the PR that introduces them.
+Release notes are the text of the GitHub release: by default GitHub's
+generated list of PR titles ("What's Changed"), so write PR titles for
+readers. The release text can be edited on GitHub after the release; the
+Changelog page of the docs shows it, and picks up edits at the next docs
+build. For notes that belong in the repository (highlights, a migration
+guide), add a section titled with the version number to `CHANGELOG.rst`
+(optional); the Changelog page shows it above that version's release notes.
+
+## Documentation
+
+The documentation site (<https://mlx-graphs.github.io/mlx-graphs/>) is built
+with [Zensical](https://zensical.org); see [`docs/README.md`](docs/README.md).
+
+- **Pages** are Markdown files in `docs/content/`.
+- **A new public class or function** goes in an `<!-- api <module> -->` block
+  of the right page of `docs/api/` (e.g. `docs/api/nn/index.md` for a
+  layer); its page is generated from the docstring (Google style). CI fails
+  when a public name is missing from these blocks, or a listed one no longer
+  exists.
+- **A tutorial notebook** goes in `docs/content/tutorials/notebooks/` with
+  its outputs (it is not executed), its figure in
+  `docs/content/assets/tutorials/`, a card in `docs/tutorials.yml`
+  and an entry in the `nav` of `zensical.toml`.
+- **Preview** with `pip install -e '.[docs]'`, then
+  `python docs/scripts/gen.py` and `zensical serve`.
 
 ## Releases
 
@@ -64,3 +88,9 @@ Actions tab ("Run workflow"), or `gh workflow run release.yml --ref main`. Its
 `bump` input is `auto` by default (the rules above); `patch`, `minor` or `major`
 force that bump, e.g. `gh workflow run release.yml --ref main -f bump=major`
 for `1.0.0`.
+
+Release notes need no step: the GitHub release is created with generated
+notes, which can be edited afterwards, and the docs build shows them on the
+Changelog page. The docs of a release are built before its GitHub release is
+published, so that version shows the titles of its PRs from the git history
+until the next docs build.

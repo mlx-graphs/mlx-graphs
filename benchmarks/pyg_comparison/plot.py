@@ -4,8 +4,8 @@
 
 Writes ``figures/<name>_{light,dark}.png``, ``results.md`` (every number in
 the figures, as tables) and ``results.rst`` (the section of the docs'
-benchmarks page, included by ``docs/source/benchmarks.rst``) into the results
-directory.
+benchmarks page: ``docs/scripts/gen.py`` converts it and
+``docs/content/benchmarks.md`` includes it) into the results directory.
 """
 
 import argparse
@@ -1117,10 +1117,10 @@ def tables(records, system):
 
 
 # ---------------------------------------------------------------------------
-# Docs page (reStructuredText, included by docs/source/benchmarks.rst)
+# Docs page section (reStructuredText, converted by docs/scripts/gen.py)
 # ---------------------------------------------------------------------------
 
-DOCS_SOURCE = os.path.join(HERE, "..", "..", "docs", "source")
+DOCS_CONTENT = os.path.join(HERE, "..", "..", "docs", "content")
 
 
 def times_x(ratio):
@@ -1143,10 +1143,10 @@ def rst_figure(fig_dir, name, alt):
     lines = []
     for mode in ("light", "dark"):
         path = os.path.relpath(
-            os.path.join(fig_dir, f"{name}_{mode}.png"), DOCS_SOURCE
+            os.path.join(fig_dir, f"{name}_{mode}.png"), DOCS_CONTENT
         ).replace(os.sep, "/")
         lines += [
-            f".. image:: /{path}",  # leading '/': relative to docs/source
+            f".. image:: /{path}",  # leading '/': relative to docs/content
             f"   :alt: {alt}",
             f"   :class: only-{mode}",
             "   :width: 100%",

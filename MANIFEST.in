@@ -3,4 +3,4 @@ prune .github
 prune benchmarks
 prune docs
 prune examples
-exclude .gitignore .pre-commit-config.yaml ACKNOWLEDGMENTS.md CONTRIBUTING.md
+exclude zensical.toml .gitignore .pre-commit-config.yaml ACKNOWLEDGMENTS.md CONTRIBUTING.md

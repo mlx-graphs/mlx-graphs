@@ -1,0 +1,145 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 378" width="960" height="378" role="img" aria-labelledby="t d">
+  <title id="t">Molecular property regression on QM9 with graph network blocks</title>
+  <desc id="d">The QM9 molecules of TUDataset (129,433 molecules of up to 9 heavy atoms among C, H, O, N and F, with 19 regression targets) are split into 110,000 training and 19,433 test molecules and batched 128 at a time by Dataloader. Atoms are nodes with 16 features, including their 3D coordinates, and bonds are edges with 4 features. The model chains two GraphNetworkBlock layers, each made of an edge model (the features of the two atoms and of the bond, Linear and ReLU) and a node model (the mean of the incoming bond features concatenated with the atom features, Linear and ReLU), then global_mean_pool and a Linear layer predict one number per molecule. It is trained on target 4, the lowest unoccupied molecular orbital (LUMO) energy, with a summed mean squared error, value_and_grad and AdamW for 20 epochs, and the training and test losses are plotted per epoch.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .alab { font-size: 11px; fill: #52514e; }
+    .malab { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="376.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+  <rect x="24" y="52" width="176" height="280" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="224" y="52" width="372" height="280" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="226" y="40">MODEL · GRAPH NETWORK BLOCKS</text>
+  <rect x="620" y="52" width="146" height="280" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="622" y="40">TRAIN</text>
+  <rect x="790" y="52" width="146" height="280" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="792" y="40">EVALUATE</text>
+  <!-- data column -->
+  <rect x="34" y="62" width="156" height="72" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="80.6">TUDataset</text>
+  <text class="sub" x="42" y="95.6">QM9 · 129,433 molecules</text>
+  <text class="sub" x="42" y="110.1">≤ 9 heavy atoms: C, O, N, F</text>
+  <text class="sub" x="42" y="124.6">19 regression targets</text>
+  <rect x="34" y="144" width="156" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="stitle" x="42" y="160">split</text>
+  <rect x="42" y="167" width="118.6" height="7" rx="2" fill="#1baf7a" fill-opacity="1.0"/>
+  <rect x="162.6" y="167" width="19.4" height="7" rx="2" fill="#1baf7a" fill-opacity="0.55"/>
+  <text class="small" x="42" y="185">110,000 train</text>
+  <text class="small" x="182" y="185" text-anchor="end">19,433 test</text>
+  <rect x="34" y="200" width="156" height="122" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="218">Dataloader</text>
+  <text class="sub" x="42" y="234">128 molecules per batch</text>
+  <!-- a small molecule: atoms are nodes, bonds are edges -->
+  <line x1="58" y1="262" x2="80" y2="250" stroke="#1baf7a" stroke-width="1.5"/>
+  <line x1="80" y1="250" x2="102" y2="262" stroke="#1baf7a" stroke-width="1.5"/>
+  <line x1="102" y1="262" x2="124" y2="250" stroke="#1baf7a" stroke-width="1.5"/>
+  <line x1="80" y1="250" x2="80" y2="276" stroke="#1baf7a" stroke-width="1.5"/>
+  <line x1="124" y1="250" x2="146" y2="262" stroke="#1baf7a" stroke-width="1.5"/>
+  <line x1="124" y1="246" x2="124" y2="232" stroke="#1baf7a" stroke-width="1.5" stroke-opacity="0"/>
+  <circle cx="58" cy="262" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="58" y="265.8" text-anchor="middle">C</text>
+  <circle cx="80" cy="250" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="80" y="253.8" text-anchor="middle">C</text>
+  <circle cx="102" cy="262" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="102" y="265.8" text-anchor="middle">N</text>
+  <circle cx="80" cy="276" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="80" y="279.8" text-anchor="middle">O</text>
+  <circle cx="124" cy="250" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="124" y="253.8" text-anchor="middle">C</text>
+  <circle cx="146" cy="262" r="7" fill="#ffffff" stroke="#1baf7a" stroke-width="1.2"/>
+  <text class="malab" x="146" y="265.8" text-anchor="middle">F</text>
+  <text class="sub" x="42" y="299">atoms: 16 features (xyz)</text>
+  <text class="sub" x="42" y="314">bonds: 4 features</text>
+  <!-- model column: the Model class of the notebook -->
+  <rect x="234" y="62" width="212" height="30" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="81.5">EdgeModel</text>
+  <text class="sub" x="438" y="81.5" text-anchor="end">36 → 64 · ReLU</text>
+  <rect x="234" y="108" width="212" height="30" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="127.5">NodeModel</text>
+  <text class="sub" x="438" y="127.5" text-anchor="end">80 → 64 · ReLU</text>
+  <rect x="234" y="154" width="212" height="30" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="173.5">EdgeModel</text>
+  <text class="sub" x="438" y="173.5" text-anchor="end">192 → 64 · ReLU</text>
+  <rect x="234" y="200" width="212" height="30" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="219.5">NodeModel</text>
+  <text class="sub" x="438" y="219.5" text-anchor="end">128 → 64 · ReLU</text>
+  <rect x="234" y="246" width="212" height="30" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="242" y="265.5">global_mean_pool</text>
+  <text class="sub" x="438" y="265.5" text-anchor="end">per molecule</text>
+  <rect x="234" y="292" width="212" height="30" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="242" y="311.5">Linear</text>
+  <text class="sub" x="438" y="311.5" text-anchor="end">64 → 1</text>
+  <path d="M340,92 L340,108" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M340,138 L340,154" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M340,184 L340,200" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M340,230 L340,246" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="348" y="241.5">atoms × 64</text>
+  <path d="M340,276 L340,292" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="348" y="287.5">molecules × 64</text>
+  <!-- the two GraphNetworkBlock layers -->
+  <path d="M452,64 L458,64 L458,136 L452,136" fill="none" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="malab" x="464" y="96">GraphNetwork</text>
+  <text class="malab" x="464" y="110">Block 1</text>
+  <path d="M452,156 L458,156 L458,228 L452,228" fill="none" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="malab" x="464" y="188">GraphNetwork</text>
+  <text class="malab" x="464" y="202">Block 2</text>
+  <text class="small" x="464" y="140">edge features:</text>
+  <text class="small" x="464" y="153">[x_dst, x_src, e]</text>
+  <text class="small" x="464" y="232">node features:</text>
+  <text class="small" x="464" y="245">[x, mean of in-edges]</text>
+  <rect x="470" y="292" width="116" height="30" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="478" y="311.3">batch_indices</text>
+  <path d="M470,307 L452,307 L452,261 L447,261" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M446,316 L629,316" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" stroke-opacity="0"/>
+  <path d="M446,326 L612,326 L612,307 L629,307" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <text class="alab" x="470" y="338" text-anchor="start">1 prediction per molecule</text>
+  <path d="M204,98 L230,98" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <!-- train column -->
+  <rect x="630" y="62" width="126" height="72" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="80.6">AdamW</text>
+  <text class="sub" x="638" y="95.6">lr 1e-3</text>
+  <text class="sub" x="638" y="110.1">20 epochs</text>
+  <text class="sub" x="638" y="124.6">GPU</text>
+  <rect x="630" y="146" width="126" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="166.1">value_and_grad</text>
+  <text class="sub" x="638" y="181.1">loss and gradients</text>
+  <rect x="630" y="204" width="126" height="60" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="stitle" x="638" y="222">target 4</text>
+  <text class="msub" x="638" y="238">graph_labels</text>
+  <text class="sub" x="638" y="254">LUMO energy</text>
+  <rect x="630" y="292" width="126" height="30" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="638" y="311.3">mse_loss</text>
+  <text class="sub" x="748" y="311.3" text-anchor="end">sum</text>
+  <path d="M693,264 L693,291" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)" stroke-opacity="0"/>
+  <path d="M762,307 L770,307 L770,169 L757,169" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M693,146 L693,135" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <path d="M693,264 L693,291" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <!-- evaluate column -->
+  <path d="M770,98 L786,98" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="800" y="62" width="126" height="72" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="80.6">mean squared error</text>
+  <text class="sub" x="808" y="95.6">train &amp; test sets</text>
+  <text class="sub" x="808" y="110.1">per molecule</text>
+  <text class="sub" x="808" y="124.6">after every epoch</text>
+  <path d="M863,134 L863,176" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+  <rect x="800" y="177" width="126" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="stitle" x="808" y="197.1">loss curves</text>
+  <text class="sub" x="808" y="212.1">matplotlib plot</text>
+  <rect x="685.997" y="347" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="701.997" y="356">data</text>
+  <rect x="742.767" y="347" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="758.767" y="356">trainable weights</text>
+  <rect x="863.995" y="347" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="879.995" y="356">no weights</text>
+</svg>

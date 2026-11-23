@@ -1,1 +1,13 @@
-_autosummary*/
+# Written by scripts/gen.py before each build
+/.generated/
+/content/api/
+/content/changelog.md
+/content/assets/benchmarks/
+/content/tutorials/notebooks/*.md
+/content/tutorials/notebooks/*_files/
+# redirect pages at the URLs of the old Sphinx site (sphinx-urls.txt)
+/content/*.html
+/content/guide/
+/content/tutorials/**/*.html
+/content/getting-started/writing-layers/
+/content/getting-started/datasets/

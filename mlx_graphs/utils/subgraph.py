@@ -241,9 +241,9 @@ def k_hop_subgraph(
         - ``subset``: the sorted ids of the nodes of the subgraph;
         - ``edge_index``: the edges of the subgraph;
         - ``mapping``: the position of each node of ``node_idx`` in ``subset``
-          (its new id when ``relabel_nodes=True``);
+            (its new id when ``relabel_nodes=True``);
         - ``edge_mask``: boolean mask of shape ``[num_edges]`` of the edges
-          that were kept.
+            that were kept.
 
     Example:
 

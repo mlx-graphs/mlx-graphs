@@ -1,0 +1,78 @@
+# Cards of the tutorial notebooks, on the home page (home: true) and on the
+# Tutorials page (all of them, in this order). gen.py turns this file into
+# .generated/tutorial_cards*.md. A notebook not listed here still gets its
+# page; add it to the nav in zensical.toml.
+#
+# thumbnail: an image of content/assets/tutorials/, or omitted for an icon.
+
+- notebook: graph_classification
+  title: Graph classification
+  text: Classify the MUTAG molecules with a GCN, mini-batches and global pooling.
+  thumbnail: graph_classification.svg
+  tags: [beginner, graph-level]
+  home: true
+
+- notebook: node2vec
+  title: Node2Vec
+  text: Node embeddings from biased random walks on Cora, sampled on the GPU, compared with PyG.
+  thumbnail: node2vec.svg
+  tags: [embeddings]
+  home: true
+
+- notebook: metapath2vec
+  title: MetaPath2Vec
+  text: Embeddings of a heterogeneous graph from meta-path guided random walks, on a toy graph and on DBLP.
+  thumbnail: metapath2vec.svg
+  tags: [embeddings, heterogeneous]
+
+- notebook: minibatch_training
+  title: Mini-batch training on large graphs
+  text: Train on ogbn-arxiv one subgraph at a time with NeighborLoader, ClusterLoader and GraphSAINT.
+  thumbnail: minibatch_training.svg
+  tags: [scaling, samplers]
+  home: true
+
+- notebook: link_prediction
+  title: Link prediction
+  text: Split edges without leakage, train a GCN encoder and dot-product decoder, rank with LinkPred metrics.
+  thumbnail: link_prediction.svg
+  tags: [edge-level, vs PyG]
+  home: true
+
+- notebook: temporal_graph_networks
+  title: Temporal graph networks
+  text: A TGN with memory, trained on the JODIE Wikipedia stream of events, against PyG.
+  thumbnail: temporal_graph_networks.svg
+  tags: [temporal, vs PyG]
+
+- notebook: heterogeneous_to_hetero
+  title: Heterogeneous graphs with to_hetero
+  text: Turn a homogeneous GraphSAGE or GAT into a heterogeneous model on DBLP, as in PyG.
+  thumbnail: heterogeneous_to_hetero.svg
+  tags: [heterogeneous, vs PyG]
+  home: true
+
+- notebook: graph_transformers_gps
+  title: Graph transformers with GPS
+  text: GPSConv with random-walk encodings on Peptides-func, plus Performer, SGFormer and Polynormer.
+  thumbnail: graph_transformers_gps.svg
+  tags: [transformers, vs PyG]
+  home: true
+
+- notebook: cybersecurity
+  title: GNNs for cybersecurity
+  text: Intrusion detection on provenance graphs, anti-money laundering, network flows and malware classification.
+  thumbnail: provenance_intrusion_detection.svg
+  tags: [applications]
+
+- notebook: graph_rag_g_reasoner
+  title: Graph RAG with G-reasoner
+  text: Run the G-reasoner checkpoint with a custom Metal kernel as the retriever of a local LLM.
+  thumbnail: graph_rag_g_reasoner.svg
+  tags: [applications, LLM]
+
+- notebook: qm9_tutorial
+  title: Molecular properties on QM9
+  text: Predict quantum-chemical properties of small molecules with a GNN.
+  thumbnail: qm9_tutorial.svg
+  tags: [chemistry, graph-level]

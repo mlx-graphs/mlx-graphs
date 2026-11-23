@@ -1,0 +1,24 @@
+{#-
+  The theme's partials/toc-item.html, with one change: a page can set
+  `toc_depth` in its front matter to list only the headings up to that level
+  in the table of contents (the Changelog lists its versions, level 2, and
+  not the headings inside each release). The headings stay in the page.
+-#}
+<li class="md-nav__item">
+  <a href="{{ toc_item.url }}" class="md-nav__link">
+    <span class="md-ellipsis">
+      <span class="md-typeset">
+        {{ toc_item.content }}
+      </span>
+    </span>
+  </a>
+  {% if toc_item.children and not (page.meta.toc_depth and toc_item.level >= page.meta.toc_depth) %}
+    <nav class="md-nav" aria-label="{{ toc_item.title | striptags | e }}">
+      <ul class="md-nav__list">
+        {% for toc_item in toc_item.children %}
+          {% include "partials/toc-item.html" %}
+        {% endfor %}
+      </ul>
+    </nav>
+  {% endif %}
+</li>

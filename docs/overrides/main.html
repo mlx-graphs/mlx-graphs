@@ -1,0 +1,11 @@
+{#-
+  Extends the theme's main.html with the icons the favicon setting does not
+  cover: PNG fallback, Apple touch icon and the web app manifest.
+-#}
+{% extends "base.html" %}
+{% block extrahead %}
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ 'assets/images/favicon-32.png' | url }}">
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ 'assets/images/apple-touch-icon.png' | url }}">
+  <link rel="manifest" href="{{ 'assets/site.webmanifest' | url }}">
+  <meta name="theme-color" content="#2286a6">
+{% endblock %}

@@ -1,6 +1,15 @@
 Changelog
 =========
 
+..
+   Optional hand-written notes. The release notes of every version are the
+   text of its GitHub release, shown on the Changelog page of the docs by
+   docs/scripts/gen.py. Add a section titled with a version number
+   (e.g. "0.6.0: Large graphs") for highlights or migration notes of that
+   version: the page shows it above the release notes. Items under
+   "Unreleased" are shown under the release that ships the commit that
+   wrote them.
+
 Unreleased
 ----------
 
@@ -91,6 +100,27 @@ Added
 - ``from_smiles``, ``to_smiles``, ``from_rdmol`` and ``to_rdmol`` with PyG's
   ``x_map`` / ``e_map`` featurization (``rdkit`` is an optional dependency).
 
+0.5.2
+-----
+
+Documentation
+~~~~~~~~~~~~~
+
+- The G-reasoner and QM9 notebooks are now listed with the other tutorials.
+  The Examples page only lists the scripts of the ``examples/`` folder.
+
+0.2.3
+-----
+
+Documentation
+~~~~~~~~~~~~~
+
+- A Graph RAG tutorial that runs the released G-reasoner checkpoint with a
+  custom Metal kernel and uses it as the retriever of a local LLM.
+
+0.2.2
+-----
+
 Documentation
 ~~~~~~~~~~~~~
 
@@ -98,10 +128,6 @@ Documentation
   TC E3 CADETS provenance graphs (Orthrus, Velox), anti-money laundering on
   Elliptic, network intrusion detection on NF-UNSW-NB15-v3 (E-GraphSAGE) and
   malware classification on MalNet-Tiny (GIN, GraphGPS).
-- A Graph RAG tutorial that runs the released G-reasoner checkpoint with a
-  custom Metal kernel and uses it as the retriever of a local LLM.
-- The G-reasoner and QM9 notebooks are now listed with the other tutorials.
-  The Examples page only lists the scripts of the ``examples/`` folder.
 
 0.2.0: PyG parity
 ------------------

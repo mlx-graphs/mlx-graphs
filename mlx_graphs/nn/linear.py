@@ -37,7 +37,7 @@ class Linear(nn.Linear):
         input_dims: Dimensionality of the input features
         output_dims: Dimensionality of the output features
         bias: If set to ``False`` then the layer will
-          not use a bias. Default is ``True``.
+            not use a bias. Default is ``True``.
     """
 
     def __init__(self, input_dims: int, output_dims: int, bias: bool = True) -> None:
