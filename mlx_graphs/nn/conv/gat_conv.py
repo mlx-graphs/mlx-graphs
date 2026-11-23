@@ -3,7 +3,11 @@ from typing import Optional, Tuple, Union
 import mlx.core as mx
 import mlx.nn as nn
 
-from mlx_graphs.nn.conv._norm import SelfLoopFillValue, attention_self_loops
+from mlx_graphs.nn.conv._norm import (
+    SelfLoopFillValue,
+    attention_leaky_relu,
+    attention_self_loops,
+)
 from mlx_graphs.nn.linear import Linear, glorot
 from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 
@@ -173,7 +177,7 @@ class GATConv(MessagePassing):
         if edge_features is not None:
             alpha = alpha + self._compute_alpha_edge_features(edge_features)
 
-        alpha = nn.leaky_relu(alpha, self.negative_slope)
+        alpha = attention_leaky_relu(alpha, self.negative_slope)
         if self._add_self_loops:
             # the input self-loops are replaced by the added ones
             alpha = mx.where(removed_loops[:, None], -float("inf"), alpha)

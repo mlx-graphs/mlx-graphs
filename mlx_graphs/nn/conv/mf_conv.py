@@ -127,8 +127,11 @@ class MFConv(MessagePassing):
             None,
             deg[order],
             sorted_indices=True,
-        )[:, 0, :]
-        out = out[mx.argsort(order)]
+        )
+        # A reshape, not `[:, 0, :]`: with MLX's CUDA backend (0.32), the
+        # gradient of a sorted gather_mm is wrong when its cotangent comes
+        # from a slice or squeeze.
+        out = out.reshape(-1, weight.shape[1])[mx.argsort(order)]
         if "bias" in self.lins_l[0]:
             out = out + mx.stack([lin.bias for lin in self.lins_l])[deg]
         return out

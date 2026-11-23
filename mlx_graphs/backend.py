@@ -46,6 +46,11 @@ def use_metal_kernels() -> bool:
     return mx.default_device().type == mx.gpu and metal_kernels_available()
 
 
+def on_cuda() -> bool:
+    """Whether the default device is a GPU of MLX's CUDA backend."""
+    return mx.default_device().type == mx.gpu and not mx.metal.is_available()
+
+
 def _import_mlx_cluster():
     if _MLX_CLUSTER_DISABLED:
         return None, ImportError(
@@ -70,5 +75,6 @@ __all__ = [
     "HAS_MLX_CLUSTER",
     "MLX_CLUSTER_IMPORT_ERROR",
     "metal_kernels_available",
+    "on_cuda",
     "use_metal_kernels",
 ]

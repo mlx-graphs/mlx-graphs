@@ -3,6 +3,7 @@ import mlx.nn as nn
 import numpy as np
 import pytest
 
+from mlx_graphs.backend import use_metal_kernels
 from mlx_graphs.nn import (
     GATConv,
     GATv2Conv,
@@ -69,8 +70,8 @@ def test_csr_softmax_spmm_empty_graph():
 @pytest.mark.parametrize("layer", [GATConv, GATv2Conv])
 @pytest.mark.parametrize("bipartite", [False, True])
 def test_attention_layer_softmax_spmm(layer, bipartite, monkeypatch):
-    if not mx.metal.is_available() or not is_fused_message_passing_enabled():
-        pytest.skip("Metal and fused SpMM required")
+    if not use_metal_kernels() or not is_fused_message_passing_enabled():
+        pytest.skip("Metal (default device) and fused SpMM required")
     conv = layer(12, 16, heads=3, add_self_loops=not bipartite)
     src = mx.random.normal((20, 12), key=mx.random.key(5))
     inputs = (src, src[:10]) if bipartite else src

@@ -3,6 +3,7 @@ from typing import Literal, Optional
 import mlx.core as mx
 import mlx.nn as nn
 
+from mlx_graphs.backend import on_cuda
 from mlx_graphs.utils import degree, scatter
 
 
@@ -76,7 +77,16 @@ class LayerNormalization(nn.Module):
         weight = self.weight if self.affine else None
         bias = self.bias if self.affine else None
         if self.mode == "node":
-            return mx.fast.layer_norm(features, weight, bias, self.eps)
+            # MLX's CUDA backend (0.32) gets the gradient of mx.fast.layer_norm
+            # wrong when the feature size is not a multiple of 4.
+            if not (features.shape[-1] % 4 and on_cuda()):
+                return mx.fast.layer_norm(features, weight, bias, self.eps)
+            features = features - features.mean(axis=-1, keepdims=True)
+            var = (features * features).mean(axis=-1, keepdims=True)
+            out = features * mx.rsqrt(var + self.eps)
+            if self.affine:
+                out = out * weight + bias
+            return out
 
         # "graph" mode: statistics over all the nodes and channels of a graph
         if batch is None:

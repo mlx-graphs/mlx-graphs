@@ -2,9 +2,9 @@ import math
 from typing import Literal, Optional, Tuple, Union
 
 import mlx.core as mx
-import mlx.nn as nn
 from mlx.nn import Linear  # PyTorch's default initialization, as in PyG
 
+from mlx_graphs.nn.conv._norm import attention_leaky_relu
 from mlx_graphs.nn.linear import glorot
 from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.utils import scatter
@@ -185,7 +185,7 @@ class GeneralConv(MessagePassing):
                 alpha = (reverse * messages).sum(-1) / math.sqrt(self.out_features_dim)
             else:
                 alpha = (messages * self.att_msg).sum(-1)
-            alpha = nn.leaky_relu(alpha, negative_slope=0.2)
+            alpha = attention_leaky_relu(alpha, 0.2)
             alpha = scatter(alpha, dst_idx, num_nodes, "softmax")
             messages = messages * alpha[..., None]
 

@@ -3,6 +3,7 @@ from typing import Dict, List, Optional, Tuple, Union
 import mlx.core as mx
 import mlx.nn as nn
 
+from mlx_graphs.nn.conv._norm import attention_leaky_relu
 from mlx_graphs.nn.conv.hetero_conv import EdgeType, _edge_type_to_key
 from mlx_graphs.nn.linear import glorot
 from mlx_graphs.utils import scatter
@@ -162,7 +163,7 @@ class HANConv(nn.Module):
             alpha_src = (x_src * self.lin_src[key]).sum(-1)  # [N_src, H]
             alpha_dst = (x_dst * self.lin_dst[key]).sum(-1)  # [N_dst, H]
             alpha = alpha_src[src_idx] + alpha_dst[dst_idx]
-            alpha = nn.leaky_relu(alpha, self.negative_slope)
+            alpha = attention_leaky_relu(alpha, self.negative_slope)
             alpha = scatter(alpha, dst_idx, x_dst.shape[0], "softmax")
             if "dropout" in self:
                 alpha = self.dropout(alpha)

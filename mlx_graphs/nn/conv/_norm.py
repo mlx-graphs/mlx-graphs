@@ -9,6 +9,7 @@ from collections import OrderedDict
 from typing import Any, Callable, Hashable, Literal, Optional, Tuple, Union
 
 import mlx.core as mx
+import mlx.nn as nn
 
 from mlx_graphs.utils import degree, invert_sqrt_degree, scatter
 
@@ -274,3 +275,10 @@ def attention_self_loops(
         [edge_features, loop_features.astype(edge_features.dtype)], axis=0
     )
     return new_edge_index, new_edge_features, removed
+
+
+def attention_leaky_relu(alpha: mx.array, negative_slope: float) -> mx.array:
+    """``nn.leaky_relu`` of attention logits, skipped for empty arrays (e.g. a
+    graph or relation without edges): with MLX's CUDA backend (0.32), compiled
+    functions such as ``nn.leaky_relu`` crash on empty arrays."""
+    return nn.leaky_relu(alpha, negative_slope) if alpha.size else alpha

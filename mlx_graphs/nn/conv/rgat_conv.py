@@ -3,6 +3,7 @@ from typing import Literal, Optional, Tuple, Union
 import mlx.core as mx
 import mlx.nn as nn
 
+from mlx_graphs.nn.conv._norm import attention_leaky_relu
 from mlx_graphs.nn.linear import Linear, glorot
 from mlx_graphs.nn.message_passing import MessagePassing
 from mlx_graphs.utils import scatter
@@ -339,7 +340,7 @@ class RGATConv(MessagePassing):
             alpha = qi + kj
             if alpha_edge is not None:
                 alpha = alpha + alpha_edge
-            alpha = nn.leaky_relu(alpha, self.negative_slope)
+            alpha = attention_leaky_relu(alpha, self.negative_slope)
         else:
             alpha = qi * kj
             if alpha_edge is not None:
