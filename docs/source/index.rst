@@ -99,6 +99,7 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    tutorials/notebooks/temporal_graph_networks.ipynb
    tutorials/notebooks/heterogeneous_to_hetero.ipynb
    tutorials/notebooks/graph_transformers_gps.ipynb
+   tutorials/notebooks/cybersecurity.ipynb
 
 
 .. toctree::

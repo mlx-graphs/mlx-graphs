@@ -1,6 +1,17 @@
 Changelog
 =========
 
+Unreleased
+----------
+
+Documentation
+~~~~~~~~~~~~~
+
+- A cybersecurity tutorial with four cases: host intrusion detection on DARPA
+  TC E3 CADETS provenance graphs (Orthrus, Velox), anti-money laundering on
+  Elliptic, network intrusion detection on NF-UNSW-NB15-v3 (E-GraphSAGE) and
+  malware classification on MalNet-Tiny (GIN, GraphGPS).
+
 0.2.0: PyG parity
 ------------------
 
