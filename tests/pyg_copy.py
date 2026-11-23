@@ -95,16 +95,20 @@ def gru_state(prefix: str, gru, suffix: str = "_l0") -> dict:
 def torch_grads(
     module,
     renames: Sequence[Tuple[str, str]] = (),
+    rename_fn: Optional[Callable[[str], str]] = None,
     drop: Sequence[str] = (),
 ) -> dict:
-    """The gradients of the parameters of a torch module (after
-    ``backward()``), with the names converted as in :func:`torch_state`."""
+    """The gradients (``.grad``) of the parameters of a torch module, as numpy
+    arrays named like :func:`torch_state` names them (parameters without a
+    gradient, or matching a pattern of ``drop``, are skipped)."""
     out = {}
     for key, param in module.named_parameters():
         if param.grad is None or any(re.search(p, key) for p in drop):
             continue
         for pattern, repl in renames:
             key = re.sub(pattern, repl, key)
+        if rename_fn is not None:
+            key = rename_fn(key)
         out[key] = param.grad.detach().cpu().numpy()
     return out
 

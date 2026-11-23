@@ -68,6 +68,7 @@ from .models import PNA  # noqa
 from .models import TGNMemory  # noqa
 from .to_hetero import ToHeteroModel, to_hetero, to_hetero_with_bases  # noqa
 from .models import Polynormer, SGFormer  # noqa
+from .models import GraphUNet  # noqa
 from . import attention  # noqa
 from .attention import (  # noqa
     MultiheadAttention,

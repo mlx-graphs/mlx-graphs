@@ -65,6 +65,23 @@ Convolution layers
 	PNAConv
 	GPSConv
 
+Dense convolution layers
+------------------------
+
+Layers on batched dense adjacency matrices ``[batch_size, num_nodes,
+num_nodes]`` (e.g. from :func:`~mlx_graphs.utils.to_dense_adj` or a
+:class:`~mlx_graphs.loaders.DenseDataLoader`), called as ``conv(adj,
+node_features, mask)``.
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	DenseGCNConv
+	DenseSAGEConv
+	DenseGINConv
+	DenseGraphConv
+
 Models
 ------
 
@@ -223,6 +240,31 @@ Pooling and readout
 	knn_graph
 	radius
 	radius_graph
+
+Hierarchical and dense pooling
+------------------------------
+
+Dense pooling learns soft cluster assignments on dense batched graphs and
+returns auxiliary losses; sparse hierarchical pooling coarsens a batch of
+graphs given by ``edge_index`` and ``batch_indices``.
+
+.. autosummary::
+	:toctree: _autosummary
+
+	dense_diff_pool
+	dense_mincut_pool
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	DMoNPooling
+	EdgePooling
+	ASAPooling
+	MemPooling
+	PANPooling
+	PANConv
+	GraphUNet
 
 Aggregations
 ------------

@@ -33,6 +33,10 @@ class GCNConv(MessagePassing):
         bias: whether to add a bias to the output
         add_self_loops: whether to add a self-loop for each node. Default:
             ``True``, as in PyG (``False`` in mlx-graphs 0.0.11 and earlier)
+        improved: whether the added self-loops have a weight of 2 instead of
+            1, i.e. :math:`\hat{\mathbf{A}} = \mathbf{A} + 2\mathbf{I}`.
+            (PyG only applies it when edge weights are given.)
+            Default: ``False``
 
     Example:
 
@@ -60,6 +64,7 @@ class GCNConv(MessagePassing):
         out_features_dim: int,
         bias: bool = True,
         add_self_loops: bool = True,
+        improved: bool = False,
         **kwargs,
     ):
         kwargs.setdefault("aggr", "add")
@@ -72,6 +77,7 @@ class GCNConv(MessagePassing):
         if bias:
             self.bias = mx.zeros((out_features_dim,))
         self._add_self_loops = add_self_loops
+        self.improved = improved
 
     def __call__(
         self,
@@ -110,7 +116,11 @@ class GCNConv(MessagePassing):
                     norm = mx.concatenate([norm, mx.ones((num_nodes,), norm.dtype)])
         else:
             edge_index, norm = cached_gcn_norm(
-                edge_index, num_nodes, edge_weights, self._add_self_loops
+                edge_index,
+                num_nodes,
+                edge_weights,
+                self._add_self_loops,
+                2.0 if self.improved else 1.0,
             )
 
         # Compute messages and aggregate them with sum and norm.
