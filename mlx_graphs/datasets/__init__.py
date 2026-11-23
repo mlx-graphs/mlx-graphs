@@ -35,3 +35,5 @@ from .tgb import (  # noqa
     TGBNegativeEdgeSampler,
     TGBNodePropPredDataset,
 )
+from .modelnet import ModelNet  # noqa
+from .shapenet import ShapeNet  # noqa

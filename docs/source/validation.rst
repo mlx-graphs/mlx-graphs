@@ -314,6 +314,21 @@ its accuracies move in steps of 5 points and its gaps are larger (up to 6
 points), within 1.5 paired standard errors. Full table:
 `graph_results.md <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/graph_results.md>`_.
 
+Point clouds on ModelNet10
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+PointNet++ (PyG's ``examples/pointnet2_classification.py``: ``fps``,
+``radius``, ``PointNetConv``) trained for 5 epochs on ModelNet10, on the same
+fixed clouds of 1024 points sampled through mlx-graphs' ``ModelNet`` and
+``SamplePoints``, reaches a test accuracy of 80.9 % in mlx-graphs and 82.5 %
+in PyG (best epoch: 80.9 % and 82.9 %), with training losses of 0.26 and
+0.31. DGCNN (``DynamicEdgeConv``, PyG's ``examples/dgcnn_classification.py``)
+reaches 78.0 % and 80.2 % after 3 epochs. The point cloud layers, ``fps``, ``voxel_grid``, ``nearest``,
+``graclus`` and the point cloud transforms are also compared with PyG in the
+test suite (``fps`` picks the same points as PyG with
+``random_start=False``). Full table:
+`pointcloud_results.md <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/pointcloud_results.md>`_.
+
 Samplers and loaders
 ~~~~~~~~~~~~~~~~~~~~
 

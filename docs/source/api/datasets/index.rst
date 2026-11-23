@@ -48,6 +48,8 @@ Datasets
 	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	ModelNet
+	ShapeNet
 	Reddit
 	Reddit2
 	Flickr

@@ -166,7 +166,8 @@ class GraphData:
 
         1. an explicit count, e.g. ``GraphData(edge_index, num_nodes=4)``;
         2. the number of rows of ``node_features``;
-        3. the number of unique node ids in ``edge_index``.
+        3. the number of rows of ``pos`` (node positions, e.g. point clouds);
+        4. the number of unique node ids in ``edge_index``.
 
         The last fallback cannot see isolated nodes (nodes without any edge), so
         graphs without node features that may contain isolated nodes should set
@@ -177,6 +178,9 @@ class GraphData:
             return explicit
         if self.node_features is not None:
             return self.node_features.shape[0]
+        pos = self.__dict__.get("pos")
+        if isinstance(pos, mx.array) and pos.ndim > 0:
+            return pos.shape[0]
         else:
             # NOTE: This may be slow for large graphs
             return np.unique(np.array(self.edge_index, copy=False)).size
@@ -380,7 +384,9 @@ class GraphData:
         ``edge_index``), the ``edge_label`` that goes with ``edge_label_index``
         and graph-level attributes are neither.
         """
-        if key.startswith(("_", "graph_")) or "index" in key or key == "edge_label":
+        if key.startswith(("_", "graph_")) or "index" in key:
+            return None
+        if key in ("edge_label", "face"):
             return None
         if not isinstance(value, mx.array) or value.ndim == 0:
             return None
@@ -683,8 +689,9 @@ class GraphData:
         Given the name of a custom attribute `key`, returns the dimension where the
         concatenation happens during batching.
 
-        By default, all attribute names containing "index" will be concatenated on
-        axis 1, e.g. `edge_index`. Other attributes are concatenated on axis 0,
+        By default, all attribute names containing "index" (and the mesh
+        triangles ``face``) will be concatenated on axis 1, e.g. `edge_index`.
+        Other attributes are concatenated on axis 0,
         e.g. node features.
 
         Args:
@@ -694,7 +701,7 @@ class GraphData:
         Returns:
             The dimension where concatenation will happen when batching.
         """
-        if "index" in key:
+        if "index" in key or key == "face":
             return 1
         return 0
 
@@ -703,7 +710,8 @@ class GraphData:
         Given the name of a custom attribute `key`, returns an integer indicating the
         incrementing value to apply to the elemnts of the attribute.
 
-        By default, all attribute names containing "index" will be incremented based on
+        By default, all attribute names containing "index" (and ``face``) will be
+        incremented based on
         the number of nodes in previous batches to avoid duplicate nodes in the index,
         e.g. `edge_index`. Other attributes are cnot incremented and keep their original
         values, e.g. node features.
@@ -716,7 +724,7 @@ class GraphData:
         Returns:
             Incrementing value for the given attribute or None.
         """
-        if "index" in key:
+        if "index" in key or key == "face":
             return self.num_nodes
         if key in ("batch", "batch_indices"):
             # A graph's own assignment of nodes to sub-batches (e.g. ShaDow
