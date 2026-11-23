@@ -246,9 +246,7 @@ def _generate_api_sections(app):
         pages = []
         for title, body, module in sections:
             slug = _slugify(title)
-            body = [
-                re.sub(r"(:toctree:\s*)(\S+)", r"\1../\2", line) for line in body
-            ]
+            body = [re.sub(r"(:toctree:\s*)(\S+)", r"\1../\2", line) for line in body]
             page = [title, "=" * len(title), ""]
             if module:
                 page += [f".. currentmodule:: {module}", ""]
