@@ -22,3 +22,6 @@ from .fake import FakeDataset, FakeHeteroDataset  # noqa
 from .jodie import JODIEDataset  # noqa
 from .lrgb import LRGBDataset  # noqa
 from .gnn_benchmark import GNNBenchmarkDataset  # noqa
+from .qm9 import QM9  # noqa
+from .zinc import ZINC  # noqa
+from .molecule_net import MoleculeNet  # noqa

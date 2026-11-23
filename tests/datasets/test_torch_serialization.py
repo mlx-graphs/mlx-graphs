@@ -127,3 +127,33 @@ def test_load_torch_file_with_numpy_arrays(tmp_path, zip_format):
     np.testing.assert_array_equal(loaded["np"], obj["np"])
     assert loaded["f"] == obj["f"]
     assert_same(loaded["x"], obj["x"])
+
+
+@pytest.mark.parametrize("protocol", [2, 3, pickle.HIGHEST_PROTOCOL])
+def test_load_plain_pickle_of_tensors(tmp_path, protocol):
+    # Tensors pickled with the `pickle` module (e.g. the raw ZINC files) store
+    # their storage as the bytes of a legacy torch.save file.
+    obj = make_object()
+    obj["records"] = [
+        {"atom_type": torch.tensor([0, 1, 2], dtype=torch.int8), "num_atom": 3},
+        {"adj": torch.eye(3, dtype=torch.int8)[1:], "y": torch.tensor([0.5])},
+    ]
+    path = os.path.join(tmp_path, "tensors.pickle")
+    with open(path, "wb") as f:
+        pickle.dump(obj, f, protocol=protocol)
+    assert_same(load_torch_file(path), obj)
+
+
+def test_load_plain_pickle_of_tensors_rejects_arbitrary_storage_bytes(tmp_path):
+    from mlx_graphs.datasets.utils.torch_serialization import _load_from_bytes
+
+    with pytest.raises(pickle.UnpicklingError):
+        _load_from_bytes(pickle.dumps(_Evil(), protocol=2))
+    with pytest.raises(pickle.UnpicklingError, match="storage bytes"):
+        _load_from_bytes("not bytes")
+    # a legacy torch file holding something else than a storage
+    path = os.path.join(tmp_path, "tensor.pt")
+    torch.save(torch.ones(2), path, _use_new_zipfile_serialization=False)
+    with open(path, "rb") as f:
+        with pytest.raises(pickle.UnpicklingError, match="storage"):
+            _load_from_bytes(f.read())
