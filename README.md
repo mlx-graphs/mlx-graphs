@@ -52,7 +52,8 @@ mlx-graphs supports Python 3.10 to 3.13. The Metal kernels and the
 SpMM, neighbor sampling, random walks) only exist on macOS; elsewhere, the same
 layers, loaders and algorithms run on portable MLX / NumPy implementations that
 give the same results, more slowly. The test suite runs on macOS and on Linux
-(MLX CPU) in CI; the CUDA backend is not tested in CI.
+(MLX CPU) in CI, and was run on an NVIDIA A100 with MLX's CUDA backend (not in
+CI). MLX's CUDA wheels need a recent NVIDIA driver (≥ 550 for CUDA 12).
 
 ## Features
 

@@ -25,6 +25,10 @@ Platforms
   on the CPU.
 - CI runs the test suite on Linux (MLX CPU, Python 3.10, 3.12, 3.13) and on
   macOS with Python 3.13.
+- Work-arounds for MLX 0.32 CUDA bugs: ``MFConv`` gradients (sorted
+  ``gather_mm``), ``LayerNormalization`` gradients in node mode
+  (``mx.fast.layer_norm``) and attention layers on graphs without edges
+  (compiled functions on empty arrays).
 
 Documentation
 ~~~~~~~~~~~~~

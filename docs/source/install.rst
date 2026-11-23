@@ -29,8 +29,14 @@ for the requirements of each):
 	pip install "mlx-graphs[cuda]"    # MLX CUDA backend, CUDA 12
 	pip install "mlx-graphs[cuda13]"  # MLX CUDA backend, CUDA 13
 
-The test suite runs on Linux with the CPU backend in CI. The CUDA backend is
-supported by MLX but not tested in CI.
+The test suite runs on Linux with the CPU backend in CI. It was also run on an
+NVIDIA A100 with the CUDA backend, which is not part of CI. MLX's CUDA 12
+wheels need an NVIDIA driver 550 or newer; on data center GPUs with an older
+driver, NVIDIA's CUDA forward compatibility package (``cuda-compat-12-9``,
+added to ``LD_LIBRARY_PATH``) also works. On MLX 0.32, mlx-graphs works
+around three bugs of the CUDA backend (wrong gradients of a sorted
+``gather_mm`` and of ``mx.fast.layer_norm`` for sizes not divisible by 4, and
+compiled functions crashing on empty arrays), but your own code may hit them.
 
 What changes on Linux
 ~~~~~~~~~~~~~~~~~~~~~
