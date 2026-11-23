@@ -62,3 +62,4 @@ Notebook examples:
 	:maxdepth: 1
 
 	qm9_tutorial.ipynb
+	graph_rag_g_reasoner.ipynb
