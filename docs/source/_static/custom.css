@@ -1,13 +1,367 @@
-.toc-backref, .toc-backref:visited {
-    color: inherit;
-    text-decoration: none;
+/* mlx-graphs documentation theme, on top of pydata-sphinx-theme.
+   Brand colors come from the logo's teal gradient (#2286A6 -> #BCDAE4). */
+
+html[data-theme="light"] {
+  --pst-color-primary: #1d7894;
+  --pst-color-primary-bg: #e3f1f5;
+  --pst-color-secondary: #2286a6;
+  --pst-color-secondary-bg: #e3f1f5;
+  --pst-color-link: #1d7894;
+  --pst-color-link-hover: #12556b;
+  --pst-color-accent: #2286a6;
+  --pst-color-inline-code: #135f77;
+  --pst-color-inline-code-links: #1d7894;
+  --sd-color-primary: #1d7894;
+  --sd-color-primary-highlight: #12556b;
+  --sd-color-primary-text: #ffffff;
+  --mg-card-bg: #ffffff;
+  --mg-card-border: #dde5e9;
+  --mg-thumb-bg: #ffffff;
+  --mg-hero-glow: rgba(34, 134, 166, 0.10);
+}
+
+html[data-theme="dark"] {
+  --pst-color-primary: #65abc1;
+  --pst-color-primary-bg: #12313b;
+  --pst-color-secondary: #7ab7ca;
+  --pst-color-secondary-bg: #12313b;
+  --pst-color-link: #7ab7ca;
+  --pst-color-link-hover: #bcdae4;
+  --pst-color-accent: #65abc1;
+  --pst-color-inline-code: #a7cfdb;
+  --pst-color-inline-code-links: #7ab7ca;
+  --sd-color-primary: #4e9eb8;
+  --sd-color-primary-highlight: #65abc1;
+  --sd-color-primary-text: #0b1d23;
+  --mg-card-bg: var(--pst-color-surface);
+  --mg-card-border: #2b3a40;
+  --mg-thumb-bg: #ffffff;
+  --mg-hero-glow: rgba(101, 171, 193, 0.12);
+}
+
+/* ---------- Navbar ---------- */
+
+.navbar-version {
+  align-self: center;
+  margin-left: 0.6rem;
+  padding: 0.1rem 0.55rem;
+  border: 1px solid var(--pst-color-border);
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--pst-color-text-muted);
+  text-decoration: none;
+  white-space: nowrap;
+}
+.navbar-version:hover {
+  color: var(--pst-color-primary);
+  border-color: var(--pst-color-primary);
+  text-decoration: none;
+}
+.navbar-brand img {
+  height: 2.75rem;
+}
+
+/* ---------- Layout ---------- */
+
+/* There is no right-hand sidebar: let the article use the width, but keep
+   running text at a readable line length (tables, code, figures, cards and
+   signatures use the full width) */
+.bd-main .bd-content .bd-article-container {
+  max-width: 76rem;
+}
+.bd-article section > p,
+.bd-article section > ul,
+.bd-article section > ol,
+.bd-article dl.py > dd > p,
+.bd-article dl.py > dd > ul,
+.bd-article .nbinput ~ div.rendered_html,
+.bd-article div.admonition,
+.bd-article nav.contents,
+.bd-article div.contents {
+  max-width: 52rem;
+}
+.header-article__inner {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.header-article__inner .header-article-item {
+  display: flex;
+  align-items: center;
+}
+.header-article-items__end .editthispage {
+  padding: 0;
+  white-space: nowrap;
+}
+.header-article-items__end .editthispage a {
+  font-size: 0.85rem;
+  color: var(--pst-color-text-muted);
+  text-decoration: none;
+}
+.header-article-items__end .editthispage a:hover {
+  color: var(--pst-color-primary);
+}
+
+/* ---------- Home page ---------- */
+
+/* The page title stays for search and the browser tab, the logo shows it */
+section.home > h1 {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+div.hero {
+  text-align: center;
+  padding: 2.5rem 1rem 2rem;
+  margin-bottom: 1rem;
+  background: radial-gradient(ellipse at top, var(--mg-hero-glow), transparent 70%);
+  border-radius: 1rem;
+}
+div.hero img.hero-logo {
+  width: min(460px, 85%);
+  height: auto;
+  margin: 0 auto 1.25rem;
+  display: block;
+}
+p.hero-tagline {
+  font-size: 1.3rem;
+  line-height: 1.5;
+  max-width: 44rem;
+  margin: 0 auto 1.5rem;
+  text-wrap: balance;
+  color: var(--pst-color-text-base);
+}
+.hero-install {
+  display: flex;
+  justify-content: center;
+}
+.hero-install div.highlight-shell {
+  display: inline-block;
+  min-width: 16rem;
+  margin: 0 0 1.5rem;
+}
+.hero-install pre {
+  font-size: 1rem;
+  padding: 0.6rem 3rem 0.6rem 1.1rem;
+  text-align: left;
+}
+.hero-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+.hero-buttons p {
+  margin: 0;
+}
+.hero-buttons .sd-btn,
+.section-more .sd-btn {
+  padding: 0.5rem 1.2rem;
+  border-radius: 999px;
+  font-weight: 600;
+}
+.section-more {
+  text-align: center;
+  margin-top: 1.5rem;
+}
+
+section.home-section {
+  margin-top: 3.5rem;
+}
+
+section.home-section > h2 {
+  font-size: 1.75rem;
+  margin-bottom: 1rem;
+}
+img.headline-figure {
+  border-radius: 0.75rem;
+  border: 1px solid var(--mg-card-border);
+  margin-top: 0.5rem;
+}
+
+/* ---------- Cards ---------- */
+
+.bd-content .sd-card {
+  background: var(--mg-card-bg);
+  border: 1px solid var(--mg-card-border);
+  border-radius: 0.75rem;
+  box-shadow: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, transform 0.15s ease;
+}
+.bd-content .sd-card.sd-card-hover:hover,
+.bd-content .sd-card:has(a.sd-stretched-link):hover {
+  border-color: var(--pst-color-primary);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+  transform: translateY(-2px);
+}
+.bd-content .sd-card .sd-card-title {
+  font-weight: 650;
+  font-size: 1.05rem;
+  color: var(--pst-color-text-base);
+}
+.bd-content .sd-card .sd-card-body {
+  padding: 1.1rem 1.25rem;
+}
+.bd-content .sd-card .sd-card-text,
+.bd-content .sd-card p {
+  color: var(--pst-color-text-muted);
+}
+.bd-content .sd-card .sd-card-footer {
+  background: transparent;
+  border-top: 1px solid var(--mg-card-border);
+  padding: 0.5rem 1.25rem;
+  font-size: 0.85rem;
+}
+.bd-content .sd-card .sd-card-footer code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--pst-color-text-muted);
+}
+.bd-content .sd-card .sd-card-text code {
+  background: none;
+  border: none;
+  padding: 0;
+  color: var(--pst-color-text-base);
+}
+.sd-octicon.feature-icon {
+  color: var(--pst-color-primary);
+  margin-right: 0.35rem;
+  vertical-align: -0.15em;
+}
+
+/* Tutorial thumbnails: the pipeline diagrams are drawn on white, so they
+   sit on a white plate in both modes and keep the same aspect ratio */
+.tutorial-grid .sd-card-img-top {
+  aspect-ratio: 2 / 1;
+  object-fit: contain;
+  padding: 0.35rem;
+  background: var(--mg-thumb-bg);
+  border-bottom: 1px solid var(--mg-card-border);
+  border-radius: 0.75rem 0.75rem 0 0;
+}
+
+/* ---------- Notebooks ---------- */
+
+.nb-links {
+  font-size: 0.85rem;
+  margin-bottom: 0.25rem;
+}
+.nb-links p {
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.5rem;
+}
+.nb-links a {
+  padding: 0.15rem 0.7rem;
+  border: 1px solid var(--mg-card-border);
+  border-radius: 999px;
+  text-decoration: none;
+}
+.nb-links a:hover {
+  border-color: var(--pst-color-primary);
+}
+.nb-links a code.download {
+  font-family: inherit;
+  font-size: inherit;
+  background: none;
+  border: none;
+  padding: 0;
+  color: inherit;
+  font-weight: normal;
+}
+
+/* nbsphinx cells in the colors of the theme */
+div.nbinput.container div.input_area {
+  border: 1px solid var(--mg-card-border);
+  border-radius: 0.5rem;
+  background: var(--pst-color-surface);
+  overflow: hidden;
+}
+div.nbinput.container div.input_area div.highlight,
+div.nbinput.container div.input_area pre {
+  background: transparent;
+  border: none;
+}
+div.nboutput.container div.output_area.stderr {
+  background: var(--pst-color-warning-bg);
+}
+
+/* ---------- API reference ---------- */
+
+/* Class and function signatures as a card-like block */
+dl.py.class > dt,
+dl.py.function > dt,
+dl.py.exception > dt {
+  background: var(--pst-color-surface);
+  border: 1px solid var(--mg-card-border);
+  border-left: 3px solid var(--pst-color-primary);
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.8rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+dl.py.method > dt,
+dl.py.property > dt,
+dl.py.attribute > dt {
+  border-left: 2px solid var(--mg-card-border);
+  padding-left: 0.6rem;
+  font-size: 0.9rem;
+}
+dl.py dt .sig-name {
+  color: var(--pst-color-primary);
+  font-weight: 700;
+}
+/* Parameters in one-per-line signatures */
+dl.py dt dl > dd {
+  margin-left: 2rem;
+}
+
+/* Summary tables: compact and full width */
+table.autosummary {
+  width: 100%;
+}
+table.autosummary td:first-child {
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 1.5rem;
+}
+table.autosummary td {
+  padding-top: 0.35rem;
+  padding-bottom: 0.35rem;
+}
+table.autosummary td:first-child code {
+  background: none;
+  border: none;
+  padding: 0;
+  font-weight: 600;
+}
+table.autosummary td:first-child a {
+  text-decoration: none;
+}
+table.autosummary td:first-child a:hover code {
+  text-decoration: underline;
+}
+
+/* ---------- Misc ---------- */
+
+.toc-backref,
+.toc-backref:visited {
+  color: inherit;
+  text-decoration: none;
 }
 
 /* Benchmarks page: tables folded under the figures */
-details {
-    margin: 0.25rem 0 1.5rem;
+.bd-article details {
+  margin: 0.25rem 0 1.5rem;
 }
-details > summary {
-    cursor: pointer;
-    font-weight: 600;
+.bd-article details > summary {
+  cursor: pointer;
+  font-weight: 600;
 }

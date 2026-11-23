@@ -1,7 +1,58 @@
+.. title:: mlx-graphs: Graph Neural Networks on Apple Silicon
+
+.. rst-class:: home
+
 MLX-graphs
 ==========
 
-MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX <https://github.com/ml-explore/mlx>`_.
+.. container:: hero
+
+   .. image:: _static/logo.svg
+      :alt: mlx-graphs
+      :class: only-light hero-logo
+
+   .. image:: _static/logo_dark.svg
+      :alt: mlx-graphs
+      :class: only-dark hero-logo
+
+   .. rst-class:: hero-tagline
+
+   MLX-graphs is a library for Graph Neural Networks (GNNs) built upon Apple's `MLX <https://github.com/ml-explore/mlx>`_.
+
+   .. container:: hero-install
+
+      .. code-block:: shell
+
+         pip install mlx-graphs
+
+   .. container:: hero-buttons
+
+      .. button-ref:: tutorials/quickstart
+         :ref-type: doc
+         :color: primary
+         :shadow:
+
+         :octicon:`rocket` Quickstart
+
+      .. button-ref:: tutorials/index
+         :ref-type: doc
+         :color: primary
+         :outline:
+
+         :octicon:`book` Tutorials
+
+      .. button-ref:: api/index
+         :ref-type: doc
+         :color: primary
+         :outline:
+
+         :octicon:`code` API reference
+
+
+.. rst-class:: home-section
+
+Faster than PyTorch Geometric on a Mac
+--------------------------------------
 
 **On a Mac, MLX-graphs trains GNNs 5.6× faster than PyTorch Geometric on the GPU (MPS)
 and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the same accuracy**
@@ -9,39 +60,52 @@ and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the sam
 
 .. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_light.png
    :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
-   :class: only-light
+   :class: only-light headline-figure
    :width: 100%
 
 .. image:: /../../benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/headline_dark.png
    :alt: Time of PyG on MPS and on CPU relative to mlx-graphs for one layer, node classification and graph classification, and the test accuracy of each framework
-   :class: only-dark
+   :class: only-dark headline-figure
    :width: 100%
 
 
-
+.. rst-class:: home-section
 
 Features
-----------------
+--------
 
-- Fast GNN training and inference on Apple Silicon
-   ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
-   fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
-   available within the MLX core library, and message passing aggregates neighbours with fused
-   sparse kernels. On an M5 Pro, one GNN layer runs up to 31× faster than PyTorch Geometric on
-   the Mac's GPU (MPS). See the :doc:`benchmarks`.
-- Scalability to large graphs
-   With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
-   This setup allows Macs to leverage their entire memory capacity for storing graphs.
-   Consequently, Macs equipped with substantial memory can efficiently train GNNs on large graphs, spanning tens of gigabytes, directly using the Mac's GPU.
-- PyTorch Geometric's API, on MLX
-   The layers, models, samplers and loaders, transforms and datasets of PyG are available under
-   the same names: mini-batch training with ``NeighborLoader`` and ``ClusterLoader``,
-   heterogeneous models with ``to_hetero``, temporal graphs with TGN, and graph transformers
-   with ``GPSConv``. Each was checked against PyG. See :doc:`tutorials/from_pyg`.
-- Multi-device
-   Unified memory eliminates the need for time-consuming device-to-device transfers.
-   This architecture also enables specific operations to be run explicitly on either the CPU or GPU without incurring any overhead, facilitating more efficient computation and resource utilization.
+.. grid:: 1 1 2 2
+   :gutter: 3
+   :class-container: feature-grid
 
+   .. grid-item-card:: :octicon:`zap;1.2em;feature-icon` Fast GNN training and inference on Apple Silicon
+
+      ``MLX-graphs`` has been designed to run *fast* on Apple Silicon chips. All GNN operations
+      fully leverage the GPU and CPU hardware of Macs thanks to the efficient low-level primitives
+      available within the MLX core library, and message passing aggregates neighbours with fused
+      sparse kernels. On an M5 Pro, one GNN layer runs up to 31× faster than PyTorch Geometric on
+      the Mac's GPU (MPS). See the :doc:`benchmarks`.
+
+   .. grid-item-card:: :octicon:`database;1.2em;feature-icon` Scalability to large graphs
+
+      With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
+      This setup allows Macs to leverage their entire memory capacity for storing graphs.
+      Consequently, Macs equipped with substantial memory can efficiently train GNNs on large graphs, spanning tens of gigabytes, directly using the Mac's GPU.
+
+   .. grid-item-card:: :octicon:`arrow-switch;1.2em;feature-icon` PyTorch Geometric's API, on MLX
+
+      The layers, models, samplers and loaders, transforms and datasets of PyG are available under
+      the same names: mini-batch training with ``NeighborLoader`` and ``ClusterLoader``,
+      heterogeneous models with ``to_hetero``, temporal graphs with TGN, and graph transformers
+      with ``GPSConv``. Each was checked against PyG. See :doc:`tutorials/from_pyg`.
+
+   .. grid-item-card:: :octicon:`cpu;1.2em;feature-icon` Multi-device
+
+      Unified memory eliminates the need for time-consuming device-to-device transfers.
+      This architecture also enables specific operations to be run explicitly on either the CPU or GPU without incurring any overhead, facilitating more efficient computation and resource utilization.
+
+
+.. rst-class:: home-section
 
 Example usage
 -------------
@@ -77,75 +141,85 @@ Here is an example of a custom `GraphSAGE <https://proceedings.neurips.cc/paper_
 Layers that override ``message()`` with something other than a weighted sum of
 neighbour features (e.g. attention computed per edge) simply drop the
 decorator, and ``propagate`` gathers per-edge messages and scatters them.
+The :doc:`guide/message_passing` guide covers this in depth.
+
+
+.. rst-class:: home-section
+
+Tutorials
+---------
+
+.. grid:: 1 2 3 3
+   :gutter: 3
+   :class-container: tutorial-grid
+
+   .. grid-item-card:: Graph classification
+      :link: tutorials/notebooks/graph_classification
+      :link-type: doc
+      :img-top: _static/tutorials/graph_classification.svg
+      :img-alt:
+
+      A GCN on the MUTAG molecules, from batching to evaluation.
+
+   .. grid-item-card:: Mini-batch training on large graphs
+      :link: tutorials/notebooks/minibatch_training
+      :link-type: doc
+      :img-top: _static/tutorials/minibatch_training.svg
+      :img-alt:
+
+      ``NeighborLoader``, ``ClusterLoader`` and GraphSAINT on ogbn-arxiv.
+
+   .. grid-item-card:: Link prediction
+      :link: tutorials/notebooks/link_prediction
+      :link-type: doc
+      :img-top: _static/tutorials/link_prediction.svg
+      :img-alt:
+
+      A GCN encoder and a dot-product decoder on Cora, compared with PyG.
+
+   .. grid-item-card:: Heterogeneous graphs with ``to_hetero``
+      :link: tutorials/notebooks/heterogeneous_to_hetero
+      :link-type: doc
+      :img-top: _static/tutorials/heterogeneous_to_hetero.svg
+      :img-alt:
+
+      Turn a homogeneous GraphSAGE or GAT into a heterogeneous model, on DBLP.
+
+   .. grid-item-card:: Graph transformers with GPS
+      :link: tutorials/notebooks/graph_transformers_gps
+      :link-type: doc
+      :img-top: _static/tutorials/graph_transformers_gps.svg
+      :img-alt:
+
+      ``GPSConv`` with random-walk encodings on Peptides-func.
+
+   .. grid-item-card:: Temporal graph networks
+      :link: tutorials/notebooks/temporal_graph_networks
+      :link-type: doc
+      :img-top: _static/tutorials/temporal_graph_networks.svg
+      :img-alt:
+
+      A TGN with node memory on the JODIE Wikipedia event stream.
+
+.. container:: section-more
+
+   .. button-ref:: tutorials/index
+      :ref-type: doc
+      :color: primary
+      :outline:
+
+      Browse all tutorials :octicon:`arrow-right`
 
 
 .. toctree::
-   :caption: Getting started
-   :maxdepth: 1
+   :hidden:
+   :maxdepth: 2
 
-   install
-   tutorials/quickstart.rst
-   tutorials/from_pyg.rst
-
-
-.. toctree::
-   :caption: Tutorials
-   :maxdepth: 1
-
-   tutorials/notebooks/graph_classification.ipynb
-   tutorials/notebooks/node2vec.ipynb
-   tutorials/notebooks/metapath2vec.ipynb
-   tutorials/notebooks/minibatch_training.ipynb
-   tutorials/notebooks/link_prediction.ipynb
-   tutorials/notebooks/temporal_graph_networks.ipynb
-   tutorials/notebooks/heterogeneous_to_hetero.ipynb
-   tutorials/notebooks/graph_transformers_gps.ipynb
-   tutorials/notebooks/cybersecurity.ipynb
-   tutorials/notebooks/graph_rag_g_reasoner.ipynb
-   tutorials/notebooks/qm9_tutorial.ipynb
-
-
-.. toctree::
-   :caption: User guide
-   :maxdepth: 1
-
-   guide/message_passing
-   datasets
-
-
-.. toctree::
-   :caption: Examples
-   :maxdepth: 1
-
-   tutorials/examples/index.rst
-
-
-.. toctree::
-   :caption: Benchmarks and validation
-   :maxdepth: 1
-
-   benchmarks
-   validation
-
-
-.. toctree::
-   :caption: API
-   :maxdepth: 1
-
-   api/data/index.rst
-   api/datasets/index.rst
-   api/loaders/index.rst
-   api/transforms/index.rst
-   api/nn/index.rst
-   api/utils/index.rst
-   api/algorithms/index.rst
-   api/metrics/index.rst
-
-
-.. toctree::
-   :caption: Project
-   :maxdepth: 1
-
+   getting_started
+   user_guide
+   tutorials/index
+   api/index
+   performance
    changelog
 
 

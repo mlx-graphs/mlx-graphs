@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 400" width="960" height="400" role="img" aria-labelledby="t">
+  <title id="t">A meta-path guided random walk author, paper, venue, paper, author on a heterogeneous graph</title>
+  <rect x="1" y="1" width="958" height="398" rx="14" fill="#ffffff" stroke="#d9d9d9" stroke-width="2"/>
+  <text x="40" y="58" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="1.5" fill="#555">META-PATH  A → P → V → P → A</text>
+  <g stroke="#7a7a7a" stroke-width="4" fill="none" stroke-linecap="round">
+    <path d="M190 210 H 270"/><path d="M370 210 H 430"/><path d="M530 210 H 590"/><path d="M690 210 H 770"/>
+  </g>
+  <g fill="#7a7a7a">
+    <path d="M282 210 l-16 -9 v18 z"/><path d="M442 210 l-16 -9 v18 z"/><path d="M602 210 l-16 -9 v18 z"/><path d="M782 210 l-16 -9 v18 z"/>
+  </g>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">
+    <circle cx="140" cy="210" r="50" fill="#2286A6"/><text x="140" y="222" fill="#fff">A</text>
+    <rect x="270" y="160" width="100" height="100" rx="18" fill="#65ABC1"/><text x="320" y="222" fill="#fff">P</text>
+    <path d="M480 156 L534 210 L480 264 L426 210 Z" fill="#A7CFDB"/><text x="480" y="222" fill="#1f2937">V</text>
+    <rect x="590" y="160" width="100" height="100" rx="18" fill="#65ABC1"/><text x="640" y="222" fill="#fff">P</text>
+    <circle cx="820" cy="210" r="50" fill="#2286A6"/><text x="820" y="222" fill="#fff">A</text>
+  </g>
+  <g font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="22" fill="#555" text-anchor="middle">
+    <text x="140" y="300">author</text><text x="320" y="300">paper</text><text x="480" y="300">venue</text><text x="640" y="300">paper</text><text x="820" y="300">author</text>
+  </g>
+  <text x="480" y="360" font-family="-apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif" font-size="22" fill="#555" text-anchor="middle">skip-gram embeddings from meta-path guided random walks</text>
+</svg>
