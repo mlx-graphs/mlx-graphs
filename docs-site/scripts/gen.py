@@ -669,38 +669,331 @@ def simple_rst_to_md(text: str, image_dir: str | None = None, image_prefix: str 
     return convert_inline("\n".join(out), "mlx_graphs")
 
 
+def git(*args: str) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=ROOT, capture_output=True, text=True, check=True
+    ).stdout
+
+
+_STABLE = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
+_CONVENTIONAL = re.compile(r"^(?P<type>\w+)(?:\((?P<scope>[^)]*)\))?(?P<bang>!)?:\s*(?P<title>.+)$")
+_GROUPS = [
+    ("breaking", "Breaking changes"),
+    ("feat", "Features"),
+    ("fix", "Fixes"),
+    ("perf", "Performance"),
+    ("docs", "Documentation"),
+    ("other", "Other"),
+]
+
+
+def stable_tags() -> list[tuple[str, str]]:
+    """``(tag, date)`` of every vX.Y.Z tag, newest first."""
+    out = git("for-each-ref", "refs/tags", "--format=%(refname:short)\t%(creatordate:short)")
+    tags = []
+    for line in out.splitlines():
+        name, date = line.split("\t")
+        if _STABLE.match(name):
+            tags.append((name, date))
+    return sorted(tags, key=lambda t: tuple(int(x) for x in _STABLE.match(t[0]).groups()), reverse=True)
+
+
+def release_commits(rev_range: str) -> list[str]:
+    """Titles of the commits of main (first parent) in ``rev_range``."""
+    out = git("log", "--first-parent", "--format=%s%x1f%b%x1e", rev_range)
+    titles = []
+    for record in out.split("\x1e"):
+        if not record.strip():
+            continue
+        subject, _, body = record.strip("\n").partition("\x1f")
+        m = re.match(r"^Merge pull request #(\d+) from \S+", subject)
+        if m:  # older history: the PR title is the merge commit's body
+            first = next((line for line in body.splitlines() if line.strip()), "")
+            subject = f"{first.strip()} (#{m.group(1)})" if first else subject
+        elif subject.startswith("Merge "):
+            continue
+        titles.append(subject)
+    return titles
+
+
+def release_entry(title: str) -> tuple[str, str]:
+    """``(group, Markdown line)`` of a commit title."""
+    m = _CONVENTIONAL.match(title)
+    if m:
+        kind, scope, text = m.group("type").lower(), m.group("scope"), m.group("title")
+        group = "breaking" if m.group("bang") else kind if kind in ("feat", "fix", "perf", "docs") else "other"
+        text = (f"**{scope}:** " if scope else "") + text
+    else:
+        group, text = "other", title
+    text = text.replace("<", "&lt;")
+    text = re.sub(r"\(#(\d+)\)", rf"([#\1]({GITHUB}/pull/\1))", text)
+    return group, f"- {text}"
+
+
+def entries_md(titles: list[str]) -> str:
+    groups: dict[str, list[str]] = {}
+    for title in titles:
+        group, line = release_entry(title)
+        groups.setdefault(group, []).append(line)
+    parts = []
+    for key, label in _GROUPS:
+        if key in groups:
+            parts.append(f"**{label}**\n\n" + "\n".join(groups[key]))
+    return "\n\n".join(parts) if parts else "*No pull request.*"
+
+
+def changelog_sections() -> tuple[dict[str, tuple[str, str]], list[tuple[str, str, int]]]:
+    """Hand-written notes of CHANGELOG.rst.
+
+    Returns ``{version: (name, reST body)}`` for the version sections, and the
+    items of the "Unreleased" section as ``(subsection, reST item, line)``.
+    """
+    lines = (ROOT / "CHANGELOG.rst").read_text().split("\n")
+    heads = [
+        i for i in range(len(lines) - 1)
+        if lines[i].strip() and re.match(r"^-{3,}\s*$", lines[i + 1])
+    ]
+    versions, unreleased = {}, []
+    for k, start in enumerate(heads):
+        end = heads[k + 1] if k + 1 < len(heads) else len(lines)
+        title = lines[start].strip()
+        body = lines[start + 2 : end]
+        m = re.match(r"^v?(\d+\.\d+\.\d+)\s*:?\s*(.*)$", title)
+        if m:
+            versions[m.group(1)] = (m.group(2), "\n".join(body))
+        elif title.lower() == "unreleased":
+            sub = ""
+            item_start = None
+            for j, line in enumerate(body + ["<end>"]):
+                if j + 1 < len(body) and line.strip() and re.match(r"^~{3,}\s*$", body[j + 1]):
+                    sub = line.strip()
+                if item_start is not None and (line.startswith("- ") or line == "<end>" or
+                                               (line.strip() and not line.startswith(" ") and not line.startswith("-"))):
+                    text = "\n".join(body[item_start:j]).rstrip()
+                    unreleased.append((sub, text, start + 2 + item_start + 1))
+                    item_start = None
+                if line.startswith("- "):
+                    item_start = j
+    return versions, unreleased
+
+
+def first_release_of(line: int, tags: list[tuple[str, str]]) -> str | None:
+    """The first stable tag containing the commit that wrote a CHANGELOG.rst line."""
+    try:
+        blame = git("blame", "--porcelain", "-L", f"{line},{line}", "CHANGELOG.rst")
+    except subprocess.CalledProcessError:
+        return None
+    sha = blame.split()[0]
+    if set(sha) == {"0"}:
+        return None  # not committed yet
+    containing = set(git("tag", "--contains", sha).split())
+    for tag, _ in reversed(tags):  # oldest first
+        if tag in containing:
+            return tag
+    return None
+
+
+def rst_chunk_to_md(rst: str, top: int) -> str:
+    """reST notes -> Markdown, with their headings starting at level ``top``."""
+    md = simple_rst_to_md(rst)
+    levels = sorted({len(m) for m in re.findall(r"^(#+) ", md, re.M)})
+    for i, level in enumerate(levels):
+        md = re.sub(rf"^{'#' * level} ", f"{'#' * (top + i)}\x00 ", md, flags=re.M)
+    return md.replace("\x00", "")
+
+
 def generate_changelog() -> None:
-    md = simple_rst_to_md((ROOT / "CHANGELOG.rst").read_text())
-    front = (
-        "---\n"
-        f"edit_url: {GITHUB}/edit/main/CHANGELOG.rst\n"
-        "---\n\n"
-        "<!-- Generated by docs-site/scripts/gen.py from CHANGELOG.rst -->\n\n"
-    )
-    write(CONTENT / "changelog.md", front + md)
-    version = latest_release(md)
+    """The changelog page, from the git history and CHANGELOG.rst.
+
+    Every stable tag vX.Y.Z gets a section: the titles of the pull requests
+    merged since the previous tag (squash merges on main), grouped by
+    conventional-commit type, with the hand-written notes of CHANGELOG.rst for
+    that version on top. Commits after the last tag are listed as Unreleased.
+    Items of CHANGELOG.rst's "Unreleased" section go under the release that
+    shipped the commit that wrote them (git blame + git tag --contains).
+    """
+    tags = stable_tags()
+    versions, unreleased_items = changelog_sections()
+    moved: dict[str | None, list[tuple[str, str]]] = {}
+    for sub, item, line in unreleased_items:
+        moved.setdefault(first_release_of(line, tags), []).append((sub, item))
+
+    def notes_md(tag: str | None) -> str:
+        parts = []
+        version = tag[1:] if tag else None
+        if version in versions:
+            parts.append(rst_chunk_to_md(versions[version][1], 3))
+        items = moved.get(tag, [])
+        if items:
+            rst = []
+            for sub in dict.fromkeys(s for s, _ in items):
+                rst += [sub, "~" * max(3, len(sub)), ""] if sub else []
+                rst += [item for s, item in items if s == sub] + [""]
+            parts.append(rst_chunk_to_md("\n".join(rst), 3))
+        return "\n\n".join(parts)
+
+    out = [
+        "---",
+        f"edit_url: {GITHUB}/edit/main/CHANGELOG.rst",
+        "---",
+        "",
+        "<!-- Generated by docs-site/scripts/gen.py from the git tags and CHANGELOG.rst -->",
+        "",
+        "# Changelog",
+        "",
+        "Every release of mlx-graphs, newest first: the pull requests it contains,"
+        " taken from the git history, and the hand-written notes of"
+        f" [`CHANGELOG.rst`]({GITHUB}/blob/main/CHANGELOG.rst) when a version has some."
+        f" The packages are on [PyPI](https://pypi.org/project/mlx-graphs/#history) and"
+        f" the [GitHub releases]({GITHUB}/releases).",
+        "",
+    ]
+    latest = tags[0][0] if tags else None
+    # squash merges of pull requests only: not the commits of a local branch
+    pending = [t for t in release_commits(f"{latest}..HEAD") if re.search(r"\(#\d+\)$", t)] if latest else []
+    if pending or moved.get(None):
+        out += [
+            "## Unreleased { #unreleased }",
+            "",
+            f'<p class="mg-release-meta" markdown>Merged after {latest} &middot; '
+            f"[changes since {latest}]({GITHUB}/compare/{latest}...main)</p>",
+            "",
+        ]
+        if moved.get(None):
+            out += [notes_md(None), ""]
+        out += [entries_md(pending), ""]
+    for i, (tag, date) in enumerate(tags):
+        version = tag[1:]
+        previous = tags[i + 1][0] if i + 1 < len(tags) else None
+        name = versions.get(version, ("", ""))[0]
+        anchor = "v" + version.replace(".", "-")
+        out += [f"## {version}{': ' + name if name else ''} {{ #{anchor} }}", ""]
+        meta = [date]
+        if previous:
+            meta.append(f"[Full diff]({GITHUB}/compare/{previous}...{tag})")
+        meta.append(f"[GitHub release]({GITHUB}/releases/tag/{tag})")
+        meta.append(f"[PyPI](https://pypi.org/project/mlx-graphs/{version}/)")
+        out += ['<p class="mg-release-meta" markdown>' + " &middot; ".join(meta) + "</p>", ""]
+        notes = notes_md(tag)
+        if notes:
+            out += [notes, ""]
+            out += ["### Pull requests" + f" {{ #{anchor}-prs }}", ""]
+        out += [entries_md(release_commits(f"{previous}..{tag}" if previous else tag)), ""]
+    md = "\n".join(out)
+
+    # every stable tag must have its section
+    missing = [t for t, _ in tags if f"{{ #v{t[1:].replace('.', '-')} }}" not in md]
+    if missing:
+        raise SystemExit(f"changelog: no section for {missing}")
+    write(CONTENT / "changelog.md", md)
+
+    version = latest[1:] if latest else "dev"
     write(
         GENERATED / "version.md",
-        f'<a class="mg-badge" href="{GITHUB}/releases/tag/v{version}">'
+        f'<a class="mg-badge" href="changelog/#v{version.replace(".", "-")}">'
         f'<span class="mg-badge__dot"></span>Latest release: v{version}</a>\n',
     )
-    print(f"changelog: converted from CHANGELOG.rst (latest release {version})")
+    print(
+        f"changelog: {len(tags)} releases from git tags (latest {latest}),"
+        f" {len(pending)} unreleased commits, notes of {sorted(versions)} from CHANGELOG.rst"
+    )
 
 
-def latest_release(changelog_md: str) -> str:
-    """The last release tag (``git describe``), else the changelog's last version."""
-    try:
-        tag = subprocess.run(
-            ["git", "describe", "--tags", "--abbrev=0", "--match", "v[0-9]*"],
-            cwd=ROOT,
-            capture_output=True,
-            text=True,
-            check=True,
-        ).stdout.strip()
-        return tag.lstrip("v")
-    except (OSError, subprocess.CalledProcessError):
-        m = re.search(r"^## (\d+\.\d+\.\d+)", changelog_md, re.M)
-        return m.group(1) if m else "dev"
+# Sphinx pages -> pages of this site (paths without .md; "" is the home page)
+SPHINX_PAGES = {
+    "install.html": "getting-started/installation",
+    "tutorials/quickstart.html": "getting-started/quickstart",
+    "tutorials/from_pyg.html": "getting-started/from-pyg",
+    "tutorials/examples/index.html": "tutorials/examples",
+    "guide/message_passing.html": "guide/message-passing",
+    "datasets.html": "guide/datasets",
+    "benchmarks.html": "benchmarks",
+    "validation.html": "validation",
+    "changelog.html": "changelog",
+    "genindex.html": "api",
+    "search.html": "",
+}
+
+
+def generate_redirects(entries: dict[str, Entry]) -> None:
+    """A redirect page at every URL of the Sphinx site (docs-site/sphinx-urls.txt).
+
+    The README, PyPI and other sites link to pages such as
+    ``tutorials/quickstart.html`` or
+    ``api/nn/_autosummary/mlx_graphs.nn.GCNConv.html``; each one now sends the
+    reader to the page that replaces it.
+    """
+    by_id = {e.id: e for e in entries.values()}
+    by_path = {e.obj.path: e for e in entries.values()}
+    by_name: dict[str, list[Entry]] = {}
+    for e in entries.values():
+        by_name.setdefault(e.name, []).append(e)
+
+    def target(old: str) -> tuple[str, str] | None:
+        """(page path, anchor) replacing an old URL."""
+        if old in SPHINX_PAGES:
+            return SPHINX_PAGES[old], ""
+        m = re.match(r"^tutorials/notebooks/(\w+)\.html$", old)
+        if m and (NB_DIR / f"{m.group(1)}.ipynb").exists():
+            return f"tutorials/notebooks/{m.group(1)}", ""
+        m = re.match(r"^api/(\w+)/_autosummary[^/]*/([\w.]+)\.html$", old)
+        if m:
+            section, dotted = m.groups()
+            parts = dotted.split(".")
+            # the object itself, or a method / attribute of a documented class
+            for cut in range(len(parts), 1, -1):
+                path = ".".join(parts[:cut])
+                entry = by_id.get(path) or by_path.get(path)
+                if entry is None:
+                    same = [e for e in by_name.get(parts[cut - 1], []) if e.page.parts[0] == section]
+                    entry = same[0] if len(same) == 1 else None
+                if entry is not None:
+                    anchor = f"{entry.id}.{'.'.join(parts[cut:])}" if cut < len(parts) else ""
+                    return f"api/{entry.page.with_suffix('').as_posix()}", anchor
+            return f"api/{section}", ""
+        m = re.match(r"^api/([\w/]+)\.html$", old)
+        if m:
+            page = m.group(1)
+            page = page[: -len("/index")] if page.endswith("/index") else page
+            if (TEMPLATES / f"{page}.md").exists() or (TEMPLATES / page / "index.md").exists():
+                return f"api/{page}", ""
+        return None
+
+    lines = (SITE / "sphinx-urls.txt").read_text().splitlines()
+    count, unmapped = 0, []
+    for old in (line.strip() for line in lines):
+        if not old or old.startswith("#"):
+            continue
+        found = target(old)
+        if found is None:
+            unmapped.append(old)
+            continue
+        page, anchor = found
+        if (CONTENT / old).with_suffix(".md").exists() and old.endswith("index.html"):
+            continue  # same URL in both sites (e.g. api/nn/index.html)
+        depth = old.count("/")
+        rel = "../" * depth + (page + "/" if page else "")
+        rel = rel or "./"
+        url = f"https://mlx-graphs.github.io/mlx-graphs/{page + '/' if page else ''}"
+        if anchor:
+            rel += f"#{anchor}"
+            url += f"#{anchor}"
+        write(
+            CONTENT / old,
+            "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
+            "<title>Redirecting...</title>\n"
+            f'<link rel="canonical" href="{url}">\n'
+            '<meta name="robots" content="noindex">\n'
+            f'<meta http-equiv="refresh" content="0; url={rel}">\n'
+            f"<script>location.replace({json.dumps(rel)} + (location.hash || \"\"))</script>\n"
+            "</head>\n<body>\n"
+            f'<p>This page has moved to <a href="{rel}">{url}</a>.</p>\n'
+            "</body>\n</html>\n",
+        )
+        count += 1
+    if unmapped:
+        raise SystemExit(f"redirects: no page for the old URLs {unmapped}")
+    print(f"redirects: {count} pages of the Sphinx site redirect to this one")
 
 
 def generate_benchmarks() -> None:
@@ -747,7 +1040,8 @@ def main() -> None:
     args = parser.parse_args()
     parts = args.only or ["api", "notebooks", "changelog", "benchmarks"]
     if "api" in parts:
-        generate_api()
+        entries = generate_api()
+        generate_redirects(entries)
     if "notebooks" in parts:
         generate_notebooks()
     if "changelog" in parts:

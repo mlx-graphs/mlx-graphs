@@ -91,7 +91,7 @@ name = "mlx-graphs on PyPI"
 [project.theme]
 custom_dir = "docs-site/overrides"
 language = "en"
-logo = "assets/images/icon.svg"
+logo = "assets/images/favicon.svg"
 favicon = "assets/images/favicon.svg"
 features = [
   "announce.dismiss",

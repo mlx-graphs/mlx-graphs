@@ -5,3 +5,7 @@
 /content/assets/benchmarks/
 /content/tutorials/notebooks/*.md
 /content/tutorials/notebooks/*_files/
+# redirect pages at the URLs of the old Sphinx site (sphinx-urls.txt)
+/content/*.html
+/content/guide/*.html
+/content/tutorials/**/*.html

@@ -42,6 +42,28 @@
   --md-typeset-a-color: #6cbad4;
 }
 
+/* the site name in the header links to the home page, like the logo */
+.md-header__home {
+  color: inherit;
+  font-weight: 700;
+  border-radius: 0.2rem;
+  transition: color 0.15s;
+}
+.md-header__home:hover {
+  color: var(--md-accent-fg-color);
+}
+.md-header__home:focus-visible {
+  outline: 2px solid var(--md-accent-fg-color);
+  outline-offset: 2px;
+}
+
+/* changelog: date and links under each version */
+.md-typeset .mg-release-meta {
+  margin-top: -0.4rem;
+  font-size: 0.7rem;
+  color: var(--md-default-fg-color--light);
+}
+
 /* ---------------------------------------------------------------------------
    General polish
    ------------------------------------------------------------------------ */

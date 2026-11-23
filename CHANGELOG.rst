@@ -1,6 +1,14 @@
 Changelog
 =========
 
+..
+   Hand-written notes only. The list of changes of every release is generated
+   from the pull request titles by docs-site/scripts/gen.py (see the
+   Changelog page of the docs). Add a section titled with a version number
+   (e.g. "0.6.0: Large graphs") for highlights or migration notes of that
+   version. Items under "Unreleased" are shown under the release that ships
+   the commit that wrote them.
+
 Unreleased
 ----------
 
@@ -19,6 +27,27 @@ Features
   ``tgn_tgbl.py`` and ``tgn_tgbn.py`` train TGN with the TGB protocol
   (compared with py-tgb's PyG examples in ``benchmarks/tgn_comparison``).
 
+0.5.2
+-----
+
+Documentation
+~~~~~~~~~~~~~
+
+- The G-reasoner and QM9 notebooks are now listed with the other tutorials.
+  The Examples page only lists the scripts of the ``examples/`` folder.
+
+0.2.3
+-----
+
+Documentation
+~~~~~~~~~~~~~
+
+- A Graph RAG tutorial that runs the released G-reasoner checkpoint with a
+  custom Metal kernel and uses it as the retriever of a local LLM.
+
+0.2.2
+-----
+
 Documentation
 ~~~~~~~~~~~~~
 
@@ -26,10 +55,6 @@ Documentation
   TC E3 CADETS provenance graphs (Orthrus, Velox), anti-money laundering on
   Elliptic, network intrusion detection on NF-UNSW-NB15-v3 (E-GraphSAGE) and
   malware classification on MalNet-Tiny (GIN, GraphGPS).
-- A Graph RAG tutorial that runs the released G-reasoner checkpoint with a
-  custom Metal kernel and uses it as the retriever of a local LLM.
-- The G-reasoner and QM9 notebooks are now listed with the other tutorials.
-  The Examples page only lists the scripts of the ``examples/`` folder.
 
 0.2.0: PyG parity
 ------------------
