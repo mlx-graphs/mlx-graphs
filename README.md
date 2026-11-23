@@ -1,5 +1,5 @@
 <p align="center">
-  <img alt="mlx-graphs" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/docs/source/_static/logo.svg" width="420">
+  <img alt="mlx-graphs" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/docs-site/content/assets/images/logo.svg" width="420">
 </p>
 
 <h3 align="center">Fast graph neural networks on Apple Silicon</h3>

@@ -493,7 +493,7 @@ def convert_notebook(path: Path) -> str:
     for cell in nb["cells"]:
         source = _text(cell.get("source", ""))
         if cell["cell_type"] == "markdown":
-            # images of the Sphinx site -> copies in assets/
+            # figures referenced the Sphinx way (notebooks of older branches)
             source = source.replace("../../_static/tutorials/", "../../assets/tutorials/")
             # links to other notebooks and to the Sphinx pages -> these pages
             source = re.sub(r"\]\((\w+)\.ipynb(#[^)]*)?\)", r"](\1.md\2)", source)
