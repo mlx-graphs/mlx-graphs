@@ -44,10 +44,25 @@ Datasets
 	FakeDataset
 	FakeHeteroDataset
 	JODIEDataset
+	TGBLinkPropPredDataset
+	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
 	ModelNet
 	ShapeNet
+	Reddit
+	Reddit2
+	Flickr
+	Yelp
+	AmazonProducts
+	PPI
+
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	TGBNegativeEdgeSampler
 
 
 Utilities

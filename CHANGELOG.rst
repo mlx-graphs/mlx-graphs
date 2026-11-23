@@ -4,6 +4,42 @@ Changelog
 Unreleased
 ----------
 
+Large graphs
+~~~~~~~~~~~~
+
+- **Datasets**: ``Reddit``, ``Reddit2``, ``Flickr``, ``Yelp``,
+  ``AmazonProducts`` and ``PPI``, with PyG's files, edges, labels and splits
+  (checked equal to PyG's, ``benchmarks/quality/dataset_parity.py``). Single
+  large graphs are stored as safetensors after processing. ``PPI`` is read
+  from the GraphSAGE release, as DGL's server is down.
+- **Temporal sampling**: ``NeighborLoader`` and ``LinkNeighborLoader`` take
+  PyG's ``time_attr``, ``input_time`` / ``edge_label_time`` and
+  ``temporal_strategy`` (``"uniform"`` / ``"last"``): only neighbors not later
+  than their seed are sampled, with node- or edge-level timestamps, each seed
+  getting its own subgraph (``disjoint=True``, also available without time).
+  Implemented as a vectorized numpy sampler; ``"last"`` gives the same
+  mini-batches as PyG with pyg-lib.
+- **Feature and graph stores**: ``FeatureStore`` / ``GraphStore`` (PyG's
+  remote backend API) with in-memory and on-disk (``MemmapFeatureStore``,
+  ``MemmapGraphStore``) implementations. ``NeighborLoader((feature_store,
+  graph_store), ...)`` gathers only the rows of the sampled nodes, so node
+  features larger than the memory can be used for training.
+
+Features
+~~~~~~~~
+
+- Temporal Graph Benchmark (TGB) datasets: ``TGBLinkPropPredDataset``
+  (``tgbl-wiki``, ``tgbl-review``, ``tgbl-coin``, ``tgbl-comment``,
+  ``tgbl-flight``) with TGB's chronological splits and precomputed
+  one-vs-many negative samples (``TGBNegativeEdgeSampler``), and
+  ``TGBNodePropPredDataset`` (``tgbn-trade``, ``tgbn-genre``,
+  ``tgbn-reddit``, ``tgbn-token``) with its label stream. ``TGBEvaluator``
+  computes MRR / Hits@k and NDCG@10 as py-tgb. The events, splits, negative
+  samples and labels of ``tgbl-wiki``, ``tgbl-review``, ``tgbn-trade`` and
+  ``tgbn-genre`` were checked to be identical to py-tgb's. New examples
+  ``tgn_tgbl.py`` and ``tgn_tgbn.py`` train TGN with the TGB protocol
+  (compared with py-tgb's PyG examples in ``benchmarks/tgn_comparison``).
+
 Point clouds and meshes
 ~~~~~~~~~~~~~~~~~~~~~~~
 
