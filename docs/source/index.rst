@@ -101,6 +101,8 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
    tutorials/notebooks/heterogeneous_to_hetero.ipynb
    tutorials/notebooks/graph_transformers_gps.ipynb
    tutorials/notebooks/cybersecurity.ipynb
+   tutorials/notebooks/graph_rag_g_reasoner.ipynb
+   tutorials/notebooks/qm9_tutorial.ipynb
 
 
 .. toctree::

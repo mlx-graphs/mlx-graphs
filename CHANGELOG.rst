@@ -11,6 +11,10 @@ Documentation
   TC E3 CADETS provenance graphs (Orthrus, Velox), anti-money laundering on
   Elliptic, network intrusion detection on NF-UNSW-NB15-v3 (E-GraphSAGE) and
   malware classification on MalNet-Tiny (GIN, GraphGPS).
+- A Graph RAG tutorial that runs the released G-reasoner checkpoint with a
+  custom Metal kernel and uses it as the retriever of a local LLM.
+- The G-reasoner and QM9 notebooks are now listed with the other tutorials.
+  The Examples page only lists the scripts of the ``examples/`` folder.
 
 0.2.0: PyG parity
 ------------------
