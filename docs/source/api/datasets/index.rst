@@ -46,6 +46,12 @@ Datasets
 	JODIEDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	Reddit
+	Reddit2
+	Flickr
+	Yelp
+	AmazonProducts
+	PPI
 
 
 Utilities
