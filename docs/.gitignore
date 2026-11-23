@@ -9,3 +9,5 @@
 /content/*.html
 /content/guide/
 /content/tutorials/**/*.html
+/content/getting-started/writing-layers/
+/content/getting-started/datasets/

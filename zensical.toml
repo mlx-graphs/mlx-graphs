@@ -24,7 +24,7 @@ repo_name = "mlx-graphs/mlx-graphs"
 edit_uri = "edit/main/docs/content/"
 strict = false
 # rebuild when gen.py rewrites the included snippets
-watch = ["docs/.generated"]
+watch = ["docs/.generated", "docs/snippets"]
 # the API sidebar (read by literate-nav), not a page
 exclude_docs = """
 SUMMARY.md
@@ -47,11 +47,14 @@ nav = [
     { "Installation" = "getting-started/installation.md" },
     { "Quickstart" = "getting-started/quickstart.md" },
     { "Coming from PyG" = "getting-started/from-pyg.md" },
-    { "Writing your own layers" = "getting-started/writing-layers.md" },
-    { "Datasets" = "getting-started/datasets.md" },
   ] },
   { "Tutorials" = [
     "tutorials/index.md",
+    { "Guides" = [
+      { "Writing your own layers" = "tutorials/guides/writing-layers.md" },
+      { "Custom GPU kernels" = "tutorials/guides/custom-kernels.md" },
+      { "Datasets" = "tutorials/guides/datasets.md" },
+    ] },
     { "Notebooks" = [
       { "Graph classification" = "tutorials/notebooks/graph_classification.md" },
       { "Node2Vec" = "tutorials/notebooks/node2vec.md" },
@@ -172,7 +175,7 @@ pymdownx.inlinehilite = {}
 pymdownx.keys = {}
 pymdownx.mark = {}
 pymdownx.smartsymbols = {}
-pymdownx.snippets.base_path = ["docs/.generated"]
+pymdownx.snippets.base_path = ["docs/.generated", "docs/snippets"]
 pymdownx.snippets.check_paths = true
 pymdownx.superfences = {}
 pymdownx.tabbed.alternate_style = true

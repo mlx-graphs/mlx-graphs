@@ -1,6 +1,6 @@
 # Datasets { #mlx_graphs.datasets }
 
-Base classes and built-in datasets of `mlx_graphs.datasets`. The [datasets guide](../../getting-started/datasets.md) lists their sizes.
+Base classes and built-in datasets of `mlx_graphs.datasets`. The [datasets guide](../../tutorials/guides/datasets.md) lists their sizes.
 
 ## Base classes
 
@@ -59,7 +59,7 @@ SparseCOOMatrix
 <!-- /api -->
 
 Helpers of `mlx_graphs.datasets.utils` for writing a dataset (see the
-[quickstart](../../getting-started/quickstart.md#datasets-and-data-loaders)):
+[datasets guide](../../tutorials/guides/datasets.md#add-your-own-dataset)):
 
 <!-- api mlx_graphs.datasets.utils.download -->
 download

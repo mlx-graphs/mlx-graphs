@@ -289,6 +289,7 @@
 
 /* feature cards */
 .md-typeset .grid.cards.mg-features > ul > li,
+.md-typeset .grid.cards.mg-guides > ul > li,
 .md-typeset .grid.cards.mg-api-cards > ul > li {
   border-radius: 0.9rem;
   border-color: var(--mg-border);
@@ -296,6 +297,7 @@
   transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
 }
 .md-typeset .grid.cards.mg-features > ul > li:hover,
+.md-typeset .grid.cards.mg-guides > ul > li:hover,
 .md-typeset .grid.cards.mg-api-cards > ul > li:hover {
   border-color: var(--mg-brand-2);
   box-shadow: var(--mg-shadow);

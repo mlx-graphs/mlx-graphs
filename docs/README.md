@@ -21,7 +21,8 @@ reload on their own. CI builds with `python docs/scripts/check_api.py`,
 
 | Path | What |
 |---|---|
-| `content/` | hand-written pages (Markdown): home, getting started (with writing layers and datasets), tutorials index, benchmarks, validation |
+| `content/` | hand-written pages (Markdown): home, getting started, tutorials (landing page and the guides in `tutorials/guides/`), benchmarks, validation |
+| `snippets/` | code that pages include with `--8<-- "file.py:section"` and that runs as a script and in the tests (the Custom GPU kernels guide: `edge_dot_kernel.py`, tested by `tests/docs/`) |
 | `content/tutorials/notebooks/*.ipynb` | the tutorial notebooks, rendered with their stored outputs (never executed) |
 | `content/assets/` | CSS, JavaScript, images, tutorial figures (`assets/tutorials/`) |
 | `api/` | templates of the API reference: one Markdown page per section, with `<!-- api -->` blocks |

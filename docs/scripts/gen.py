@@ -1220,17 +1220,19 @@ SPHINX_PAGES = {
     "tutorials/quickstart.html": "getting-started/quickstart",
     "tutorials/from_pyg.html": "getting-started/from-pyg",
     "tutorials/examples/index.html": "tutorials/examples",
-    "guide/message_passing.html": "getting-started/writing-layers",
-    "datasets.html": "getting-started/datasets",
+    "guide/message_passing.html": "tutorials/guides/writing-layers",
+    "datasets.html": "tutorials/guides/datasets",
     # linked from the README, not a page of the Sphinx site
     "tutorials/graph_classification.html": "tutorials/notebooks/graph_classification",
     "benchmarks.html": "benchmarks",
     "validation.html": "validation",
     "changelog.html": "changelog",
     "genindex.html": "api",
-    # pages of this site that moved: the User guide is now in Getting started
-    "guide/message-passing/index.html": "getting-started/writing-layers",
-    "guide/datasets/index.html": "getting-started/datasets",
+    # pages of this site that moved: the guides are now in Tutorials
+    "guide/message-passing/index.html": "tutorials/guides/writing-layers",
+    "guide/datasets/index.html": "tutorials/guides/datasets",
+    "getting-started/writing-layers/index.html": "tutorials/guides/writing-layers",
+    "getting-started/datasets/index.html": "tutorials/guides/datasets",
     "search.html": "",
 }
 
@@ -1477,7 +1479,7 @@ def check_lists() -> None:
     for name in public_exports(load_package(), "mlx_graphs.datasets"):
         if f"[mlx_graphs.datasets.{name}]" not in datasets_text:
             problems.append(
-                f"getting-started/datasets.md does not link mlx_graphs.datasets.{name}"
+                f"tutorials/guides/datasets.md does not link mlx_graphs.datasets.{name}"
             )
     if problems:
         raise SystemExit("\n".join(problems))

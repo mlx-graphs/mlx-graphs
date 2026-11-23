@@ -626,4 +626,4 @@ A few things make these tests catch bugs:
 - **Tolerances.** MLX's float32 matmul on the GPU has a relative error of about 1e-3, where torch on the CPU has about 1e-7. The tests use a tolerance of 2e-2, which a wrong formula exceeds by far.
 - **Both paths.** For a layer decorated with `@fused_message_passing`, compare the fused and gather-scatter outputs with [`fused_message_passing_mode()`][mlx_graphs.nn.fused_message_passing_mode] (see `tests/nn/test_fused_message_passing.py`).
 
-See [Validation](../validation.md) for the layer-level, sampler and training checks against PyG.
+See [Validation](../../validation.md) for the layer-level, sampler and training checks against PyG.

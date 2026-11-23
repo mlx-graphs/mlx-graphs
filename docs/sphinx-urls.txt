@@ -398,3 +398,5 @@ tutorials/graph_classification.html
 # pages of this site that moved
 guide/message-passing/index.html
 guide/datasets/index.html
+getting-started/writing-layers/index.html
+getting-started/datasets/index.html

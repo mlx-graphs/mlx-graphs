@@ -1,277 +1,190 @@
 # Quickstart
 
-Here is a short introduction to `mlx-graphs`, starting from building a simple graph to training a first GNN model.
+Train a graph neural network on your Mac's GPU in a few lines, then see how graphs, mini-batches and layers work in mlx-graphs. Install it first: `pip install mlx-graphs`.
 
-## Representing Graphs
+## Train a GCN on Cora
 
-### Simple Graphs
-
-A graph can be easily built in `mlx-graphs` using [`GraphData`][mlx_graphs.data.data.GraphData].
+Node classification on the Cora citation graph (2,708 papers, 7 topics) with a 2-layer GCN, full batch:
 
 ```python
-import mlx.core as mx
-from mlx_graphs.data.data import GraphData
+import time
 
-edge_index = mx.array([[0, 1, 0, 2, 3],
-                       [2, 3, 1, 0, 2]])
-node_features = mx.random.normal((4, 8))
-
-graph = GraphData(edge_index, node_features)
->>> GraphData(
-        edge_index(shape=(2, 5), int32)
-        node_features(shape=(4, 8), float32))
-
-graph.edge_index
->>> array([[0, 1, 0, 2, 3],
-           [2, 3, 1, 0, 2]], dtype=int32)
-```
-
-The [`GraphData`][mlx_graphs.data.data.GraphData] class accepts by default the following optional arguments to build the graph.
-
-`edge_index`:
-
-: an array of size `[2, num_edges]` which specifies the topology of the graph in [COO](https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.coo_matrix.html) format. The i-th column in `edge_index` defines the source and destination nodes of the i-th edge
-
-`node_features`:
-
-: an array of size `[num_nodes, num_node_features]` defining the features associated to each node (if any). The i-th row contains the features of the i-th node
-
-`edge_features`:
-
-: an array of size `[num_edges, num_edge_features]` defining the features associated to each edge (if any). The i-th row contains the features of the i-th edge
-
-`graph_features`:
-
-: an array of size `[1, num_graph_features]` defining the features associated to the graph itself
-
-`node_labels`:
-
-: an array of shape `[num_nodes, num_node_labels]` containing the labels of each node.
-
-`edge_labels`:
-
-: an array of shape `[num_edges, num_edge_labels]` containing the labels of each edge.
-
-`graph_labels`
-
-: an array of shape `[1, num_graph_labels]` containing the global labels of the graph.
-
-We adopt the above convention across the entire library both in terms of shapes of the attributes and the order in which they're provided to functions.
-
-### Graphs with Custom Attributes
-
-[`GraphData`][mlx_graphs.data.data.GraphData] also supports additional attributes to integrate within the graph. Just add your own attributes to the constructor using `kwargs`.
-
-```python
-import mlx.core as mx
-from mlx_graphs.data.data import GraphData
-
-graph = GraphData(
-    edge_index=mx.array([[0, 0, 0], [1, 1, 1]]),
-    node_features=mx.random.normal((4, 8)),
-    alpha=mx.ones((4,)),  # Custom attribute
-)
->>> GraphData(
-        edge_index(shape=(2, 3), int32)
-        node_features(shape=(4, 8), float32)
-        alpha(shape=(4,), float32))
-
-graph.alpha
->>> array([1, 1, 1, 1], dtype=float32)
-```
-
-## Operations on graphs
-
-We provide some utilities to perform operations on graphs in [`utils`][mlx_graphs.utils].
-
-For example, [`to_edge_index()`][mlx_graphs.utils.transformations.to_edge_index] and [`to_adjacency_matrix()`][mlx_graphs.utils.transformations.to_adjacency_matrix] can be used to convert an adjacency matrix representing a graph into its edge index and viceversa.
-
-## Batching
-
-In tasks with multiple graphs, such as graph classification, batching accelerates GNN computations by processing several graphs together instead of individually. This approach can drastically enhance speed through parallelization on the Mac's GPU.
-
-The [`GraphDataBatch`][mlx_graphs.data.batch.GraphDataBatch] class handles all batch operations, enabling the creation of a batch from a list of [`GraphData`][mlx_graphs.data.data.GraphData] objects. We provide the [`mlx_graphs.data.batch.batch()`][mlx_graphs.data.batch.batch] function as an interface to create a [`GraphDataBatch`][mlx_graphs.data.batch.GraphDataBatch] out of a sequence of [`GraphData`][mlx_graphs.data.data.GraphData] objects.
-
-!!! tip "Hint"
-
-    The operations provided in `mlx-graphs` are particularly efficient on large graphs. We recommend to leverage batching whenever possible, ensuring that the batched graphs collectively fit within available memory.
-
-```python
-from mlx_graphs.data.batch import batch
-
-graphs = [
-    GraphData(
-        edge_index=mx.array([[0, 0, 0], [1, 1, 1]]),
-        node_features=mx.zeros((3, 1)),
-    ),
-    GraphData(
-        edge_index=mx.array([[1, 1, 1], [2, 2, 2]]),
-        node_features=mx.ones((3, 1)),
-    ),
-    GraphData(
-        edge_index=mx.array([[3, 3, 3], [4, 4, 4]]),
-        node_features=mx.ones((3, 1)) * 2,
-    )
-]
-graphs_batch = batch(graphs)
->>> GraphDataBatch(
-    edge_index(shape=(2, 9), int32)
-    node_features(shape=(9, 1), float32))
-
-graphs_batch.num_graphs
->>> 3
-```
-
-Internally, [`GraphDataBatch`][mlx_graphs.data.batch.GraphDataBatch] simply collates the attributes from all [`GraphData`][mlx_graphs.data.data.GraphData] objects and concatenates them to end up with a single large graph made of the disconnected graphs. Our batching strategy follows a similar approach as in [PyG](https://pytorch-geometric.readthedocs.io/en/latest/get_started/introduction.html#mini-batches).
-
-If needed, the graphs within the batch can be easily indexed:
-
-```python
-graphs_batch[1]
->>> GraphData(
-    edge_index(shape=(2, 3), int32)
-    node_features(shape=(3, 1), float32))
-
-graphs_batch[1:]
->>> [
-        GraphData(
-            edge_index(shape=(2, 3), int32)
-            node_features(shape=(3, 1), float32)),
-        GraphData(
-            edge_index(shape=(2, 3), int32)
-            node_features(shape=(3, 1), float32))
-    ]
-```
-
-## Datasets and Data loaders
-
-Datasets can be implemented by extending the base class [`Dataset`][mlx_graphs.datasets.Dataset] and implementing its abstract methods. For example, a basic implementation of the QM7b molecular dataset could look like
-
-```python
-import os
-
-import mlx.core as mx
-import scipy as sp
-
-from mlx_graphs.data import GraphData
-from mlx_graphs.datasets.dataset import Dataset
-from mlx_graphs.datasets.utils import download
-from mlx_graphs.utils.transformations import to_sparse_adjacency_matrix
-
-class QM7bDataset(Dataset):
-    def __init__(self):
-        super().__init__(name="qm7b")
-
-    def download(self):
-        file_path = os.path.join(self.raw_path, self.name + ".mat")
-        download(
-            "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm7b.mat",
-            path=file_path,
-        )
-
-    def process(self):
-        mat_path = os.path.join(self.raw_path, self.name + ".mat")
-        data = sp.io.loadmat(mat_path)
-        labels = mx.array(data["T"].tolist())
-        features = mx.array(data["X"].tolist())
-        num_graphs = labels.shape[0]
-        graphs = []
-        for i in range(num_graphs):
-            edge_index, edge_features = to_sparse_adjacency_matrix(features[i])
-            graphs.append(
-                GraphData(
-                    edge_index=edge_index,
-                    edge_features=edge_features,
-                    graph_labels=mx.expand_dims(labels[i], 0),
-                )
-            )
-        self.graphs = graphs
-```
-
-Every [`Dataset`][mlx_graphs.datasets.Dataset] should implement two abstract methods: `download`, responsible to download raw datasets locally and `process()`, which transforms the datasets into a `List[GraphData]`, saved in `self.graphs`. Once the list of graphs is processed, all the indexing and dataset properties such as [`num_graphs`][mlx_graphs.datasets.Dataset.num_graphs], [`num_node_features`][mlx_graphs.datasets.Dataset.num_node_features] and [`num_node_classes`][mlx_graphs.datasets.Dataset.num_node_classes] are automatically handled.
-
-We provide a few widely used datasets and we expect to implement more over time.
-
-Data loaders can be used to automatically load and batch graphs for training routines. The [`Dataloader`][mlx_graphs.loaders.Dataloader] class accepts a [`Dataset`][mlx_graphs.datasets.Dataset] or a sequence of [`GraphData`][mlx_graphs.data.data.GraphData] as input together with a `batch_size` and provides an iterable over the dataset.
-
-```python
-from mlx_graphs.loaders import Dataloader
-
-data = QM7bDataset()
-loader = Dataloader(data, batch_size=16)
-
-for item in loader:
-    ...
-```
-
-## GNN Layers
-
-Similarly as other libraries, `mlx-graphs` comes with some predefined GNN layers. These layers usually follow the implementation from the original papers and can be used as basic blocks to build more complex GNN models.
-
-For instance, here is a [`SAGEConv`][mlx_graphs.nn.SAGEConv] layer from the [Inductive Representation Learning on Large Graphs](https://arxiv.org/abs/1706.02216) paper:
-
-```python
-import mlx.core as mx
-from mlx_graphs.data.data import GraphData
-from mlx_graphs.nn import SAGEConv
-
-graph = GraphData(
-    edge_index = mx.array([[0, 1, 2, 3, 4], [0, 0, 1, 1, 3]]),
-    node_features = mx.ones((5, 16)),
-)
-
-conv = SAGEConv(node_features_dim=16, out_features_dim=32)
-h = conv(graph.edge_index, graph.node_features)
-
->>> h
-array([[1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
-    [1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
-    [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897],
-    [1.65429, -0.376169, 1.04172, ..., -0.919106, 1.42576, 0.490938],
-    [1.05823, -0.295776, 0.075439, ..., -0.104383, 0.031947, -0.351897]],
-    dtype=float32)
-```
-
-## Models and training
-
-Common architectures are available as ready-to-use multi-layer models in [`mlx_graphs.nn`][mlx_graphs.nn]: [`GCN`][mlx_graphs.nn.GCN], [`GraphSAGE`][mlx_graphs.nn.GraphSAGE], [`GIN`][mlx_graphs.nn.GIN], [`GAT`][mlx_graphs.nn.GAT] and [`MLP`][mlx_graphs.nn.MLP], with optional dropout, normalization and Jumping Knowledge. Here is a full-batch training loop for node classification on Cora:
-
-```python
 import mlx.core as mx
 import mlx.nn as nn
 import mlx.optimizers as optim
-import numpy as np
 
 from mlx_graphs.datasets import PlanetoidDataset
 from mlx_graphs.nn import GCN
+from mlx_graphs.transforms import NormalizeFeatures
+from mlx_graphs.utils import mask_to_index
 
-graph = PlanetoidDataset("cora")[0]
-train = mx.array(np.nonzero(np.array(graph.train_mask))[0])
-labels = graph.node_labels
+mx.random.seed(0)
+graph = NormalizeFeatures()(PlanetoidDataset("cora")[0])  # downloaded on first use
+train, test = mask_to_index(graph.train_mask), mask_to_index(graph.test_mask)
 
 model = GCN(graph.num_node_features, 64, num_layers=2, out_features_dim=7, dropout=0.5)
 # bias_correction=True: the same update rule as torch.optim.Adam
 optimizer = optim.Adam(learning_rate=0.01, bias_correction=True)
 
+
 def loss_fn(model):
     logits = model(graph.edge_index, graph.node_features)
-    return nn.losses.cross_entropy(logits[train], labels[train], reduction="mean")
+    return nn.losses.cross_entropy(logits[train], graph.node_labels[train], reduction="mean")
+
 
 loss_and_grad = nn.value_and_grad(model, loss_fn)
+start = time.perf_counter()
 for epoch in range(200):
     loss, grads = loss_and_grad(model)
     optimizer.update(model, grads)
-    mx.eval(model.parameters(), optimizer.state)
+    mx.eval(model.parameters(), optimizer.state)  # MLX is lazy: run the step
+ms_per_epoch = (time.perf_counter() - start) / 200 * 1e3
+
+model.eval()
+predictions = model(graph.edge_index, graph.node_features).argmax(axis=1)
+accuracy = (predictions[test] == graph.node_labels[test]).mean().item()
+print(f"test accuracy: {accuracy:.3f}, {ms_per_epoch:.2f} ms per epoch")
 ```
+
+On an Apple M5 Pro (the time per epoch varied from 0.9 to 1.4 ms between our runs):
+
+```text
+test accuracy: 0.786, 1.06 ms per epoch
+```
+
+The whole graph lives in unified memory, and the message passing of the built-in layers runs as fused sparse kernels on the GPU. The [Benchmarks](../benchmarks.md) compare training times and accuracy with PyTorch Geometric on the same Macs.
 
 !!! tip
 
     Create MLX's `Adam` / `AdamW` with `bias_correction=True`. MLX's default (no bias correction) takes much larger first steps than PyTorch's Adam, which can cost accuracy (about 4 points for GAT on Cora in our runs).
 
-The message passing of the built-in layers runs as fused sparse kernels on the GPU; see [Neural networks](../api/nn/index.md) for how to control it, and the [Benchmarks](../benchmarks.md) for how it compares with PyTorch Geometric.
+## Graphs in mlx-graphs
+
+A graph is a [`GraphData`][mlx_graphs.data.data.GraphData]: an `edge_index` of shape `[2, num_edges]` (sources, then targets) and optional node, edge and graph features and labels. Any other keyword becomes an attribute. Several graphs [`batch`][mlx_graphs.data.batch.batch] into one [`GraphDataBatch`][mlx_graphs.data.batch.GraphDataBatch], a single disconnected graph whose `batch_indices` give each node's graph:
+
+```python
+import mlx.core as mx
+
+from mlx_graphs.data import GraphData, batch
+
+graph = GraphData(
+    edge_index=mx.array([[0, 1, 2, 3], [1, 2, 3, 0]]),  # [2, num_edges]: sources, targets
+    node_features=mx.random.normal((4, 8)),  # [num_nodes, num_features]
+    node_labels=mx.array([0, 1, 1, 0]),
+    timestamps=mx.arange(4),  # any other attribute is kept as is
+)
+print(graph)
+
+# several graphs as one disconnected graph, for mini-batches of graphs
+graphs = batch([graph, graph, graph])
+print(graphs.num_graphs, graphs.num_nodes, graphs.batch_indices)
+print(graphs[1])
+```
+
+```text
+GraphData(
+	edge_index(shape=(2, 4), int32)
+	node_features(shape=(4, 8), float32)
+	node_labels(shape=(4,), int32)
+	timestamps(shape=(4,), int32))
+3 12 array([0, 0, 0, ..., 2, 2, 2], dtype=int32)
+GraphData(
+	edge_index(shape=(2, 4), int32)
+	node_features(shape=(4, 8), float32)
+	node_labels(shape=(4,), int32)
+	timestamps(shape=(4,), int32))
+```
+
+The [`GraphData` reference][mlx_graphs.data.data.GraphData] lists all its arguments and methods. Graph utilities (self-loops, subgraphs, conversions to and from PyG, NetworkX and SciPy...) are in [`mlx_graphs.utils`][mlx_graphs.utils].
+
+## Classify molecules: MUTAG
+
+Graph classification on MUTAG (188 molecules, mutagenic or not): a [`Dataloader`][mlx_graphs.loaders.Dataloader] batches the graphs, a [`GIN`][mlx_graphs.nn.GIN] embeds the atoms, [`global_mean_pool`][mlx_graphs.nn.global_mean_pool] averages them per molecule and a linear layer classifies:
+
+```python
+import mlx.core as mx
+import mlx.nn as nn
+import mlx.optimizers as optim
+
+from mlx_graphs.datasets import TUDataset
+from mlx_graphs.loaders import Dataloader
+from mlx_graphs.nn import GIN, Linear, global_mean_pool
+
+mx.random.seed(0)
+dataset = TUDataset("MUTAG").shuffle()  # 188 molecules, 2 classes
+train_loader = Dataloader(dataset[:150], batch_size=32, shuffle=True)
+test_loader = Dataloader(dataset[150:], batch_size=64)
+
+
+class Classifier(nn.Module):
+    def __init__(self, in_dim, hidden, num_classes):
+        super().__init__()
+        self.gin = GIN(in_dim, hidden, num_layers=3)
+        self.head = Linear(hidden, num_classes)
+
+    def __call__(self, batch):
+        h = self.gin(batch.edge_index, batch.node_features)
+        return self.head(global_mean_pool(h, batch.batch_indices))  # one row per graph
+
+
+model = Classifier(dataset.num_node_features, 64, dataset.num_graph_classes)
+optimizer = optim.Adam(learning_rate=0.01, bias_correction=True)
+loss_and_grad = nn.value_and_grad(
+    model, lambda m, b: nn.losses.cross_entropy(m(b), b.graph_labels, reduction="mean")
+)
+
+for epoch in range(50):
+    for batch in train_loader:
+        loss, grads = loss_and_grad(model, batch)
+        optimizer.update(model, grads)
+        mx.eval(model.parameters(), optimizer.state)
+
+correct = sum((model(b).argmax(axis=1) == b.graph_labels).sum().item() for b in test_loader)
+print(f"test accuracy: {correct / len(dataset[150:]):.3f}")
+```
+
+```text
+test accuracy: 0.816
+```
+
+The 38 test molecules are few, and GPU reductions are not bitwise deterministic, so the accuracy moves a little between runs (0.816 to 0.868 in ours). The [graph classification tutorial](../tutorials/notebooks/graph_classification.md) goes through the same task step by step.
+
+## A layer of your own
+
+A layer is a [`MessagePassing`][mlx_graphs.nn.MessagePassing] subclass that calls `propagate`. This one adds the mean of each node's neighbors to the node itself; `@fused_message_passing` aggregates with one sparse-dense matrix product on the GPU instead of building a message per edge:
+
+```python
+import mlx.core as mx
+
+from mlx_graphs.nn import Linear, MessagePassing, fused_message_passing
+
+
+@fused_message_passing  # aggregate with one sparse-dense matmul on the GPU
+class MeanConv(MessagePassing):
+    def __init__(self, in_dim: int, out_dim: int):
+        super().__init__(aggr="mean")
+        self.root = Linear(in_dim, out_dim)
+        self.neighbors = Linear(in_dim, out_dim)
+
+    def __call__(self, edge_index: mx.array, node_features: mx.array) -> mx.array:
+        aggregated = self.propagate(edge_index, node_features)  # mean of the neighbors
+        return self.root(node_features) + self.neighbors(aggregated)
+
+
+conv = MeanConv(8, 16)
+edge_index = mx.array([[0, 1, 2, 3], [1, 2, 3, 0]])
+print(conv(edge_index, mx.random.normal((4, 8))).shape)
+```
+
+```text
+(4, 16)
+```
+
+[Writing your own layers](../tutorials/guides/writing-layers.md) covers messages, aggregations, attention and testing a layer against PyG; [Custom GPU kernels](../tutorials/guides/custom-kernels.md) shows how to fuse an operation of your own in Metal.
 
 ## Next steps
 
-- [Writing your own layers](writing-layers.md): the `MessagePassing` contract, aggregations, attention layers, fused kernels and how to check a layer against PyG.
-- [Datasets](datasets.md): the built-in datasets and their sizes.
-- [Tutorials](../tutorials/index.md): notebooks that train complete models, most of them side by side with PyTorch Geometric.
+- **Large graphs**: train on subgraphs with [`NeighborLoader`][mlx_graphs.loaders.NeighborLoader] and the other samplers, in the [mini-batch training tutorial](../tutorials/notebooks/minibatch_training.md).
+- **Coming from PyTorch Geometric**: the same names and how a PyG model ports, in [Coming from PyG](from-pyg.md).
+- **More examples**: the [tutorials](../tutorials/index.md) (link prediction, heterogeneous and temporal graphs, graph transformers...) and the built-in [datasets](../tutorials/guides/datasets.md), including how to add your own.
+- **Everything else**: the [API reference](../api/index.md).
