@@ -7,6 +7,6 @@ graphs, and the batches the loaders build from them.
 |---|---|
 | [Data objects](data.md) | `GraphData`, `HeteroGraphData` and `TemporalData`. |
 | [Batch objects](batch.md) | `GraphDataBatch`, batching, unbatching and collating graphs. |
-| [Utils](utils.md) | Validation helpers for lists of graphs. |
+| [Data utilities](utils.md) | Validation helpers for lists of graphs. |
 
 <!-- api-rest -->

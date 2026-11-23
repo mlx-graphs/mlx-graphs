@@ -35,6 +35,9 @@ jobs:
         # and on a listed name that no longer exists
         run: python docs-site/scripts/check_api.py
       - name: Generate the API, notebook, changelog and benchmark pages
+        env:
+          # the changelog shows the notes of the GitHub releases
+          GITHUB_TOKEN: ${{ github.token }}
         run: python docs-site/scripts/gen.py
       - name: Build the site (strict)
         run: zensical build --strict --clean

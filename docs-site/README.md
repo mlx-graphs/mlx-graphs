@@ -76,8 +76,17 @@ in the meantime.
 
 ## Release notes
 
-The Changelog page is generated from the git history: one section per `vX.Y.Z`
-tag with the titles of the pull requests merged in it. PR titles are therefore
-the release notes; write them as Conventional Commits. `CHANGELOG.rst` only
-holds optional hand-written notes (highlights, migration guides) in a section
-titled with the version number, shown above that version's list.
+The Changelog page has one section per `vX.Y.Z` tag, rendered from:
+
+1. the body of the tag's published GitHub release (fetched from the REST API;
+   `GITHUB_TOKEN` / `GH_TOKEN` is used when set, CI sets it);
+2. when the release is not published yet (`release.yml` builds the docs before
+   it publishes the release) or the API cannot be reached: the titles of the
+   pull requests merged since the previous tag, from the git history, grouped
+   by Conventional Commit type. An offline build says so at the top of the page.
+
+Commits merged after the last tag are listed under Unreleased. `CHANGELOG.rst`
+holds optional hand-written notes in a section titled with the version number,
+shown above that version's release notes (long ones folded). `gen.py` fails if
+a stable tag has no section, or if a published release body is missing. The
+build needs the git tags (`fetch-depth: 0` in CI).

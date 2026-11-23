@@ -733,7 +733,11 @@ def release_entry(title: str) -> tuple[str, str]:
     if m:
         kind, scope, text = m.group("type").lower(), m.group("scope"), m.group("title")
         group = "breaking" if m.group("bang") else kind if kind in ("feat", "fix", "perf", "docs") else "other"
-        text = (f"**{scope}:** " if scope else "") + text
+        if group == "other":  # keep the type: ci, build, refactor, test...
+            label = kind + (f"({scope})" if scope else "")
+            text = f"**{label}:** {text}"
+        else:
+            text = (f"**{scope}:** " if scope else "") + text
     else:
         group, text = "other", title
     text = text.replace("<", "&lt;")
@@ -813,27 +817,120 @@ def rst_chunk_to_md(rst: str, top: int) -> str:
     return md.replace("\x00", "")
 
 
-def generate_changelog() -> None:
-    """The changelog page, from the git history and CHANGELOG.rst.
+API_RELEASES = "https://api.github.com/repos/mlx-graphs/mlx-graphs/releases"
 
-    Every stable tag vX.Y.Z gets a section: the titles of the pull requests
-    merged since the previous tag (squash merges on main), grouped by
-    conventional-commit type, with the hand-written notes of CHANGELOG.rst for
-    that version on top. Commits after the last tag are listed as Unreleased.
-    Items of CHANGELOG.rst's "Unreleased" section go under the release that
-    shipped the commit that wrote them (git blame + git tag --contains).
+
+def github_releases() -> dict[str, dict] | None:
+    """Published GitHub releases by tag, or None when the API is unreachable.
+
+    Uses GITHUB_TOKEN / GH_TOKEN when set (CI); works without one locally,
+    within the rate limit of unauthenticated requests.
+    """
+    import urllib.error
+    import urllib.request
+
+    token = os.environ.get("GITHUB_TOKEN") or os.environ.get("GH_TOKEN")
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "mlx-graphs-docs"}
+    if token:
+        headers["Authorization"] = f"Bearer {token}"
+    releases: dict[str, dict] = {}
+    page = 1
+    try:
+        while True:
+            req = urllib.request.Request(f"{API_RELEASES}?per_page=100&page={page}", headers=headers)
+            with urllib.request.urlopen(req, timeout=20) as r:
+                batch = json.load(r)
+            if not batch:
+                break
+            for rel in batch:
+                if not rel.get("draft"):
+                    releases[rel["tag_name"]] = rel
+            page += 1
+    except (urllib.error.URLError, OSError, ValueError) as e:
+        print(f"  note: GitHub releases unavailable ({e}); release notes from the git history only")
+        return None
+    return releases
+
+
+def url_ok(url: str) -> bool:
+    import urllib.request
+
+    try:
+        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "mlx-graphs-docs"})
+        with urllib.request.urlopen(req, timeout=15) as r:
+            return r.status < 400
+    except Exception:  # noqa: BLE001
+        return False
+
+
+def release_body_md(body: str, broken_images: list[str]) -> str:
+    """A GitHub release body (GitHub-flavoured Markdown) -> Python-Markdown."""
+    text = body.replace("\r\n", "\n").strip()
+    # headings go under the version's h2
+    text = re.sub(r"^(#{1,4})\s+", lambda m: "#" * min(6, len(m.group(1)) + 2) + " ", text, flags=re.M)
+    # bare links of pull requests, compare views and users, as GitHub renders them
+    text = re.sub(
+        rf"(?<![(<\"\[]){re.escape(GITHUB)}/pull/(\d+)", rf"[#\1]({GITHUB}/pull/\1)", text
+    )
+    text = re.sub(
+        rf"(?<![(<\"\[]){re.escape(GITHUB)}/compare/([\w.\-]+)", rf"[\1]({GITHUB}/compare/\1)", text
+    )
+    text = re.sub(r"(?<![(<\"\[\w/])(https?://[^\s)<>\]]+)", r"<\1>", text)
+    text = re.sub(r"(?<![\w/@`\[])@([A-Za-z0-9](?:[A-Za-z0-9-]{0,38}))\b", r"[@\1](https://github.com/\1)", text)
+    # lists need a blank line before them, and nested items 4 spaces
+    lines, out = text.split("\n"), []
+    for i, line in enumerate(lines):
+        is_item = re.match(r"^\s*([-*+]|\d+\.)\s", line)
+        if is_item and out and out[-1].strip() and not re.match(r"^\s*([-*+]|\d+\.)\s", out[-1]):
+            if not out[-1].startswith(" "):
+                out.append("")
+        indent = len(line) - len(line.lstrip(" "))
+        if is_item and indent:
+            line = " " * (indent * 2) + line.lstrip(" ")
+        out.append(line)
+    text = "\n".join(out)
+    for url in re.findall(r"!\[[^\]]*\]\((https?://[^)\s]+)\)|<img[^>]+src=\"(https?://[^\"]+)\"", text):
+        url = url[0] or url[1]
+        if not url_ok(url):
+            broken_images.append(url)
+    return text
+
+
+def generate_changelog() -> None:
+    """The changelog page.
+
+    One section per stable tag vX.Y.Z, newest first, rendered from
+
+    - the published GitHub release of the tag: its body, which is the release
+      notes (hand-written, or GitHub's generated "What's Changed");
+    - otherwise (a tag whose release is not published yet, as in release.yml,
+      which builds the docs before it publishes the release; or no network):
+      the titles of the pull requests merged since the previous tag, from the
+      git history, grouped by conventional-commit type.
+
+    Hand-written notes of CHANGELOG.rst for a version are shown above. Commits
+    after the last tag are listed as Unreleased; items of CHANGELOG.rst's
+    "Unreleased" section go under the release that shipped the commit that
+    wrote them (git blame + git tag --contains).
     """
     tags = stable_tags()
+    releases = github_releases()
     versions, unreleased_items = changelog_sections()
     moved: dict[str | None, list[tuple[str, str]]] = {}
     for sub, item, line in unreleased_items:
         moved.setdefault(first_release_of(line, tags), []).append((sub, item))
 
     def notes_md(tag: str | None) -> str:
+        """Hand-written notes of CHANGELOG.rst for a version."""
         parts = []
         version = tag[1:] if tag else None
-        if version in versions:
-            parts.append(rst_chunk_to_md(versions[version][1], 3))
+        if version in versions and versions[version][1].strip():
+            notes = rst_chunk_to_md(versions[version][1], 3)
+            if len(notes) > 3000:  # long notes (0.2.0): folded under the release
+                notes = "\n".join("    " + line if line.strip() else "" for line in notes.split("\n"))
+                notes = re.sub(r"^    (#+) (.+)$", r"    **\2**", notes, flags=re.M)
+                notes = f'??? info "Detailed notes (CHANGELOG.rst)"\n\n{notes}'
+            parts.append(notes)
         items = moved.get(tag, [])
         if items:
             rst = []
@@ -843,22 +940,33 @@ def generate_changelog() -> None:
             parts.append(rst_chunk_to_md("\n".join(rst), 3))
         return "\n\n".join(parts)
 
+    intro = (
+        "Every release of mlx-graphs, newest first, with the notes of its"
+        f" [GitHub release]({GITHUB}/releases) and, for some versions, hand-written"
+        f" notes from [`CHANGELOG.rst`]({GITHUB}/blob/main/CHANGELOG.rst)."
+        " The packages are on [PyPI](https://pypi.org/project/mlx-graphs/#history)."
+    )
     out = [
         "---",
         f"edit_url: {GITHUB}/edit/main/CHANGELOG.rst",
         "---",
         "",
-        "<!-- Generated by docs-site/scripts/gen.py from the git tags and CHANGELOG.rst -->",
+        "<!-- Generated by docs-site/scripts/gen.py from the GitHub releases, the git tags"
+        " and CHANGELOG.rst -->",
         "",
         "# Changelog",
         "",
-        "Every release of mlx-graphs, newest first: the pull requests it contains,"
-        " taken from the git history, and the hand-written notes of"
-        f" [`CHANGELOG.rst`]({GITHUB}/blob/main/CHANGELOG.rst) when a version has some."
-        f" The packages are on [PyPI](https://pypi.org/project/mlx-graphs/#history) and"
-        f" the [GitHub releases]({GITHUB}/releases).",
+        intro,
         "",
     ]
+    if releases is None:
+        out += [
+            "!!! warning \"Built offline\"",
+            "",
+            "    The GitHub releases could not be fetched when this page was built: every"
+            " version lists the pull requests of the git history instead of its release notes.",
+            "",
+        ]
     latest = tags[0][0] if tags else None
     # squash merges of pull requests only: not the commits of a local branch
     pending = [t for t in release_commits(f"{latest}..HEAD") if re.search(r"\(#\d+\)$", t)] if latest else []
@@ -873,30 +981,49 @@ def generate_changelog() -> None:
         if moved.get(None):
             out += [notes_md(None), ""]
         out += [entries_md(pending), ""]
+
+    sources, broken_images = {}, []
     for i, (tag, date) in enumerate(tags):
         version = tag[1:]
         previous = tags[i + 1][0] if i + 1 < len(tags) else None
+        release = (releases or {}).get(tag)
         name = versions.get(version, ("", ""))[0]
         anchor = "v" + version.replace(".", "-")
         out += [f"## {version}{': ' + name if name else ''} {{ #{anchor} }}", ""]
-        meta = [date]
+        meta = [(release.get("published_at") or "")[:10] if release else date]
+        if release:
+            meta.append(f"[GitHub release]({release['html_url']})")
         if previous:
             meta.append(f"[Full diff]({GITHUB}/compare/{previous}...{tag})")
-        meta.append(f"[GitHub release]({GITHUB}/releases/tag/{tag})")
         meta.append(f"[PyPI](https://pypi.org/project/mlx-graphs/{version}/)")
         out += ['<p class="mg-release-meta" markdown>' + " &middot; ".join(meta) + "</p>", ""]
         notes = notes_md(tag)
         if notes:
             out += [notes, ""]
-            out += ["### Pull requests" + f" {{ #{anchor}-prs }}", ""]
-        out += [entries_md(release_commits(f"{previous}..{tag}" if previous else tag)), ""]
+        body = (release or {}).get("body") or ""
+        if body.strip():
+            out += [f"<!-- source: github-release {tag} -->", release_body_md(body, broken_images), ""]
+            sources[tag] = "GitHub release"
+        else:
+            if notes:
+                out += [f"### Pull requests {{ #{anchor}-prs }}", ""]
+            out += [entries_md(release_commits(f"{previous}..{tag}" if previous else tag)), ""]
+            sources[tag] = "git history" + (" (release not published)" if releases is not None else " (offline)")
+        if notes:
+            sources[tag] += " + CHANGELOG.rst"
     md = "\n".join(out)
 
-    # every stable tag must have its section
+    # every stable tag has its section, with its release notes when published
     missing = [t for t, _ in tags if f"{{ #v{t[1:].replace('.', '-')} }}" not in md]
     if missing:
         raise SystemExit(f"changelog: no section for {missing}")
+    if releases is not None:
+        no_body = [t for t, _ in tags if (releases.get(t) or {}).get("body", "").strip()
+                   and f"<!-- source: github-release {t} -->" not in md]
+        if no_body:
+            raise SystemExit(f"changelog: the release notes of {no_body} are not on the page")
     write(CONTENT / "changelog.md", md)
+    write(GENERATED / "changelog_sources.json", json.dumps(sources, indent=1))
 
     version = latest[1:] if latest else "dev"
     write(
@@ -904,10 +1031,14 @@ def generate_changelog() -> None:
         f'<a class="mg-badge" href="changelog/#v{version.replace(".", "-")}">'
         f'<span class="mg-badge__dot"></span>Latest release: v{version}</a>\n',
     )
+    from_releases = sum(1 for s in sources.values() if s.startswith("GitHub"))
     print(
-        f"changelog: {len(tags)} releases from git tags (latest {latest}),"
-        f" {len(pending)} unreleased commits, notes of {sorted(versions)} from CHANGELOG.rst"
+        f"changelog: {len(tags)} releases (latest {latest}): {from_releases} from GitHub releases,"
+        f" {len(tags) - from_releases} from the git history; {len(pending)} unreleased PRs;"
+        f" CHANGELOG.rst notes for {sorted(versions)}"
     )
+    for url in broken_images:
+        print(f"  note: an image of a GitHub release does not load: {url}")
 
 
 # Sphinx pages -> pages of this site (paths without .md; "" is the home page)

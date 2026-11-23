@@ -42,10 +42,13 @@ PR, for example `fix(loaders): handle empty batches` or `feat: add a dataset`.
 The title becomes the squash commit message and determines the version bump.
 Use `!` for breaking changes, as in `feat(loaders)!: change the default sampler`.
 
-PR titles are the release notes: the Changelog page of the docs lists, for
-every release, the titles of the PRs it contains (from the git history). For
-highlights or migration details, add a section titled with the version number
-to `CHANGELOG.rst` (optional).
+Release notes are the text of the GitHub release: by default GitHub's
+generated list of PR titles ("What's Changed"), so write PR titles for
+readers. The release text can be edited on GitHub after the release; the
+Changelog page of the docs shows it, and picks up edits at the next docs
+build. For notes that belong in the repository (highlights, a migration
+guide), add a section titled with the version number to `CHANGELOG.rst`
+(optional); the Changelog page shows it above that version's release notes.
 
 ## Documentation
 
@@ -86,5 +89,8 @@ Actions tab ("Run workflow"), or `gh workflow run release.yml --ref main`. Its
 force that bump, e.g. `gh workflow run release.yml --ref main -f bump=major`
 for `1.0.0`.
 
-Release notes need no step: the docs build lists each release's PR titles on
-the Changelog page, and the GitHub release is created with generated notes.
+Release notes need no step: the GitHub release is created with generated
+notes, which can be edited afterwards, and the docs build shows them on the
+Changelog page. The docs of a release are built before its GitHub release is
+published, so that version shows the titles of its PRs from the git history
+until the next docs build.

@@ -2,12 +2,13 @@ Changelog
 =========
 
 ..
-   Hand-written notes only. The list of changes of every release is generated
-   from the pull request titles by docs-site/scripts/gen.py (see the
-   Changelog page of the docs). Add a section titled with a version number
+   Optional hand-written notes. The release notes of every version are the
+   text of its GitHub release, shown on the Changelog page of the docs by
+   docs-site/scripts/gen.py. Add a section titled with a version number
    (e.g. "0.6.0: Large graphs") for highlights or migration notes of that
-   version. Items under "Unreleased" are shown under the release that ships
-   the commit that wrote them.
+   version: the page shows it above the release notes. Items under
+   "Unreleased" are shown under the release that ships the commit that
+   wrote them.
 
 Unreleased
 ----------
