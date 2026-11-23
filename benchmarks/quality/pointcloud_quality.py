@@ -52,6 +52,21 @@ MLX_DIR = os.path.join(DATA_DIR, "quality_pointcloud")
 RESULTS = os.path.join(HERE, "pointcloud_results.jsonl")
 SUMMARY = os.path.join(HERE, "pointcloud_results.md")
 NUM_POINTS = 1024
+NOTES = """\
+Notes:
+
+- The runs of the table shared the machine (Apple M5 Pro, 64 GB) with other
+  GPU and CPU jobs, so their times are noisy (the epochs of a run vary by up
+  to 1.8x). On an idle GPU, one mlx-graphs PointNet++ training step takes
+  0.42 s (about 53 s per epoch).
+- ``fps`` alone (32 clouds of 1024 points, ratio 0.5): 1.9 ms with the Metal
+  kernel, 132 ms with torch_cluster on the CPU; the sampled points are the
+  same (``random_start=False``).
+- PyG's ``radius`` keeps the first ``max_num_neighbors`` points found,
+  mlx-graphs' the closest ones: the neighborhoods can differ in dense regions.
+"""
+# Number of batches per epoch and evaluation (``--max-steps``, for quick checks)
+MAX_STEPS = None
 BATCH_SIZE = 32
 LR = 1e-3
 
@@ -99,7 +114,9 @@ def batches(num_graphs: int, shuffle_seed=None):
     order = np.arange(num_graphs)
     if shuffle_seed is not None:
         order = np.random.default_rng(shuffle_seed).permutation(num_graphs)
-    for start in range(0, num_graphs, BATCH_SIZE):
+    for step, start in enumerate(range(0, num_graphs, BATCH_SIZE)):
+        if MAX_STEPS is not None and step >= MAX_STEPS:
+            return
         yield order[start : start + BATCH_SIZE]
 
 
@@ -351,6 +368,8 @@ def run_pyg(model_name: str, epochs: int, seed: int, data: dict, threads: int) -
 
 
 def worker(args):
+    global MAX_STEPS
+    MAX_STEPS = args.max_steps
     data = modelnet10()
     if args.worker == "mlx":
         result = run_mlx(args.model, args.epochs, args.seed, data)
@@ -393,7 +412,7 @@ def summarize():
             f"{100 * max(e['test_acc'] for e in h):.1f} | {np.mean(times):.1f} | "
             f"{np.mean([e['test_time'] for e in h]):.1f} | {h[-1]['loss']:.3f} |"
         )
-    text = "\n".join(lines) + "\n"
+    text = "\n".join(lines) + "\n\n" + NOTES
     with open(SUMMARY, "w") as f:
         f.write(text)
     print(text)
@@ -406,6 +425,9 @@ def main():
     parser.add_argument("--epochs", type=int, default=5)
     parser.add_argument("--seeds", type=int, nargs="+", default=[0])
     parser.add_argument("--torch-threads", type=int, default=8)
+    parser.add_argument(
+        "--max-steps", type=int, help="batches per epoch, for quick checks"
+    )
     parser.add_argument("--summary", action="store_true")
     parser.add_argument("--worker", choices=["mlx", "pyg"], help=argparse.SUPPRESS)
     parser.add_argument("--model", help=argparse.SUPPRESS)
@@ -421,6 +443,8 @@ def main():
     done = {
         (r["model"], r["framework"], r["epochs"], r["seed"]) for r in load_results()
     }
+    if args.max_steps is not None:
+        done = set()
     for model in args.models:
         for seed in args.seeds:
             for framework in args.frameworks:
@@ -441,14 +465,20 @@ def main():
                     "--torch-threads",
                     str(args.torch_threads),
                 ]
-                process = subprocess.run(command, capture_output=True, text=True)
+                if args.max_steps is not None:
+                    command += ["--max-steps", str(args.max_steps)]
+                # the per-epoch lines of the worker go to stderr as it trains
+                process = subprocess.run(command, stdout=subprocess.PIPE, text=True)
                 if process.returncode != 0:
-                    print(process.stderr[-3000:], file=sys.stderr)
+                    print(f"failed with exit code {process.returncode}", flush=True)
                     continue
                 result = json.loads(process.stdout.strip().splitlines()[-1])
                 result.update(
                     model=model, framework=framework, epochs=args.epochs, seed=seed
                 )
+                if args.max_steps is not None:  # quick check: not a result
+                    print(json.dumps(result["history"]), flush=True)
+                    continue
                 with open(RESULTS, "a") as f:
                     f.write(json.dumps(result) + "\n")
     summarize()
