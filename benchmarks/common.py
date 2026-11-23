@@ -1,15 +1,19 @@
-"""Helpers shared by the PyG comparison benchmarks."""
+"""Shared benchmark timing, process, and system utilities."""
 
 import ctypes
 import ctypes.util
+import json
 import os
 import platform
 import subprocess
+import sys
 import time
 from importlib.metadata import PackageNotFoundError, version
 from typing import Callable, Optional
 
 import numpy as np
+
+from benchmarks.versions import REPO_ROOT
 
 FRAMEWORKS = ("mlx-graphs", "pyg-mps", "pyg-cpu")
 
@@ -89,6 +93,39 @@ def peak_footprint_gb(pid: Optional[int] = None) -> float:
     """Largest memory footprint a process has had so far, in GB."""
     info = _rusage(os.getpid() if pid is None else pid)
     return 0.0 if info is None else info.ri_lifetime_max_phys_footprint / 1024**3
+
+
+def run_worker(module: str, argv: list[str], memory_gb: float, timeout_s: float):
+    """Run a worker module in the checkout and read its final JSON result."""
+    with subprocess.Popen(
+        [sys.executable, "-m", module, *argv],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        cwd=REPO_ROOT,
+    ) as process:
+        deadline = time.monotonic() + timeout_s
+        try:
+            while True:
+                try:
+                    out, err = process.communicate(timeout=0.2)
+                    break
+                except subprocess.TimeoutExpired:
+                    if footprint_gb(process.pid) > memory_gb:
+                        return None, f"oom (> {memory_gb:.0f} GB)"
+                    if time.monotonic() > deadline:
+                        return None, f"timeout (> {timeout_s:.0f} s)"
+        finally:
+            if process.poll() is None:
+                process.kill()
+
+    if process.returncode != 0:
+        lines = err.strip().splitlines() or ["?"]
+        return None, f"error: {lines[-1][:200]}"
+    try:
+        return json.loads(out.strip().splitlines()[-1]), "ok"
+    except (IndexError, json.JSONDecodeError):
+        return None, "error: worker produced no JSON result"
 
 
 # ---------------------------------------------------------------------------

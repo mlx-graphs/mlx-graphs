@@ -1,8 +1,8 @@
 """Benchmarks mlx-graphs against PyTorch Geometric on this Mac.
 
-    python benchmarks/pyg_comparison/run.py                 # everything
-    python benchmarks/pyg_comparison/run.py --tasks layer   # one task
-    python benchmarks/pyg_comparison/run.py --quick         # smoke test
+    python -m benchmarks.pyg_comparison.run                 # everything
+    python -m benchmarks.pyg_comparison.run --tasks layer   # one task
+    python -m benchmarks.pyg_comparison.run --quick         # smoke test
 
 Every configuration runs in its own subprocess (see ``worker.py``) under a
 hard memory cap: a run whose footprint (CPU + GPU memory) goes over
@@ -23,15 +23,7 @@ import os
 import subprocess
 import sys
 import time
-
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from common import FRAMEWORKS, footprint_gb, system_info  # noqa: E402
-from versions import (  # noqa: E402
-    REPO_ROOT,
-    check_imported_library,
-    library_info,
-    worker_env,
-)
+from pathlib import Path
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 
@@ -55,6 +47,8 @@ GRAPH_MODELS = ["gcn", "gin", "sage"]
 
 
 def configurations(tasks, quick, seeds=(0,)):
+    from benchmarks.common import FRAMEWORKS
+
     if "layer" in tasks:
         graphs = LAYER_GRAPHS[:1] if quick else LAYER_GRAPHS
         for (n, e), layer, fw in itertools.product(graphs, LAYERS, FRAMEWORKS):
@@ -101,37 +95,6 @@ def config_key(argv) -> str:
     return " ".join(argv)
 
 
-def run_one(argv, memory_gb, timeout_s):
-    """Runs one worker; returns (result dict or None, status string)."""
-    cmd = [sys.executable, os.path.join(HERE, "worker.py"), *argv]
-    process = subprocess.Popen(
-        cmd,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        text=True,
-        env=worker_env(),  # measure this checkout's mlx_graphs
-        cwd=REPO_ROOT,
-    )
-    start, peak = time.time(), 0.0
-    while process.poll() is None:
-        used = footprint_gb(process.pid)
-        peak = max(peak, used)
-        if used > memory_gb:
-            process.kill()
-            process.wait()
-            return None, f"oom (> {memory_gb:.0f} GB)"
-        if time.time() - start > timeout_s:
-            process.kill()
-            process.wait()
-            return None, f"timeout (> {timeout_s:.0f} s)"
-        time.sleep(0.2)
-    out, err = process.communicate()
-    if process.returncode != 0:
-        lines = err.strip().splitlines() or ["?"]
-        return None, f"error: {lines[-1][:200]}"
-    return json.loads(out.strip().splitlines()[-1]), "ok"
-
-
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument(
@@ -160,6 +123,18 @@ def main():
         help="results directory (default: results/<chip>/<label>)",
     )
     args = parser.parse_args()
+    if not __package__:
+        # Retain direct script invocation and paths relative to the caller.
+        argv = sys.argv[1:]
+        if args.out:
+            argv = [*argv, "--out", os.path.abspath(args.out)]
+        return subprocess.call(
+            [sys.executable, "-m", "benchmarks.pyg_comparison.run", *argv],
+            cwd=Path(__file__).resolve().parents[2],
+        )
+
+    from benchmarks.common import run_worker, system_info
+    from benchmarks.versions import check_imported_library, library_info
 
     library = library_info()
     if args.label:
@@ -193,7 +168,9 @@ def main():
     print(f"{len(todo)} configurations to run ({len(done)} already done)")
     for i, argv in enumerate(todo, 1):
         t0 = time.time()
-        result, status = run_one(argv, args.memory_gb, args.timeout_s)
+        result, status = run_worker(
+            "benchmarks.pyg_comparison.worker", argv, args.memory_gb, args.timeout_s
+        )
         record = {"config": config_key(argv), "status": status, **(result or {})}
         if result is None:  # keep the identifying fields of failed runs
             keys = argv[1::2]
@@ -213,7 +190,8 @@ def main():
             f"({time.time() - t0:.0f} s) {summary}",
             flush=True,
         )
+    return 0
 
 
 if __name__ == "__main__":
-    main()
+    raise SystemExit(main())

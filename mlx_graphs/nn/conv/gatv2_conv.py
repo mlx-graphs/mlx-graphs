@@ -4,6 +4,7 @@ import mlx.core as mx
 import mlx.nn as nn
 
 from mlx_graphs.nn.conv._norm import SelfLoopFillValue, attention_self_loops
+from mlx_graphs.nn.kernels.gatv2_edge_scores import _reference_scores, gatv2_edge_scores
 from mlx_graphs.nn.linear import Linear, glorot
 from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
 from mlx_graphs.utils import scatter
@@ -144,27 +145,24 @@ class GATv2Conv(MessagePassing):
             edge_index, edge_features, removed_loops = attention_self_loops(
                 edge_index, src_x.shape[0], edge_features, self.fill_value
             )
-        src_idx, dst_idx = edge_index
+        dst_idx = edge_index[1]
         src_feats = self.W_src(src_x).reshape(-1, H, C)
         dst_feats = self.W_dst(dst_x).reshape(-1, H, C)
 
-        # Dynamic attention: alpha = att . leaky_relu(z), with one z per edge,
-        # z = W_src x_j + W_dst x_i (+ edge features). Writing
-        # leaky_relu(z) = slope * z + (1 - slope) * relu(z) leaves a term that
-        # is linear in z, computed per node and gathered as [num_edges, heads]
-        # scalars, and a relu term, whose backward pass is cheaper than the
-        # leaky relu's on the large [num_edges, heads, channels] array.
-        z = src_feats[src_idx] + dst_feats[dst_idx]
-        linear = (src_feats * self.att).sum(-1)[src_idx] + (dst_feats * self.att).sum(
-            -1
-        )[dst_idx]
-        if edge_features is not None:
-            edge_feats = self._compute_edge_features(edge_features)
-            z = z + edge_feats
-            linear = linear + (edge_feats * self.att).sum(-1)
-
-        slope = self.negative_slope
-        alpha = slope * linear + (1 - slope) * (mx.maximum(z, 0) * self.att).sum(-1)
+        edge_feats = (
+            self._compute_edge_features(edge_features)
+            if edge_features is not None
+            else None
+        )
+        # Tie the Metal score path to the existing fused message-passing mode.
+        score = (
+            gatv2_edge_scores
+            if self._can_fuse(edge_index, src_feats, None, None)
+            else _reference_scores
+        )
+        alpha = score(
+            src_feats, dst_feats, self.att, edge_index, self.negative_slope, edge_feats
+        )
         if self._add_self_loops:
             # the input self-loops are replaced by the added ones
             alpha = mx.where(removed_loops[:, None], -float("inf"), alpha)

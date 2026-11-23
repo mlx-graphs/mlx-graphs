@@ -4,6 +4,8 @@ import numpy as np
 import pytest
 
 from mlx_graphs.nn.conv.gatv2_conv import GATv2Conv
+from mlx_graphs.nn.kernels import gatv2_edge_scores
+from mlx_graphs.nn.kernels.gatv2_edge_scores import _metal_scores, _reference_scores
 
 mx.random.seed(42)
 
@@ -168,6 +170,90 @@ def test_gatv2_conv_fused_matches_gather_scatter(fmt):
     np.testing.assert_allclose(np.array(out_f), np.array(out_r), rtol=5e-3, atol=5e-3)
     for (_, a), (_, b) in zip(nn.utils.tree_flatten(g_f), nn.utils.tree_flatten(g_r)):
         np.testing.assert_allclose(np.array(a), np.array(b), rtol=2e-2, atol=2e-2)
+
+
+@pytest.mark.skipif(not mx.metal.is_available(), reason="Metal required")
+@pytest.mark.parametrize(
+    "channels, index_dtype, slope",
+    [(3, mx.int32, 0.0), (32, mx.uint32, 0.2), (65, mx.int64, 0.4)],
+)
+def test_gatv2_metal_scores_and_gradients(channels, index_dtype, slope):
+    rng = np.random.default_rng(23)
+    # Include exact zeros in the activation, as well as repeated edges and a
+    # partial final threadgroup. Use different node counts and strided inputs.
+    src = rng.standard_normal((7, 2, channels * 2)).astype(np.float32)
+    dst = rng.standard_normal((8, 2, channels)).astype(np.float32)
+    src[..., 0] = dst[..., 0] = 0
+    att = rng.standard_normal((1, 2, channels)).astype(np.float32)
+    edge_pairs = rng.integers(0, 7, (37, 2))
+    if index_dtype == mx.int64:
+        edge_pairs[0] = (-1, -1)
+    edges = mx.array(edge_pairs, dtype=index_dtype).T
+    cotangent = mx.array(rng.standard_normal((2, 37)).astype(np.float32)).T
+    primals = (mx.array(src)[..., ::2], mx.array(dst), mx.array(att))
+    metal = _metal_scores(slope)
+
+    def reference(s, d, a):
+        return _reference_scores(s, d, a, edges, slope)
+
+    scores, grads = mx.vjp(lambda s, d, a: metal(s, d, a, edges), primals, [cotangent])
+    expected, expected_grads = mx.vjp(reference, primals, [cotangent])
+    for got, want in zip([*scores, *grads], [*expected, *expected_grads]):
+        np.testing.assert_allclose(np.array(got), np.array(want), rtol=1e-5, atol=1e-5)
+
+
+@pytest.mark.parametrize("case", ["cpu", "float16", "edge-features", "empty"])
+def test_gatv2_score_dispatch_falls_back(monkeypatch, case):
+    def unexpected_metal(slope):
+        pytest.fail("The Metal score kernel was selected for a fallback case")
+
+    monkeypatch.setattr(gatv2_edge_scores, "_metal_scores", unexpected_metal)
+    device = mx.cpu if case == "cpu" else mx.default_device()
+    dtype = mx.float16 if case == "float16" else mx.float32
+    with mx.stream(device):
+        edges = mx.array([[0, 1, 1], [1, 0, 0]])
+        if case == "empty":
+            edges = edges[:, :0]
+        src = mx.arange(12).reshape(2, 2, 3).astype(dtype)
+        dst = src - 8
+        weights = mx.ones((1, 2, 3), dtype=dtype)
+        edge_feats = (
+            mx.ones((3, 2, 3), dtype=dtype) if case == "edge-features" else None
+        )
+        args = (src, dst, weights, edges, 0.2, edge_feats)
+        out = gatv2_edge_scores.gatv2_edge_scores(*args)
+        np.testing.assert_array_equal(np.array(out), np.array(_reference_scores(*args)))
+
+
+@pytest.mark.skipif(not mx.metal.is_available(), reason="Metal required")
+def test_gatv2_metal_score_transforms():
+    edges = mx.array([[0, 1, 1, 2], [1, 2, 2, 0]])
+    src, dst, att = [
+        mx.random.normal(shape, key=mx.random.key(i))
+        for i, shape in enumerate(((3, 2, 8), (3, 2, 8), (1, 2, 8)))
+    ]
+    metal = _metal_scores(0.2)
+
+    def fused(s, d, a):
+        return metal(s, d, a, edges)
+
+    def reference(s, d, a):
+        return _reference_scores(s, d, a, edges, 0.2)
+
+    def transformed(scores):
+        def loss(s, d, a):
+            return scores(s, d, a).square().sum()
+
+        def grad_sum(s):
+            return mx.grad(loss)(s, dst, att).sum()
+
+        primals = (src, dst, att)
+        tangents = [mx.ones_like(x) for x in primals]
+        _, (jvp,) = mx.jvp(scores, primals, tangents)
+        return mx.compile(scores)(*primals), jvp, mx.grad(grad_sum)(src)
+
+    for got, want in zip(transformed(fused), transformed(reference)):
+        np.testing.assert_allclose(np.array(got), np.array(want), rtol=1e-5, atol=1e-5)
 
 
 def test_gatv2_conv_self_loops_default_and_bipartite():
