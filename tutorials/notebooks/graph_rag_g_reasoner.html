@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Quantum-chemical property prediction with GNNs &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>Graph RAG with G-reasoner &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -42,19 +42,19 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../_static/documentation_options.js?v=83a61292"></script>
+    <script src="../../_static/documentation_options.js?v=68565d2c"></script>
     <script src="../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/examples/qm9_tutorial';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'tutorials/notebooks/graph_rag_g_reasoner';</script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Graph RAG with G-reasoner" href="graph_rag_g_reasoner.html" />
-    <link rel="prev" title="Examples" href="index.html" />
+    <link rel="next" title="Quantum-chemical property prediction with GNNs" href="qm9_tutorial.html" />
+    <link rel="prev" title="Graph neural networks for cybersecurity" href="cybersecurity.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="" />
@@ -186,8 +186,8 @@
       
     
     
-    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -207,15 +207,18 @@
 <li class="toctree-l1"><a class="reference internal" href="../from_pyg.html">Coming from PyTorch Geometric</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/graph_classification.html">Graph Classification</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="graph_classification.html">Graph Classification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="metapath2vec.html">MetaPath2Vec</a></li>
+<li class="toctree-l1"><a class="reference internal" href="minibatch_training.html">Mini-batch training on large graphs</a></li>
+<li class="toctree-l1"><a class="reference internal" href="link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -223,12 +226,8 @@
 <li class="toctree-l1"><a class="reference internal" href="../../datasets.html">Datasets</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -631,6 +630,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -730,7 +730,7 @@
       
       
       
-      <li><a href="../../_sources/tutorials/examples/qm9_tutorial.ipynb" target="_blank"
+      <li><a href="../../_sources/tutorials/notebooks/graph_rag_g_reasoner.ipynb" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -813,7 +813,7 @@
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Quantum-chemical property prediction with GNNs</h1>
+    <h1>Graph RAG with G-reasoner</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -823,10 +823,16 @@
             </div>
             <nav aria-label="Page">
                 <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Loading-the-dataset">Loading the dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Graph-Neural-Network-module">Graph Neural Network module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-training">Model training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Notes-and-next-steps">Notes and next steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Running-G-reasoner-with-mlx-graphs">Running G-reasoner with mlx-graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-data">The data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Text-embeddings">Text embeddings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-model">The model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-released-weights">The released weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Scoring-the-documents-of-one-question">Scoring the documents of one question</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#On-the-full-benchmarks">On the full benchmarks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Going-further:-a-local-LLM-with-G-reasoner-as-retriever">Going further: a local LLM with G-reasoner as retriever</a></li>
 </ul>
             </nav>
         </div>
@@ -838,31 +844,135 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="Quantum-chemical-property-prediction-with-GNNs">
-<h1>Quantum-chemical property prediction with GNNs<a class="headerlink" href="#Quantum-chemical-property-prediction-with-GNNs" title="Link to this heading">#</a></h1>
-<p>In this <code class="docutils literal notranslate"><span class="pre">mlx-graphs</span></code> tutorial we explore how to use and graph neural networks to predict quantum-chemical properties of small molecules. You may need to install <code class="docutils literal notranslate"><span class="pre">mlx</span></code>, <code class="docutils literal notranslate"><span class="pre">mlx-graphs</span></code>, <code class="docutils literal notranslate"><span class="pre">tqdm</span></code> and <code class="docutils literal notranslate"><span class="pre">matplotlib</span></code> to run it.</p>
-<section id="Loading-the-dataset">
-<h2>Loading the dataset<a class="headerlink" href="#Loading-the-dataset" title="Link to this heading">#</a></h2>
-<p>We will be using the QM9 dataset as provided via <code class="docutils literal notranslate"><span class="pre">TUDataset</span></code>, which consists of about 130,000 small molecules consisting of 9 heavy atoms drawn from the elements C, H, O, N, F. Each molecule includes spatial information for the single low energy conformation (i.e., 3D coordinates of the atoms, specified in the latest 3 columns in the <code class="docutils literal notranslate"><span class="pre">node_features</span></code> of the graph) in addition to 13 other features. The dataset consists of 19 regression tasks, corresponding to different quantum-chemical
-properties of the molecules.</p>
-<p>Let’s start by loading the dataset and looking at some of its properties</p>
-<div class="nbinput nblast docutils container">
+  <section id="Graph-RAG-with-G-reasoner">
+<h1>Graph RAG with G-reasoner<a class="headerlink" href="#Graph-RAG-with-G-reasoner" title="Link to this heading">#</a></h1>
+<p>Standard retrieval-augmented generation (RAG) ranks documents by how close their embedding is to the embedding of the question. That fails on multi-hop questions such as <em>“In which county is the town in which Raymond Robertsen was born?”</em>. His page gives the town, Hammerfest. The county is on the Hammerfest page, which never mentions him, so that page does not look like the question.</p>
+<p>Graph RAG builds a knowledge graph from the documents: entities and documents are nodes, and the facts that link them are edges. The two pages are now connected through the entity <code class="docutils literal notranslate"><span class="pre">hammerfest</span></code>. <a class="reference external" href="https://arxiv.org/abs/2509.24276">G-reasoner</a> (Luo et al., ICLR 2026) is a graph neural network that scores every node of such a graph for a question.</p>
+<p>In this tutorial we run the released G-reasoner checkpoint on a Mac with mlx-graphs, compare it with embedding search on a slice of HotpotQA and give its documents to a local LLM. Everything running inside the Mac.</p>
+<p><code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">mlx-graphs</span> <span class="pre">mlx-lm</span> <span class="pre">huggingface_hub</span></code></p>
+<img alt="A question enters the knowledge graph at its start nodes, G-reasoner scores every node and a local LLM answers from the best documents" src="../../_images/graph_rag_g_reasoner.svg" />
+<section id="Running-G-reasoner-with-mlx-graphs">
+<h2>Running G-reasoner with mlx-graphs<a class="headerlink" href="#Running-G-reasoner-with-mlx-graphs" title="Link to this heading">#</a></h2>
+<section id="The-data">
+<h3>The data<a class="headerlink" href="#The-data" title="Link to this heading">#</a></h3>
+<p>Each <a class="reference external" href="https://hotpotqa.github.io">HotpotQA</a> question needs two Wikipedia passages. The authors of G-reasoner released a knowledge graph that an LLM extracted from these passages as <em>(subject, relation, object)</em> triples. We use a slice of it: the first 100 questions of their test split, with the documents, entities and edges around them. The next cell downloads it from the Hugging Face Hub (0.3 MB).</p>
+<p>Each question comes with <strong>start nodes</strong>, the nodes where it enters the graph. We reuse the ones that the authors released: the 5 documents closest to the question and the entities of the closest facts, after an LLM has discarded the irrelevant facts.</p>
+<div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[1]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.datasets</span><span class="w"> </span><span class="kn">import</span> <span class="n">TUDataset</span>
-<span class="n">qm9</span> <span class="o">=</span> <span class="n">TUDataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"QM9"</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pickle</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">zipfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="n">OrderedDict</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">huggingface_hub</span><span class="w"> </span><span class="kn">import</span> <span class="n">hf_hub_download</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">tree_unflatten</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_lm</span><span class="w"> </span><span class="kn">import</span> <span class="n">generate</span><span class="p">,</span> <span class="n">load</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">GeneralizedRelationalConv</span>
+
+<span class="n">mx</span><span class="o">.</span><span class="n">set_cache_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="n">hf_hub_download</span><span class="p">(</span>
+    <span class="s2">"Djam1998/g-reasoner-hotpotqa-subset"</span><span class="p">,</span>
+    <span class="s2">"hotpotqa_subset.json.gz"</span><span class="p">,</span>
+    <span class="n">repo_type</span><span class="o">=</span><span class="s2">"dataset"</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="k">with</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+<span class="n">documents</span><span class="p">,</span> <span class="n">entities</span><span class="p">,</span> <span class="n">relations</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"documents"</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">"entities"</span><span class="p">],</span> <span class="n">data</span><span class="p">[</span><span class="s2">"relations"</span><span class="p">]</span>
+<span class="n">questions</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"questions"</span><span class="p">]</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">]</span> <span class="o">+</span> <span class="n">entities</span>  <span class="c1"># node names, documents first</span>
+<span class="n">num_documents</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">documents</span><span class="p">)</span>
+
+<span class="c1"># Every edge also exists in the other direction, with a relation of its own.</span>
+<span class="n">source</span><span class="p">,</span> <span class="n">relation</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">"edges"</span><span class="p">])</span><span class="o">.</span><span class="n">T</span>
+<span class="n">edge_index</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+    <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">source</span><span class="p">,</span> <span class="n">target</span><span class="p">]),</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">target</span><span class="p">,</span> <span class="n">source</span><span class="p">])]</span>
+<span class="p">)</span>
+<span class="n">edge_type</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">relation</span><span class="p">,</span> <span class="n">relation</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">relations</span><span class="p">)])</span>
+<span class="nb">print</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">num_documents</span><span class="si">}</span><span class="s2"> documents, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">entities</span><span class="p">)</span><span class="si">}</span><span class="s2"> entities, "</span>
+    <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">edge_index</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2"> edges, </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">questions</span><span class="p">)</span><span class="si">}</span><span class="s2"> questions"</span>
+<span class="p">)</span>
+
+<span class="n">example</span> <span class="o">=</span> <span class="n">questions</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"</span><span class="se">\n</span><span class="s2">question:"</span><span class="p">,</span> <span class="n">example</span><span class="p">[</span><span class="s2">"question"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"supporting documents:"</span><span class="p">,</span> <span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">example</span><span class="p">[</span><span class="s2">"supporting_documents"</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"start nodes:"</span><span class="p">,</span> <span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">example</span><span class="p">[</span><span class="s2">"start_nodes"</span><span class="p">]])</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"facts about 'raymond robertsen':"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">r</span><span class="p">,</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data</span><span class="p">[</span><span class="s2">"edges"</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="n">names</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"raymond robertsen"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  (</span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">relations</span><span class="p">[</span><span class="n">r</span><span class="p">]</span><span class="si">}</span><span class="s2">, </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">t</span><span class="p">]</span><span class="si">}</span><span class="s2">)"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+504 documents, 5458 entities, 43750 edges, 100 questions
+
+question: In which county is the town in which Raymond Robertsen was born ?
+supporting documents: [&#39;Raymond Robertsen&#39;, &#39;Hammerfest&#39;]
+start nodes: [&#39;Raymond, Wisconsin&#39;, &#39;Raymond, Washington&#39;, &#39;Raymond, Maine&#39;, &#39;Raymond Robertsen&#39;, &#39;Raymond, Alberta&#39;, &#39;raymond&#39;, &#39;cumberland county&#39;, &#39;hammerfest&#39;, &#39;norwegian politician&#39;, &#39;raymond robertsen&#39;]
+facts about &#39;raymond robertsen&#39;:
+  (raymond robertsen, is_mentioned_in, Raymond Robertsen)
+  (raymond robertsen, is a, norwegian politician)
+  (raymond robertsen, born in, hammerfest)
+  (raymond robertsen, is a member of, conservative party)
+  (raymond robertsen, born on, 12 september 1974)
+</pre></div></div>
+</div>
+</section>
+<section id="Text-embeddings">
+<h3>Text embeddings<a class="headerlink" href="#Text-embeddings" title="Link to this heading">#</a></h3>
+<p>G-reasoner reads embeddings, not text: one vector per node and one per relation. The checkpoint expects <a class="reference external" href="https://huggingface.co/Qwen/Qwen3-Embedding-0.6B">Qwen3-Embedding-0.6B</a>, which runs with mlx-lm. The embedding of a text is the hidden state of its last token, normalized.</p>
 <div class="nbinput docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[2]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of graphs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">qm9</span><span class="p">)</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of node features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_node_features</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of edge features: </span><span class="si">{</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_edge_features</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Number of regression tasks: </span><span class="si">{</span><span class="n">qm9</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">graph_labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">embedder</span><span class="p">,</span> <span class="n">tokenizer</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">"mlx-community/Qwen3-Embedding-0.6B-8bit"</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">embed</span><span class="p">(</span><span class="n">texts</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="mi">64</span><span class="p">):</span>
+    <span class="n">tokens</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokenizer</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="n">text</span><span class="p">)</span> <span class="k">for</span> <span class="n">text</span> <span class="ow">in</span> <span class="n">texts</span><span class="p">]</span>
+    <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">tokens</span><span class="p">])</span>  <span class="c1"># batches of similar length</span>
+    <span class="n">out</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span> <span class="mi">1024</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">start</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">texts</span><span class="p">),</span> <span class="n">batch_size</span><span class="p">):</span>
+        <span class="n">ids</span> <span class="o">=</span> <span class="n">order</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">start</span> <span class="o">+</span> <span class="n">batch_size</span><span class="p">]</span>
+        <span class="n">batch</span> <span class="o">=</span> <span class="p">[</span><span class="n">tokens</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ids</span><span class="p">]</span>
+        <span class="n">width</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">)</span>
+        <span class="c1"># Causal attention: the padding on the right is never attended to.</span>
+        <span class="n">padded</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="o">+</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">width</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">))</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">]</span>
+        <span class="n">states</span> <span class="o">=</span> <span class="n">embedder</span><span class="o">.</span><span class="n">model</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">padded</span><span class="p">))</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">states</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">batch</span><span class="p">)),</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">batch</span><span class="p">])]</span>
+        <span class="n">last</span> <span class="o">=</span> <span class="n">last</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">out</span><span class="p">[</span><span class="n">ids</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">last</span> <span class="o">/</span> <span class="n">mx</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">last</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">keepdims</span><span class="o">=</span><span class="kc">True</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">out</span>
+
+
+<span class="n">node_texts</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="sa">f</span><span class="s2">"name: </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">'title'</span><span class="p">]</span><span class="si">}</span><span class="se">\n</span><span class="s2">type: document</span><span class="se">\n</span><span class="s2">content: </span><span class="si">{</span><span class="n">d</span><span class="p">[</span><span class="s1">'content'</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">documents</span>
+<span class="p">]</span> <span class="o">+</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"name: </span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="se">\n</span><span class="s2">type: entity"</span> <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">entities</span><span class="p">]</span>
+<span class="n">relation_texts</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"name: </span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">]</span>
+<span class="n">relation_texts</span> <span class="o">+=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">"name: inverse_</span><span class="si">{</span><span class="n">r</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">relations</span><span class="p">]</span>
+<span class="n">query</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="s2">"Instruct: Given a web search query, retrieve relevant passages that answer "</span>
+    <span class="s2">"the query</span><span class="se">\n</span><span class="s2">Query: "</span>
+<span class="p">)</span>
+
+<span class="n">node_emb</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">node_texts</span><span class="p">)</span>
+<span class="n">relation_emb</span> <span class="o">=</span> <span class="n">embed</span><span class="p">(</span><span class="n">relation_texts</span><span class="p">)</span>
+<span class="n">question_emb</span> <span class="o">=</span> <span class="n">embed</span><span class="p">([</span><span class="n">query</span> <span class="o">+</span> <span class="n">q</span><span class="p">[</span><span class="s2">"question"</span><span class="p">]</span> <span class="k">for</span> <span class="n">q</span> <span class="ow">in</span> <span class="n">questions</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">node_emb</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">relation_emb</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">question_emb</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -871,288 +981,204 @@ properties of the molecules.</p>
 </div>
 <div class="output_area docutils container">
 <div class="highlight"><pre>
-Number of graphs: 129433
-Number of node features: 16
-Number of edge features: 4
-Number of regression tasks: 19
+(5962, 1024) (4602, 1024) (100, 1024)
 </pre></div></div>
 </div>
-<p>We’ll split the dataset into training and test sets and create dataloader for them</p>
+</section>
+<section id="The-model">
+<h3>The model<a class="headerlink" href="#The-model" title="Link to this heading">#</a></h3>
+<p>G-reasoner follows <a class="reference external" href="https://arxiv.org/abs/2106.06935">NBFNet</a>. For one question:</p>
+<ol class="arabic simple">
+<li><p>Every node starts from its text embedding, and the start nodes also receive the embedding of the question.</p></li>
+<li><p>Six message passing layers spread these states along the edges. Each message is the state of a neighbor multiplied element-wise by a vector for the relation of the edge.</p></li>
+<li><p>An MLP turns the final state of each node into a score.</p></li>
+</ol>
+<p>Step 2 is <code class="docutils literal notranslate"><span class="pre">GeneralizedRelationalConv</span></code> in mlx-graphs. Like most message passing layers, it builds one message per edge: with 1024 features, that is 4 GB per million edges, and the full HotpotQA graph has 2.6 million edges. The sum does not need these messages:</p>
+<div class="math notranslate nohighlight">
+\[\mathrm{out}[v, k] = \sum_{(v, r, u)} \mathrm{relation}[r, k] \times x[u, k]\]</div>
+<p>So we write a custom Metal kernel for this step with <code class="docutils literal notranslate"><span class="pre">mx.fast.metal_kernel</span></code>: each GPU thread loops over the edges of one node and accumulates 16 features. <code class="docutils literal notranslate"><span class="pre">FusedRelationalConv</span></code> keeps the weights and the node update of the mlx-graphs layer and calls the kernel in place of its message and aggregate steps. The kernel has no backward pass (inference only) and is not part of the library yet.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[3]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.loaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">Dataloader</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">relational_spmm</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">fast</span><span class="o">.</span><span class="n">metal_kernel</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s2">"relational_spmm"</span><span class="p">,</span>
+    <span class="n">input_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"row_ptr"</span><span class="p">,</span> <span class="s2">"col"</span><span class="p">,</span> <span class="s2">"edge_type"</span><span class="p">,</span> <span class="s2">"relation"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">],</span>
+    <span class="n">output_names</span><span class="o">=</span><span class="p">[</span><span class="s2">"out"</span><span class="p">],</span>
+    <span class="n">source</span><span class="o">=</span><span class="s2">"""</span>
+<span class="s2">        uint node = thread_position_in_grid.y;</span>
+<span class="s2">        uint dim = x_shape[1];</span>
+<span class="s2">        uint offset = thread_position_in_grid.x * 16;</span>
+<span class="s2">        float acc[16];</span>
+<span class="s2">        for (uint k = 0; k &lt; 16; k++) acc[k] = 0.0f;</span>
+<span class="s2">        // The edges of a node are a contiguous range (CSR format).</span>
+<span class="s2">        for (uint e = row_ptr[node]; e &lt; row_ptr[node + 1]; e++) {</span>
+<span class="s2">            uint neighbor = col[e] * dim + offset;</span>
+<span class="s2">            uint rel = edge_type[e] * dim + offset;</span>
+<span class="s2">            for (uint k = 0; k &lt; 16; k++) acc[k] += relation[rel + k] * x[neighbor + k];</span>
+<span class="s2">        }</span>
+<span class="s2">        for (uint k = 0; k &lt; 16; k++) out[node * dim + offset + k] = acc[k];</span>
+<span class="s2">    """</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="c1"># training and test splits</span>
-<span class="n">num_training_samples</span> <span class="o">=</span> <span class="mi">110_000</span>
 
-<span class="n">training_dataset</span> <span class="o">=</span> <span class="n">qm9</span><span class="p">[:</span><span class="n">num_training_samples</span><span class="p">]</span>
-<span class="n">test_dataset</span> <span class="o">=</span> <span class="n">qm9</span><span class="p">[</span><span class="n">num_training_samples</span><span class="p">:]</span>
-
-<span class="c1"># dataloaders</span>
-<span class="n">batch_size</span> <span class="o">=</span> <span class="mi">128</span>
-
-<span class="n">train_loader</span> <span class="o">=</span> <span class="n">Dataloader</span><span class="p">(</span><span class="n">training_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">test_loader</span> <span class="o">=</span> <span class="n">Dataloader</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">,</span> <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span> <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FusedRelationalConv</span><span class="p">(</span><span class="n">GeneralizedRelationalConv</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">csr</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">boundary</span><span class="p">):</span>
+        <span class="n">num_nodes</span><span class="p">,</span> <span class="n">dim</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">shape</span>
+        <span class="n">aggregated</span> <span class="o">=</span> <span class="n">relational_spmm</span><span class="p">(</span>
+            <span class="n">inputs</span><span class="o">=</span><span class="p">[</span><span class="o">*</span><span class="n">csr</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation</span><span class="o">.</span><span class="n">weight</span><span class="p">,</span> <span class="n">x</span><span class="p">],</span>
+            <span class="n">grid</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span> <span class="o">//</span> <span class="mi">16</span><span class="p">,</span> <span class="n">num_nodes</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+            <span class="n">threadgroup</span><span class="o">=</span><span class="p">(</span><span class="n">dim</span> <span class="o">//</span> <span class="mi">16</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>  <span class="c1"># one group per node</span>
+            <span class="n">output_shapes</span><span class="o">=</span><span class="p">[(</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">dim</span><span class="p">)],</span>
+            <span class="n">output_dtypes</span><span class="o">=</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">float32</span><span class="p">],</span>
+        <span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="c1"># The initial state of a node counts as one more message to itself.</span>
+        <span class="n">output</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">x</span><span class="p">,</span> <span class="n">aggregated</span> <span class="o">+</span> <span class="n">boundary</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">activation</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layer_norm</span><span class="p">(</span><span class="n">output</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
-</section>
-<section id="Graph-Neural-Network-module">
-<h2>Graph Neural Network module<a class="headerlink" href="#Graph-Neural-Network-module" title="Link to this heading">#</a></h2>
-<p>To dive a bit deeper into the GNN logic and allow for more flexibility, we will implement node and edge processing blocks from scratch (as in <a class="reference external" href="https://arxiv.org/pdf/1806.01261.pdf">https://arxiv.org/pdf/1806.01261.pdf</a>) and then combine them through the <code class="docutils literal notranslate"><span class="pre">GraphNetworkBlock</span></code> provided by <code class="docutils literal notranslate"><span class="pre">mlx-graphs</span></code>.</p>
-<p>Let’s start with the edge features update model. It will concatenate the <code class="docutils literal notranslate"><span class="pre">edge_features</span></code> with the <code class="docutils literal notranslate"><span class="pre">node_features</span></code> of the coreesponding source and target nodes, pass them through a simple MLP (just a linear layer followed by a ReLU) and output the updated <code class="docutils literal notranslate"><span class="pre">edge_features</span></code>.</p>
 <div class="nbinput nblast docutils container">
 <div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[4]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">EdgeModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">edge_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">node_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="p">):</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">mlp</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">Sequential</span><span class="p">(</span>
+        <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">in_dim</span><span class="p">,</span> <span class="n">hidden_dim</span><span class="p">),</span> <span class="n">nn</span><span class="o">.</span><span class="n">ReLU</span><span class="p">(),</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">hidden_dim</span><span class="p">,</span> <span class="n">out_dim</span><span class="p">)</span>
+    <span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">GReasoner</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1024</span><span class="p">,</span> <span class="n">num_layers</span><span class="o">=</span><span class="mi">6</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
-            <span class="n">input_dims</span><span class="o">=</span><span class="mi">2</span> <span class="o">*</span> <span class="n">node_features_dim</span> <span class="o">+</span> <span class="n">edge_features_dim</span><span class="p">,</span> <span class="c1"># source + target features + edge features</span>
-            <span class="n">output_dims</span><span class="o">=</span><span class="n">output_dim</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">question_mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rel_mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ent_mlp</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">Linear</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">early_fuse_mlp</span> <span class="o">=</span> <span class="n">mlp</span><span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">predict_mlp</span> <span class="o">=</span> <span class="n">mlp</span><span class="p">(</span><span class="mi">3</span> <span class="o">*</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># num_relations=1 is a placeholder: set_graph writes the relation vectors.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">layers</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">FusedRelationalConv</span><span class="p">(</span>
+                <span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">num_relations</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">message_func</span><span class="o">=</span><span class="s2">"distmult"</span><span class="p">,</span> <span class="n">aggregate_func</span><span class="o">=</span><span class="s2">"add"</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)</span>
+        <span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relation_projections</span> <span class="o">=</span> <span class="p">[</span><span class="n">mlp</span><span class="p">(</span><span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">,</span> <span class="n">dim</span><span class="p">)</span> <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">num_layers</span><span class="p">)]</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">node_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">graph_features</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">):</span>
-        <span class="n">source_nodes</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">destination_nodes</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">model_input</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">node_features</span><span class="p">[</span><span class="n">destination_nodes</span><span class="p">],</span>
-                <span class="n">node_features</span><span class="p">[</span><span class="n">source_nodes</span><span class="p">],</span>
-                <span class="n">edge_features</span><span class="p">,</span>
-            <span class="p">],</span>
-            <span class="mi">1</span><span class="p">,</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_graph</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">relation_emb</span><span class="p">,</span> <span class="n">node_emb</span><span class="p">):</span>
+        <span class="c1"># Everything that does not depend on the question is computed once.</span>
+        <span class="n">source</span><span class="p">,</span> <span class="n">target</span> <span class="o">=</span> <span class="n">edge_index</span>
+        <span class="n">order</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"stable"</span><span class="p">)</span>
+        <span class="n">row_ptr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">node_emb</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)</span>
+        <span class="n">row_ptr</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">bincount</span><span class="p">(</span><span class="n">source</span><span class="p">,</span> <span class="n">minlength</span><span class="o">=</span><span class="nb">len</span><span class="p">(</span><span class="n">node_emb</span><span class="p">)))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_csr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">row_ptr</span><span class="p">),</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)),</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">edge_type</span><span class="p">[</span><span class="n">order</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint32</span><span class="p">)),</span>
         <span class="p">)</span>
-        <span class="n">new_edge_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
-        <span class="n">new_edge_features</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">new_edge_features</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_edge_features</span>
-</pre></div>
-</div>
-</div>
-<p>The node features update model will start by aggregating the <code class="docutils literal notranslate"><span class="pre">edge_features</span></code> corresponding to the edges incoming into each node, by computing their mean. Such aggregated edge features will be concatenated to the corresponding <code class="docutils literal notranslate"><span class="pre">node_features</span></code> and passed through an MLP to compute the updated node features.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">NodeModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">node_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">edge_features_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-        <span class="n">output_dim</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
-    <span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">linear</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span>
-            <span class="n">input_dims</span><span class="o">=</span><span class="n">node_features_dim</span> <span class="o">+</span> <span class="n">edge_features_dim</span><span class="p">,</span>
-            <span class="n">output_dims</span><span class="o">=</span><span class="n">output_dim</span><span class="p">,</span>
-        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_node_emb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ent_mlp</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">node_emb</span><span class="p">))</span>
+        <span class="n">relation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rel_mlp</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">relation_emb</span><span class="p">))</span>
+        <span class="k">for</span> <span class="n">layer</span><span class="p">,</span> <span class="n">projection</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">relation_projections</span><span class="p">):</span>
+            <span class="n">layer</span><span class="o">.</span><span class="n">relation</span><span class="o">.</span><span class="n">weight</span> <span class="o">=</span> <span class="n">projection</span><span class="p">(</span><span class="n">relation</span><span class="p">)</span>
+        <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_emb</span><span class="p">,</span> <span class="p">[</span><span class="n">layer</span><span class="o">.</span><span class="n">relation</span><span class="o">.</span><span class="n">weight</span> <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">])</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">node_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">graph_features</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="p">):</span>
-        <span class="n">target_nodes</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">aggregated_edges</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">target_nodes</span><span class="p">,</span> <span class="n">out_size</span><span class="o">=</span><span class="n">node_features</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"mean"</span><span class="p">)</span>
-        <span class="n">model_input</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">node_features</span><span class="p">,</span> <span class="n">aggregated_edges</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span>
-        <span class="n">new_node_features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">linear</span><span class="p">(</span><span class="n">model_input</span><span class="p">)</span>
-        <span class="n">new_node_features</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">relu</span><span class="p">(</span><span class="n">new_node_features</span><span class="p">)</span>
-        <span class="k">return</span> <span class="n">new_node_features</span>
-</pre></div>
-</div>
-</div>
-<p>Now, the edge and node models we defined can be combined to create a basic graph neural network to sequentially update/transform edges and node features of the input graph.</p>
-<p>To do that we can use the <code class="docutils literal notranslate"><span class="pre">GraphNetworkBlock</span></code>. In the model below we create two graph network blocks that we apply sequentially, we then pool the node features and pass them through a linear transformation to compute the predicted output. We use an output dimension of 1 for the entire model as we’ll use it to learn a single regression task.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">global_mean_pool</span><span class="p">,</span> <span class="n">GraphNetworkBlock</span>
-
-
-<span class="k">class</span><span class="w"> </span><span class="nc">Model</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="n">Module</span><span class="p">):</span>
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gnn1</span> <span class="o">=</span> <span class="n">GraphNetworkBlock</span><span class="p">(</span>
-            <span class="n">node_model</span><span class="o">=</span><span class="n">NodeModel</span><span class="p">(</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_node_features</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
-            <span class="n">edge_model</span><span class="o">=</span><span class="n">EdgeModel</span><span class="p">(</span><span class="n">qm9</span><span class="o">.</span><span class="n">num_edge_features</span><span class="p">,</span> <span class="n">qm9</span><span class="o">.</span><span class="n">num_node_features</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">question_emb</span><span class="p">,</span> <span class="n">start_nodes</span><span class="p">):</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">question_mlp</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">question_emb</span><span class="p">))</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_node_emb</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
+        <span class="n">mask</span><span class="p">[</span><span class="n">start_nodes</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="c1"># The start nodes carry the question; every node carries its own text.</span>
+        <span class="n">boundary</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">early_fuse_mlp</span><span class="p">(</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">)</span> <span class="o">*</span> <span class="n">question</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_emb</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">gnn2</span> <span class="o">=</span> <span class="n">GraphNetworkBlock</span><span class="p">(</span>
-            <span class="n">node_model</span><span class="o">=</span><span class="n">NodeModel</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
-            <span class="n">edge_model</span><span class="o">=</span><span class="n">EdgeModel</span><span class="p">(</span><span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">64</span><span class="p">),</span>
+        <span class="n">hidden</span> <span class="o">=</span> <span class="n">boundary</span>
+        <span class="k">for</span> <span class="n">layer</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">layers</span><span class="p">:</span>
+            <span class="n">hidden</span> <span class="o">=</span> <span class="n">hidden</span> <span class="o">+</span> <span class="n">layer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_csr</span><span class="p">,</span> <span class="n">hidden</span><span class="p">,</span> <span class="n">boundary</span><span class="p">)</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">hidden</span><span class="p">)</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="n">mx</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">hidden</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+        <span class="n">scores</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">predict_mlp</span><span class="p">(</span>
+            <span class="n">mx</span><span class="o">.</span><span class="n">concatenate</span><span class="p">([</span><span class="n">hidden</span><span class="p">,</span> <span class="n">question</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_node_emb</span><span class="p">],</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">output_linear</span> <span class="o">=</span> <span class="n">Linear</span><span class="p">(</span><span class="n">input_dims</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">output_dims</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span>
-        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">node_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">edge_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">batch_indices</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-    <span class="p">):</span>
-
-        <span class="n">node_features</span><span class="p">,</span> <span class="n">edge_features</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gnn1</span><span class="p">(</span>
-            <span class="n">edge_index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span>
-            <span class="n">node_features</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">node_features</span><span class="p">,</span>
-            <span class="n">edge_features</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">edge_features</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">node_features</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gnn2</span><span class="p">(</span>
-            <span class="n">edge_index</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span>
-            <span class="n">node_features</span><span class="o">=</span><span class="n">node_features</span><span class="p">,</span>
-            <span class="n">edge_features</span><span class="o">=</span><span class="n">edge_features</span><span class="p">,</span>
-        <span class="p">)</span>
-        <span class="n">out</span> <span class="o">=</span> <span class="n">global_mean_pool</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">batch_indices</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">output_linear</span><span class="p">(</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">scores</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
 </section>
-<section id="Model-training">
-<h2>Model training<a class="headerlink" href="#Model-training" title="Link to this heading">#</a></h2>
-<p>Now that we have our model we can simply define our loss function (MSE) and the forward function we’re going to use to train our model along with an optimizer (we’ll use AdamW in this example).</p>
+<section id="The-released-weights">
+<h3>The released weights<a class="headerlink" href="#The-released-weights" title="Link to this heading">#</a></h3>
+<p>The authors released the checkpoint <code class="docutils literal notranslate"><span class="pre">`rmanluo/G-reasoner-34M</span></code> &lt;<a class="reference external" href="https://huggingface.co/rmanluo/G-reasoner-34M">https://huggingface.co/rmanluo/G-reasoner-34M</a>&gt;`__ as a PyTorch file: a zip archive with one raw buffer per tensor and a pickle that describes them. We read it with NumPy, so this tutorial does not need PyTorch, and we rename the weights to the names of the class above.</p>
 <div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[5]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">mlx.optimizers</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">read_torch_checkpoint</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">tensor</span><span class="p">(</span><span class="n">storage</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">size</span><span class="p">,</span> <span class="o">*</span><span class="n">unused</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">storage</span><span class="p">[</span><span class="n">offset</span> <span class="p">:</span> <span class="n">offset</span> <span class="o">+</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">size</span><span class="p">))]</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">size</span><span class="p">)</span>
 
-<span class="n">model</span> <span class="o">=</span> <span class="n">Model</span><span class="p">()</span>
+    <span class="c1"># The only classes that a dictionary of float tensors needs.</span>
+    <span class="n">allowed</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="p">(</span><span class="s2">"torch._utils"</span><span class="p">,</span> <span class="s2">"_rebuild_tensor_v2"</span><span class="p">):</span> <span class="n">tensor</span><span class="p">,</span>
+        <span class="p">(</span><span class="s2">"torch"</span><span class="p">,</span> <span class="s2">"FloatStorage"</span><span class="p">):</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">,</span>
+        <span class="p">(</span><span class="s2">"collections"</span><span class="p">,</span> <span class="s2">"OrderedDict"</span><span class="p">):</span> <span class="n">OrderedDict</span><span class="p">,</span>
+    <span class="p">}</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">)</span> <span class="k">as</span> <span class="n">archive</span><span class="p">:</span>
+        <span class="n">pickle_name</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">archive</span><span class="o">.</span><span class="n">namelist</span><span class="p">()</span> <span class="k">if</span> <span class="n">n</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">"data.pkl"</span><span class="p">))</span>
+        <span class="n">root</span> <span class="o">=</span> <span class="n">pickle_name</span><span class="p">[:</span> <span class="o">-</span><span class="nb">len</span><span class="p">(</span><span class="s2">"data.pkl"</span><span class="p">)]</span>
 
-<span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
+        <span class="k">class</span><span class="w"> </span><span class="nc">Reader</span><span class="p">(</span><span class="n">pickle</span><span class="o">.</span><span class="n">Unpickler</span><span class="p">):</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">find_class</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">):</span>
+                <span class="k">if</span> <span class="p">(</span><span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">allowed</span><span class="p">:</span>
+                    <span class="k">raise</span> <span class="n">pickle</span><span class="o">.</span><span class="n">UnpicklingError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"unexpected class </span><span class="si">{</span><span class="n">module</span><span class="si">}</span><span class="s2">.</span><span class="si">{</span><span class="n">name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">allowed</span><span class="p">[(</span><span class="n">module</span><span class="p">,</span> <span class="n">name</span><span class="p">)]</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="k">return</span> <span class="n">nn</span><span class="o">.</span><span class="n">losses</span><span class="o">.</span><span class="n">mse_loss</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">"sum"</span><span class="p">)</span>
+            <span class="k">def</span><span class="w"> </span><span class="nf">persistent_load</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pid</span><span class="p">):</span>
+                <span class="n">buffer</span> <span class="o">=</span> <span class="n">archive</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">root</span><span class="si">}</span><span class="s2">data/</span><span class="si">{</span><span class="n">pid</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+                <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buffer</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">pid</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 
-<span class="k">def</span><span class="w"> </span><span class="nf">forward_fn</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">graph</span><span class="p">,</span> <span class="n">labels</span><span class="p">):</span>
-    <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">node_features</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">graph</span><span class="o">.</span><span class="n">batch_indices</span><span class="p">)</span>
-    <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">())</span>
-    <span class="k">return</span> <span class="n">loss</span><span class="p">,</span> <span class="n">y_hat</span>
+        <span class="k">with</span> <span class="n">archive</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">pickle_name</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Reader</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">.</span><span class="n">load</span><span class="p">()</span>
 
-<span class="n">loss_and_grad_fn</span> <span class="o">=</span> <span class="n">nn</span><span class="o">.</span><span class="n">value_and_grad</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">forward_fn</span><span class="p">)</span>
-<span class="n">optimizer</span> <span class="o">=</span> <span class="n">optim</span><span class="o">.</span><span class="n">AdamW</span><span class="p">(</span><span class="n">learning_rate</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+
+<span class="n">checkpoint</span> <span class="o">=</span> <span class="n">read_torch_checkpoint</span><span class="p">(</span>
+    <span class="n">hf_hub_download</span><span class="p">(</span><span class="s2">"rmanluo/G-reasoner-34M"</span><span class="p">,</span> <span class="s2">"model.pth"</span><span class="p">)</span>
+<span class="p">)</span>
+<span class="n">weights</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">checkpoint</span><span class="p">[</span><span class="s2">"model"</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">"entity_model."</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"relation_projection."</span> <span class="ow">in</span> <span class="n">name</span><span class="p">:</span>
+        <span class="c1"># layers.3.relation_projection.0.weight</span>
+        <span class="c1">#   -&gt; relation_projections.3.layers.0.weight</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">layer</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">rest</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"."</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"relation_projections.</span><span class="si">{</span><span class="n">layer</span><span class="si">}</span><span class="s2">.layers.</span><span class="si">{</span><span class="n">rest</span><span class="si">}</span><span class="s2">"</span>
+    <span class="k">for</span> <span class="n">block</span> <span class="ow">in</span> <span class="p">(</span><span class="s2">"early_fuse_mlp."</span><span class="p">,</span> <span class="s2">"predict_mlp."</span><span class="p">):</span>
+        <span class="n">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">block</span><span class="p">,</span> <span class="n">block</span> <span class="o">+</span> <span class="s2">"layers."</span><span class="p">)</span>
+    <span class="n">weights</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">name</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">value</span><span class="p">)))</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">GReasoner</span><span class="p">()</span>
+<span class="n">model</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">tree_unflatten</span><span class="p">(</span><span class="n">weights</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">set_graph</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">edge_type</span><span class="p">,</span> <span class="n">relation_emb</span><span class="p">,</span> <span class="n">node_emb</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<p>We’re now ready to train our GNN model. Let’s select the “Lowest unoccupied molecular orbital energy” as the target regression task.</p>
+</section>
+<section id="Scoring-the-documents-of-one-question">
+<h3>Scoring the documents of one question<a class="headerlink" href="#Scoring-the-documents-of-one-question" title="Link to this heading">#</a></h3>
+<p>Let’s rank the documents for the question about Raymond Robertsen by embedding similarity and with G-reasoner. We picked this question because its second document does not look like the question. A star marks a supporting document.</p>
 <div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[9]:
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[6]:
 </pre></div>
 </div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">rank</span><span class="p">(</span><span class="n">i</span><span class="p">):</span>
+    <span class="n">similarity</span> <span class="o">=</span> <span class="n">node_emb</span><span class="p">[:</span><span class="n">num_documents</span><span class="p">]</span> <span class="o">@</span> <span class="n">question_emb</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="n">scores</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">question_emb</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">questions</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="s2">"start_nodes"</span><span class="p">])[:</span><span class="n">num_documents</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">similarity</span><span class="p">,</span> <span class="n">scores</span>
 
-<span class="n">mx</span><span class="o">.</span><span class="n">set_default_device</span><span class="p">(</span><span class="n">mx</span><span class="o">.</span><span class="n">gpu</span><span class="p">)</span>
-<span class="n">regression_task</span> <span class="o">=</span> <span class="mi">4</span>
 
-<span class="n">len_training_loader</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">training_dataset</span><span class="p">)</span><span class="o">/</span><span class="n">batch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">len_test_loader</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">test_dataset</span><span class="p">)</span><span class="o">/</span><span class="n">batch_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
-<span class="n">epochs</span> <span class="o">=</span> <span class="mi">20</span>
-
-<span class="n">epoch_training_losses</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="n">epoch_test_losses</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">for</span> <span class="n">epoch</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">):</span>
-    <span class="c1"># training loop</span>
-    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">train_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_training_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"batch"</span><span class="p">)</span> <span class="k">as</span> <span class="n">tepoch</span><span class="p">:</span>
-        <span class="n">tepoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Epoch </span><span class="si">{</span><span class="n">epoch</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">training_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">tepoch</span><span class="p">):</span>
-            <span class="p">(</span><span class="n">loss</span><span class="p">,</span> <span class="n">y_hat</span><span class="p">),</span> <span class="n">grads</span> <span class="o">=</span> <span class="n">loss_and_grad_fn</span><span class="p">(</span>
-                <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
-                <span class="n">graph</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
-                <span class="n">labels</span><span class="o">=</span><span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">graph_labels</span><span class="p">[:,</span> <span class="n">regression_task</span><span class="p">],</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="p">)</span>
-            <span class="n">optimizer</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">grads</span><span class="p">)</span>
-            <span class="n">mx</span><span class="o">.</span><span class="n">eval</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">parameters</span><span class="p">(),</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">state</span><span class="p">)</span>
-            <span class="n">training_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">num_graphs</span>
-            <span class="n">tepoch</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">training_loss</span><span class="o">=</span><span class="n">training_loss</span> <span class="o">/</span> <span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">),</span> <span class="n">test_loss</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">epoch_training_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">training_loss</span><span class="o">/</span><span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-
-    <span class="c1"># testing loop</span>
-    <span class="k">with</span> <span class="n">tqdm</span><span class="p">(</span><span class="n">test_loader</span><span class="p">,</span> <span class="n">total</span><span class="o">=</span><span class="n">len_test_loader</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"batch"</span><span class="p">,</span> <span class="n">leave</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span> <span class="k">as</span> <span class="n">test_epoch</span><span class="p">:</span>
-        <span class="n">test_epoch</span><span class="o">.</span><span class="n">set_description</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Testing"</span><span class="p">)</span>
-        <span class="n">test_loss</span> <span class="o">=</span> <span class="mf">0.0</span>
-        <span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">test_epoch</span><span class="p">):</span>
-            <span class="n">y_hat</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">node_features</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">edge_features</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">batch_indices</span><span class="p">)</span>
-            <span class="n">loss</span> <span class="o">=</span> <span class="n">loss_fn</span><span class="p">(</span><span class="n">y_hat</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">graph_labels</span><span class="p">[:,</span> <span class="n">regression_task</span><span class="p">],</span> <span class="mi">1</span><span class="p">))</span>
-            <span class="n">test_loss</span> <span class="o">+=</span> <span class="n">loss</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="o">/</span><span class="n">data</span><span class="o">.</span><span class="n">num_graphs</span>
-            <span class="n">test_epoch</span><span class="o">.</span><span class="n">set_postfix</span><span class="p">(</span><span class="n">test_loss</span><span class="o">=</span><span class="n">test_loss</span> <span class="o">/</span> <span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-        <span class="n">epoch_test_losses</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">test_loss</span><span class="o">/</span><span class="p">(</span><span class="n">idx</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="nboutput nblast docutils container">
-<div class="prompt empty docutils container">
-</div>
-<div class="output_area stderr docutils container">
-<div class="highlight"><pre>
-Epoch 1: 100%|████████████████████████████████████| 860/860 [00:06&lt;00:00, 137.66batch/s, test_loss=0, training_loss=1.39]
-Epoch 2: 100%|███████████████████████████████████| 860/860 [00:06&lt;00:00, 141.06batch/s, test_loss=0, training_loss=0.634]
-Epoch 3: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 147.70batch/s, test_loss=0, training_loss=0.406]
-Epoch 4: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 151.08batch/s, test_loss=0, training_loss=0.357]
-Epoch 5: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 151.76batch/s, test_loss=0, training_loss=0.335]
-Epoch 6: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 151.85batch/s, test_loss=0, training_loss=0.316]
-Epoch 7: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 154.13batch/s, test_loss=0, training_loss=0.303]
-Epoch 8: 100%|███████████████████████████████████| 860/860 [00:05&lt;00:00, 154.84batch/s, test_loss=0, training_loss=0.285]
-Epoch 9: 100%|███████████████████████████████████| 860/860 [00:06&lt;00:00, 131.16batch/s, test_loss=0, training_loss=0.264]
-Epoch 10: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 135.10batch/s, test_loss=0, training_loss=0.249]
-Epoch 11: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 129.22batch/s, test_loss=0, training_loss=0.234]
-Epoch 12: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 130.47batch/s, test_loss=0, training_loss=0.218]
-Epoch 13: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 131.18batch/s, test_loss=0, training_loss=0.205]
-Epoch 14: 100%|██████████████████████████████████| 860/860 [00:05&lt;00:00, 150.44batch/s, test_loss=0, training_loss=0.194]
-Epoch 15: 100%|██████████████████████████████████| 860/860 [00:05&lt;00:00, 147.08batch/s, test_loss=0, training_loss=0.182]
-Epoch 16: 100%|██████████████████████████████████| 860/860 [00:05&lt;00:00, 150.98batch/s, test_loss=0, training_loss=0.171]
-Epoch 17: 100%|██████████████████████████████████| 860/860 [00:05&lt;00:00, 149.20batch/s, test_loss=0, training_loss=0.167]
-Epoch 18: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 129.81batch/s, test_loss=0, training_loss=0.162]
-Epoch 19: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 127.19batch/s, test_loss=0, training_loss=0.156]
-Epoch 20: 100%|██████████████████████████████████| 860/860 [00:06&lt;00:00, 128.22batch/s, test_loss=0, training_loss=0.153]
-
-</pre></div></div>
-</div>
-<p>Now that the training is concluded we can visualize the evolution of the training and test losses.</p>
-<div class="nbinput nblast docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[10]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-</pre></div>
-</div>
-</div>
-<div class="nbinput docutils container">
-<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[11]:
-</pre></div>
-</div>
-<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_training_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Training"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">epochs</span><span class="p">),</span> <span class="n">epoch_test_losses</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Test"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">"Loss"</span><span class="p">)</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">similarity</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">rank</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">title</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"embedding similarity"</span><span class="p">,</span> <span class="n">similarity</span><span class="p">),</span> <span class="p">(</span><span class="s2">"G-reasoner"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">title</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">values</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]:</span>
+        <span class="n">star</span> <span class="o">=</span> <span class="s2">"*"</span> <span class="k">if</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">example</span><span class="p">[</span><span class="s2">"supporting_documents"</span><span class="p">]</span> <span class="k">else</span> <span class="s2">" "</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"  </span><span class="si">{</span><span class="n">star</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">names</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="si">:</span><span class="s2">22s</span><span class="si">}{</span><span class="n">values</span><span class="p">[</span><span class="n">d</span><span class="p">]</span><span class="si">:</span><span class="s2">6.2f</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1160,13 +1186,141 @@ Epoch 20: 100%|█████████████████████�
 <div class="prompt empty docutils container">
 </div>
 <div class="output_area docutils container">
-<img alt="../../_images/tutorials_examples_qm9_tutorial_21_0.png" src="../../_images/tutorials_examples_qm9_tutorial_21_0.png" />
+<div class="highlight"><pre>
+embedding similarity
+  * Raymond Robertsen       0.68
+    Raymond, Alberta        0.57
+    Raymond, Washington     0.56
+    Raymond, Wisconsin      0.55
+    Raymond, Maine          0.55
+G-reasoner
+  * Raymond Robertsen       7.01
+  * Hammerfest              6.38
+    Raymond, Maine         -1.11
+    Raymond, Washington    -1.98
+    Raymond, Alberta       -2.87
+</pre></div></div>
 </div>
+<p>Embedding search finds the page about Raymond Robertsen and then four towns named Raymond. G-reasoner ranks <em>Hammerfest</em> second, far above the rest. It had help: the released start nodes already contain the entity <code class="docutils literal notranslate"><span class="pre">hammerfest</span></code>, found through the fact <em>(raymond robertsen, born in, hammerfest)</em>. G-reasoner carries the question from that entity to the page that mentions it.</p>
+<p>Now all 100 questions. Recall at k is the share of the supporting documents that are in the top k. The last row is the 5 start documents taken as they are, with no ranking: this is what G-reasoner starts from.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[7]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">results</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"embedding search"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"G-reasoner"</span><span class="p">:</span> <span class="p">[]}</span>
+<span class="n">start_recall</span><span class="p">,</span> <span class="n">seconds</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">question</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">questions</span><span class="p">):</span>
+    <span class="n">supporting</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">question</span><span class="p">[</span><span class="s2">"supporting_documents"</span><span class="p">])</span>
+    <span class="n">tic</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span>
+    <span class="n">similarity</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">rank</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+    <span class="n">seconds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">perf_counter</span><span class="p">()</span> <span class="o">-</span> <span class="n">tic</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"embedding search"</span><span class="p">,</span> <span class="n">similarity</span><span class="p">),</span> <span class="p">(</span><span class="s2">"G-reasoner"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)):</span>
+        <span class="n">top</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">values</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">supporting</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">top</span><span class="p">[:</span><span class="n">k</span><span class="p">]))</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">supporting</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">5</span><span class="p">)]</span>
+        <span class="n">results</span><span class="p">[</span><span class="n">method</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">found</span><span class="p">)</span>
+    <span class="n">start_documents</span> <span class="o">=</span> <span class="p">{</span><span class="n">n</span> <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="n">question</span><span class="p">[</span><span class="s2">"start_nodes"</span><span class="p">]</span> <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="n">num_documents</span><span class="p">}</span>
+    <span class="n">start_recall</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">supporting</span> <span class="o">&amp;</span> <span class="n">start_documents</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">supporting</span><span class="p">))</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">''</span><span class="si">:</span><span class="s2">20s</span><span class="si">}</span><span class="s2">recall at 2  recall at 5"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="n">results</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+    <span class="n">at_2</span><span class="p">,</span> <span class="n">at_5</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">values</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">method</span><span class="si">:</span><span class="s2">20s</span><span class="si">}{</span><span class="n">at_2</span><span class="si">:</span><span class="s2">10.1f</span><span class="si">}</span><span class="s2">%</span><span class="si">{</span><span class="n">at_5</span><span class="si">:</span><span class="s2">12.1f</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'start documents'</span><span class="si">:</span><span class="s2">20s</span><span class="si">}{</span><span class="s1">'-'</span><span class="si">:</span><span class="s2">&gt;11s</span><span class="si">}{</span><span class="mi">100</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">start_recall</span><span class="p">)</span><span class="si">:</span><span class="s2">12.1f</span><span class="si">}</span><span class="s2">%"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="se">\n</span><span class="s2">G-reasoner takes </span><span class="si">{</span><span class="mi">1000</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">seconds</span><span class="p">)</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> ms per question"</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+                    recall at 2  recall at 5
+embedding search          67.0%        91.0%
+G-reasoner                88.0%        98.5%
+start documents               -        94.5%
+
+G-reasoner takes 137 ms per question
+</pre></div></div>
 </div>
 </section>
-<section id="Notes-and-next-steps">
-<h2>Notes and next steps<a class="headerlink" href="#Notes-and-next-steps" title="Link to this heading">#</a></h2>
-<p>While this is an illustrative tutorial, we hope it gives some insights into <code class="docutils literal notranslate"><span class="pre">mlx-graphs</span></code>. Next steps could involve implementing more complex and specialized models (e.g., exploiting invariances and equivariances in the geometries of the molecules) or normalizing features and target properties, which can highly improve performance as well.</p>
+<section id="On-the-full-benchmarks">
+<h3>On the full benchmarks<a class="headerlink" href="#On-the-full-benchmarks" title="Link to this heading">#</a></h3>
+<p>We ran the same model on the three benchmarks of the paper (1,000 questions each, graphs of up to 114,000 nodes and 3.0 million edges) on a MacBook Pro M1 Pro with 32 GB. Recall at 2 / at 5 matches the paper:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p></p></th>
+<th class="head"><p>HotpotQA</p></th>
+<th class="head"><p>MuSiQue</p></th>
+<th class="head"><p>2Wiki</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>paper</p></td>
+<td><p>85.9 / 97.7</p></td>
+<td><p>54.8 / 74.9</p></td>
+<td><p>81.2 / 98.2</p></td>
+</tr>
+<tr class="row-odd"><td><p>this tutorial</p></td>
+<td><p>86.0 / 97.7</p></td>
+<td><p>54.7 / 74.8</p></td>
+<td><p>81.2 / 98.1</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<img alt="Recall at 2 and at 5 on 2Wiki and HotpotQA for BM25, text embeddings and G-reasoner" src="../../_images/graph_rag_g_reasoner_recall.png" />
+<img alt="Time for one question and peak memory of the process on 2Wiki, HotpotQA and MuSiQue for PyTorch on CPU and mlx-graphs on GPU" src="../../_images/graph_rag_g_reasoner_backends.png" />
+</section>
+</section>
+<section id="Going-further:-a-local-LLM-with-G-reasoner-as-retriever">
+<h2>Going further: a local LLM with G-reasoner as retriever<a class="headerlink" href="#Going-further:-a-local-LLM-with-G-reasoner-as-retriever" title="Link to this heading">#</a></h2>
+<p>Now let’s give these documents to an LLM. Gemma 4 12B in 4 bits (8.4 GB) runs with <a class="reference external" href="https://github.com/ml-explore/mlx-lm">mlx-lm</a>, so the whole chain stays on the Mac. We ask the same question with no documents, with the top 5 from embedding search and with the top 5 from G-reasoner.</p>
+<div class="nbinput docutils container">
+<div class="prompt highlight-none notranslate"><div class="highlight"><pre><span></span>[8]:
+</pre></div>
+</div>
+<div class="input_area highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">llm</span><span class="p">,</span> <span class="n">llm_tokenizer</span> <span class="o">=</span> <span class="n">load</span><span class="p">(</span><span class="s2">"mlx-community/gemma-4-12B-it-qat-OptiQ-4bit"</span><span class="p">)</span>
+<span class="n">content</span> <span class="o">=</span> <span class="p">{</span><span class="n">d</span><span class="p">[</span><span class="s2">"title"</span><span class="p">]:</span> <span class="n">d</span><span class="p">[</span><span class="s2">"content"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">documents</span><span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">ask</span><span class="p">(</span><span class="n">question</span><span class="p">,</span> <span class="n">titles</span><span class="o">=</span><span class="p">()):</span>
+    <span class="n">system</span> <span class="o">=</span> <span class="s2">"Give only the answer, in a few words, with no explanation."</span>
+    <span class="k">if</span> <span class="n">titles</span><span class="p">:</span>
+        <span class="n">system</span> <span class="o">=</span> <span class="s2">"Answer the question with the help of the documents. "</span> <span class="o">+</span> <span class="n">system</span>
+        <span class="n">context</span> <span class="o">=</span> <span class="s2">"</span><span class="se">\n\n</span><span class="s2">"</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="sa">f</span><span class="s2">"[</span><span class="si">{</span><span class="n">title</span><span class="si">}</span><span class="s2">]</span><span class="se">\n</span><span class="si">{</span><span class="n">content</span><span class="p">[</span><span class="n">title</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span> <span class="k">for</span> <span class="n">title</span> <span class="ow">in</span> <span class="n">titles</span><span class="p">)</span>
+        <span class="n">question</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">context</span><span class="si">}</span><span class="se">\n\n</span><span class="s2">Question: </span><span class="si">{</span><span class="n">question</span><span class="si">}</span><span class="s2">"</span>
+    <span class="n">prompt</span> <span class="o">=</span> <span class="n">llm_tokenizer</span><span class="o">.</span><span class="n">apply_chat_template</span><span class="p">(</span>
+        <span class="p">[{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"system"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">system</span><span class="p">},</span> <span class="p">{</span><span class="s2">"role"</span><span class="p">:</span> <span class="s2">"user"</span><span class="p">,</span> <span class="s2">"content"</span><span class="p">:</span> <span class="n">question</span><span class="p">}],</span>
+        <span class="n">add_generation_prompt</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">enable_thinking</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">return</span> <span class="n">generate</span><span class="p">(</span><span class="n">llm</span><span class="p">,</span> <span class="n">llm_tokenizer</span><span class="p">,</span> <span class="n">prompt</span><span class="p">,</span> <span class="n">max_tokens</span><span class="o">=</span><span class="mi">32</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+
+
+<span class="n">similarity</span><span class="p">,</span> <span class="n">scores</span> <span class="o">=</span> <span class="n">rank</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">"question"</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="s1">'no documents:'</span><span class="si">:</span><span class="s2">18s</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">ask</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">"question"</span><span class="p">]))</span>
+<span class="k">for</span> <span class="n">method</span><span class="p">,</span> <span class="n">values</span> <span class="ow">in</span> <span class="p">((</span><span class="s2">"embedding search"</span><span class="p">,</span> <span class="n">similarity</span><span class="p">),</span> <span class="p">(</span><span class="s2">"G-reasoner"</span><span class="p">,</span> <span class="n">scores</span><span class="p">)):</span>
+    <span class="n">titles</span> <span class="o">=</span> <span class="p">[</span><span class="n">names</span><span class="p">[</span><span class="n">d</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="o">-</span><span class="n">values</span><span class="p">)[:</span><span class="mi">5</span><span class="p">]]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">method</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="s1">':'</span><span class="si">:</span><span class="s2">18s</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span> <span class="n">ask</span><span class="p">(</span><span class="n">example</span><span class="p">[</span><span class="s2">"question"</span><span class="p">],</span> <span class="n">titles</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+<div class="nboutput nblast docutils container">
+<div class="prompt empty docutils container">
+</div>
+<div class="output_area docutils container">
+<div class="highlight"><pre>
+In which county is the town in which Raymond Robertsen was born ?
+no documents:      I do not have enough information to answer this.
+embedding search:  The documents do not provide this information.
+G-reasoner:        Finnmark county
+</pre></div></div>
+</div>
+<p>Only the documents from G-reasoner include the Hammerfest page, so only that run finds the county. This is one question. On the first 100 questions of the full 2Wiki benchmark, Gemma gives the exact answer to 32 questions with no documents, 46 with BM25, 46 with embedding search and 71 with G-reasoner.</p>
+<p>To ask your own question you need its start nodes, and to use your own documents you need a graph. The <a class="reference external" href="https://github.com/RManLuo/gfm-rag">gfm-rag repository</a> of the authors has the code for both.</p>
+<p>References: <a class="reference external" href="https://arxiv.org/abs/2509.24276">G-reasoner</a> (Luo et al., 2026), <a class="reference external" href="https://arxiv.org/abs/2106.06935">NBFNet</a> (Zhu et al., 2021) and <a class="reference external" href="https://arxiv.org/abs/1809.09600">HotpotQA</a> (Yang et al., 2018, distributed under CC BY-SA 4.0).</p>
 </section>
 </section>
 
@@ -1182,20 +1336,20 @@ Epoch 20: 100%|█████████████████████�
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="index.html"
+       href="cybersecurity.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Examples</p>
+        <p class="prev-next-title">Graph neural networks for cybersecurity</p>
       </div>
     </a>
     <a class="right-next"
-       href="graph_rag_g_reasoner.html"
+       href="qm9_tutorial.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Graph RAG with G-reasoner</p>
+        <p class="prev-next-title">Quantum-chemical property prediction with GNNs</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -1216,10 +1370,16 @@ Epoch 20: 100%|█████████████████████�
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Loading-the-dataset">Loading the dataset</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Graph-Neural-Network-module">Graph Neural Network module</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Model-training">Model training</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Notes-and-next-steps">Notes and next steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Running-G-reasoner-with-mlx-graphs">Running G-reasoner with mlx-graphs</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-data">The data</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Text-embeddings">Text embeddings</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-model">The model</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#The-released-weights">The released weights</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#Scoring-the-documents-of-one-question">Scoring the documents of one question</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#On-the-full-benchmarks">On the full benchmarks</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#Going-further:-a-local-LLM-with-G-reasoner-as-retriever">Going further: a local LLM with G-reasoner as retriever</a></li>
 </ul>
   </nav></div>
 

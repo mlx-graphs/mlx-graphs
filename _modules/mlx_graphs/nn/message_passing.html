@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>mlx_graphs.nn.message_passing &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../../_static/documentation_options.js?v=83a61292"></script>
+    <script src="../../../_static/documentation_options.js?v=68565d2c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -178,8 +178,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -202,12 +202,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/metapath2vec.html">MetaPath2Vec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -216,11 +219,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -623,6 +622,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -778,6 +778,10 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.core</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mx</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.kernels.csr_softmax_spmm</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">csr_softmax_spmm</span><span class="p">,</span>
+    <span class="n">supports_metal_csr_softmax_spmm</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ScatterAggregations</span><span class="p">,</span> <span class="n">get_src_dst_features</span><span class="p">,</span> <span class="n">scatter</span>
 
 <span class="c1"># Fused SpMM kernels live in mlx-cluster. They are optional: without them (or</span>
@@ -813,9 +817,21 @@
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="k">pass</span>
 
+<span class="c1"># Per-edge attention scores without gathering [num_edges, heads, channels]</span>
+<span class="c1"># arrays need an mlx-cluster with edge_scores; older ones fall back.</span>
+<span class="n">HAS_EDGE_SCORES</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">if</span> <span class="n">HAS_FUSED_KERNELS</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_cluster</span><span class="w"> </span><span class="kn">import</span> <span class="n">edge_scores</span> <span class="k">as</span> <span class="n">_edge_scores</span>
+
+        <span class="n">HAS_EDGE_SCORES</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
 <span class="c1"># Global switch, mainly for benchmarks and tests (same model, both paths).</span>
 <span class="n">_fused_enabled</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="n">_fused_format_override</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="n">_fused_softmax_spmm</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
 
 
 <div class="viewcode-block" id="set_fused_message_passing">
@@ -847,24 +863,59 @@
 
 
 
+<span class="k">def</span><span class="w"> </span><span class="nf">edge_scores</span><span class="p">(</span>
+    <span class="n">row</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">col</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">a</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">b</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">scale</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">"""Dot product per edge and per head: ``scale * (a[row] * b[col]).sum(-1)``.</span>
+
+<span class="sd">    With a recent ``mlx_cluster`` and fused message passing enabled, this runs</span>
+<span class="sd">    a kernel that never builds the gathered ``a[row]`` and ``b[col]`` arrays</span>
+<span class="sd">    (``[num_edges, heads, channels]`` each), forward or backward. Otherwise it</span>
+<span class="sd">    computes the expression above.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        row: ``[num_edges]`` index into ``a`` (e.g. destination nodes).</span>
+<span class="sd">        col: ``[num_edges]`` index into ``b`` (e.g. source nodes).</span>
+<span class="sd">        a: ``[num_a, heads, channels]`` (or ``[num_a, channels]``).</span>
+<span class="sd">        b: ``[num_b, heads, channels]`` (or ``[num_b, channels]``).</span>
+<span class="sd">        scale: factor applied to every score.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        ``[num_edges, heads]`` (or ``[num_edges]``) scores.</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">HAS_EDGE_SCORES</span> <span class="ow">and</span> <span class="n">is_fused_message_passing_enabled</span><span class="p">():</span>
+        <span class="k">return</span> <span class="n">_edge_scores</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="n">col</span><span class="p">,</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">scale</span> <span class="o">*</span> <span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">row</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">col</span><span class="p">])</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+
+
 <div class="viewcode-block" id="fused_message_passing_mode">
 <a class="viewcode-back" href="../../../api/nn/_autosummary/mlx_graphs.nn.fused_message_passing_mode.html#mlx_graphs.nn.fused_message_passing_mode">[docs]</a>
 <span class="nd">@contextmanager</span>
-<span class="k">def</span><span class="w"> </span><span class="nf">fused_message_passing_mode</span><span class="p">(</span><span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span> <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fused_message_passing_mode</span><span class="p">(</span>
+    <span class="n">enabled</span><span class="p">:</span> <span class="nb">bool</span><span class="p">,</span>
+    <span class="nb">format</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">FusedFormat</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="o">*</span><span class="p">,</span>
+    <span class="n">softmax_spmm</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="nb">bool</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Context manager version of :func:`set_fused_message_passing`.</span>
+
+<span class="sd">    Pass ``softmax_spmm=True`` to try the experimental fused neighbor softmax</span>
+<span class="sd">    and weighted sum. It requires CSR and skips active attention dropout.</span>
 
 <span class="sd">    .. code-block:: python</span>
 
 <span class="sd">        with fused_message_passing_mode(False):</span>
 <span class="sd">            out_reference = model(edge_index, x)  # gather-scatter</span>
 <span class="sd">    """</span>
-    <span class="k">global</span> <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span>
-    <span class="n">previous</span> <span class="o">=</span> <span class="p">(</span><span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span><span class="p">)</span>
+    <span class="k">global</span> <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span><span class="p">,</span> <span class="n">_fused_softmax_spmm</span>
+    <span class="n">previous</span> <span class="o">=</span> <span class="p">(</span><span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span><span class="p">,</span> <span class="n">_fused_softmax_spmm</span><span class="p">)</span>
     <span class="n">set_fused_message_passing</span><span class="p">(</span><span class="n">enabled</span><span class="p">,</span> <span class="nb">format</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">softmax_spmm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">_fused_softmax_spmm</span> <span class="o">=</span> <span class="n">softmax_spmm</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="k">yield</span>
     <span class="k">finally</span><span class="p">:</span>
-        <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span> <span class="o">=</span> <span class="n">previous</span></div>
+        <span class="n">_fused_enabled</span><span class="p">,</span> <span class="n">_fused_format_override</span><span class="p">,</span> <span class="n">_fused_softmax_spmm</span> <span class="o">=</span> <span class="n">previous</span></div>
 
 
 
@@ -941,6 +992,15 @@
             <span class="c1"># possible while tracing (edge_index is an input of mx.compile).</span>
             <span class="n">entry</span><span class="o">.</span><span class="n">failed</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_cached</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">:</span> <span class="nb">int</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Return prepared CSR without converting or counting a new use."""</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="p">(</span><span class="nb">id</span><span class="p">(</span><span class="n">edge_index</span><span class="p">),</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">num_cols</span><span class="p">)</span>
+        <span class="n">entry</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">entry</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">move_to_end</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">entry</span><span class="o">.</span><span class="n">csr</span>
+        <span class="k">return</span> <span class="kc">None</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">clear</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_entries</span><span class="o">.</span><span class="n">clear</span><span class="p">()</span>
@@ -1271,6 +1331,54 @@
 
         <span class="k">return</span> <span class="n">output</span></div>
 
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">_softmax_aggregate</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">edge_index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">logits</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">node_features</span><span class="p">:</span> <span class="n">Union</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">Tuple</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]],</span>
+        <span class="n">dropout</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">nn</span><span class="o">.</span><span class="n">Dropout</span><span class="p">],</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""Normalize incoming edge logits and apply their weights to source values."""</span>
+        <span class="n">values</span><span class="p">,</span> <span class="n">destinations</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">node_features</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">)</span>
+            <span class="k">else</span> <span class="p">(</span><span class="n">node_features</span><span class="p">,</span> <span class="n">node_features</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">num_rows</span> <span class="o">=</span> <span class="n">destinations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">_fused_softmax_spmm</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">aggr</span> <span class="o">==</span> <span class="s2">"add"</span>
+            <span class="ow">and</span> <span class="p">(</span><span class="n">dropout</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">dropout</span><span class="o">.</span><span class="n">training</span><span class="p">)</span>
+            <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">propagate</span> <span class="ow">is</span> <span class="n">MessagePassing</span><span class="o">.</span><span class="n">propagate</span>
+            <span class="ow">and</span> <span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="n">message_and_aggregate</span> <span class="ow">is</span> <span class="n">MessagePassing</span><span class="o">.</span><span class="n">message_and_aggregate</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">_can_fuse</span><span class="p">(</span>
+                <span class="n">edge_index</span><span class="p">,</span> <span class="n">node_features</span><span class="p">,</span> <span class="p">{</span><span class="s2">"edge_weights"</span><span class="p">:</span> <span class="n">logits</span><span class="p">},</span> <span class="kc">None</span>
+            <span class="p">)</span>
+            <span class="ow">and</span> <span class="n">supports_metal_csr_softmax_spmm</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">)</span>
+        <span class="p">):</span>
+            <span class="n">fmt</span> <span class="o">=</span> <span class="n">_fused_format_override</span> <span class="ow">or</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fused_format</span>
+            <span class="k">if</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"csr"</span><span class="p">:</span>
+                <span class="n">csr</span> <span class="o">=</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">elif</span> <span class="n">fmt</span> <span class="o">==</span> <span class="s2">"auto"</span><span class="p">:</span>
+                <span class="n">csr</span> <span class="o">=</span> <span class="n">_csr_cache</span><span class="o">.</span><span class="n">get_cached</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">values</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">csr</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">if</span> <span class="n">csr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span> <span class="o">=</span> <span class="n">num_rows</span>
+                <span class="n">aggregated</span> <span class="o">=</span> <span class="n">csr_softmax_spmm</span><span class="p">(</span>
+                    <span class="n">csr</span><span class="o">.</span><span class="n">rowptr</span><span class="p">,</span> <span class="n">csr</span><span class="o">.</span><span class="n">col</span><span class="p">,</span> <span class="n">logits</span><span class="p">,</span> <span class="n">values</span><span class="p">,</span> <span class="n">permutation</span><span class="o">=</span><span class="n">csr</span><span class="o">.</span><span class="n">perm</span>
+                <span class="p">)</span>
+                <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">update_nodes</span><span class="p">(</span><span class="n">aggregated</span><span class="o">=</span><span class="n">aggregated</span><span class="p">)</span>
+
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">logits</span><span class="p">,</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">num_rows</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"softmax"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dropout</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">weights</span> <span class="o">=</span> <span class="n">dropout</span><span class="p">(</span><span class="n">weights</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span>
+            <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span>
+            <span class="n">node_features</span><span class="o">=</span><span class="n">node_features</span><span class="p">,</span>
+            <span class="n">message_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">"edge_weights"</span><span class="p">:</span> <span class="n">weights</span><span class="p">},</span>
+        <span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_can_fuse</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>

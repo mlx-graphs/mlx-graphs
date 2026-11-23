@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.nn.fused_message_passing_mode &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>mlx_graphs.nn.fused_message_passing_mode &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../../_static/documentation_options.js?v=83a61292"></script>
+    <script src="../../../_static/documentation_options.js?v=68565d2c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -183,8 +183,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -207,12 +207,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/metapath2vec.html">MetaPath2Vec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -221,11 +224,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -628,6 +627,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -836,8 +836,10 @@
 <h1>mlx_graphs.nn.fused_message_passing_mode<a class="headerlink" href="#mlx-graphs-nn-fused-message-passing-mode" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="mlx_graphs.nn.fused_message_passing_mode">
-<span class="sig-prename descclassname"><span class="pre">mlx_graphs.nn.</span></span><span class="sig-name descname"><span class="pre">fused_message_passing_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'coo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'csr'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/message_passing.html#fused_message_passing_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.fused_message_passing_mode" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">mlx_graphs.nn.</span></span><span class="sig-name descname"><span class="pre">fused_message_passing_mode</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">enabled</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">format</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Literal" title="(in Python v3.15)"><span class="pre">Literal</span></a><span class="p"><span class="pre">[</span></span><span class="s"><span class="pre">'auto'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'coo'</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="s"><span class="pre">'csr'</span></span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">softmax_spmm</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="(in Python v3.15)"><span class="pre">bool</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/message_passing.html#fused_message_passing_mode"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.fused_message_passing_mode" title="Link to this definition">#</a></dt>
 <dd><p>Context manager version of <a class="reference internal" href="mlx_graphs.nn.set_fused_message_passing.html#mlx_graphs.nn.set_fused_message_passing" title="mlx_graphs.nn.set_fused_message_passing"><code class="xref py py-func docutils literal notranslate"><span class="pre">set_fused_message_passing()</span></code></a>.</p>
+<p>Pass <code class="docutils literal notranslate"><span class="pre">softmax_spmm=True</span></code> to try the experimental fused neighbor softmax
+and weighted sum. It requires CSR and skips active attention dropout.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">with</span> <span class="n">fused_message_passing_mode</span><span class="p">(</span><span class="kc">False</span><span class="p">):</span>
     <span class="n">out_reference</span> <span class="o">=</span> <span class="n">model</span><span class="p">(</span><span class="n">edge_index</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span>  <span class="c1"># gather-scatter</span>
 </pre></div>

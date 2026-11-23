@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mlx_graphs.nn.TransformerConv &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>mlx_graphs.nn.TransformerConv &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -41,7 +41,7 @@
   <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../../_static/documentation_options.js?v=83a61292"></script>
+    <script src="../../../_static/documentation_options.js?v=68565d2c"></script>
     <script src="../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -185,8 +185,8 @@
       
     
     
-    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -209,12 +209,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/metapath2vec.html">MetaPath2Vec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/notebooks/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -223,11 +226,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../tutorials/examples/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials/examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -630,6 +629,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -943,7 +943,7 @@ Required if (and only if) the layer was built with
 <p class="rubric">Methods</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.nn.TransformerConv.message" title="mlx_graphs.nn.TransformerConv.message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message</span></code></a>(src_features, dst_features, key, index)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="#mlx_graphs.nn.TransformerConv.message" title="mlx_graphs.nn.TransformerConv.message"><code class="xref py py-obj docutils literal notranslate"><span class="pre">message</span></code></a>(src_features, dst_features, edge_weights)</p></td>
 <td><p>Computes one attention-weighted message per edge.</p></td>
 </tr>
 </tbody>
@@ -951,19 +951,18 @@ Required if (and only if) the layer was built with
 </div>
 <dl class="py method">
 <dt class="sig sig-object py" id="mlx_graphs.nn.TransformerConv.message">
-<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">key</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">index</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/conv/transformer_conv.html#TransformerConv.message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.TransformerConv.message" title="Link to this definition">#</a></dt>
+<span class="sig-name descname"><span class="pre">message</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">src_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">dst_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_weights</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">edge_features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/builtins/constants.html#None" title="(in Python v3.15)"><span class="pre">None</span></a></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><span class="pre">mlx.core.array</span></a></span></span><a class="reference internal" href="../../../_modules/mlx_graphs/nn/conv/transformer_conv.html#TransformerConv.message"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mlx_graphs.nn.TransformerConv.message" title="Link to this definition">#</a></dt>
 <dd><p>Computes one attention-weighted message per edge.</p>
+<p>Only used on the gather-scatter path (with edge features, or without
+the fused kernels); without edge features it is the default
+<code class="docutils literal notranslate"><span class="pre">edge_weights</span> <span class="pre">*</span> <span class="pre">x_j</span></code> that the fused SpMM computes.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>src_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Values of the source nodes,
 shape <cite>[num_edges, heads, out_features_dim]</cite></p></li>
-<li><p><strong>dst_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Queries of the destination nodes,
-shape <cite>[num_edges, heads, out_features_dim]</cite></p></li>
-<li><p><strong>key</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Keys of the source nodes,
-shape <cite>[num_edges, heads, out_features_dim]</cite></p></li>
-<li><p><strong>index</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Destination node of each edge, used to normalize the
-attention coefficients over the incoming edges of a node</p></li>
+<li><p><strong>dst_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Queries of the destination nodes (unused)</p></li>
+<li><p><strong>edge_weights</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a></span>) – Attention coefficients, shape <cite>[num_edges, heads]</cite></p></li>
 <li><p><strong>edge_features</strong> (<span class="sphinx_autodoc_typehints-type"><a class="reference external" href="https://docs.python.org/3/library/typing.html#typing.Optional" title="(in Python v3.15)"><code class="xref py py-data docutils literal notranslate"><span class="pre">Optional</span></code></a>[<a class="reference external" href="https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.array.html#mlx.core.array" title="(in MLX v0.32.4)"><code class="xref py py-class docutils literal notranslate"><span class="pre">array</span></code></a>]</span>) – Projected edge features,
 shape <cite>[num_edges, heads, out_features_dim]</cite></p></li>
 </ul>

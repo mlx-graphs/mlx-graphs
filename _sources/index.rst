@@ -94,12 +94,15 @@ decorator, and ``propagate`` gathers per-edge messages and scatters them.
 
    tutorials/notebooks/graph_classification.ipynb
    tutorials/notebooks/node2vec.ipynb
+   tutorials/notebooks/metapath2vec.ipynb
    tutorials/notebooks/minibatch_training.ipynb
    tutorials/notebooks/link_prediction.ipynb
    tutorials/notebooks/temporal_graph_networks.ipynb
    tutorials/notebooks/heterogeneous_to_hetero.ipynb
    tutorials/notebooks/graph_transformers_gps.ipynb
    tutorials/notebooks/cybersecurity.ipynb
+   tutorials/notebooks/graph_rag_g_reasoner.ipynb
+   tutorials/notebooks/qm9_tutorial.ipynb
 
 
 .. toctree::

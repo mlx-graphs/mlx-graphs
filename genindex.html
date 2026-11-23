@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>Index &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="_static/documentation_options.js?v=83a61292"></script>
+    <script src="_static/documentation_options.js?v=68565d2c"></script>
     <script src="_static/doctools.js?v=9bcbadda"></script>
     <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -178,8 +178,8 @@
       
     
     
-    <img src="_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -202,12 +202,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/metapath2vec.html">MetaPath2Vec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/notebooks/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -216,11 +219,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="tutorials/examples/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -623,6 +622,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -804,9 +804,11 @@
 <h2 id="_">_</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.__call__">__call__() (mlx_graphs.algorithms.Node2Vec method)</a>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.__call__">__call__() (mlx_graphs.algorithms.MetaPath2Vec method)</a>
 
       <ul>
+        <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.__call__">(mlx_graphs.algorithms.Node2Vec method)</a>
+</li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.aggr.Aggregation.html#mlx_graphs.nn.aggr.Aggregation.__call__">(mlx_graphs.nn.aggr.Aggregation method)</a>
 </li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.aggr.DeepSetsAggregation.html#mlx_graphs.nn.aggr.DeepSetsAggregation.__call__">(mlx_graphs.nn.aggr.DeepSetsAggregation method)</a>
@@ -1346,8 +1348,12 @@
 </li>
       <li><a href="api/loaders/_autosummary/mlx_graphs.loaders.Dataloader.html#mlx_graphs.loaders.Dataloader">Dataloader (class in mlx_graphs.loaders)</a>
 </li>
-      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.dataloader">dataloader() (mlx_graphs.algorithms.Node2Vec method)</a>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.dataloader">dataloader() (mlx_graphs.algorithms.MetaPath2Vec method)</a>
+
+      <ul>
+        <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.dataloader">(mlx_graphs.algorithms.Node2Vec method)</a>
 </li>
+      </ul></li>
       <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.Dataset.html#mlx_graphs.datasets.Dataset">Dataset (class in mlx_graphs.datasets)</a>
 </li>
       <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.DBLP.html#mlx_graphs.datasets.DBLP">DBLP (class in mlx_graphs.datasets)</a>
@@ -1812,10 +1818,10 @@
 </li>
       <li><a href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredHitRatio.html#mlx_graphs.metrics.LinkPredHitRatio">LinkPredHitRatio (class in mlx_graphs.metrics)</a>
 </li>
-  </ul></td>
-  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMAP.html#mlx_graphs.metrics.LinkPredMAP">LinkPredMAP (class in mlx_graphs.metrics)</a>
 </li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetric.html#mlx_graphs.metrics.LinkPredMetric">LinkPredMetric (class in mlx_graphs.metrics)</a>
 </li>
       <li><a href="api/metrics/_autosummary/mlx_graphs.metrics.LinkPredMetricCollection.html#mlx_graphs.metrics.LinkPredMetricCollection">LinkPredMetricCollection (class in mlx_graphs.metrics)</a>
@@ -1842,9 +1848,11 @@
 </li>
       <li><a href="api/transforms/_autosummary/mlx_graphs.transforms.LocalDegreeProfile.html#mlx_graphs.transforms.LocalDegreeProfile">LocalDegreeProfile (class in mlx_graphs.transforms)</a>
 </li>
-      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.loss">loss() (mlx_graphs.algorithms.Node2Vec method)</a>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.loss">loss() (mlx_graphs.algorithms.MetaPath2Vec method)</a>
 
       <ul>
+        <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html#mlx_graphs.algorithms.Node2Vec.loss">(mlx_graphs.algorithms.Node2Vec method)</a>
+</li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.ComplEx.html#mlx_graphs.nn.ComplEx.loss">(mlx_graphs.nn.ComplEx method)</a>
 </li>
         <li><a href="api/nn/_autosummary/mlx_graphs.nn.DeepGraphInfomax.html#mlx_graphs.nn.DeepGraphInfomax.loss">(mlx_graphs.nn.DeepGraphInfomax method)</a>
@@ -1926,6 +1934,8 @@
 </li>
       <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.metadata">metadata() (mlx_graphs.data.data.HeteroGraphData method)</a>
 </li>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec">MetaPath2Vec (class in mlx_graphs.algorithms)</a>
+</li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.MFConv.html#mlx_graphs.nn.MFConv">MFConv (class in mlx_graphs.nn)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.aggr.MinAggregation.html#mlx_graphs.nn.aggr.MinAggregation">MinAggregation (class in mlx_graphs.nn.aggr)</a>
@@ -1954,6 +1964,8 @@
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="api/utils/_autosummary_sparse/mlx_graphs.utils.narrow.html#mlx_graphs.utils.narrow">narrow() (in module mlx_graphs.utils)</a>
 </li>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.neg_sample">neg_sample() (mlx_graphs.algorithms.MetaPath2Vec method)</a>
+</li>
       <li><a href="api/utils/_autosummary_graph/mlx_graphs.utils.negative_sampling.html#mlx_graphs.utils.negative_sampling">negative_sampling() (in module mlx_graphs.utils)</a>
 </li>
       <li><a href="api/loaders/_autosummary/mlx_graphs.loaders.NegativeSampling.html#mlx_graphs.loaders.NegativeSampling">NegativeSampling (class in mlx_graphs.loaders)</a>
@@ -1966,8 +1978,12 @@
 </li>
       <li><a href="api/loaders/_autosummary/mlx_graphs.loaders.ClusterData.html#mlx_graphs.loaders.ClusterData.node_perm">node_perm (mlx_graphs.loaders.ClusterData attribute)</a>
 </li>
-      <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.node_types">node_types (mlx_graphs.data.data.HeteroGraphData property)</a>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.node_types">node_types (mlx_graphs.algorithms.MetaPath2Vec property)</a>
+
+      <ul>
+        <li><a href="api/data/_autosummary/mlx_graphs.data.data.HeteroGraphData.html#mlx_graphs.data.data.HeteroGraphData.node_types">(mlx_graphs.data.data.HeteroGraphData property)</a>
 </li>
+      </ul></li>
       <li><a href="api/utils/_autosummary_graph/mlx_graphs.utils.normalized_cut.html#mlx_graphs.utils.normalized_cut">normalized_cut() (in module mlx_graphs.utils)</a>
 </li>
       <li><a href="api/transforms/_autosummary/mlx_graphs.transforms.NormalizeFeatures.html#mlx_graphs.transforms.NormalizeFeatures">NormalizeFeatures (class in mlx_graphs.transforms)</a>
@@ -2062,6 +2078,8 @@
         <li><a href="api/datasets/_autosummary/mlx_graphs.datasets.HeteroDataset.html#mlx_graphs.datasets.HeteroDataset.num_nodes">(mlx_graphs.datasets.HeteroDataset property)</a>
 </li>
       </ul></li>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.num_nodes_dict">num_nodes_dict (mlx_graphs.algorithms.MetaPath2Vec property)</a>
+</li>
   </ul></td>
 </tr></table>
 
@@ -2109,6 +2127,8 @@
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.attention.PolynormerAttention.html#mlx_graphs.nn.attention.PolynormerAttention">PolynormerAttention (class in mlx_graphs.nn.attention)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.aggr.PoolingByMultiheadAttention.html#mlx_graphs.nn.aggr.PoolingByMultiheadAttention">PoolingByMultiheadAttention (class in mlx_graphs.nn.aggr)</a>
+</li>
+      <li><a href="api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html#mlx_graphs.algorithms.MetaPath2Vec.pos_sample">pos_sample() (mlx_graphs.algorithms.MetaPath2Vec method)</a>
 </li>
       <li><a href="api/nn/_autosummary/mlx_graphs.nn.PositionalEncoding.html#mlx_graphs.nn.PositionalEncoding">PositionalEncoding (class in mlx_graphs.nn)</a>
 </li>

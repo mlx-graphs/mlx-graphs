@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>mlx_graphs.nn.conv.transformer_conv &#8212; mlx-graphs 0.3.0 documentation</title>
+    <title>mlx_graphs.nn.conv.transformer_conv &#8212; mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation</title>
   
   
   
@@ -40,7 +40,7 @@
   <link rel="preload" as="script" href="../../../../_static/scripts/bootstrap.js?digest=a95f357e85573c9b56d5" />
 <link rel="preload" as="script" href="../../../../_static/scripts/pydata-sphinx-theme.js?digest=a95f357e85573c9b56d5" />
 
-    <script src="../../../../_static/documentation_options.js?v=83a61292"></script>
+    <script src="../../../../_static/documentation_options.js?v=68565d2c"></script>
     <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
     <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../../_static/scripts/sphinx-book-theme.js?v=efea14e4"></script>
@@ -178,8 +178,8 @@
       
     
     
-    <img src="../../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.3.0 documentation - Home"/>
-    <img src="../../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.3.0 documentation - Home"/>
+    <img src="../../../../_static/logo.svg" class="logo__image only-light" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
+    <img src="../../../../_static/logo_dark.svg" class="logo__image only-dark pst-js-only" alt="mlx-graphs 0.4.1.dev4+g2b6cc49c6 documentation - Home"/>
   
   
 </a></div>
@@ -202,12 +202,15 @@
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/graph_classification.html">Graph Classification</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/node2vec.html">Node2Vec: node embeddings from random walks</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/metapath2vec.html">MetaPath2Vec</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/minibatch_training.html">Mini-batch training on large graphs</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/link_prediction.html">Link prediction: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/temporal_graph_networks.html">Temporal Graph Networks: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/heterogeneous_to_hetero.html">Heterogeneous graphs with <code class="docutils literal notranslate"><span class="pre">to_hetero</span></code>: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/graph_transformers_gps.html">Graph Transformers with GPS: mlx-graphs vs PyG</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/cybersecurity.html">Graph neural networks for cybersecurity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/notebooks/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User guide</span></p>
 <ul class="nav bd-sidenav">
@@ -216,11 +219,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="../../../../tutorials/examples/index.html">Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../../../../tutorials/examples/qm9_tutorial.html">Quantum-chemical property prediction with GNNs</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../../../../tutorials/examples/graph_rag_g_reasoner.html">Graph RAG with G-reasoner</a></li>
-</ul>
-</details></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../tutorials/examples/index.html">Examples</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Benchmarks and validation</span></p>
 <ul class="nav bd-sidenav">
@@ -623,6 +622,7 @@
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/algorithms/index.html">Algorithms</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="../../../../api/algorithms/_autosummary/mlx_graphs.algorithms.Node2Vec.html">mlx_graphs.algorithms.Node2Vec</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../../../api/algorithms/_autosummary/mlx_graphs.algorithms.MetaPath2Vec.html">mlx_graphs.algorithms.MetaPath2Vec</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../../../../api/metrics/index.html">Metrics</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
@@ -777,12 +777,18 @@
 <span class="kn">import</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">nn</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx.nn</span><span class="w"> </span><span class="kn">import</span> <span class="n">Linear</span>  <span class="c1"># PyTorch's default initialization, as in PyG</span>
 
-<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.message_passing</span><span class="w"> </span><span class="kn">import</span> <span class="n">MessagePassing</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.nn.message_passing</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
+    <span class="n">MessagePassing</span><span class="p">,</span>
+    <span class="n">edge_scores</span><span class="p">,</span>
+    <span class="n">fused_message_passing</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">mlx_graphs.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">scatter</span>
 
 
+<span class="c1"># message() reduces to the default edge_weights * x_j without edge features</span>
 <div class="viewcode-block" id="TransformerConv">
 <a class="viewcode-back" href="../../../../api/nn/_autosummary/mlx_graphs.nn.TransformerConv.html#mlx_graphs.nn.TransformerConv">[docs]</a>
+<span class="nd">@fused_message_passing</span><span class="p">(</span><span class="n">allow_message_override</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 <span class="k">class</span><span class="w"> </span><span class="nc">TransformerConv</span><span class="p">(</span><span class="n">MessagePassing</span><span class="p">):</span>
 <span class="w">    </span><span class="sa">r</span><span class="sd">"""Graph transformer convolution layer from `"Masked Label Prediction: Unified</span>
 <span class="sd">    Message Passing Model for Semi-Supervised Classification"</span>
@@ -959,15 +965,29 @@
 
         <span class="n">src_idx</span><span class="p">,</span> <span class="n">dst_idx</span> <span class="o">=</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">edge_index</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
+        <span class="n">num_dst</span> <span class="o">=</span> <span class="n">query</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">scale</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">C</span><span class="p">)</span>
+
+        <span class="c1"># Attention logits q_i . k_j / sqrt(C), one per (edge, head). With a</span>
+        <span class="c1"># recent mlx_cluster this never gathers [num_edges, heads, C] queries</span>
+        <span class="c1"># and keys (see edge_scores).</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">edge_scores</span><span class="p">(</span><span class="n">dst_idx</span><span class="p">,</span> <span class="n">src_idx</span><span class="p">,</span> <span class="n">query</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">scale</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="c1"># keys are k_j + e_ij; the edge term is per edge already</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">+</span> <span class="n">scale</span> <span class="o">*</span> <span class="p">(</span><span class="n">query</span><span class="p">[</span><span class="n">dst_idx</span><span class="p">]</span> <span class="o">*</span> <span class="n">edge_features</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">dst_idx</span><span class="p">,</span> <span class="n">num_dst</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"softmax"</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="s2">"dropout"</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
+            <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
+
+        <span class="c1"># Weighted sum of the values, one weight per (edge, head). Without edge</span>
+        <span class="c1"># features this is a fused SpMM per head, as in GATConv; with them the</span>
+        <span class="c1"># values are v_j + e_ij and messages go through message().</span>
         <span class="c1"># shape: [num_dst_nodes, heads, out_features_dim]</span>
         <span class="n">out</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">propagate</span><span class="p">(</span>
             <span class="n">edge_index</span><span class="o">=</span><span class="n">edge_index</span><span class="p">,</span>
             <span class="n">node_features</span><span class="o">=</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="n">query</span><span class="p">),</span>
-            <span class="n">message_kwargs</span><span class="o">=</span><span class="p">{</span>
-                <span class="s2">"key"</span><span class="p">:</span> <span class="n">key</span><span class="p">[</span><span class="n">src_idx</span><span class="p">],</span>
-                <span class="s2">"index"</span><span class="p">:</span> <span class="n">dst_idx</span><span class="p">,</span>
-                <span class="s2">"edge_features"</span><span class="p">:</span> <span class="n">edge_features</span><span class="p">,</span>
-            <span class="p">},</span>
+            <span class="n">message_kwargs</span><span class="o">=</span><span class="p">{</span><span class="s2">"edge_weights"</span><span class="p">:</span> <span class="n">alpha</span><span class="p">,</span> <span class="s2">"edge_features"</span><span class="p">:</span> <span class="n">edge_features</span><span class="p">},</span>
         <span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">concat</span><span class="p">:</span>
@@ -994,41 +1014,30 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">src_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">dst_features</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">key</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
-        <span class="n">index</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
+        <span class="n">edge_weights</span><span class="p">:</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">,</span>
         <span class="n">edge_features</span><span class="p">:</span> <span class="n">Optional</span><span class="p">[</span><span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">mx</span><span class="o">.</span><span class="n">array</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">"""Computes one attention-weighted message per edge.</span>
 
+<span class="sd">        Only used on the gather-scatter path (with edge features, or without</span>
+<span class="sd">        the fused kernels); without edge features it is the default</span>
+<span class="sd">        ``edge_weights * x_j`` that the fused SpMM computes.</span>
+
 <span class="sd">        Args:</span>
 <span class="sd">            src_features: Values of the source nodes,</span>
 <span class="sd">                shape `[num_edges, heads, out_features_dim]`</span>
-<span class="sd">            dst_features: Queries of the destination nodes,</span>
-<span class="sd">                shape `[num_edges, heads, out_features_dim]`</span>
-<span class="sd">            key: Keys of the source nodes,</span>
-<span class="sd">                shape `[num_edges, heads, out_features_dim]`</span>
-<span class="sd">            index: Destination node of each edge, used to normalize the</span>
-<span class="sd">                attention coefficients over the incoming edges of a node</span>
+<span class="sd">            dst_features: Queries of the destination nodes (unused)</span>
+<span class="sd">            edge_weights: Attention coefficients, shape `[num_edges, heads]`</span>
 <span class="sd">            edge_features: Projected edge features,</span>
 <span class="sd">                shape `[num_edges, heads, out_features_dim]`</span>
 
 <span class="sd">        Returns:</span>
 <span class="sd">            mx.array: The messages, shape `[num_edges, heads, out_features_dim]`</span>
 <span class="sd">        """</span>
-        <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">key</span> <span class="o">=</span> <span class="n">key</span> <span class="o">+</span> <span class="n">edge_features</span>
-
-        <span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="n">dst_features</span> <span class="o">*</span> <span class="n">key</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">out_features_dim</span><span class="p">)</span>
-        <span class="n">alpha</span> <span class="o">=</span> <span class="n">scatter</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">index</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">num_nodes</span><span class="p">,</span> <span class="n">aggr</span><span class="o">=</span><span class="s2">"softmax"</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="s2">"dropout"</span> <span class="ow">in</span> <span class="bp">self</span><span class="p">:</span>
-            <span class="n">alpha</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dropout</span><span class="p">(</span><span class="n">alpha</span><span class="p">)</span>
-
         <span class="n">value</span> <span class="o">=</span> <span class="n">src_features</span>
         <span class="k">if</span> <span class="n">edge_features</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="n">value</span> <span class="o">+</span> <span class="n">edge_features</span>
-
-        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">value</span></div>
+        <span class="k">return</span> <span class="n">mx</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">edge_weights</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">value</span></div>
 </div>
 
 </pre></div>

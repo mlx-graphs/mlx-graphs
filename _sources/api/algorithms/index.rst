@@ -11,3 +11,4 @@ Algorithms
 	:template: custom-class-template.rst
 
 	Node2Vec
+	MetaPath2Vec
