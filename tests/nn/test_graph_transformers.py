@@ -368,12 +368,18 @@ def test_models_train(name):
         out = model(edge_index, x, batch)
         return -mx.take_along_axis(out, y[:, None], axis=1).mean()
 
+    def eval_loss():
+        # Without dropout: the training losses oscillate too much to compare
+        # the first and the last one (the order depends on the device).
+        model.eval()
+        loss = loss_fn(model).item()
+        model.train()
+        return loss
+
     loss_and_grad = nn.value_and_grad(model, loss_fn)
-    model.train()
-    losses = []
+    initial = eval_loss()
     for _ in range(30):
         loss, grads = loss_and_grad(model)
         optimizer.update(model, grads)
         mx.eval(model.parameters(), optimizer.state)
-        losses.append(loss.item())
-    assert losses[-1] < losses[0]
+    assert eval_loss() < initial
