@@ -82,7 +82,8 @@ and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the sam
     With unified memory architecture, objects live in a shared memory accessible by both the CPU and GPU.
     This setup allows Macs to leverage their entire memory capacity for storing graphs.
     Consequently, Macs equipped with substantial memory can efficiently train GNNs on large graphs,
-    spanning tens of gigabytes, directly using the Mac's GPU.
+    spanning tens of gigabytes, directly using the Mac's GPU, and features larger than the memory
+    stay on disk in a memory-mapped feature store. See the [large graphs guide](tutorials/guides/large-graphs.md).
 
 -   :lucide-arrow-left-right:{ .mg-icon } **PyTorch Geometric's API, on MLX**
 
@@ -90,8 +91,8 @@ and 5.8× faster than PyTorch Geometric on the CPU, and the models reach the sam
 
     The layers, models, samplers and loaders, transforms and datasets of PyG are available under
     the same names: mini-batch training with `NeighborLoader` and `ClusterLoader`,
-    heterogeneous models with `to_hetero`, temporal graphs with TGN, and graph transformers
-    with `GPSConv`. Each was checked against PyG. See [Coming from PyG](getting-started/from-pyg.md).
+    heterogeneous models with `to_hetero`, temporal graphs with TGN, graph transformers
+    with `GPSConv`, point clouds with `PointNetConv`, and hierarchical pooling. Each was checked against PyG. See [Coming from PyG](getting-started/from-pyg.md).
 
 -   :lucide-cpu:{ .mg-icon } **Multi-device**
 

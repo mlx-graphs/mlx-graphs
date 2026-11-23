@@ -52,7 +52,7 @@ from griffe_rst import convert_inline  # noqa: E402
 # A section is a directory of docs/api/ with an index.md; its other pages
 # are listed here (the ones not listed come after, alphabetically).
 API_SECTIONS = {
-    "data": ["data", "batch", "utils"],
+    "data": ["data", "batch", "stores", "utils"],
     "datasets": [],
     "loaders": [],
     "transforms": [],
@@ -1222,6 +1222,7 @@ SPHINX_PAGES = {
     "tutorials/examples/index.html": "tutorials/examples",
     "guide/message_passing.html": "tutorials/guides/writing-layers",
     "datasets.html": "tutorials/guides/datasets",
+    "guide/large_graphs.html": "tutorials/guides/large-graphs",
     # linked from the README, not a page of the Sphinx site
     "tutorials/graph_classification.html": "tutorials/notebooks/graph_classification",
     "benchmarks.html": "benchmarks",

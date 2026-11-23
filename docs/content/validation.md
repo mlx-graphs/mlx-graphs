@@ -86,11 +86,12 @@ Full table, with the training losses of both frameworks: [node_results.md](https
 
 ### Graph-level, heterogeneous, link and knowledge graph models
 
-**34 configurations, all pass**, most of them set up after PyG's example scripts:
+**40 configurations, all pass**, most of them set up after PyG's example scripts:
 
 | Task                       | Models and datasets                                                                                                               | Configs | Pass |
 |----------------------------|-----------------------------------------------------------------------------------------------------------------------------------|---------|------|
 | Graph classification       | GINE, PNA, TopK and SAG pooling, DGCNN, MultiAggregation, GraphNorm, Set2Set, DeepSets on MUTAG (10 seeds) and PROTEINS (5 seeds) | 17      | 17   |
+| Hierarchical pooling       | DiffPool, MinCutPool, DMoN, ASAPooling, EdgePooling, GraphUNet on PROTEINS (5 seeds, `pooling_quality.py`) | 6 | 6 |
 | Heterogeneous graphs       | HAN on IMDB, HGT on DBLP, RGAT and FastRGCN on DBLP as a homogeneous graph                                                        | 4       | 4    |
 | Link prediction            | GAE and VGAE on Cora and CiteSeer (and GAE with `train_test_split_edges`), LightGCN on MovieLens100K                              | 6       | 6    |
 | Self-supervised            | DeepGraphInfomax on Cora                                                                                                          | 1       | 1    |
@@ -98,6 +99,25 @@ Full table, with the training losses of both frameworks: [node_results.md](https
 | Point clouds               | EdgeCNN and DynamicEdgeConv on synthetic point clouds                                                                             | 2       | 2    |
 
 For example, HGT on DBLP reaches 71.8 ± 1.8 % in PyG and 73.0 ± 2.5 % in mlx-graphs, GAE on Cora a test AUC of 90.7 % in both, and LightGCN a <recall@20> of 27.4 % in both. MUTAG has only 19-20 test graphs per split, so its accuracies move in steps of 5 points and its gaps are larger (up to 6 points), within 1.5 paired standard errors. Full table: [graph_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/graph_results.md).
+
+### Hierarchical pooling on PROTEINS
+
+`benchmarks/quality/pooling_quality.py` trains the same architectures in both frameworks on PROTEINS, with the same data and splits (5 seeds, 100 epochs; test accuracy in % at the best validation epoch):
+
+| Model      | PyG        | mlx-graphs | Gap  |
+|------------|------------|------------|------|
+| DiffPool   | 71.4 ± 4.8 | 74.1 ± 4.8 | +2.8 |
+| MinCutPool | 73.0 ± 4.3 | 74.5 ± 5.0 | +1.4 |
+| DMoN       | 72.7 ± 4.7 | 73.9 ± 4.2 | +1.2 |
+| ASAPooling | 68.2 ± 6.8 | 70.7 ± 4.1 | +2.5 |
+| EdgePooling | 70.2 ± 7.2 | 71.1 ± 4.0 | +0.9 |
+| GraphUNet  | 73.4 ± 3.7 | 75.5 ± 2.5 | +2.1 |
+
+All six are within 2 PyG standard deviations (3 to 7 points with 5 random splits of PROTEINS). MinCut and DMoN hit non-finite gradients in both frameworks on nearly empty clusters; those steps are skipped in both (about twice as many in mlx-graphs, with the same final accuracy). The dense and sparse pooling layers are also compared with PyG with copied weights (outputs, auxiliary losses and gradients) in the test suite. Full table: [pooling_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/pooling_results.md).
+
+### Point clouds on ModelNet10
+
+PointNet++ (PyG's `examples/pointnet2_classification.py`: `fps`, `radius`, `PointNetConv`) trained for 5 epochs on ModelNet10, on the same fixed clouds of 1024 points sampled through mlx-graphs' `ModelNet` and `SamplePoints`, reaches a test accuracy of 80.9 % in mlx-graphs and 82.5 % in PyG (best epoch: 80.9 % and 82.9 %), with training losses of 0.26 and 0.31. DGCNN (`DynamicEdgeConv`, PyG's `examples/dgcnn_classification.py`) reaches 78.0 % and 80.2 % after 3 epochs. The point cloud layers, `fps`, `voxel_grid`, `nearest`, `graclus` and the point cloud transforms are also compared with PyG in the test suite (`fps` picks the same points as PyG with `random_start=False`, in 1.9 ms with its Metal kernel against 132 ms for `torch_cluster` on the CPU, for 32 clouds of 1024 points). Full table: [pointcloud_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/pointcloud_results.md).
 
 ### Samplers and loaders
 
@@ -119,6 +139,26 @@ Every mini-batch method lands within one standard deviation of full-batch traini
 | `ShaDowKHopSampler` (depth 2, 10)       | 80.2 ± 0.8 | 76.9 ± 0.5 |
 
 For link prediction, `LinkNeighborLoader` reaches a test AUC of 84.3 ± 1.4 % on Cora (full batch: 84.4 ± 3.2 % in mlx-graphs, 83.3 ± 1.6 % in PyG) and 89.2 ± 0.7 % on PubMed (full batch: 90.1 % in both). Full results: [sampler_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/sampler_results.md).
+
+### Large graphs
+
+Results of `benchmarks/quality/` for the large datasets, temporal neighbour sampling and the memory-mapped feature store (Apple M5 Pro, 64 GB, shared with other jobs, so the times are indicative). Full results: [large_graph_results.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/large_graph_results.md).
+
+**The datasets are identical to PyG's.** `dataset_parity.py` loads `Flickr`, `Reddit`, `Reddit2`, `Yelp`, `AmazonProducts` and `PPI` with both libraries and compares the edges (in the same order), features, labels and split masks: all equal. PPI is read from the GraphSAGE release (DGL's server, which PyG uses, is down) and gives exactly PyG's 20 / 2 / 2 graphs.
+
+**GraphSAGE mini-batch training** (2 layers, `NeighborLoader` with fan-outs \[25, 10\], batches of 1,024; PyG on the CPU with 8 threads):
+
+| Dataset | Framework                        | Seeds × epochs | Test accuracy   | s / epoch |
+|---------|----------------------------------|----------------|-----------------|-----------|
+| Flickr  | mlx-graphs                       | 3 × 10         | 0.5095 ± 0.0001 | 3.6       |
+| Flickr  | mlx-graphs, `MemmapFeatureStore` | 3 × 10         | 0.5101 ± 0.0026 | 8.7       |
+| Flickr  | PyG                              | 3 × 10         | 0.5120 ± 0.0015 | 11.5      |
+| Reddit  | mlx-graphs                       | 1 × 3          | 0.9558          | 27.6      |
+| Reddit  | PyG                              | 1 × 3          | 0.9583          | 79.7      |
+
+**Temporal sampling** (`temporal_sampler_quality.py`, a random graph of 20,000 nodes and 400,000 timestamped edges): with `temporal_strategy="last"`, the mini-batches are identical to PyG's with pyg-lib (8 of 8, with node- and edge-level time); neither library samples an edge later than its seed; with `"uniform"`, the sampling frequencies are as close to uniform as PyG's (mean deviation 0.0267 against 0.0266 with node-level time, no seed rejected by a chi-squared test in either). pyg-lib's C++ sampler is 1.2 to 2.3 times faster than the vectorized numpy one.
+
+**Memory-mapped features** (`feature_store_memory.py`): a `NeighborLoader` over a `MemmapFeatureStore` of 6.1 GB (1.5M nodes × 1,024 features) and a `MemmapGraphStore` gathers 250 MB of features per mini-batch and peaks at 2.8 GB of resident memory over 100 mini-batches, where loading the features in a `GraphData` would take 6.1 GB. See the [large graphs guide](tutorials/guides/large-graphs.md).
 
 ### Temporal graph networks
 
@@ -220,6 +260,21 @@ python benchmarks/quality/node_quality.py
 # graph-level, heterogeneous, link and KG models (--groups tu kge ... for a subset)
 python benchmarks/quality/graph_quality.py
 
+# hierarchical and dense pooling on PROTEINS (--models diffpool asap ... for a subset)
+python benchmarks/quality/pooling_quality.py
+
+# PointNet++ and DGCNN on ModelNet10 (--models pointnet2 --epochs 5 for a subset)
+python benchmarks/quality/pointcloud_quality.py
+
+# large graphs: datasets equal to PyG's, GraphSAGE training, temporal sampling, feature store
+python benchmarks/run_capped.py --gb 24 -- python benchmarks/quality/dataset_parity.py \
+    --data-dir .mlx_graphs_data --datasets flickr reddit2 yelp reddit ppi amazon_products
+python benchmarks/run_capped.py --gb 16 -- python benchmarks/quality/large_graph_training.py \
+    --datasets flickr --seeds 0 1 2 --epochs 10
+PYTHONPATH=<pyg-lib dir> python benchmarks/quality/temporal_sampler_quality.py
+python benchmarks/quality/feature_store_memory.py --dir /tmp/fs_bench \
+    --num-nodes 1500000 --num-features 1024
+
 # samplers and loaders (about 15 minutes)
 python benchmarks/run_capped.py --gb 6 -- python benchmarks/quality/sampler_quality.py \
     --data-dir .mlx_graphs_data --seeds 0 1 2 3 4
@@ -245,7 +300,7 @@ The node and graph harnesses append one line per run to `node_results.jsonl` / `
 
 ## Not covered
 
-- **Training quality on large graphs** (Amazon, ogbn): out of the memory budget of these checks. They are part of the speed [Benchmarks](benchmarks.md), which also record accuracy.
+- **Training quality on the largest graphs** (AmazonProducts, Yelp, ogbn): out of the memory budget of these checks; Flickr and Reddit are covered above. They are part of the speed [Benchmarks](benchmarks.md), which also record accuracy.
 - **Mini-batch training in the node classification harness**, which trains full batch only. Mini-batch training is checked for GraphSAGE by the sampler harness, and for `to_hetero` models in mlx-graphs only.
 - **PyG's compiled samplers and operations**: PyG's neighbour samplers, GraphSAINT, ShaDow, `ClusterData` (METIS), `DynamicEdgeConv` and `knn_graph` need `pyg-lib`, `torch_sparse` or `torch_cluster`, which were not installed. The samplers were checked against references instead, and `ClusterLoader` was trained with the dependency-free balanced partitioner, not METIS.
 - **NCI1** graph classification, which did not fit in the time budget.

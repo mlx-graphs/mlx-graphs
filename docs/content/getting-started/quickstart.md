@@ -184,7 +184,7 @@ print(conv(edge_index, mx.random.normal((4, 8))).shape)
 
 ## Next steps
 
-- **Large graphs**: train on subgraphs with [`NeighborLoader`][mlx_graphs.loaders.NeighborLoader] and the other samplers, in the [mini-batch training tutorial](../tutorials/notebooks/minibatch_training.md).
+- **Large graphs**: train on subgraphs with [`NeighborLoader`][mlx_graphs.loaders.NeighborLoader] and the other samplers, in the [mini-batch training tutorial](../tutorials/notebooks/minibatch_training.md), and keep the features on disk with the [large graphs guide](../tutorials/guides/large-graphs.md).
 - **Coming from PyTorch Geometric**: the same names and how a PyG model ports, in [Coming from PyG](from-pyg.md).
 - **More examples**: the [tutorials](../tutorials/index.md) (link prediction, heterogeneous and temporal graphs, graph transformers...) and the built-in [datasets](../tutorials/guides/datasets.md), including how to add your own.
 - **Everything else**: the [API reference](../api/index.md).

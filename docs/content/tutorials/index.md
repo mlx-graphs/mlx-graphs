@@ -23,6 +23,12 @@ Guides to the parts of mlx-graphs you build on, and Jupyter notebooks that train
 
     Fuse an operation of your own in Metal, with gradients, a fallback, tests and a benchmark: a per-edge score whose forward pass runs about 5.5x faster than with MLX operations on 2 million edges (M5 Pro).
 
+-   :lucide-hard-drive:{ .mg-icon } **[Large graphs](guides/large-graphs.md)**
+
+    ---
+
+    Train on graphs larger than the memory with memory-mapped feature stores, and sample neighborhoods that respect time.
+
 -   :lucide-database:{ .mg-icon } **[Datasets](guides/datasets.md)**
 
     ---
@@ -42,5 +48,5 @@ Each page shows the notebook with the outputs of its last run; download it to ru
 The [`examples/`](https://github.com/mlx-graphs/mlx-graphs/tree/main/examples)
 folder of the repository has runnable scripts that train models end to end
 from the command line: node classification, GCN and GAT on Cora, link
-prediction, heterogeneous GraphSAGE, MetaPath2Vec, TGN on JODIE and TGB, GPS and more.
+prediction, heterogeneous GraphSAGE, MetaPath2Vec, TGN on JODIE and TGB, GPS, PointNet++ and more.
 [See all the example scripts](examples.md).

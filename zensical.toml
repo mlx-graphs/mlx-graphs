@@ -53,6 +53,7 @@ nav = [
     { "Guides" = [
       { "Writing your own layers" = "tutorials/guides/writing-layers.md" },
       { "Custom GPU kernels" = "tutorials/guides/custom-kernels.md" },
+      { "Large graphs" = "tutorials/guides/large-graphs.md" },
       { "Datasets" = "tutorials/guides/datasets.md" },
     ] },
     { "Notebooks" = [

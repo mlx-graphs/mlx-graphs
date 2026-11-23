@@ -416,6 +416,32 @@ def main():
         }
     )
 
+    # Large graphs, meshes and point clouds
+    from mlx_graphs.datasets import (
+        PPI,
+        AmazonProducts,
+        Flickr,
+        ModelNet,
+        Reddit,
+        Reddit2,
+        ShapeNet,
+        Yelp,
+    )
+
+    dataset_registry.update(
+        {
+            "flickr": ("Flickr", Flickr, {}),
+            "reddit": ("Reddit", Reddit, {}),
+            "reddit2": ("Reddit2", Reddit2, {}),
+            "yelp": ("Yelp", Yelp, {}),
+            "amazon_products": ("AmazonProducts", AmazonProducts, {}),
+            "ppi": ("PPI", PPI, {"split": "train"}),
+            "modelnet10": ("ModelNet", ModelNet, {"name": "10"}),
+            "modelnet40": ("ModelNet", ModelNet, {"name": "40"}),
+            "shapenet": ("ShapeNet", ShapeNet, {}),
+        }
+    )
+
     if args.dataset:
         if args.dataset not in dataset_registry:
             print(f"Unknown dataset: {args.dataset}")

@@ -58,6 +58,38 @@ PNAConv
 GPSConv
 <!-- /api -->
 
+## Point cloud and mesh layers
+
+Layers for point clouds and meshes, which take node positions `pos` (and
+normals or pseudo-coordinates), e.g. from
+[`ModelNet`][mlx_graphs.datasets.ModelNet] with
+[`SamplePoints`][mlx_graphs.transforms.SamplePoints]. `PointConv` is an alias
+of [`PointNetConv`][mlx_graphs.nn.PointNetConv].
+
+<!-- api mlx_graphs.nn -->
+PointNetConv
+PointTransformerConv
+PPFConv
+XConv
+SplineConv
+GMMConv
+FeaStConv
+<!-- /api -->
+
+## Dense convolution layers
+
+Layers on batched dense adjacency matrices `[batch_size, num_nodes, num_nodes]`
+(e.g. from [`to_dense_adj`][mlx_graphs.utils.to_dense_adj] or a
+[`DenseDataLoader`][mlx_graphs.loaders.DenseDataLoader]), called as
+`conv(adj, node_features, mask)`.
+
+<!-- api mlx_graphs.nn -->
+DenseGCNConv
+DenseSAGEConv
+DenseGINConv
+DenseGraphConv
+<!-- /api -->
+
 ## Models
 
 Ready-to-use multi-layer models, with optional normalization, dropout and
@@ -169,6 +201,39 @@ knn
 knn_graph
 radius
 radius_graph
+<!-- /api -->
+
+Point cloud sampling and cluster pooling (`fps`, `voxel_grid`, `graclus` and
+`nearest` are also in [`mlx_graphs.utils`](../utils/spatial.md)):
+
+<!-- api mlx_graphs.nn -->
+fps
+voxel_grid
+graclus
+nearest
+avg_pool
+max_pool
+avg_pool_x
+max_pool_x
+<!-- /api -->
+
+## Hierarchical and dense pooling
+
+Dense pooling learns soft cluster assignments on dense batched graphs and
+returns auxiliary losses; sparse hierarchical pooling coarsens a batch of
+graphs given by `edge_index` and `batch_indices`.
+
+<!-- api mlx_graphs.nn -->
+dense_diff_pool
+dense_mincut_pool
+DMoNPooling
+EdgePooling
+UnpoolInfo
+ASAPooling
+MemPooling
+PANPooling
+PANConv
+GraphUNet
 <!-- /api -->
 
 ## Aggregations { #mlx_graphs.nn.aggr }
