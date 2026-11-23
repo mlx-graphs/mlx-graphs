@@ -25,6 +25,7 @@ pip install mlx-graphs
 [Quickstart :lucide-arrow-right:](getting-started/quickstart.md){ .md-button .md-button--primary }
 [Tutorials](tutorials/index.md){ .md-button }
 [API reference](api/index.md){ .md-button }
+[:fontawesome-brands-discord: Join the Discord](https://discord.gg/K3mWFCxxM7){ .md-button .mg-discord target="_blank" rel="noopener" }
 </div>
 
 </div>

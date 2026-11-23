@@ -77,6 +77,13 @@ nav = [
 [project.extra]
 generator = false
 homepage = "./"
+# community Discord (the invite of the README): header button and footer link
+discord = "https://discord.gg/K3mWFCxxM7"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/discord"
+link = "https://discord.gg/K3mWFCxxM7"
+name = "Join the Discord"
 
 [[project.extra.social]]
 icon = "fontawesome/brands/github"

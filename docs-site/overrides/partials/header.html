@@ -1,6 +1,8 @@
 {#-
-  The theme's partials/header.html, with one change: the site name next to
-  the logo is a link to the home page (class md-header__home), like the logo.
+  The theme's partials/header.html, with two changes: the site name next to
+  the logo is a link to the home page (class md-header__home), like the logo,
+  and a Discord button (extra.discord in zensical.toml) sits before the
+  repository link.
 -#}
 {% set class = "md-header" %}
 {% if "navigation.tabs.sticky" in features %}
@@ -57,6 +59,11 @@
         </label>
         {% include "partials/search.html" %}
       {% endif %}
+    {% endif %}
+    {% if config.extra.discord %}
+      <a href="{{ config.extra.discord }}" target="_blank" rel="noopener" class="md-header__button md-icon mg-discord-link" title="Join the Discord" aria-label="Join the Discord">
+        {% include ".icons/fontawesome/brands/discord.svg" %}
+      </a>
     {% endif %}
     <div class="md-header__source">
       {% if config.repo_url %}

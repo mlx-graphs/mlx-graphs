@@ -1,3 +1,7 @@
+---
+title: Datasets guide
+---
+
 # Datasets
 
 MLX-graphs provides several built-in datasets for graph machine learning tasks.

@@ -394,3 +394,4 @@ tutorials/quickstart.html
 validation.html
 genindex.html
 search.html
+tutorials/graph_classification.html

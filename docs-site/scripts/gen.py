@@ -299,9 +299,14 @@ def render_page(page: Page, entries: dict[str, Entry], added: list[Entry]) -> st
     text = re.sub(r"<!--\s*count\s+(\w+)\s*-->", count, text)
     # the edit button opens the template, not this generated page
     edit = f"edit_url: {GITHUB}/edit/main/docs-site/api/{page.src.as_posix()}"
+    # the browser title: the page's heading, not its "Overview" label in the sidebar
+    meta = f"{edit}\ntitle: {json.dumps(page.title)}"
     if text.startswith("---\n"):
-        return text.replace("---\n", f"---\n{edit}\n", 1)
-    return f"---\n{edit}\n---\n\n{text}"
+        return text.replace("---\n", f"---\n{meta}\n", 1)
+    return f"---\n{meta}\n---\n\n{text}"
+
+
+DUPLICATE_NAMES: set[str] = set()
 
 
 def object_page(entry: Entry) -> str:
@@ -310,7 +315,8 @@ def object_page(entry: Entry) -> str:
     source = entry.obj.relative_package_filepath.as_posix()
     lines = [
         "---",
-        f"title: {entry.name}",
+        # the module too when another section has an object of the same name
+        f"title: {entry.name}" + (f" ({entry.module})" if entry.name in DUPLICATE_NAMES else ""),
         f"edit_url: {GITHUB}/edit/main/{source}",
         "---",
         "",
@@ -421,6 +427,8 @@ def generate_api(check: bool = False) -> dict[str, Entry]:
                 old.unlink()
     for page in pages:
         write(API_OUT / page.src, render_page(page, entries, added))
+    names = [e.name for e in entries.values()]
+    DUPLICATE_NAMES.update(n for n in names if names.count(n) > 1)
     for e in entries.values():
         write(API_OUT / e.page, object_page(e))
     write(API_OUT / "SUMMARY.md", nav(pages))
@@ -563,9 +571,12 @@ def convert_notebook(path: Path) -> str:
                 out.append(f'<div class="mg-nb-output {cls}">\n{body}\n</div>')
             else:
                 out.append(f'<div class="mg-nb-output {cls}" markdown>\n\n{body}\n\n</div>')
+    heading = next((re.sub(r"^#\s+", "", s) for s in out if re.match(r"^#\s", s)), name)
+    title = re.sub(r"[`*_]", "", heading.strip()) + " · Tutorials"
     front = (
         "---\n"
         f"edit_url: {GITHUB}/edit/main/{repo_path}\n"
+        f"title: {json.dumps(title, ensure_ascii=False)}\n"
         "---\n\n"
     )
     return front + "\n\n".join(out) + "\n"
@@ -907,6 +918,8 @@ SPHINX_PAGES = {
     "tutorials/examples/index.html": "tutorials/examples",
     "guide/message_passing.html": "guide/message-passing",
     "datasets.html": "guide/datasets",
+    # linked from the README, not a page of the Sphinx site
+    "tutorials/graph_classification.html": "tutorials/notebooks/graph_classification",
     "benchmarks.html": "benchmarks",
     "validation.html": "validation",
     "changelog.html": "changelog",

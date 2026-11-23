@@ -42,7 +42,28 @@ PR, for example `fix(loaders): handle empty batches` or `feat: add a dataset`.
 The title becomes the squash commit message and determines the version bump.
 Use `!` for breaking changes, as in `feat(loaders)!: change the default sampler`.
 
-Add migration details to `CHANGELOG.rst` in the PR that introduces them.
+PR titles are the release notes: the Changelog page of the docs lists, for
+every release, the titles of the PRs it contains (from the git history). For
+highlights or migration details, add a section titled with the version number
+to `CHANGELOG.rst` (optional).
+
+## Documentation
+
+The documentation site (<https://mlx-graphs.github.io/mlx-graphs/>) is built
+with [Zensical](https://zensical.org); see [`docs-site/README.md`](docs-site/README.md).
+
+- **Pages** are Markdown files in `docs-site/content/`.
+- **A new public class or function** goes in an `<!-- api <module> -->` block
+  of the right page of `docs-site/api/` (e.g. `docs-site/api/nn/index.md` for a
+  layer); its page is generated from the docstring (Google style). CI fails
+  when a public name is missing from these blocks, or a listed one no longer
+  exists.
+- **A tutorial notebook** goes in `docs-site/content/tutorials/notebooks/` with
+  its outputs (it is not executed), its figure in
+  `docs-site/content/assets/tutorials/`, a card in `docs-site/tutorials.yml`
+  and an entry in the `nav` of `zensical.toml`.
+- **Preview** with `pip install -e '.[docs-new]'`, then
+  `python docs-site/scripts/gen.py` and `zensical serve`.
 
 ## Releases
 
@@ -64,3 +85,6 @@ Actions tab ("Run workflow"), or `gh workflow run release.yml --ref main`. Its
 `bump` input is `auto` by default (the rules above); `patch`, `minor` or `major`
 force that bump, e.g. `gh workflow run release.yml --ref main -f bump=major`
 for `1.0.0`.
+
+Release notes need no step: the docs build lists each release's PR titles on
+the Changelog page, and the GitHub release is created with generated notes.

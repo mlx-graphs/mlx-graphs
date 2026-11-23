@@ -57,6 +57,33 @@
   outline-offset: 2px;
 }
 
+/* Discord: header icon button and the secondary hero button */
+.md-header__button.mg-discord-link {
+  margin-right: 0.2rem;
+}
+.md-header__button.mg-discord-link:hover {
+  color: #5865f2;
+  opacity: 1;
+}
+.md-typeset .md-button.mg-discord {
+  border-color: rgba(88, 101, 242, 0.45);
+  color: #4752c4;
+  background: transparent;
+}
+[data-md-color-scheme="slate"] .md-typeset .md-button.mg-discord {
+  color: #9aa2ff;
+  border-color: rgba(154, 162, 255, 0.45);
+}
+.md-typeset .md-button.mg-discord:hover,
+.md-typeset .md-button.mg-discord:focus-visible {
+  background: #5865f2;
+  border-color: #5865f2;
+  color: #fff;
+}
+.md-typeset .md-button.mg-discord .twemoji svg {
+  fill: currentColor;
+}
+
 /* changelog: date and links under each version */
 .md-typeset .mg-release-meta {
   margin-top: -0.4rem;
