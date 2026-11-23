@@ -24,6 +24,7 @@ Large graphs
   ``MemmapGraphStore``) implementations. ``NeighborLoader((feature_store,
   graph_store), ...)`` gathers only the rows of the sampled nodes, so node
   features larger than the memory can be used for training.
+
 Features
 ~~~~~~~~
 
