@@ -166,6 +166,9 @@ def _torch_interaction_graph(pos, batch, cutoff):
     ],
 )
 def test_schnet_matches_pyg(kwargs):
+    if kwargs.get("dipole"):
+        # The atomic masses of the dipole readout come from ase, in both libraries.
+        pytest.importorskip("ase")
     model, pyg = build_schnet(**kwargs)
     z, pos, batch = molecules()
     out = compare(model, pyg, z, pos, batch, SCHNET_RENAMES)
