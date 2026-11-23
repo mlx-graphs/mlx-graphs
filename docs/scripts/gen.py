@@ -803,9 +803,14 @@ def stable_tags() -> list[tuple[str, str]]:
     )
 
 
-def release_commits(rev_range: str) -> list[str]:
-    """Titles of the commits of main (first parent) in ``rev_range``."""
-    out = git("log", "--first-parent", "--format=%s%x1f%b%x1e", rev_range)
+def release_commits(rev_range: str, first_parent: bool = True) -> list[str]:
+    """Titles of the commits of main (first parent) in ``rev_range``.
+
+    With ``first_parent=False``, also the commits that came in through merge
+    commits (e.g. main merged into a pull request branch).
+    """
+    args = ["log", "--first-parent"] if first_parent else ["log"]
+    out = git(*args, "--format=%s%x1f%b%x1e", rev_range)
     titles = []
     for record in out.split("\x1e"):
         if not record.strip():
@@ -883,12 +888,8 @@ def changelog_sections() -> (
             sub = ""
             item_start = None
             for j, line in enumerate(body + ["<end>"]):
-                if (
-                    j + 1 < len(body)
-                    and line.strip()
-                    and re.match(r"^~{3,}\s*$", body[j + 1])
-                ):
-                    sub = line.strip()
+                # close the current item first: a heading ends it, and the
+                # item belongs to the subsection above that heading
                 if item_start is not None and (
                     line.startswith("- ")
                     or line == "<end>"
@@ -901,6 +902,12 @@ def changelog_sections() -> (
                     text = "\n".join(body[item_start:j]).rstrip()
                     unreleased.append((sub, text, start + 2 + item_start + 1))
                     item_start = None
+                if (
+                    j + 1 < len(body)
+                    and line.strip()
+                    and re.match(r"^~{3,}\s*$", body[j + 1])
+                ):
+                    sub = line.strip()
                 if line.startswith("- "):
                     item_start = j
     return versions, unreleased
@@ -1117,9 +1124,16 @@ def generate_changelog() -> None:
             "",
         ]
     latest = tags[0][0] if tags else None
-    # squash merges of pull requests only: not the commits of a local branch
+    # squash merges of pull requests only, not the commits of a local branch;
+    # all parents, so that a branch which merged main lists main's PRs too
     pending = (
-        [t for t in release_commits(f"{latest}..HEAD") if re.search(r"\(#\d+\)$", t)]
+        list(
+            dict.fromkeys(
+                t
+                for t in release_commits(f"{latest}..HEAD", first_parent=False)
+                if re.search(r"\(#\d+\)$", t)
+            )
+        )
         if latest
         else []
     )

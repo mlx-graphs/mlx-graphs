@@ -24,7 +24,10 @@ The average degree is 2 × edges / nodes. The last rows are collections, heterog
 
 - for a collection, `Graphs` is the number of graphs (of the split that `Load with` loads) and the other numbers are averages per graph (\~);
 - a heterogeneous graph counts the nodes and edges of all types: ogbn-mag has 4 node types (paper, author, institution, field of study) and 4 edge types, IMDB 3 node types (movie, director, actor) and 4 edge types, DBLP 4 node types (author, paper, term, conference) and 6 edge types;
-- a temporal graph counts each event as an edge.
+- a temporal graph counts each event as an edge;
+- ModelNet meshes and ShapeNet point clouds have no edges: ModelNet keeps its triangles in `face` ([`FaceToEdge`][mlx_graphs.transforms.FaceToEdge] turns them into edges), and point clouds get theirs from [`knn_graph`][mlx_graphs.utils.knn_graph] or [`radius_graph`][mlx_graphs.utils.radius_graph].
+
+The [large graphs guide](large-graphs.md) shows how to train on Reddit, Yelp or AmazonProducts with features kept on disk.
 
 --8<-- "datasets_other.md"
 
