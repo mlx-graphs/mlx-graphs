@@ -12,7 +12,6 @@ import pytest
 
 import mlx_graphs.nn.message_passing as mp
 from mlx_graphs.nn import (
-    GATConv,
     GCNConv,
     GINConv,
     MessagePassing,
@@ -84,17 +83,17 @@ LAYERS = [
 
 
 def close(a, b):
-    np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
+    # Both paths end in a dense matmul (the layer's Linear). MLX's GPU matmul
+    # is only accurate to ~1e-3 relative on some chips, and it turns the
+    # float-rounding differences between the two aggregation orders into
+    # differences of that size, so the tolerance cannot be tighter than this.
+    np.testing.assert_allclose(np.array(a), np.array(b), atol=5e-3, rtol=5e-3)
 
 
 @pytest.mark.parametrize("fmt", ["coo", "csr"])
 @pytest.mark.parametrize("weighted", [False, True])
 @pytest.mark.parametrize("name", LAYERS)
 def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
-    if name == "gcn_self_loops" and weighted:
-        pytest.skip(
-            "pre-existing GCNConv bug: add_self_loops does not extend edge_weights"
-        )
     edge_index, x, weights = graph
     layer = make_layer(name)
     w = weights if weighted else None
@@ -132,10 +131,14 @@ def test_layer_matches_gather_scatter(graph, count_fused, name, weighted, fmt):
 
 def test_falls_back_for_unsupported_aggr(graph, count_fused):
     edge_index, x, _ = graph
-    out = SimpleConv(aggr="softmax")(edge_index, x)
-    assert count_fused["n"] == 0
-    with fused_message_passing_mode(False):
-        close(out, SimpleConv(aggr="softmax")(edge_index, x))
+    # "softmax" is SoftmaxAggregation (an aggregation module), "std" a scatter
+    # reduction without a fused kernel
+    for aggr in ("softmax", "std"):
+        out = SimpleConv(aggr=aggr)(edge_index, x)
+        assert count_fused["n"] == 0
+        assert out.shape == x.shape
+        with fused_message_passing_mode(False):
+            close(out, SimpleConv(aggr=aggr)(edge_index, x))
 
 
 def test_falls_back_for_edge_features(graph, count_fused):
@@ -160,9 +163,139 @@ def test_disabled_globally(graph, count_fused):
 
 
 def test_undecorated_layer_unchanged(graph, count_fused):
+    class Plain(MessagePassing):
+        def __call__(self, edge_index, node_features):
+            return self.propagate(edge_index, node_features)
+
     edge_index, x, _ = graph
-    GATConv(DIM, 8)(edge_index, x)
+    Plain(aggr="add")(edge_index, x)
     assert count_fused["n"] == 0
+
+
+def test_multi_head_weights_are_fused(graph, count_fused):
+    # GAT-style: [num_nodes, heads, channels] features with one weight per
+    # (edge, head) run as one SpMM per head.
+    edge_index, x, _ = graph
+    heads = 4
+    x = x.reshape(NUM_NODES, heads, DIM // heads)
+    alpha = mx.random.uniform(shape=(NUM_EDGES, heads), key=mx.random.key(2))
+    layer = SimpleConv(aggr="add")
+
+    def run(x, alpha):
+        return layer.propagate(edge_index, x, message_kwargs={"edge_weights": alpha})
+
+    def loss(x, alpha):
+        return (run(x, alpha) ** 2).sum()
+
+    results = {}
+    for fmt in ("coo", "csr"):
+        clear_csr_cache()
+        with fused_message_passing_mode(True, format=fmt):
+            results[fmt] = (run(x, alpha), *mx.grad(loss, argnums=[0, 1])(x, alpha))
+    assert count_fused["n"] > 0
+    count_fused["n"] = 0
+    with fused_message_passing_mode(False):
+        reference = (run(x, alpha), *mx.grad(loss, argnums=[0, 1])(x, alpha))
+    assert count_fused["n"] == 0
+
+    assert reference[0].shape == (NUM_NODES, heads, DIM // heads)
+    for fmt in ("coo", "csr"):
+        for a, b in zip(results[fmt], reference):
+            np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-4, rtol=1e-4)
+
+
+@pytest.mark.parametrize("aggr", ["max", "min"])
+@pytest.mark.parametrize("weights", [None, "edge", "head"])
+def test_max_min_gradient_of_duplicate_edges(count_fused, aggr, weights):
+    # Duplicate edges send identical messages: the gradient of the maximum is
+    # split among them on both paths. The fused kernels gave each duplicate
+    # the full gradient.
+    rng = np.random.default_rng(0)
+    edges = rng.integers(0, 20, (2, 60))
+    edges = np.concatenate([edges, edges[:, :20]], axis=1)
+    edge_index = mx.array(edges)
+    heads = 2
+    x = mx.random.normal((25, heads, 3), key=mx.random.key(0))
+    w = None
+    if weights == "edge":
+        w = mx.random.uniform(0.5, 1.5, (60,), key=mx.random.key(1))
+        w = mx.concatenate([w, w[:20]])
+    elif weights == "head":
+        w = mx.random.uniform(0.5, 1.5, (60, heads), key=mx.random.key(1))
+        w = mx.concatenate([w, w[:20]])
+    layer = SimpleConv(aggr=aggr)
+    scale = mx.arange(1, heads * 3 + 1).reshape(heads, 3)
+
+    def loss(x, w):
+        out = layer.propagate(edge_index, x, message_kwargs={"edge_weights": w})
+        return (out * scale).sum()
+
+    def grads(grad_fn):
+        out = grad_fn(x, w)
+        return out if isinstance(out, (tuple, list)) else (out,)
+
+    argnums = [0] if w is None else [0, 1]
+    with fused_message_passing_mode(False):
+        reference = grads(mx.grad(loss, argnums=argnums))
+    assert count_fused["n"] == 0
+    for fmt in ("coo", "csr"):
+        clear_csr_cache()
+        with fused_message_passing_mode(True, format=fmt):
+            for grad_fn in (
+                mx.grad(loss, argnums=argnums),
+                mx.compile(mx.grad(loss, argnums=argnums)),
+            ):
+                for a, b in zip(grads(grad_fn), reference):
+                    np.testing.assert_allclose(np.array(a), np.array(b), atol=1e-5)
+    assert count_fused["n"] > 0
+    # each of the two copies of an edge gets half of its gradient: the source
+    # nodes of the duplicated edges get the gradient of a single edge
+    single = SimpleConv(aggr=aggr)
+    with fused_message_passing_mode(False):
+        expected = mx.grad(
+            lambda x: (
+                single.propagate(
+                    mx.array(edges[:, :60]),
+                    x,
+                    message_kwargs={"edge_weights": None if w is None else w[:60]},
+                )
+                * scale
+            ).sum()
+        )(x)
+    np.testing.assert_allclose(np.array(reference[0]), np.array(expected), atol=1e-5)
+
+
+def test_auto_format_switches_to_csr(graph, monkeypatch):
+    edge_index, x, _ = graph
+    layer = SimpleConv(aggr="add")
+    clear_csr_cache()
+    with fused_message_passing_mode(True, format="auto"):
+        outs = [layer(edge_index, x) for _ in range(mp._AUTO_CSR_MIN_USES + 1)]
+    entry = next(iter(mp._csr_cache._entries.values()))
+    assert entry.uses == mp._AUTO_CSR_MIN_USES + 1
+    assert entry.csr is not None  # built once the edge_index was reused enough
+    for out in outs[1:]:
+        np.testing.assert_allclose(np.array(out), np.array(outs[0]), atol=1e-5)
+
+    # a large graph converts on first use
+    clear_csr_cache()
+    monkeypatch.setattr(mp, "_AUTO_CSR_MIN_EDGES", NUM_EDGES)
+    with fused_message_passing_mode(True, format="auto"):
+        layer(edge_index, x)
+    assert next(iter(mp._csr_cache._entries.values())).csr is not None
+
+
+def test_auto_format_inside_compile(graph, monkeypatch):
+    # The CSR conversion cannot run while tracing; "auto" must fall back to COO.
+    edge_index, x, _ = graph
+    layer = SimpleConv(aggr="add")
+    clear_csr_cache()
+    monkeypatch.setattr(mp, "_AUTO_CSR_MIN_EDGES", 1)
+    with fused_message_passing_mode(True, format="auto"):
+        out = mx.compile(lambda e, x: layer(e, x))(edge_index, x)
+        mx.eval(out)
+    with fused_message_passing_mode(False):
+        close(out, layer(edge_index, x))
 
 
 def test_decorator_rejects_message_override():
@@ -183,7 +316,7 @@ def test_decorator_accepts_custom_fused_impl():
         def message_and_aggregate(self, edge_index, node_features, **kwargs):
             return 2 * super().message_and_aggregate(edge_index, node_features)
 
-    assert Custom._fused_format == "coo"
+    assert Custom._fused_format == "auto"
 
 
 class DoubledConv(SimpleConv):
@@ -196,7 +329,7 @@ class DoubledConv(SimpleConv):
 def test_subclass_message_override_falls_back(graph, count_fused):
     edge_index, x, _ = graph
     assert DoubledConv._fused_format is None
-    assert SimpleConv._fused_format == "coo"  # parent untouched
+    assert SimpleConv._fused_format == "auto"  # parent untouched
     out = DoubledConv(aggr="add")(edge_index, x)
     assert count_fused["n"] == 0
     with fused_message_passing_mode(False):
@@ -218,8 +351,8 @@ def test_subclass_without_override_stays_fused(graph, count_fused):
     class PlainGIN(GINConv):  # GINConv's own allowed message override
         pass
 
-    assert PlainGCN._fused_format == "coo"
-    assert PlainGIN._fused_format == "coo"
+    assert PlainGCN._fused_format == "auto"
+    assert PlainGIN._fused_format == "auto"
     edge_index, x, _ = graph
     mx.random.seed(0)
     PlainGCN(DIM, 8)(edge_index, x)
@@ -234,7 +367,7 @@ def test_subclass_with_custom_fused_impl_stays_fused():
         def message_and_aggregate(self, edge_index, node_features, **kwargs):
             return 2 * super().message_and_aggregate(edge_index, node_features)
 
-    assert Custom._fused_format == "coo"
+    assert Custom._fused_format == "auto"
 
 
 def test_redecorated_subclass_uses_decorator_format():
@@ -267,3 +400,39 @@ def test_csr_cache_reused(graph):
         layer(edge_index, x)
         layer(edge_index, x)
     assert len(mp._csr_cache._entries) == 1
+
+
+@pytest.mark.parametrize("aggr", ["add", "max"])
+def test_fused_without_nodes(count_fused, aggr):
+    # The features were reshaped with an inferred size, which fails on 0 nodes.
+    layer = SimpleConv(aggr=aggr)
+    edge_index = mx.zeros((2, 0), dtype=mx.int32)
+    assert layer(edge_index, mx.zeros((0, 4))).shape == (0, 4)
+    out = layer.propagate(
+        edge_index,
+        mx.zeros((0, 2, 3)),
+        message_kwargs={"edge_weights": mx.zeros((0, 2))},
+    )
+    assert out.shape == (0, 2, 3)
+    assert count_fused["n"] > 0
+
+
+def test_csr_format_compiles_with_edge_index_as_input(graph):
+    """Regression: ``format="csr"`` read the graph back on the host while
+    tracing and failed under mx.compile; it now falls back to the COO
+    kernel, as ``format="auto"`` does."""
+
+    @mp.fused_message_passing(format="csr")
+    class SumConv(mp.MessagePassing):
+        def __init__(self):
+            super().__init__(aggr="add")
+
+        def __call__(self, edge_index, node_features):
+            return self.propagate(edge_index, node_features)
+
+    conv = SumConv()
+    edge_index, x = graph[0], graph[1]
+    expected = conv(edge_index, x)
+    compiled = mx.compile(lambda ei, h: conv(ei, h))
+    out = compiled(mx.array(np.array(edge_index)), x)
+    np.testing.assert_allclose(np.array(out), np.array(expected), atol=1e-5)

@@ -20,11 +20,41 @@ Datasets
 
 	KarateClubDataset
 	PlanetoidDataset
+	AmazonDataset
+	CoauthorDataset
 	QM7bDataset
 	TUDataset
 	SuperPixelDataset
 	OGBDataset
+	OGBMAG
 	EllipticBitcoinDataset
 	MovieLens100K
 	IMDB
 	DBLP
+	CitationFull
+	CoraFull
+	HeterophilousGraphDataset
+	WebKB
+	WikipediaNetwork
+	Actor
+	WikiCS
+	FB15k_237
+	WordNet18
+	WordNet18RR
+	FakeDataset
+	FakeHeteroDataset
+	JODIEDataset
+	LRGBDataset
+	GNNBenchmarkDataset
+
+
+Utilities
+---------
+
+.. currentmodule:: mlx_graphs.datasets.utils.torch_serialization
+
+.. autosummary::
+	:toctree: _autosummary
+
+	load_torch_file
+	SparseCOOMatrix

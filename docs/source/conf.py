@@ -1,15 +1,16 @@
 import os
 import sys
+from importlib.metadata import version as package_version
 
 sys.path.insert(0, os.path.abspath("../.."))
-autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster"]
+autodoc_mock_imports = ["mlx", "networkx", "mlx_cluster", "torch", "torch_geometric"]
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = "mlx-graphs"
 copyright = "2024, mlx-graphs contributors"
 author = "mlx-graphs contributors"
-release = "0.0.11"
+release = package_version("mlx-graphs")
 
 # -- General configuration ---------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#general-configuration
@@ -47,7 +48,7 @@ html_theme = "sphinx_book_theme"
 html_static_path = ["_static"]
 html_theme_options = {
     # "show_toc_level": 2,
-    "repository_url": "https://github.com/TristanBilot/mlx-graphs",
+    "repository_url": "https://github.com/mlx-graphs/mlx-graphs",
     "use_repository_button": True,
     "navigation_with_keys": False,
     "logo": {

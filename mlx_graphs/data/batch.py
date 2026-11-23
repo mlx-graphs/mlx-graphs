@@ -1,10 +1,23 @@
-from typing import Union, overload
+from typing import Optional, Union, overload
 
 import mlx.core as mx
 import numpy as np
 
 from mlx_graphs.data.collate import collate
 from mlx_graphs.data.data import GraphData
+
+
+class _BatchAlias:
+    """Read-only property that an instance attribute of the same name takes
+    precedence over (a non-data descriptor), so that graphs with their own
+    ``batch`` or ``ptr`` attribute can still be batched."""
+
+    def __init__(self, fget):
+        self.fget = fget
+        self.__doc__ = fget.__doc__
+
+    def __get__(self, obj, objtype=None):
+        return self if obj is None else self.fget(obj)
 
 
 class GraphDataBatch(GraphData):
@@ -72,10 +85,34 @@ class GraphDataBatch(GraphData):
         """Number of graphs in the batch."""
         return self._num_graphs  # type: ignore - provided via collate
 
-    @property
+    @_BatchAlias
     def batch_indices(self):
-        """Mask indicating for each node its corresponding batch index."""
+        """Mask indicating for each node its corresponding batch index.
+
+        Graphs that carry their own ``batch_indices`` (e.g. the outputs of
+        :class:`~mlx_graphs.loaders.ShaDowKHopSampler`, one subgraph per seed)
+        keep it, offset per graph so that ids stay distinct, as PyG does with
+        ``batch``."""
         return self._batch_indices  # type: ignore - provided via collate
+
+    @_BatchAlias
+    def batch(self) -> mx.array:
+        """PyG-style alias of :attr:`batch_indices`: the index of the graph of
+        each node."""
+        return self.batch_indices
+
+    @_BatchAlias
+    def ptr(self) -> mx.array:
+        """Offsets of the nodes of each graph in the batch, as in PyG: the nodes
+        of graph ``i`` are ``ptr[i]`` to ``ptr[i + 1] - 1``. Has
+        ``num_graphs + 1`` entries (int32)."""
+        cumsum = getattr(self, "_cumsum_edge_index", None)
+        if cumsum is not None:
+            return cumsum.astype(mx.int32)
+        counts = np.bincount(np.asarray(self.batch_indices), minlength=self.num_graphs)
+        ptr = np.zeros(self.num_graphs + 1, dtype=np.int32)
+        np.cumsum(counts, out=ptr[1:])
+        return mx.array(ptr)
 
     @overload
     def __getitem__(self, idx: int) -> GraphData:
@@ -86,131 +123,144 @@ class GraphDataBatch(GraphData):
         ...
 
     def __getitem__(
-        self, idx: Union[int, slice, mx.array, list[int]]
+        self, idx: Union[int, slice, mx.array, np.ndarray, list[int]]
     ) -> Union[GraphData, list[GraphData]]:
-        if isinstance(idx, int):
-            idx = self._handle_neg_index_if_needed(idx)
-            return self._get_graph(idx)
+        """Graphs of the batch, indexed like a Python list of graphs.
 
-        elif isinstance(idx, slice):
-            start, stop, step = (
-                idx.start or 0,
-                idx.stop or self._num_graphs,  # type: ignore
-                idx.step or 1,
-            )
-            start = self._handle_neg_index_if_needed(start)
-            stop = self._handle_neg_index_if_needed(stop)
-            if stop < start:
+        An integer (negative ones count from the end) returns a
+        :class:`GraphData`. A slice, a list, tuple or 1D array of indices, or
+        a boolean mask of shape ``[num_graphs]`` returns a list of graphs.
+        A string returns the attribute of that name.
+        """
+        if isinstance(idx, str):
+            # Attribute access by name, e.g. `batch["node_features"]`.
+            return super().__getitem__(idx)
+
+        num_graphs = self.num_graphs
+        if isinstance(idx, (int, np.integer)) or (
+            isinstance(idx, mx.array) and idx.ndim == 0
+        ):
+            index = int(idx.item() if isinstance(idx, mx.array) else idx)
+            return self._get_graph(self._check_index(np.array([index]))[0])
+
+        if isinstance(idx, slice):
+            plan = self._unbatch_plan()
+            return [self._get_graph(i, plan) for i in range(*idx.indices(num_graphs))]
+
+        if isinstance(idx, (mx.array, np.ndarray, list, tuple)):
+            index = np.array(idx) if isinstance(idx, mx.array) else np.asarray(idx)
+            if index.ndim != 1:
+                raise ValueError("Batch indexing only supports 1D index arrays.")
+            if index.dtype == np.bool_:
+                if index.size != num_graphs:
+                    raise IndexError(
+                        f"Boolean mask of size {index.size} for a batch of "
+                        f"{num_graphs} graphs."
+                    )
+                index = np.nonzero(index)[0]
+            elif index.size == 0:
+                return []
+            elif not np.issubdtype(index.dtype, np.integer):
                 raise IndexError(
-                    "Batch slicing out of range (stop is greater than start)."
+                    f"Batch indices must be integers or booleans (got {index.dtype})."
                 )
+            plan = self._unbatch_plan()
+            return [self._get_graph(i, plan) for i in self._check_index(index)]
 
-            return [self._get_graph(i) for i in range(start, stop, step)]
+        raise TypeError(
+            "GraphDataBatch indices should be int, slice, a list or 1D array "
+            f"of indices or a boolean mask (got '{type(idx).__name__}')."
+        )
 
-        elif isinstance(idx, (mx.array, list)):
-            if isinstance(idx, list):
-                idx = mx.array(idx)
-
-            if idx.ndim != 1:  # type: ignore - idx is a mx.array here
-                raise ValueError(
-                    "Batch indexing with mx.array only supports 1D index array."
-                )
-
-            idx = self._handle_neg_index_if_needed(idx)
-            return [self._get_graph(i) for i in idx]
-
-        raise TypeError("GraphDataBatch indices should be int or slice.")
+    def _check_index(self, index: np.ndarray) -> list[int]:
+        """Positive graph indices from ``index`` (negative indices count from
+        the end). Raises an ``IndexError`` if any is out of range."""
+        num_graphs = self.num_graphs
+        index = index.astype(np.int64)
+        if index.size > 0 and (index.min() < -num_graphs or index.max() >= num_graphs):
+            raise IndexError(
+                f"Batch index out of range for a batch of {num_graphs} graphs."
+            )
+        return np.where(index < 0, index + num_graphs, index).tolist()
 
     def __len__(self):
         """The length of a batch is its number of graphs."""
         return self.num_graphs
 
-    def _get_graph(self, idx: int) -> GraphData:
+    def _unbatch_plan(self) -> dict:
+        """How to get each attribute of a graph back from the batch, computed
+        once per indexing call: the slice bounds of every graph are read on
+        the host here, so extracting a graph needs no device synchronization.
+        """
+        batch_dict = self.to_dict()
+        # vectors added by the loader's `follow_batch` only exist in batches
+        follow_batch = batch_dict.get("_follow_batch", ())
+        plan: dict = {}
+        for attr, value in batch_dict.items():
+            if attr.startswith("_") or attr in follow_batch:
+                continue
+            if f"_scalar_{attr}" in batch_dict:
+                # Scalars were stored one per graph
+                plan[attr] = ("scalar", np.array(value))
+            elif f"_list_{attr}" in batch_dict:
+                plan[attr] = ("list", value)
+            else:
+                sizes = np.array(batch_dict[f"_size_{attr}"], dtype=np.int64)
+                bounds = np.zeros(sizes.size + 1, dtype=np.int64)
+                np.cumsum(sizes, out=bounds[1:])
+                plan[attr] = (
+                    "array",
+                    value,
+                    bounds.tolist(),
+                    batch_dict[f"_cat_dim_{attr}"],
+                    batch_dict.get(f"_cumsum_{attr}")
+                    if f"_inc_{attr}" in batch_dict
+                    else None,
+                    f"_stack_{attr}" in batch_dict,
+                )
+        num_nodes = batch_dict.get("_num_nodes_per_graph")
+        if num_nodes is not None:
+            plan["_num_nodes"] = np.array(num_nodes).tolist()
+        return plan
+
+    def _get_graph(self, idx: int, plan: Optional[dict] = None) -> GraphData:
         """
         Returns a `GraphData` from the batch with its original attributes and edge
         index.
         """
-        large_graph_dict = {
-            attr: getattr(self, attr)
-            for attr in self.to_dict()
-            if not attr.startswith("_")
-        }
-
+        if plan is None:
+            plan = self._unbatch_plan()
         single_graph_dict = {}
-        for attr in large_graph_dict:
-            from_idx, upto_idx = self._get_attr_slice_at_index(attr, idx)
-            attr_array = getattr(self, attr)
+        for attr, entry in plan.items():
+            if attr == "_num_nodes":
+                single_graph_dict["num_nodes"] = entry[idx]
+                continue
+            kind = entry[0]
+            if kind == "scalar":
+                single_graph_dict[attr] = entry[1][idx].item()
+                continue
+            if kind == "list":
+                single_graph_dict[attr] = entry[1][idx]
+                continue
 
-            # Using mx.take_along_axis required indices with same number of dimensions
-            # as the values
-            # Singleton dimensions are thus added to all dimensions except
-            # the __concat__ dimension
-            gather_dim = self.to_dict()[f"_cat_dim_{attr}"]
-            broadcast_dim = [
-                -1 if dim == gather_dim else 1 for dim in range(attr_array.ndim)
-            ]
-            range_at_dim = mx.arange(from_idx, upto_idx).reshape(broadcast_dim)
+            _, value, bounds, cat_dim, cumsum, stacked = entry
+            # Rows of the graph along the concatenation dimension
+            index = [slice(None)] * value.ndim
+            index[cat_dim] = slice(bounds[idx], bounds[idx + 1])
+            original_value = value[tuple(index)]
 
-            # Gather values at the current range on the __concat__ dimension
-            original_value = mx.take_along_axis(attr_array, range_at_dim, gather_dim)
+            # Incremented attributes get their original values back by
+            # subtracting the offset of the graph, in the dtype of the
+            # attribute (e.g. int32 `edge_index` stays int32)
+            if cumsum is not None:
+                offset = cumsum[idx].astype(original_value.dtype)
+                original_value = original_value - offset
 
-            # If __inc__ is True, we get back the original values by subtracting
-            # the cumulative sum at the batch index
-            if f"_inc_{attr}" in self.to_dict():
-                original_value -= self.to_dict()[f"_cumsum_{attr}"][idx]
-
+            if stacked:  # 0-dim in every graph
+                original_value = original_value.reshape(())
             single_graph_dict[attr] = original_value
 
-        if "_num_nodes_per_graph" in self.to_dict():
-            single_graph_dict["num_nodes"] = self._num_nodes_per_graph[idx].item()  # type: ignore
-
         return GraphData(**single_graph_dict)
-
-    def _get_attr_slice_at_index(self, attr: str, idx: int) -> tuple[int, int]:
-        """Returns the starting and ending index to retrieve the original attribute
-        `attr` from the batch, at the given index `idx`.
-        """
-        attr_sizes = self.to_dict()[f"_size_{attr}"]
-        cum_attr_counts = mx.cumsum(mx.concatenate([mx.array([0]), attr_sizes]))
-
-        from_idx = cum_attr_counts[idx].item()
-        upto_idx = cum_attr_counts[idx + 1].item()
-
-        return from_idx, upto_idx
-
-    @overload
-    def _handle_neg_index_if_needed(self, index: int) -> int:
-        ...
-
-    @overload
-    def _handle_neg_index_if_needed(
-        self, index: Union[mx.array, list[int]]
-    ) -> list[int]:
-        ...
-
-    def _handle_neg_index_if_needed(
-        self, index: Union[mx.array, list[int], int]
-    ) -> Union[list[int], int]:
-        """Returns the corresponsing positive index or indices of negative batch
-        indices. Raises an index error if indices are incorrect. This method accepts
-        either an mx.array, a list or a single int index.
-        """
-        if isinstance(index, int):
-            index_ = mx.array([index])
-        elif isinstance(index, list):  # required for type checks on Union
-            pass
-        elif isinstance(index, mx.array):
-            index_ = index.tolist()
-
-        # Should be changed once boolean indexing exists in mlx
-        index_ = np.asarray(index_)
-        index_[index_ < 0] += self.num_graphs
-
-        if np.any((index_ < 0) | (index_ > self.num_graphs)):
-            raise IndexError("Batch indexing out of range.")
-
-        index_ = index_.tolist()
-        return index_[0] if len(index_) == 1 else index_
 
 
 def batch(graphs: list[GraphData]) -> GraphDataBatch:
@@ -234,7 +284,4 @@ def unbatch(batch: GraphDataBatch) -> list[GraphData]:
     Returns:
         List of unbatched `GraphData`
     """
-    return [
-        batch[idx]  # type: ignore
-        for idx in range(batch.num_graphs)
-    ]
+    return batch[:]  # type: ignore

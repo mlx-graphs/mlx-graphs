@@ -10,6 +10,9 @@ Installation
 
 	pip install mlx-graphs
 
+It requires a Mac with Apple Silicon and Python 3.10 or later. MLX and
+``mlx-cluster``, which provides the sparse GPU kernels of the fused message
+passing, are installed with it.
 
 
 Build from source

@@ -125,7 +125,7 @@ def main(args):
     )
     mx.eval(gcn.parameters())
 
-    optimizer = optim.Adam(learning_rate=args.lr)
+    optimizer = optim.Adam(learning_rate=args.lr, bias_correction=True)
     loss_and_grad_fn = nn.value_and_grad(gcn, forward_fn)
 
     best_val_loss = float("inf")

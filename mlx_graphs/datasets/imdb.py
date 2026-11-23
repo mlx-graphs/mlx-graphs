@@ -85,7 +85,7 @@ class IMDB(HeteroDataset):
 
         node_labels_dict = {}
         y = np.load(osp.join(self.raw_path, "labels.npy"))
-        node_labels_dict["movies"] = mx.array(y)
+        node_labels_dict["movie"] = mx.array(y)
 
         data = HeteroGraphData(
             edge_index_dict={},

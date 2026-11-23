@@ -1,4 +1,5 @@
 import mlx.core as mx
+import numpy as np
 import pytest
 
 from mlx_graphs.utils import degree, invert_sqrt_degree, scatter
@@ -117,3 +118,35 @@ def test_inv_degree():
     expected = mx.array([1, 0.707107, 0.57735, 0])
     out = invert_sqrt_degree(deg)
     assert mx.allclose(out, expected), "Incorrect degree inversion"
+
+
+@pytest.mark.parametrize("aggr", ["max", "min"])
+def test_scatter_max_min_gradient_splits_ties(aggr):
+    # The gradient of a maximum (minimum) is split equally among the values
+    # equal to it, as torch's scatter_reduce (used by PyG without
+    # torch_scatter). MLX's own gradient gave each tied value the full
+    # gradient. No exact zeros: torch then also counts its zero initial value.
+    torch = pytest.importorskip("torch")
+    rng = np.random.default_rng(0)
+    index = rng.integers(0, 6, 50)
+    values = np.round(rng.uniform(0.1, 1.0, (50, 3)), 1).astype(np.float32)
+    values[40:] = values[:10]  # duplicates: exact ties within their group
+    index[40:] = index[:10]
+    cot = rng.normal(size=(8, 3)).astype(np.float32)
+
+    def loss(v):
+        return (scatter(v, mx.array(index), 8, aggr) * mx.array(cot)).sum()
+
+    v = torch.tensor(values, requires_grad=True)
+    out = torch.zeros(8, 3).scatter_reduce(
+        0,
+        torch.tensor(index).view(-1, 1).expand(-1, 3),
+        v,
+        reduce="a" + aggr,
+        include_self=False,
+    )
+    (out * torch.tensor(cot)).sum().backward()
+
+    for grad_fn in (mx.grad(loss), mx.compile(mx.grad(loss))):
+        grad = grad_fn(mx.array(values))
+        np.testing.assert_allclose(np.array(grad), v.grad.numpy(), rtol=1e-5, atol=1e-6)

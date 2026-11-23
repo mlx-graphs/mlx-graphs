@@ -3,6 +3,7 @@ import pytest
 
 from mlx_graphs.utils.transformations import (
     add_self_loops,
+    coalesce,
     get_isolated_nodes_mask,
     get_unique_edge_indices,
     has_isolated_nodes,
@@ -256,3 +257,51 @@ def test_has_self_loops():
     edge_index = mx.array([[0, 1], [1, 0]])
 
     assert has_self_loops(edge_index) is False, "has_self_loops failed"
+
+
+def test_unsigned_edge_index():
+    # uint32 is the default dtype of to_edge_index
+    edge_index = mx.array([[0, 1, 1], [1, 0, 1]], dtype=mx.uint32)
+    assert has_isolated_nodes(edge_index, 3) is True
+    assert has_isolated_nodes(edge_index, 2) is False
+    assert mx.array_equal(
+        get_isolated_nodes_mask(edge_index, 3, complement=False), mx.array([2])
+    )
+    assert mx.array_equal(
+        get_unique_edge_indices(edge_index, edge_index[:, :1]), mx.array([1, 2])
+    )
+    assert remove_self_loops(edge_index).dtype == mx.uint32
+
+
+def test_add_self_loops_keeps_feature_dtype():
+    edge_index = mx.array([[0, 1], [1, 0]])
+    edge_features = mx.array([[3], [4]], dtype=mx.int32)
+    _, features = add_self_loops(edge_index, edge_features, fill_value=1.0)
+    assert features.dtype == mx.int32
+    assert features.reshape(-1).tolist() == [3, 4, 1, 1]
+
+
+def test_coalesce_reduces_features():
+    edge_index = mx.array([[1, 0, 1, 0, 2], [0, 1, 0, 2, 2]])
+    edge_features = mx.array([1.0, 2.0, 3.0, 4.0, 5.0])
+    index, features = coalesce(edge_index, edge_features)
+    assert index.tolist() == [[0, 0, 1, 2], [1, 2, 0, 2]]
+    assert features.tolist() == [2.0, 4.0, 4.0, 5.0]
+    _, features = coalesce(edge_index, edge_features, reduce="max")
+    assert features.tolist() == [2.0, 4.0, 3.0, 5.0]
+    assert coalesce(mx.zeros((2, 0), dtype=mx.int32)).shape == (2, 0)
+
+
+def test_to_undirected_coalesce():
+    edge_index = mx.array([[0, 1, 1], [1, 0, 2]])
+    assert to_undirected(edge_index, coalesce=True).tolist() == [
+        [0, 1, 1, 2],
+        [1, 0, 2, 1],
+    ]
+
+
+def test_remove_self_loops_all_loops():
+    edge_index = mx.array([[0, 1], [0, 1]])
+    index, features = remove_self_loops(edge_index, mx.ones((2, 3)))
+    assert index.shape == (2, 0)
+    assert features.shape == (0, 3)

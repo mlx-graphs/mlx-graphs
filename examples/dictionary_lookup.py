@@ -35,10 +35,16 @@ class Model(nn.Module):
         self.values0 = nn.Embedding(k + 1, self.hidden_states)
         self.ff0 = nn.Sequential(nn.ReLU())
 
+        # Without self-loops (the default of mlx-graphs <= 0.0.11): the
+        # queries attend to the keys only.
         if self.dynamic_attention:
-            self.gnn = GATv2Conv(self.hidden_states, self.hidden_states, heads=1)
+            self.gnn = GATv2Conv(
+                self.hidden_states, self.hidden_states, heads=1, add_self_loops=False
+            )
         else:
-            self.gnn = GATConv(self.hidden_states, self.hidden_states, heads=1)
+            self.gnn = GATConv(
+                self.hidden_states, self.hidden_states, heads=1, add_self_loops=False
+            )
 
         self.ffn = nn.Linear(self.hidden_states, k)
 

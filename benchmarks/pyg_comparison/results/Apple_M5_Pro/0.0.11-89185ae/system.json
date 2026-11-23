@@ -1,0 +1,22 @@
+{
+  "chip": "Apple M5 Pro",
+  "memory_gb": 64,
+  "os": "macOS 27.2.1",
+  "python": "3.12.14",
+  "mlx": "0.32.4",
+  "mlx-graphs": "0.0.10",
+  "mlx-cluster": "0.1.2",
+  "torch": "2.15.0",
+  "torch_geometric": "2.8.1",
+  "library": {
+    "label": "0.0.11-89185ae",
+    "version": "0.0.11",
+    "commit": "89185aeb2e2f83116fd4a637b28311ddc9d78fde",
+    "commit_date": "2026-11-20T13:43:59Z",
+    "commit_subject": "Node2 vec bug fix (#201)",
+    "branch": "v0.0.11",
+    "dirty": false,
+    "repo_root": "/private/tmp/claude-502/-Users-tristan-Documents-Repos-mlx-graphs/3df18859-8c8d-4c1b-8b6e-d508dc4f3c38/scratchpad/mlx-graphs-main",
+    "imported_from": "/private/tmp/claude-502/-Users-tristan-Documents-Repos-mlx-graphs/3df18859-8c8d-4c1b-8b6e-d508dc4f3c38/scratchpad/mlx-graphs-main/mlx_graphs"
+  }
+}

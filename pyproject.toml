@@ -1,10 +1,10 @@
 [build-system]
-requires = ["setuptools >= 61.0"]
+requires = ["setuptools>=80", "setuptools-scm>=9.2,<10"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "mlx-graphs"
-version = "0.0.11"
+dynamic = ["version"]
 description = "Graph Neural Network library made for Apple Silicon"
 authors = [{name="mlx-graphs contributors"}]
 readme = "README.md"
@@ -15,13 +15,16 @@ classifiers = [
     "License :: OSI Approved :: MIT License",
     "Operating System :: MacOS",
     "Programming Language :: Python",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
 ]
 dependencies = [
     "mlx>=0.32; sys_platform == 'darwin'",
     "numpy>=1.26.3",
-    "requests==2.31.0",
-    "fsspec==2024.2.0",
-    "tqdm==4.66.1",
+    "requests>=2.31.0",
+    "fsspec>=2024.2.0",
+    "tqdm>=4.66.1",
     "mlx_cluster>=0.1.2; sys_platform == 'darwin'",
 ]
 
@@ -30,26 +33,28 @@ dev = [
   "pre-commit==3.6.0",
 ]
 test = [
-  "pytest==7.4.4",
-  "scipy==1.12.0",
-  "networkx==3.2.1",
-  "torch==2.2.0",
-  "torch_geometric==2.5.0",
+  "pytest>=7.4.4",
+  "scipy>=1.12.0",
+  "networkx>=3.2.1",
+  "torch>=2.2.0",
+  "torch_geometric>=2.5.0",
+  "pandas>=2.0",
+  "scikit-learn>=1.3",
 ]
 docs = [
   "ipython==8.21.0",
-  "sphinx>=7.2.6",
+  "sphinx>=7.2.6,<8.2", # sphinx-autodoc-typehints 1.25.2 patches the older API.
   "sphinx-book-theme==1.1.0",
   "sphinx-autodoc-typehints==1.25.2",
   "nbsphinx==0.9.3",
   "sphinx-gallery==0.15.0",
 ]
 benchmarks = [
-  "scipy==1.12.0",
-  "dgl==2.0.0",
-  "torch==2.2.0",
-  "torch_geometric==2.5.0",
-  "torch_cluster==1.6.3",
+  "scipy>=1.12.0",
+  "matplotlib>=3.8",
+  "ogb>=1.3.6",
+  "torch>=2.2.0",
+  "torch_geometric>=2.5.0",
 ]
 
 [project.urls]
@@ -57,6 +62,24 @@ Homepage = "https://mlx-graphs.github.io/mlx-graphs/"
 Documentation = "https://mlx-graphs.github.io/mlx-graphs/"
 Repository = "https://github.com/mlx-graphs/mlx-graphs"
 Issues = "https://github.com/mlx-graphs/mlx-graphs/issues"
+
+[tool.setuptools_scm]
+parentdir_prefix_version = "mlx-graphs-"
+
+[tool.semantic_release]
+commit_parser = "conventional"
+tag_format = "v{version}"
+allow_zero_version = true
+major_on_zero = false
+
+[tool.semantic_release.branches.main]
+match = "^main$"
+
+[tool.semantic_release.commit_parser_options]
+allowed_tags = ["feat", "build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
+minor_tags = ["feat"]
+patch_tags = ["build", "chore", "ci", "docs", "fix", "perf", "refactor", "revert", "style", "test"]
+parse_squash_commits = false
 
 
 [tool.ruff]

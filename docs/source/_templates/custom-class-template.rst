@@ -7,16 +7,22 @@
 	:show-inheritance:
 
 	{% block methods %}
+	{% if '__call__' in members %}
 	.. automethod:: __call__
+	{% endif %}
 
-	{% if methods %}
+	{% set own_methods = [] %}
+	{% for item in methods %}
+	  {%- if item not in inherited_members and item != '__init__' %}
+	    {%- set _ = own_methods.append(item) %}
+	  {%- endif %}
+	{%- endfor %}
+	{% if own_methods %}
 	.. rubric:: {{ _('Methods') }}
 
 	.. autosummary::
-	{% for item in methods %}
-	  {%- if item not in inherited_members and item != '__init__' %}
+	{% for item in own_methods %}
 	     ~{{ name }}.{{ item }}
-	  {%- endif %}
 	{%- endfor %}
 	{% endif %}
 	{% endblock %}

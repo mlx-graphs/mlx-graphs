@@ -386,3 +386,49 @@ class TestTrainingPattern:
             for i in range(batch.batch_size):
                 global_id = batch.n_id[i].item()
                 assert global_id in train_indices.tolist()
+
+
+def test_neighbor_loader_subgraphs_can_be_batched():
+    # Subgraphs carry an int `batch_size`; batching them used to fail.
+    from mlx_graphs.data import batch, unbatch
+
+    edge_index = mx.array([[0, 1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 5, 0, 3]])
+    graph = GraphData(
+        edge_index, node_features=mx.random.normal((6, 4)), node_labels=mx.arange(6)
+    )
+    subgraphs = list(NeighborLoader(graph, num_neighbors=[2, 2], batch_size=2))
+    batched = batch(subgraphs)
+
+    assert batched.batch_size.tolist() == [s.batch_size for s in subgraphs]
+    # n_id / e_id are ids in the original graph: concatenated, not incremented
+    assert batched.n_id.tolist() == sum((s.n_id.tolist() for s in subgraphs), [])
+    for original, restored in zip(subgraphs, unbatch(batched)):
+        assert restored.batch_size == original.batch_size
+        assert mx.array_equal(restored.edge_index, original.edge_index)
+        assert mx.array_equal(restored.n_id, original.n_id)
+        assert mx.array_equal(restored.node_features, original.node_features)
+
+
+def test_shadow_subgraphs_can_be_batched():
+    # ShaDow outputs carry their own `batch_indices` (one subgraph per seed):
+    # batching keeps it, offset per graph like PyG's `batch`, and unbatching
+    # restores it.
+    from mlx_graphs.data import batch, unbatch
+    from mlx_graphs.loaders import ShaDowKHopSampler
+
+    edge_index = mx.array([[0, 1, 2, 3, 4, 5, 1], [1, 2, 3, 4, 5, 0, 3]])
+    graph = GraphData(
+        edge_index, node_features=mx.random.normal((6, 4)), node_labels=mx.arange(6)
+    )
+    subgraphs = list(ShaDowKHopSampler(graph, depth=2, num_neighbors=2, batch_size=2))
+    batched = batch(subgraphs)
+
+    expected, offset = [], 0
+    for s in subgraphs:
+        expected += (s.batch_indices + offset).tolist()
+        offset += s.batch_indices.max().item() + 1
+    assert batched.batch_indices.tolist() == expected
+    assert batched.batch.tolist() == expected
+    for original, restored in zip(subgraphs, unbatch(batched)):
+        assert mx.array_equal(restored.batch_indices, original.batch_indices)
+        assert mx.array_equal(restored.edge_index, original.edge_index)

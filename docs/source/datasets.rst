@@ -50,6 +50,34 @@ Available Datasets
      - 8.99
      - node
      - node
+   * - Amazon Computers
+     - 1
+     - 13,752
+     - 491,722
+     - 71.51
+     - node
+     - node
+   * - Amazon Photo
+     - 1
+     - 7,650
+     - 238,162
+     - 62.26
+     - node
+     - node
+   * - Coauthor CS
+     - 1
+     - 18,333
+     - 163,788
+     - 17.87
+     - node
+     - node
+   * - Coauthor Physics
+     - 1
+     - 34,493
+     - 495,924
+     - 28.76
+     - node
+     - node
    * - QM7b
      - 7,211
      - ~15
@@ -71,6 +99,146 @@ Available Datasets
      - 118.90
      - node
      - edge
+   * - Cora Full
+     - 1
+     - 19,793
+     - 126,842
+     - 12.82
+     - node
+     - node
+   * - Cora ML (full)
+     - 1
+     - 2,995
+     - 16,316
+     - 10.90
+     - node
+     - node
+   * - CiteSeer (full)
+     - 1
+     - 4,230
+     - 10,674
+     - 5.05
+     - node
+     - node
+   * - DBLP (full)
+     - 1
+     - 17,716
+     - 105,734
+     - 11.94
+     - node
+     - node
+   * - PubMed (full)
+     - 1
+     - 19,717
+     - 88,648
+     - 8.99
+     - node
+     - node
+   * - Roman-empire
+     - 1
+     - 22,662
+     - 65,854
+     - 5.81
+     - node
+     - node
+   * - Amazon-ratings
+     - 1
+     - 24,492
+     - 186,100
+     - 15.20
+     - node
+     - node
+   * - Minesweeper
+     - 1
+     - 10,000
+     - 78,804
+     - 15.76
+     - node
+     - node
+   * - Tolokers
+     - 1
+     - 11,758
+     - 1,038,000
+     - 176.56
+     - node
+     - node
+   * - Questions
+     - 1
+     - 48,921
+     - 307,080
+     - 12.55
+     - node
+     - node
+   * - Cornell
+     - 1
+     - 183
+     - 298
+     - 3.26
+     - node
+     - node
+   * - Texas
+     - 1
+     - 183
+     - 325
+     - 3.55
+     - node
+     - node
+   * - Wisconsin
+     - 1
+     - 251
+     - 515
+     - 4.10
+     - node
+     - node
+   * - Chameleon
+     - 1
+     - 2,277
+     - 36,101
+     - 31.71
+     - node
+     - node
+   * - Squirrel
+     - 1
+     - 5,201
+     - 217,073
+     - 83.47
+     - node
+     - node
+   * - Actor
+     - 1
+     - 7,600
+     - 30,019
+     - 7.90
+     - node
+     - node
+   * - WikiCS
+     - 1
+     - 11,701
+     - 431,726
+     - 73.79
+     - node
+     - node
+   * - FB15k-237 (train)
+     - 1
+     - 14,541
+     - 272,115
+     - 37.43
+     - none
+     - edge (type)
+   * - WordNet18RR
+     - 1
+     - 40,943
+     - 93,003
+     - 4.54
+     - none
+     - edge (type)
+   * - JODIE Wikipedia (temporal)
+     - 1
+     - 9,227
+     - 157,474
+     - 34.13
+     - edge
+     - edge
 
 .. _dataset-classes:
 
@@ -80,11 +248,12 @@ Dataset Classes
 .. currentmodule:: mlx_graphs.datasets
 
 .. autosummary::
-   :toctree: generated/
    :nosignatures:
 
    KarateClubDataset
    PlanetoidDataset
+   AmazonDataset
+   CoauthorDataset
    QM7bDataset
    TUDataset
    SuperPixelDataset
@@ -93,6 +262,22 @@ Dataset Classes
    MovieLens100K
    IMDB
    DBLP
+   CitationFull
+   CoraFull
+   HeterophilousGraphDataset
+   WebKB
+   WikipediaNetwork
+   Actor
+   WikiCS
+   FB15k_237
+   WordNet18
+   WordNet18RR
+   FakeDataset
+   FakeHeteroDataset
+   JODIEDataset
+   LRGBDataset
+   GNNBenchmarkDataset
+   OGBMAG
 
 KarateClubDataset
 ^^^^^^^^^^^^^^^^^
@@ -100,6 +285,7 @@ KarateClubDataset
 .. autoclass:: KarateClubDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 PlanetoidDataset
 ^^^^^^^^^^^^^^^^
@@ -107,6 +293,23 @@ PlanetoidDataset
 .. autoclass:: PlanetoidDataset
    :members:
    :show-inheritance:
+   :no-index:
+
+AmazonDataset
+^^^^^^^^^^^^^
+
+.. autoclass:: AmazonDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+CoauthorDataset
+^^^^^^^^^^^^^^^
+
+.. autoclass:: CoauthorDataset
+   :members:
+   :show-inheritance:
+   :no-index:
 
 QM7bDataset
 ^^^^^^^^^^^
@@ -114,6 +317,7 @@ QM7bDataset
 .. autoclass:: QM7bDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 TUDataset
 ^^^^^^^^^
@@ -121,6 +325,7 @@ TUDataset
 .. autoclass:: TUDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 SuperPixelDataset
 ^^^^^^^^^^^^^^^^^
@@ -128,6 +333,7 @@ SuperPixelDataset
 .. autoclass:: SuperPixelDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 OGBDataset
 ^^^^^^^^^^
@@ -135,6 +341,7 @@ OGBDataset
 .. autoclass:: OGBDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 EllipticBitcoinDataset
 ^^^^^^^^^^^^^^^^^^^^^^
@@ -142,6 +349,7 @@ EllipticBitcoinDataset
 .. autoclass:: EllipticBitcoinDataset
    :members:
    :show-inheritance:
+   :no-index:
 
 MovieLens100K
 ^^^^^^^^^^^^^
@@ -149,6 +357,7 @@ MovieLens100K
 .. autoclass:: MovieLens100K
    :members:
    :show-inheritance:
+   :no-index:
 
 IMDB
 ^^^^
@@ -156,6 +365,7 @@ IMDB
 .. autoclass:: IMDB
    :members:
    :show-inheritance:
+   :no-index:
 
 DBLP
 ^^^^
@@ -163,6 +373,135 @@ DBLP
 .. autoclass:: DBLP
    :members:
    :show-inheritance:
+   :no-index:
+
+CitationFull
+^^^^^^^^^^^^
+
+.. autoclass:: CitationFull
+   :members:
+   :show-inheritance:
+   :no-index:
+
+CoraFull
+^^^^^^^^
+
+.. autoclass:: CoraFull
+   :members:
+   :show-inheritance:
+   :no-index:
+
+HeterophilousGraphDataset
+^^^^^^^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: HeterophilousGraphDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+WebKB
+^^^^^
+
+.. autoclass:: WebKB
+   :members:
+   :show-inheritance:
+   :no-index:
+
+WikipediaNetwork
+^^^^^^^^^^^^^^^^
+
+.. autoclass:: WikipediaNetwork
+   :members:
+   :show-inheritance:
+   :no-index:
+
+Actor
+^^^^^
+
+.. autoclass:: Actor
+   :members:
+   :show-inheritance:
+   :no-index:
+
+WikiCS
+^^^^^^
+
+.. autoclass:: WikiCS
+   :members:
+   :show-inheritance:
+   :no-index:
+
+FB15k_237
+^^^^^^^^^
+
+.. autoclass:: FB15k_237
+   :members:
+   :show-inheritance:
+   :no-index:
+
+WordNet18
+^^^^^^^^^
+
+.. autoclass:: WordNet18
+   :members:
+   :show-inheritance:
+   :no-index:
+
+WordNet18RR
+^^^^^^^^^^^
+
+.. autoclass:: WordNet18RR
+   :members:
+   :show-inheritance:
+   :no-index:
+
+FakeDataset
+^^^^^^^^^^^
+
+.. autoclass:: FakeDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+FakeHeteroDataset
+^^^^^^^^^^^^^^^^^
+
+.. autoclass:: FakeHeteroDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+JODIEDataset
+^^^^^^^^^^^^
+
+.. autoclass:: JODIEDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+LRGBDataset
+^^^^^^^^^^^
+
+.. autoclass:: LRGBDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+GNNBenchmarkDataset
+^^^^^^^^^^^^^^^^^^^
+
+.. autoclass:: GNNBenchmarkDataset
+   :members:
+   :show-inheritance:
+   :no-index:
+
+OGBMAG
+^^^^^^
+
+.. autoclass:: OGBMAG
+   :members:
+   :show-inheritance:
+   :no-index:
 
 Using Datasets
 --------------

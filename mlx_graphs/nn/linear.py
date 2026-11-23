@@ -1,12 +1,37 @@
+import math
+
 import mlx.core as mx
 import mlx.nn as nn
 
 
+def glorot(shape: tuple) -> mx.array:
+    r"""Glorot (Xavier) uniform initialization over the last two dimensions.
+
+    Matches PyG's ``glorot``: values are drawn from
+    :math:`\mathcal{U}(-a, a)` with :math:`a = \sqrt{6 / (n_{-2} + n_{-1})}`,
+    where :math:`n_{-2}, n_{-1}` are the sizes of the last two dimensions.
+    Unlike ``mlx.nn.init.glorot_uniform``, it does not treat arrays with more
+    than two dimensions as convolution kernels, which is what attention
+    vectors of shape ``[1, heads, channels]`` need.
+
+    Args:
+        shape: Shape of the array to initialize (at least 2 dimensions).
+    """
+    if len(shape) < 2:
+        raise ValueError(f"glorot needs at least 2 dimensions, got shape {shape}")
+    limit = math.sqrt(6.0 / (shape[-2] + shape[-1]))
+    return mx.random.uniform(-limit, limit, shape)
+
+
 class Linear(nn.Linear):
-    """Linear layer with Xavier Glorot weight inititalization.
+    """Linear layer with Xavier Glorot weight initialization and a zero bias.
 
     This Linear class inherits from `mx.nn.Linear`, but uses glorot
-    initialization instead of the default initialization in mlx's Linear.
+    initialization instead of the default initialization in mlx's Linear,
+    like PyG's ``Linear(weight_initializer="glorot")`` used by e.g. GCN and
+    GAT. Layers that PyG initializes like ``torch.nn.Linear`` (e.g.
+    GraphSAGE) use ``mlx.nn.Linear``, which has the same default
+    initialization as PyTorch.
 
     Args:
         input_dims: Dimensionality of the input features
@@ -18,14 +43,18 @@ class Linear(nn.Linear):
     def __init__(self, input_dims: int, output_dims: int, bias: bool = True) -> None:
         super().__init__(input_dims, output_dims, bias)
 
-        glorot_init = nn.init.glorot_uniform()
-        self.weight = glorot_init(mx.zeros((output_dims, input_dims)))
+        self.weight = glorot((output_dims, input_dims))
         if bias:
-            self.bias = glorot_init(mx.zeros((output_dims, 1))).flatten()
+            self.bias = mx.zeros((output_dims,))
 
 
 class HeteroDictLinear(nn.Module):
-    """Applies a separate :class:`Linear` layer to each node type.
+    """Applies a separate linear layer to each node type.
+
+    The layers are initialized like PyG's ``HeteroDictLinear`` (and
+    ``torch.nn.Linear``): weights and biases uniform in
+    ``[-1/sqrt(input_dims), 1/sqrt(input_dims)]``, i.e. ``mlx.nn.Linear``'s
+    default.
 
     Node types in a heterogeneous graph usually have different numbers of
     features. This layer maps every node type to the same size, so later layers
@@ -65,7 +94,7 @@ class HeteroDictLinear(nn.Module):
         self.input_dims = dict(input_dims)
         self.output_dims = output_dims
         self.lins = {
-            node_type: Linear(dims, output_dims, bias=bias)
+            node_type: nn.Linear(dims, output_dims, bias=bias)
             for node_type, dims in input_dims.items()
         }
 
