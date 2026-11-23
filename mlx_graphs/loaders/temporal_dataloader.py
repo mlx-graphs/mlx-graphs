@@ -44,7 +44,7 @@ class TemporalDataLoader:
 
     References:
         `PyG TemporalDataLoader <https://pytorch-geometric.readthedocs.io/en/
-        latest/generated/torch_geometric.loader.TemporalDataLoader.html>`_
+        latest/modules/loader.html#torch_geometric.loader.TemporalDataLoader>`_
     """
 
     def __init__(

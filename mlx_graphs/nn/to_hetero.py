@@ -1479,7 +1479,7 @@ def to_hetero(
 
     References:
         `PyG's to_hetero <https://pytorch-geometric.readthedocs.io/en/latest/
-        generated/torch_geometric.nn.to_hetero_transformer.to_hetero.html>`_
+        modules/nn.html#torch_geometric.nn.to_hetero_transformer.to_hetero>`_
     """
     return ToHeteroModel(module, metadata, aggr, input_map, input_dims)
 
@@ -1557,8 +1557,8 @@ def to_hetero_with_bases(
 
     References:
         `PyG's to_hetero_with_bases <https://pytorch-geometric.readthedocs.io/
-        en/latest/generated/torch_geometric.nn.to_hetero_with_bases_transformer.
-        to_hetero_with_bases.html>`_
+        en/latest/modules/nn.html#torch_geometric.nn.
+        to_hetero_with_bases_transformer.to_hetero_with_bases>`_
     """
     return ToHeteroModel(
         module,

@@ -1196,12 +1196,12 @@ class HeteroGraphData:
             type ``(src, rel, dst)``:
 
             - ``colptr_dict[et]``: ``int64`` array of length ``num_dst_nodes + 1``;
-              the incoming edges of destination node ``v`` are at positions
-              ``colptr[v]`` to ``colptr[v + 1]``.
+                the incoming edges of destination node ``v`` are at positions
+                ``colptr[v]`` to ``colptr[v + 1]``.
             - ``row_dict[et]``: ``int64`` source node of each edge, in CSC order.
             - ``perm_dict[et]``: ``int64`` original position (column in
-              ``edge_index_dict[et]``) of each edge in CSC order, used to look up
-              edge features of sampled edges.
+                ``edge_index_dict[et]``) of each edge in CSC order, used to look up
+                edge features of sampled edges.
         """
         num_nodes = self.num_nodes
         colptr_dict, row_dict, perm_dict = {}, {}, {}

@@ -44,7 +44,7 @@ def get_ppr(
     """
     Computes approximate personalized PageRank (PPR) vectors with the push
     algorithm of `"Local Graph Partitioning using PageRank Vectors"
-    <https://www.cs.cmu.edu/~dwoodruf/papers/andersen-chung-lang.pdf>`_, as
+    <https://doi.org/10.1109/FOCS.2006.44>`_, as
     used in `"Predict then Propagate" <https://arxiv.org/abs/1810.05997>`_.
 
     The PPR vector of a node ``i`` is the stationary distribution of a random

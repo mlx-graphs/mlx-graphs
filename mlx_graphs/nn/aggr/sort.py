@@ -8,7 +8,7 @@ from mlx_graphs.utils.dense import to_dense_batch
 
 class SortAggregation(Aggregation):
     r"""Sort pooling from `"An End-to-End Deep Learning Architecture for Graph
-    Classification" <https://www.cse.wustl.edu/~muhan/papers/AAAI_2018_DGCNN.pdf>`_
+    Classification" <https://doi.org/10.1609/aaai.v32i1.11782>`_
     paper (DGCNN).
 
     The elements of each set (e.g. the nodes of each graph) are sorted in
