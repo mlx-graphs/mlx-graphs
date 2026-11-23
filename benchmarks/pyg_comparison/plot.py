@@ -974,7 +974,8 @@ def tables(records, system):
         lines += [
             "## One layer, forward + backward",
             "",
-            "Random graphs, 128 input and output features, 4 heads for the attention layers.",
+            "Random graphs, 128 input and output features, "
+            "4 heads for the attention layers.",
             "",
             *figure(
                 "layers_speedup",
