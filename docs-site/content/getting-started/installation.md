@@ -1,22 +1,22 @@
 # Installation
 
-<span class="title-ref">mlx-graphs</span> is available on Pypi. To install run
+`mlx-graphs` is available on PyPI. To install it, run
 
 ```shell
 pip install mlx-graphs
 ```
 
-It requires a Mac with Apple Silicon and Python 3.10 or later. MLX and `mlx-cluster`, which provides the sparse GPU kernels of the fused message passing, are installed with it.
+It requires a Mac with Apple Silicon and Python 3.10 or later. MLX and `mlx-cluster`, which provides the sparse GPU kernels of the fused message passing, are installed with it, together with NumPy, `requests`, `fsspec` and `tqdm`.
 
 ## Build from source
 
-To build and install <span class="title-ref">mlx-graphs</span> from source start by cloning the github repo
+To build and install `mlx-graphs` from source, start by cloning the GitHub repository
 
 ```shell
 git clone git@github.com:mlx-graphs/mlx-graphs.git && cd mlx-graphs
 ```
 
-Then build and install using <span class="title-ref">pip</span> (we suggest using a separate virtual environment)
+Then build and install it with `pip` (we suggest using a separate virtual environment)
 
 ```shell
 pip install -e .
@@ -24,13 +24,26 @@ pip install -e .
 
 ## Installing test, dev, benchmarks, docs dependencies
 
-To install any extra dependencies for testing, development and building documentation, you can run any of the following
+To install the extra dependencies for testing, development, benchmarks and building the documentation, you can run any of the following
 
 ```shell
-pip install -e '.[test]'
-pip install -e '.[dev]'
-pip install -e '.[benchmarks]'
-pip install -e '.[docs]'
+pip install -e '.[test]'        # pytest, scipy, networkx, PyTorch, PyG, pandas, scikit-learn
+pip install -e '.[dev]'         # pre-commit
+pip install -e '.[benchmarks]'  # scipy, matplotlib, ogb, PyTorch, PyG
+pip install -e '.[docs-new]'    # this documentation site (Zensical)
 ```
 
-For dev purposes you may want to install the current version of <span class="title-ref">mlx</span> via <span class="title-ref">pip install mlx @ git+https://github.com/ml-explore/mlx.git</span>
+The `docs` extra installs the Sphinx toolchain of the previous documentation site.
+
+For dev purposes you may want to install the current version of `mlx` via `pip install "mlx @ git+https://github.com/ml-explore/mlx.git"`.
+
+## Building the documentation
+
+The site is built with [Zensical](https://zensical.org). The API reference is generated from the docstrings by static analysis, so MLX does not need to be importable:
+
+```shell
+pip install -e '.[docs-new]'
+python docs-site/scripts/gen.py   # API pages, notebooks, changelog, benchmark sections
+zensical serve                    # live preview on http://localhost:8000
+zensical build --strict           # static site in site/
+```

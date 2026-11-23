@@ -49,3 +49,19 @@ GNNBenchmarkDataset
 load_torch_file
 SparseCOOMatrix
 <!-- /api -->
+
+Helpers of `mlx_graphs.datasets.utils` for writing a dataset (see the
+[quickstart](../../getting-started/quickstart.md#datasets-and-data-loaders)):
+
+<!-- api mlx_graphs.datasets.utils.download -->
+download
+<!-- /api -->
+
+<!-- api mlx_graphs.datasets.utils -->
+check_sha1
+extract_archive
+save_graphs
+read_txt_array
+parse_txt_array
+is_floating_point
+<!-- /api -->

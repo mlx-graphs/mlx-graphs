@@ -1,6 +1,6 @@
 # Benchmarks
 
-MLX-graphs is compared with [PyTorch Geometric](https://pyg.org) (PyG) on the same Mac, on both PyTorch backends: MPS (the Apple GPU) and CPU. Every framework trains the same models, with the same hyperparameters, on the same data, and the training loss and test accuracy are recorded alongside the times: being faster only counts at the same results.
+MLX-graphs is compared with [PyTorch Geometric](https://github.com/pyg-team/pytorch_geometric) (PyG) on the same Mac, on both PyTorch backends: MPS (the Apple GPU) and CPU. Every framework trains the same models, with the same hyperparameters, on the same data, and the training loss and test accuracy are recorded alongside the times: being faster only counts at the same results.
 
 Each section below is one machine. Click a figure to see it at full size.
 

@@ -1,6 +1,6 @@
 # Coming from PyTorch Geometric
 
-mlx-graphs follows the design of [PyTorch Geometric](https://pyg.org) (PyG): graphs in COO format, a `MessagePassing` base class, batching by concatenating graphs, and layers with the same names. Porting a PyG model is mostly renaming. This page lists the differences and walks through porting a model and its training loop.
+mlx-graphs follows the design of [PyTorch Geometric](https://github.com/pyg-team/pytorch_geometric) (PyG): graphs in COO format, a `MessagePassing` base class, batching by concatenating graphs, and layers with the same names. Porting a PyG model is mostly renaming. This page lists the differences and walks through porting a model and its training loop.
 
 ## Names at a glance
 
@@ -44,7 +44,8 @@ from torch_geometric.datasets import Planetoid
 
 from mlx_graphs.utils import from_pyg
 
-data = Planetoid(root="data/Planetoid", name="Cora")[0]
+dataset = Planetoid(root="data/Planetoid", name="Cora")
+data = dataset[0]
 graph = from_pyg(data)
 >>> GraphData(
         edge_index(shape=(2, 10556), int64)

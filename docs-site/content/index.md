@@ -146,6 +146,13 @@ class SAGEConv(MessagePassing):
             message_kwargs={"edge_weights": edge_weights},
         )
         return self.self_proj(node_features) + self.neigh_proj(neigh_features)
+
+
+# 3 nodes, 3 weighted edges, 8 features -> 16
+edge_index = mx.array([[0, 1, 2], [1, 2, 0]])
+conv = SAGEConv(8, 16)
+out = conv(edge_index, mx.random.normal((3, 8)), mx.array([1.0, 0.5, 2.0]))
+print(out.shape)  # (3, 16)
 ```
 
 </div>

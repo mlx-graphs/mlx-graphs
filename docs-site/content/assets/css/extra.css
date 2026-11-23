@@ -264,9 +264,13 @@
   min-width: 0;
 }
 /* wide display math scrolls instead of overflowing the page */
-.md-typeset .katex-display {
+.md-typeset div.arithmatex {
+  max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
+}
+.md-typeset .katex-display {
+  margin: 0.5em 0;
   padding: 0.2rem 0;
 }
 .md-typeset .mg-example__text p {

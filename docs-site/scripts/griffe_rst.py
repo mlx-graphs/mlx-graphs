@@ -309,7 +309,8 @@ def convert_inline(text: str, context: str) -> str:
         chunk = _MATH_ROLE.sub(lambda m: "$" + m.group(1).strip() + "$", chunk)
         chunk = _ROLE.sub(_role_sub(context), chunk)
         chunk = _LINK.sub(
-            lambda m: "[" + re.sub(r"\s+", " ", m.group(1)) + "](" + m.group(2).strip() + ")",
+            # reST lets a long URL wrap: its whitespace is not part of it
+            lambda m: "[" + re.sub(r"\s+", " ", m.group(1)) + "](" + re.sub(r"\s+", "", m.group(2)) + ")",
             chunk,
         )
         chunk = _BARE_LINK.sub(lambda m: "<" + m.group(1).strip() + ">", chunk)

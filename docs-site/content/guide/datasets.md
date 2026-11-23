@@ -43,6 +43,8 @@ MLX-graphs provides several built-in datasets for graph machine learning tasks.
 | JODIE Wikipedia (temporal) | 1      | 9,227   | 157,474   | 34.13      | edge       | edge        |
 
 
+Not in the table: the dataset collections (`TUDataset`, `OGBDataset`, `LRGBDataset`, `GNNBenchmarkDataset`, `SuperPixelDataset`), the heterogeneous graphs (`IMDB`, `DBLP`, `OGBMAG`), `WordNet18`, the `mooc` and `lastfm` graphs of `JODIEDataset`, and the synthetic `FakeDataset` and `FakeHeteroDataset`. Every dataset class is listed below.
+
 ## Dataset Classes { #dataset-classes }
 
 Each class is documented, with its parameters and methods, in the [API reference](../api/datasets/index.md).
@@ -108,9 +110,9 @@ python examples/compute_dataset_stats.py
 # Stats for a specific dataset
 python examples/compute_dataset_stats.py --dataset karate_club
 
-# Output as markdown table (for use in docs/issues)
+# Output as markdown table (for this page, or issues)
 python examples/compute_dataset_stats.py --format markdown
 
-# Output as RST table (for Sphinx docs)
+# Output as RST table
 python examples/compute_dataset_stats.py --format rst
 ```

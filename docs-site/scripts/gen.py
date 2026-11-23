@@ -756,6 +756,25 @@ def main() -> None:
         generate_benchmarks()
     if args.only is None:
         check_nav()
+        check_lists()
+
+
+def check_lists() -> None:
+    """Hand-written lists that must follow the code."""
+    problems = []
+    examples = (CONTENT / "tutorials" / "examples.md").read_text()
+    for script in sorted((ROOT / "examples").glob("*.py")):
+        if f"examples/{script.name})" not in examples:
+            problems.append(f"tutorials/examples.md does not list examples/{script.name}")
+    datasets_page = (CONTENT / "guide" / "datasets.md").read_text()
+    pkg = load_package()
+    base = {"BaseDataset", "Dataset", "HeteroDataset"}
+    for name in public_exports(pkg, "mlx_graphs.datasets"):
+        if name not in base and f"[mlx_graphs.datasets.{name}]" not in datasets_page:
+            problems.append(f"guide/datasets.md does not list mlx_graphs.datasets.{name}")
+    if problems:
+        raise SystemExit("\n".join(problems))
+    print("lists: examples and datasets pages match examples/ and mlx_graphs.datasets")
 
 
 def check_nav() -> None:

@@ -22,7 +22,7 @@
 - notebook: metapath2vec
   title: MetaPath2Vec
   text: Embeddings of a heterogeneous graph from meta-path guided random walks, on a toy graph and on DBLP.
-  icon: lucide/route
+  thumbnail: metapath2vec.svg
   tags: [embeddings, heterogeneous]
 
 - notebook: minibatch_training
@@ -74,5 +74,5 @@
 - notebook: qm9_tutorial
   title: Molecular properties on QM9
   text: Predict quantum-chemical properties of small molecules with a GNN.
-  icon: lucide/atom
+  thumbnail: qm9_tutorial.svg
   tags: [chemistry, graph-level]

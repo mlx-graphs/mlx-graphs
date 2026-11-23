@@ -1,6 +1,6 @@
 # Validation against PyG
 
-mlx-graphs follows [PyTorch Geometric](https://pyg.org) (PyG), and every layer, sampler and model added for PyG parity was checked against PyG: layers by copying PyG's weights and comparing outputs and gradients, samplers statistically, and models by training them in both frameworks on the same data. This page describes how, summarizes the results, lists the bugs these checks found, and shows how to rerun them.
+mlx-graphs follows [PyTorch Geometric](https://github.com/pyg-team/pytorch_geometric) (PyG), and every layer, sampler and model added for PyG parity was checked against PyG: layers by copying PyG's weights and comparing outputs and gradients, samplers statistically, and models by training them in both frameworks on the same data. This page describes how, summarizes the results, lists the bugs these checks found, and shows how to rerun them.
 
 The full result tables are in the repository, under [benchmarks/quality](https://github.com/mlx-graphs/mlx-graphs/tree/main/benchmarks/quality). The speed comparison is on the [Benchmarks](benchmarks.md) page.
 
@@ -174,7 +174,7 @@ Found by the training and sampler comparisons, each fixed with a regression test
 - `GINEConv`'s edge projection was also initialized with Glorot weights (GINE on MUTAG: 80.0 ± 10.5 % before the fix, 82.0 ± 7.1 % after, 78.0 ± 13.6 % in PyG).
 - GraphSAINT's `edge_norm` used the count of the edge's source node, as PyG does, instead of its target (the paper's definition). On Cora, the median relative error of the normalized aggregation was about 50 % with the source count; with the target count it is sampling noise that shrinks with `sample_coverage`.
 
-Other differences from PyG fixed in the same release (see the [changelog](https://github.com/mlx-graphs/mlx-graphs/blob/main/CHANGELOG.md)):
+Other differences from PyG fixed in the same release (see the [changelog](changelog.md)):
 
 - `LayerNormalization(mode="graph")` gave wrong shapes with batch indices, and `mode="node"` ignored its own `weight` and `bias`. Both now match PyG's `LayerNorm`.
 - Max and min aggregations gave the full gradient to every tied value (e.g. the identical messages of duplicate edges). They now split it equally, as PyG does.

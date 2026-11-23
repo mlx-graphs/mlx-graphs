@@ -115,8 +115,8 @@ graphs = [
 ]
 graphs_batch = batch(graphs)
 >>> GraphDataBatch(
-    edge_index(shape=[2, 9], int32)
-    node_features(shape=[9, 1], float32))
+    edge_index(shape=(2, 9), int32)
+    node_features(shape=(9, 1), float32))
 
 graphs_batch.num_graphs
 >>> 3
@@ -129,17 +129,17 @@ If needed, the graphs within the batch can be easily indexed:
 ```python
 graphs_batch[1]
 >>> GraphData(
-    edge_index(shape=[2, 3], int32)
-    node_features(shape=[3, 1], float32))
+    edge_index(shape=(2, 3), int32)
+    node_features(shape=(3, 1), float32))
 
 graphs_batch[1:]
 >>> [
         GraphData(
-            edge_index(shape=[2, 3], int32)
-            node_features(shape=[3, 1], float32)),
+            edge_index(shape=(2, 3), int32)
+            node_features(shape=(3, 1), float32)),
         GraphData(
-            edge_index(shape=[2, 3], int32)
-            node_features(shape=[3, 1], float32))
+            edge_index(shape=(2, 3), int32)
+            node_features(shape=(3, 1), float32))
     ]
 ```
 
@@ -165,15 +165,15 @@ class QM7bDataset(Dataset):
     def download(self):
         file_path = os.path.join(self.raw_path, self.name + ".mat")
         download(
-            "http://deepchem.io.s3-website-us-west-1.amazonaws.com/datasets/qm7b.mat",
+            "https://deepchemdata.s3-us-west-1.amazonaws.com/datasets/qm7b.mat",
             path=file_path,
         )
 
     def process(self):
         mat_path = os.path.join(self.raw_path, self.name + ".mat")
-        data = scipy.io.loadmat(mat_path)
+        data = sp.io.loadmat(mat_path)
         labels = mx.array(data["T"].tolist())
-        features = mx.array(data["X"].to_list())
+        features = mx.array(data["X"].tolist())
         num_graphs = labels.shape[0]
         graphs = []
         for i in range(num_graphs):
