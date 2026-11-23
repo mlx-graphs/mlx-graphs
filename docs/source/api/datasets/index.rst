@@ -46,6 +46,9 @@ Datasets
 	JODIEDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	QM9
+	ZINC
+	MoleculeNet
 
 
 Utilities

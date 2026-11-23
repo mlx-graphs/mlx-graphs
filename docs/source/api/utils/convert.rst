@@ -21,3 +21,13 @@ Convert
 
 	from_pyg
 	to_pyg
+
+Molecules (require ``rdkit``):
+
+.. autosummary::
+	:toctree: _autosummary_convert
+
+	from_smiles
+	to_smiles
+	from_rdmol
+	to_rdmol
