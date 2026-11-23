@@ -52,4 +52,11 @@ from .generators import (  # noqa
     stochastic_blockmodel_graph,
 )
 from .spatial import knn, knn_graph, radius, radius_graph  # noqa
+from .clustering import (  # noqa
+    consecutive_cluster,
+    fps,
+    graclus,
+    nearest,
+    voxel_grid,
+)
 from .smiles import e_map, from_rdmol, from_smiles, to_rdmol, to_smiles, x_map  # noqa

@@ -16,3 +16,10 @@ from .edge_pool import EdgePooling, UnpoolInfo  # noqa
 from .asap import ASAPooling  # noqa
 from .mem_pool import MemPooling  # noqa
 from .pan_pool import PANPooling  # noqa
+from .cluster_pooling import (  # noqa
+    avg_pool,
+    avg_pool_x,
+    max_pool,
+    max_pool_x,
+)
+from mlx_graphs.utils.clustering import fps, graclus, nearest, voxel_grid  # noqa

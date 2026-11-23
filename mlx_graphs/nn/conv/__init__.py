@@ -43,3 +43,10 @@ from .pna_conv import PNAConv  # noqa
 from .gps_conv import GPSConv  # noqa
 from .dense_conv import DenseGCNConv, DenseGINConv, DenseGraphConv, DenseSAGEConv  # noqa
 from .pan_conv import PANConv  # noqa
+from .point_conv import PointConv, PointNetConv  # noqa
+from .point_transformer_conv import PointTransformerConv  # noqa
+from .ppf_conv import PPFConv  # noqa
+from .spline_conv import SplineConv  # noqa
+from .gmm_conv import GMMConv  # noqa
+from .feast_conv import FeaStConv  # noqa
+from .x_conv import XConv  # noqa

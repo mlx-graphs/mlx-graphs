@@ -178,8 +178,13 @@ def _sorted_pairs(rows: list, by_distance: bool) -> mx.array:
         return mx.zeros((2, 0), dtype=mx.int32)
     query = np.concatenate([r[0] for r in rows])
     neighbor = np.concatenate([r[1] for r in rows])
-    second = np.concatenate([r[2] for r in rows]) if by_distance else neighbor
-    order = np.lexsort((neighbor, second, query))
+    if by_distance:
+        distance = np.concatenate([r[2] for r in rows])
+        order = np.lexsort((neighbor, distance, query))
+    else:
+        # one integer key sorts ~10x faster than a lexsort
+        key = query.astype(np.int64) * (int(neighbor.max()) + 1) + neighbor
+        order = np.argsort(key, kind="stable")
     return mx.array(np.stack([query[order], neighbor[order]]).astype(np.int32))
 
 

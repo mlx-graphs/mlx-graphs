@@ -48,6 +48,8 @@ Datasets
 	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+	ModelNet
+	ShapeNet
 	QM9
 	ZINC
 	MoleculeNet
