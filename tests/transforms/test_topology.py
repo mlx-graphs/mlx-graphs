@@ -1,3 +1,5 @@
+import sys
+
 import mlx.core as mx
 import numpy as np
 import pytest
@@ -93,23 +95,52 @@ def test_two_hop_keeps_edge_features_aligned():
     assert graph.edge_features.tolist() == [[2.0], [0.0], [1.0]]
 
 
+def _two_hop_reference(edge_index, edge_features, num_nodes):
+    """TwoHop with NumPy: the coalesced edges and two-hop paths (i != k), with
+    the summed features of duplicate edges and zeros for the new ones."""
+    src, dst = edge_index
+    adj = np.zeros((num_nodes, num_nodes), dtype=np.int64)
+    np.add.at(adj, (src, dst), 1)
+    two_hop = (adj @ adj > 0) & ~np.eye(num_nodes, dtype=bool)
+    row, col = np.nonzero((adj > 0) | two_hop)
+    if edge_features is None:
+        return np.stack([row, col]), None
+    features = np.zeros((num_nodes, num_nodes, edge_features.shape[1]), np.float32)
+    np.add.at(features, (src, dst), edge_features)
+    return np.stack([row, col]), features[row, col]
+
+
 @pytest.mark.parametrize("seed", range(4))
 @pytest.mark.parametrize("edge_features", [False, True])
-def test_two_hop_matches_pyg(seed, edge_features, monkeypatch):
-    pyg_utils = pytest.importorskip("torch_geometric.utils")
+def test_two_hop_matches_reference(seed, edge_features):
+    graph = random_graph(seed)
+    features = None
+    if edge_features:
+        features = np.random.default_rng(seed).normal(size=(graph.num_edges, 2))
+        graph.edge_features = mx.array(features.astype(np.float32))
+    expected_index, expected_features = _two_hop_reference(
+        np.asarray(graph.edge_index), features, 10
+    )
+    out = TwoHop()(graph)
+    np.testing.assert_array_equal(np.asarray(out.edge_index), expected_index)
+    if edge_features:
+        np.testing.assert_allclose(
+            np.asarray(out.edge_features), expected_features, atol=1e-5
+        )
+    assert out.num_nodes == 10
+
+
+# PyG's TwoHop (torch's sparse matmul) crashes on GitHub's x86 Linux runners.
+@pytest.mark.skipif(sys.platform != "darwin", reason="PyG's TwoHop crashes on x86")
+@pytest.mark.parametrize("seed", range(4))
+@pytest.mark.parametrize("edge_features", [False, True])
+def test_two_hop_matches_pyg(seed, edge_features):
     pyg_transforms = pytest.importorskip("torch_geometric.transforms")
     graph = random_graph(seed)
     if edge_features:
         # PyG sorts the edges by source without permuting `edge_attr`, so the
-        # comparison needs edges that are already sorted, and a stable sort:
-        # x86 builds of torch sort ties in an unspecified order.
+        # comparison needs edges that are already sorted.
         graph = graph.coalesce()
-        index_sort = pyg_utils.index_sort
-
-        def stable_index_sort(inputs, max_value=None, stable=False):
-            return index_sort(inputs, max_value, stable=True)
-
-        monkeypatch.setattr(pyg_utils, "index_sort", stable_index_sort)
         graph.edge_features = mx.random.normal((graph.num_edges, 2))
 
     expected = pyg_transforms.TwoHop()(to_pyg(graph))

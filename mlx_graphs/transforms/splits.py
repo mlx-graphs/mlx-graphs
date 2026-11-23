@@ -341,7 +341,11 @@ class RandomLinkSplit(BaseTransform):
         labels = np.zeros(label_index.shape[1], dtype=np.float32)
         labels[: positive_edges.size] = 1.0
         out.edge_label_index = mx.array(label_index, dtype=dtype)
-        out.edge_label = mx.array(labels)
+        # Not mx.array of an empty NumPy array: with MLX 0.32 on the CPU, a
+        # reduction of such an array (e.g. `edge_label.sum()`) can be very slow.
+        out.edge_label = (
+            mx.array(labels) if labels.size else mx.zeros((0,), dtype=mx.float32)
+        )
         out.num_nodes = num_nodes
         return out
 

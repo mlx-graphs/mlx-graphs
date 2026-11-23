@@ -62,6 +62,12 @@ def _cat(parts: List[np.ndarray]) -> np.ndarray:
     return np.concatenate(parts) if parts else np.zeros(0, dtype=np.int64)
 
 
+def _to_mx(a: np.ndarray) -> mx.array:
+    """``mx.array(a)``, except for empty arrays: with MLX 0.32 on the CPU, a
+    reduction of an array made from an empty NumPy array can be very slow."""
+    return mx.array(a) if a.size else mx.zeros(a.shape, dtype=mx.int64)
+
+
 def _ranges(starts: np.ndarray, counts: np.ndarray) -> Tuple[np.ndarray, np.ndarray]:
     """Segment ids and values of the concatenated ``range(s, s + c)``."""
     seg = np.repeat(np.arange(counts.size), counts)
@@ -222,10 +228,10 @@ def _neighbor_sample_numpy(
         keep = src >= 0
         rows, cols, edges = [src[keep]], [seg[keep]], [off[keep]]
     return (
-        mx.array(samples),
-        mx.array(_cat(rows)),
-        mx.array(_cat(cols)),
-        mx.array(_cat(edges)),
+        _to_mx(samples),
+        _to_mx(_cat(rows)),
+        _to_mx(_cat(cols)),
+        _to_mx(_cat(edges)),
     )
 
 
@@ -423,10 +429,10 @@ def _hetero_neighbor_sample_numpy(
             num_sampled_nodes[nt].append(count[nt] - before[nt])
 
     return HeteroSamplerOutput(
-        node_id={nt: mx.array(_cat(sampled[nt])) for nt in node_types},
-        row={et: mx.array(_cat(rows[et])) for et in edge_types},
-        col={et: mx.array(_cat(cols[et])) for et in edge_types},
-        edge_id={et: mx.array(_cat(eids[et])) for et in edge_types},
+        node_id={nt: _to_mx(_cat(sampled[nt])) for nt in node_types},
+        row={et: _to_mx(_cat(rows[et])) for et in edge_types},
+        col={et: _to_mx(_cat(cols[et])) for et in edge_types},
+        edge_id={et: _to_mx(_cat(eids[et])) for et in edge_types},
         num_sampled_nodes=num_sampled_nodes,
         num_sampled_edges=num_sampled_edges,
     )
@@ -597,7 +603,7 @@ def _rejection_sampling_numpy(
         nodes[:, step + 1] = x
         edges[:, step] = edge
         t, v = v, x
-    return mx.array(nodes), mx.array(edges)
+    return _to_mx(nodes), _to_mx(edges)
 
 
 # ---------------------------------------------------------------------------
