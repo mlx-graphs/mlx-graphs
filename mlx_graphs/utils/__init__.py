@@ -59,3 +59,4 @@ from .clustering import (  # noqa
     nearest,
     voxel_grid,
 )
+from .smiles import e_map, from_rdmol, from_smiles, to_rdmol, to_smiles, x_map  # noqa

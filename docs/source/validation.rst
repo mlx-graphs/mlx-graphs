@@ -329,6 +329,40 @@ test suite (``fps`` picks the same points as PyG with
 ``random_start=False``). Full table:
 `pointcloud_results.md <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/pointcloud_results.md>`_.
 
+Molecular models
+~~~~~~~~~~~~~~~~
+
+SchNet, DimeNet, DimeNet++ and AttentiveFP match PyG with copied weights
+(outputs, and gradients with respect to the parameters and to the atom
+positions, ``tests/nn/models/test_molecular.py``). They were also trained in
+both frameworks (``benchmarks/quality/molecular_quality.py``, small budget):
+SchNet and DimeNet++ on the HOMO-LUMO gap of a random QM9 subset, AttentiveFP
+on ESOL (one-hot ``from_smiles`` features, random 80/10/10 splits).
+
+.. list-table::
+   :header-rows: 1
+   :widths: 16 30 18 18
+
+   * - Model
+     - Task
+     - PyG
+     - mlx-graphs
+   * - SchNet
+     - QM9 gap, 10k molecules, 10 epochs, test MAE (eV), 2 seeds
+     - 0.377 ± 0.004
+     - 0.384 ± 0.019
+   * - DimeNet++
+     - QM9 gap, 5k molecules, 6 epochs, test MAE (eV), 1 seed
+     - 0.270
+     - 0.279
+   * - AttentiveFP
+     - ESOL, 100 epochs, test RMSE, 3 seeds
+     - 0.606 ± 0.058
+     - 0.593 ± 0.034
+
+Full table, with the time per epoch:
+`molecular_results.md <https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/molecular_results.md>`_.
+
 Samplers and loaders
 ~~~~~~~~~~~~~~~~~~~~
 

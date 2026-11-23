@@ -85,6 +85,27 @@ Available Datasets
      - ~8.67
      - node, edge
      - graph
+   * - QM9
+     - 130,831
+     - ~18.0
+     - ~37.3
+     - ~2.07
+     - node, edge, positions
+     - graph
+   * - ZINC (subset / full)
+     - 12,000 / 249,456
+     - ~23.2
+     - ~49.8
+     - ~2.14
+     - node, edge
+     - graph
+   * - MoleculeNet (e.g. ESOL)
+     - 1,128
+     - ~13.3
+     - ~27.4
+     - ~1.98
+     - node, edge
+     - graph
    * - Elliptic Bitcoin
      - 1
      - 203,769
@@ -319,6 +340,9 @@ Dataset Classes
    JODIEDataset
    LRGBDataset
    GNNBenchmarkDataset
+   QM9
+   ZINC
+   MoleculeNet
    OGBMAG
    Reddit
    Reddit2
@@ -595,6 +619,30 @@ PPI
 ^^^
 
 .. autoclass:: PPI
+   :members:
+   :show-inheritance:
+   :no-index:
+
+QM9
+^^^
+
+.. autoclass:: QM9
+   :members:
+   :show-inheritance:
+   :no-index:
+
+ZINC
+^^^^
+
+.. autoclass:: ZINC
+   :members:
+   :show-inheritance:
+   :no-index:
+
+MoleculeNet
+^^^^^^^^^^^
+
+.. autoclass:: MoleculeNet
    :members:
    :show-inheritance:
    :no-index:

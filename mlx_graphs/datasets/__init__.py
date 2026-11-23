@@ -37,3 +37,6 @@ from .tgb import (  # noqa
 )
 from .modelnet import ModelNet  # noqa
 from .shapenet import ShapeNet  # noqa
+from .qm9 import QM9  # noqa
+from .zinc import ZINC  # noqa
+from .molecule_net import MoleculeNet  # noqa

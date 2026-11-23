@@ -137,6 +137,17 @@ Other models and building blocks:
 	SGFormer
 	Polynormer
 
+Molecular and 3D models:
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	SchNet
+	DimeNet
+	DimeNetPlusPlus
+	AttentiveFP
+
 Graph auto-encoders
 -------------------
 

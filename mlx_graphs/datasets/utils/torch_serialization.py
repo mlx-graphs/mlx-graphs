@@ -130,6 +130,19 @@ def _rebuild_parameter(data, requires_grad=False, hooks=None, *args):
     return data
 
 
+def _load_from_bytes(buffer: bytes):
+    """Stand-in for ``torch.storage._load_from_bytes``: a tensor pickled with
+    the plain :mod:`pickle` module (not ``torch.save``) stores its storage as
+    the bytes of a legacy ``torch.save`` file, read with the same restricted
+    unpickler."""
+    if not isinstance(buffer, (bytes, bytearray)):
+        raise pickle.UnpicklingError("Invalid storage bytes")
+    storage = _load_legacy(io.BytesIO(buffer))
+    if not isinstance(storage, (_Storage, _StorageView)):
+        raise pickle.UnpicklingError("The storage bytes do not hold a storage")
+    return storage
+
+
 class SparseCOOMatrix:
     """Minimal stand-in for an unpickled ``scipy.sparse.coo_matrix``.
 
@@ -162,6 +175,7 @@ _ALLOWED_GLOBALS = {
     ("torch._utils", "_rebuild_tensor_v2"): _rebuild_tensor_v2,
     ("torch._utils", "_rebuild_tensor"): _rebuild_tensor,
     ("torch._utils", "_rebuild_parameter"): _rebuild_parameter,
+    ("torch.storage", "_load_from_bytes"): _load_from_bytes,
     ("collections", "OrderedDict"): collections.OrderedDict,
     # Pickle protocol 2 (used by torch.save) stores `bytes`, e.g. the buffer of
     # a NumPy array, as `_codecs.encode(str, "latin1")`. Also allowed by
