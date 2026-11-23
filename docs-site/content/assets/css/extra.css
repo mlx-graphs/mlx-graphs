@@ -1,0 +1,487 @@
+/* mlx-graphs documentation: brand colours (from the logo) and page components. */
+
+/* ---------------------------------------------------------------------------
+   Brand colours. The logo's gradient goes from #2286A6 to #BCDAE4.
+   ------------------------------------------------------------------------ */
+:root,
+[data-md-color-scheme="default"] {
+  --mg-brand: #2286a6;
+  --mg-brand-2: #4e9eb8;
+  --mg-brand-3: #90c2d2;
+  --mg-brand-4: #bcdae4;
+  --mg-brand-ink: #135a71;
+  --mg-surface: #f4f9fb;
+  --mg-border: rgba(34, 134, 166, 0.18);
+  --mg-shadow: 0 1px 2px rgba(16, 42, 54, 0.06), 0 8px 24px rgba(16, 42, 54, 0.06);
+  --md-primary-fg-color: #2286a6;
+  --md-primary-fg-color--light: #4e9eb8;
+  --md-primary-fg-color--dark: #176a85;
+  --md-primary-bg-color: #ffffff;
+  --md-primary-bg-color--light: rgba(255, 255, 255, 0.7);
+  --md-accent-fg-color: #1b7896;
+  --md-accent-fg-color--transparent: rgba(34, 134, 166, 0.1);
+  --md-typeset-a-color: #1b7896;
+}
+
+[data-md-color-scheme="slate"] {
+  --mg-brand: #5fb3cf;
+  --mg-brand-2: #4e9eb8;
+  --mg-brand-3: #90c2d2;
+  --mg-brand-4: #bcdae4;
+  --mg-brand-ink: #a9dbeb;
+  --mg-surface: hsla(var(--md-hue), 18%, 9%, 1);
+  --mg-border: rgba(144, 194, 210, 0.16);
+  --mg-shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 8px 24px rgba(0, 0, 0, 0.25);
+  --md-hue: 197;
+  --md-primary-fg-color: #4e9eb8;
+  --md-primary-fg-color--light: #65abc1;
+  --md-primary-fg-color--dark: #2286a6;
+  --md-primary-bg-color: #ffffff;
+  --md-accent-fg-color: #7ac3dc;
+  --md-accent-fg-color--transparent: rgba(122, 195, 220, 0.12);
+  --md-typeset-a-color: #6cbad4;
+}
+
+/* ---------------------------------------------------------------------------
+   General polish
+   ------------------------------------------------------------------------ */
+.md-typeset h1 {
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.md-typeset h2 {
+  font-weight: 650;
+  letter-spacing: -0.01em;
+}
+.md-typeset table:not([class]) {
+  font-size: 0.72rem;
+}
+.md-typeset img {
+  border-radius: 6px;
+}
+
+/* figures that exist in a light and a dark version */
+.md-typeset img[src$="#only-light"],
+.md-typeset img[src$="#only-dark"] {
+  width: 100%;
+}
+
+/* ---------------------------------------------------------------------------
+   Home page
+   ------------------------------------------------------------------------ */
+.mg-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+  gap: 2.5rem;
+  align-items: center;
+  margin: 0.5rem 0 2rem;
+  padding: 2.5rem 2.5rem 2.25rem;
+  border-radius: 1.25rem;
+  border: 1px solid var(--mg-border);
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(144, 194, 210, 0.28) 0%, transparent 55%),
+    radial-gradient(90% 120% at 0% 100%, rgba(34, 134, 166, 0.12) 0%, transparent 60%),
+    var(--mg-surface);
+}
+[data-md-color-scheme="slate"] .mg-hero {
+  background:
+    radial-gradient(120% 140% at 100% 0%, rgba(78, 158, 184, 0.22) 0%, transparent 55%),
+    radial-gradient(90% 120% at 0% 100%, rgba(34, 134, 166, 0.16) 0%, transparent 60%),
+    var(--mg-surface);
+}
+.md-typeset .mg-hero__title {
+  margin: 0.6rem 0 0.8rem;
+  font-size: 2.35rem;
+  line-height: 1.12;
+  font-weight: 800;
+  letter-spacing: -0.035em;
+  color: var(--md-default-fg-color);
+}
+.md-typeset .mg-hero__title span {
+  background: linear-gradient(90deg, var(--mg-brand) 0%, var(--mg-brand-3) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.md-typeset .mg-hero__lead {
+  font-size: 0.95rem;
+  line-height: 1.6;
+  color: var(--md-default-fg-color--light);
+  margin: 0 0 1rem;
+  max-width: 34rem;
+}
+.md-typeset .mg-hero .highlight {
+  max-width: 22rem;
+  margin: 0 0 1.1rem;
+}
+.md-typeset .mg-hero .highlight pre > code {
+  font-size: 0.8rem;
+  padding: 0.65rem 1rem;
+}
+.mg-hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.md-typeset .mg-hero__actions p {
+  display: contents;
+}
+.md-typeset .mg-hero__actions .md-button {
+  margin: 0;
+  border-radius: 0.6rem;
+  padding: 0.55em 1.25em;
+  font-size: 0.75rem;
+}
+.mg-hero__art {
+  display: flex;
+  justify-content: center;
+}
+.md-typeset .mg-hero__art img {
+  width: 100%;
+  max-width: 26rem;
+  border-radius: 0;
+}
+
+.md-typeset .mg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.2rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--mg-border);
+  background: var(--md-default-bg-color);
+  color: var(--md-default-fg-color--light);
+  font-size: 0.68rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+.md-typeset .mg-badge:hover {
+  color: var(--md-accent-fg-color);
+}
+.mg-badge__dot {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #2fbf71;
+  box-shadow: 0 0 0 3px rgba(47, 191, 113, 0.18);
+}
+
+/* headline numbers */
+.mg-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0 0 2.5rem;
+}
+.mg-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.9rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid var(--mg-border);
+  background: var(--md-default-bg-color);
+}
+.mg-stat__value {
+  font-size: 1.6rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--mg-brand);
+}
+.mg-stat__label {
+  font-size: 0.68rem;
+  line-height: 1.4;
+  color: var(--md-default-fg-color--light);
+}
+
+.mg-section {
+  margin: 0 0 2.75rem;
+}
+.md-typeset .mg-section > h2 {
+  margin-top: 0;
+  font-size: 1.35rem;
+}
+.md-typeset .mg-figure {
+  margin: 1rem 0 0;
+  padding: 0.75rem;
+  border-radius: 1rem;
+  border: 1px solid var(--mg-border);
+  background: var(--md-default-bg-color);
+  max-width: 100%;
+}
+.md-typeset .mg-figure img {
+  margin: 0;
+  vertical-align: top;
+}
+.md-typeset .mg-figure p {
+  margin: 0;
+}
+/* no edit / view buttons on the home page */
+.md-content__inner:has(.mg-hero) > .md-content__button {
+  display: none;
+}
+
+/* feature cards */
+.md-typeset .grid.cards.mg-features > ul > li,
+.md-typeset .grid.cards.mg-api-cards > ul > li {
+  border-radius: 0.9rem;
+  border-color: var(--mg-border);
+  padding: 1rem 1.1rem;
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.md-typeset .grid.cards.mg-features > ul > li:hover,
+.md-typeset .grid.cards.mg-api-cards > ul > li:hover {
+  border-color: var(--mg-brand-2);
+  box-shadow: var(--mg-shadow);
+}
+.md-typeset .mg-icon {
+  color: var(--mg-brand);
+}
+.md-typeset .grid.cards > ul > li > hr {
+  margin: 0.6rem 0;
+}
+
+.md-typeset .grid.mg-features {
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+  grid-gap: 0.75rem;
+}
+.md-typeset .grid.mg-api-cards {
+  grid-gap: 0.75rem;
+}
+.md-typeset a.mg-tutorial__title {
+  text-decoration: none;
+}
+
+/* example: the text, then the code at full width */
+.mg-example > * {
+  min-width: 0;
+}
+/* wide display math scrolls instead of overflowing the page */
+.md-typeset .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.2rem 0;
+}
+.md-typeset .mg-example__text p {
+  max-width: 48rem;
+}
+.md-typeset .mg-example__code .highlight {
+  margin: 0;
+}
+.md-typeset .mg-example__code pre > code {
+  font-size: 0.7rem;
+}
+
+/* ---------------------------------------------------------------------------
+   Tutorial cards (home page and Tutorials page)
+   ------------------------------------------------------------------------ */
+.mg-tutorials {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 12.5rem), 1fr));
+  gap: 1rem;
+  margin: 1rem 0 1.5rem;
+}
+@media screen and (min-width: 60em) {
+  .mg-section .mg-tutorials {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+.mg-tutorial {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 0.9rem;
+  border: 1px solid var(--mg-border);
+  background: var(--md-default-bg-color);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.2s;
+}
+.mg-tutorial:hover {
+  border-color: var(--mg-brand-2);
+  box-shadow: var(--mg-shadow);
+  transform: translateY(-2px);
+}
+.md-typeset .mg-tutorial p {
+  margin: 0;
+}
+.mg-tutorial__thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 16 / 8;
+  padding: 0.6rem;
+  background: linear-gradient(135deg, #f7fafb 0%, #eaf3f6 100%);
+  border-bottom: 1px solid var(--mg-border);
+  overflow: hidden;
+}
+[data-md-color-scheme="slate"] .mg-tutorial__thumb {
+  background: linear-gradient(135deg, #1b2a31 0%, #14323d 100%);
+}
+.md-typeset .mg-tutorial__thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 0.4rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .mg-tutorial__thumb img {
+  filter: brightness(0.92);
+}
+.md-typeset .mg-tutorial__thumb .twemoji,
+.md-typeset .mg-tutorial__thumb svg {
+  width: 3rem;
+  height: 3rem;
+  color: var(--mg-brand);
+}
+.md-typeset .mg-tutorial__thumb .twemoji svg {
+  width: 3rem;
+  height: 3rem;
+  max-height: none;
+}
+.mg-tutorial__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.8rem 0.95rem 0.9rem;
+  flex: 1;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset a.mg-tutorial__title {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--md-default-fg-color);
+}
+/* the whole card is the link */
+.md-typeset a.mg-tutorial__title::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+.md-typeset a.mg-tutorial__title:hover {
+  color: var(--md-accent-fg-color);
+}
+.mg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: auto;
+  padding-top: 0.3rem;
+}
+.mg-tags span {
+  font-size: 0.6rem;
+  font-weight: 600;
+  padding: 0.05rem 0.5rem;
+  border-radius: 999px;
+  background: var(--md-accent-fg-color--transparent);
+  color: var(--mg-brand-ink);
+}
+
+/* ---------------------------------------------------------------------------
+   Notebooks
+   ------------------------------------------------------------------------ */
+.mg-nb-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: -0.4rem 0 1.4rem;
+}
+.md-typeset .mg-nb-links p {
+  display: contents;
+}
+.md-typeset .mg-nb-links .md-button {
+  margin: 0;
+  padding: 0.3em 0.9em;
+  font-size: 0.65rem;
+  border-radius: 0.5rem;
+  border-width: 1px;
+}
+.md-typeset .mg-nb-input .highlight {
+  margin-bottom: 0;
+}
+.md-typeset .mg-nb-input + .mg-nb-output,
+.md-typeset .mg-nb-output + .mg-nb-output {
+  margin-top: 0;
+}
+.md-typeset .mg-nb-output {
+  position: relative;
+  margin: 0 0 1em;
+  padding: 0.1rem 0 0.1rem 0.9rem;
+  border-left: 3px solid var(--mg-brand-3);
+  overflow-x: auto;
+}
+.md-typeset .mg-nb-output .highlight,
+.md-typeset .mg-nb-output pre {
+  margin: 0.4em 0;
+}
+.md-typeset .mg-nb-output pre > code {
+  background: transparent;
+  font-size: 0.68rem;
+  padding: 0.4rem 0.2rem;
+}
+.md-typeset .mg-nb-stderr {
+  border-left-color: #e0a54a;
+}
+.md-typeset .mg-nb-html table {
+  font-size: 0.68rem;
+}
+.md-typeset .mg-nb-image img {
+  background: #fff;
+}
+
+/* ---------------------------------------------------------------------------
+   API reference
+   ------------------------------------------------------------------------ */
+.mg-count {
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--md-default-fg-color--lighter);
+}
+.md-typeset .doc-heading code {
+  font-weight: 700;
+}
+.md-typeset .doc-signature {
+  border-radius: 0.6rem;
+}
+.md-typeset .doc-contents > p:first-child {
+  font-size: 0.82rem;
+}
+.md-typeset .mg-source {
+  display: block;
+  margin-top: 2rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--md-default-fg-color--lightest);
+  color: var(--md-default-fg-color--light);
+}
+.mg-columns ul {
+  columns: 3 14rem;
+  column-gap: 2rem;
+}
+.md-typeset .mg-columns li {
+  break-inside: avoid;
+}
+
+/* ---------------------------------------------------------------------------
+   Small screens
+   ------------------------------------------------------------------------ */
+@media screen and (max-width: 60em) {
+  .mg-hero {
+    grid-template-columns: minmax(0, 1fr);
+    padding: 1.75rem 1.25rem;
+    gap: 1.25rem;
+  }
+  .mg-hero__art {
+    order: -1;
+    justify-content: flex-start;
+  }
+  .md-typeset .mg-hero__art img {
+    max-width: 15rem;
+  }
+  .md-typeset .mg-hero__title {
+    font-size: 1.75rem;
+  }
+  .mg-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

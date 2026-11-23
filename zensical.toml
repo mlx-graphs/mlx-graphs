@@ -1,0 +1,210 @@
+# Documentation site of mlx-graphs, built with Zensical (https://zensical.org).
+#
+#   pip install -e '.[docs-new]'
+#   python docs-site/scripts/gen.py      # API pages, notebooks, changelog, benchmarks
+#   zensical serve                       # live preview on http://localhost:8000
+#   zensical build --strict              # static site in site/
+#
+# The hand-written pages are in docs-site/content. gen.py writes the generated
+# pages next to them (they are git-ignored, see docs-site/.gitignore).
+
+[project]
+site_name = "mlx-graphs"
+site_description = "Graph Neural Networks on Apple Silicon, with MLX: PyTorch Geometric's API, 5-6x faster on a Mac."
+site_author = "mlx-graphs contributors"
+site_url = "https://mlx-graphs.github.io/mlx-graphs/"
+copyright = "Copyright &copy; 2024-2026 mlx-graphs contributors"
+docs_dir = "docs-site/content"
+site_dir = "site"
+repo_url = "https://github.com/mlx-graphs/mlx-graphs"
+repo_name = "mlx-graphs/mlx-graphs"
+edit_uri = "edit/main/docs-site/content/"
+strict = false
+# rebuild when gen.py rewrites the included snippets
+watch = ["docs-site/.generated"]
+not_in_nav = """
+/index.md
+"""
+extra_css = [
+  "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.css",
+  "assets/css/extra.css",
+]
+extra_javascript = [
+  "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/katex.min.js",
+  "https://cdn.jsdelivr.net/npm/katex@0.16.22/dist/contrib/auto-render.min.js",
+  "assets/js/katex.js",
+]
+
+nav = [
+  { "Getting started" = [
+    { "Installation" = "getting-started/installation.md" },
+    { "Quickstart" = "getting-started/quickstart.md" },
+    { "Coming from PyG" = "getting-started/from-pyg.md" },
+  ] },
+  { "User guide" = [
+    { "Message passing" = "guide/message-passing.md" },
+    { "Datasets" = "guide/datasets.md" },
+  ] },
+  { "Tutorials" = [
+    "tutorials/index.md",
+    { "Notebooks" = [
+      { "Graph classification" = "tutorials/notebooks/graph_classification.md" },
+      { "Node2Vec" = "tutorials/notebooks/node2vec.md" },
+      { "MetaPath2Vec" = "tutorials/notebooks/metapath2vec.md" },
+      { "Mini-batch training" = "tutorials/notebooks/minibatch_training.md" },
+      { "Link prediction" = "tutorials/notebooks/link_prediction.md" },
+      { "Temporal graph networks" = "tutorials/notebooks/temporal_graph_networks.md" },
+      { "Heterogeneous graphs" = "tutorials/notebooks/heterogeneous_to_hetero.md" },
+      { "Graph transformers (GPS)" = "tutorials/notebooks/graph_transformers_gps.md" },
+      { "Intrusion detection" = "tutorials/notebooks/cybersecurity.md" },
+      { "Graph RAG (G-reasoner)" = "tutorials/notebooks/graph_rag_g_reasoner.md" },
+      { "Molecules (QM9)" = "tutorials/notebooks/qm9_tutorial.md" },
+    ] },
+    { "Example scripts" = "tutorials/examples.md" },
+  ] },
+  { "API reference" = "api/" },
+  { "Benchmarks & validation" = [
+    { "Benchmarks" = "benchmarks.md" },
+    { "Validation against PyG" = "validation.md" },
+  ] },
+  { "Changelog" = "changelog.md" },
+]
+
+[project.extra]
+generator = false
+homepage = "./"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/github"
+link = "https://github.com/mlx-graphs/mlx-graphs"
+name = "mlx-graphs on GitHub"
+
+[[project.extra.social]]
+icon = "fontawesome/brands/python"
+link = "https://pypi.org/project/mlx-graphs/"
+name = "mlx-graphs on PyPI"
+
+[project.theme]
+language = "en"
+logo = "assets/images/icon.svg"
+favicon = "assets/images/favicon.svg"
+features = [
+  "announce.dismiss",
+  "content.action.edit",
+  "content.action.view",
+  "content.code.annotate",
+  "content.code.copy",
+  "content.tabs.link",
+  "content.tooltips",
+  "navigation.footer",
+  "navigation.indexes",
+  "navigation.instant",
+  "navigation.instant.prefetch",
+  "navigation.path",
+  "navigation.sections",
+  "navigation.tabs",
+  "navigation.top",
+  "navigation.tracking",
+  "search.highlight",
+  "toc.follow",
+]
+
+[project.theme.icon]
+repo = "fontawesome/brands/github"
+
+[project.theme.font]
+text = "Inter"
+code = "JetBrains Mono"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme)"
+toggle.icon = "lucide/sun-moon"
+toggle.name = "Switch to light mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: light)"
+scheme = "default"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/sun"
+toggle.name = "Switch to dark mode"
+
+[[project.theme.palette]]
+media = "(prefers-color-scheme: dark)"
+scheme = "slate"
+primary = "custom"
+accent = "custom"
+toggle.icon = "lucide/moon"
+toggle.name = "Switch to system preference"
+
+[project.markdown_extensions]
+abbr = {}
+admonition = {}
+attr_list = {}
+def_list = {}
+footnotes = {}
+md_in_html = {}
+tables = {}
+toc.permalink = true
+pymdownx.arithmatex.generic = true
+pymdownx.betterem = {}
+pymdownx.caret = {}
+pymdownx.details = {}
+pymdownx.emoji.emoji_generator = "zensical.extensions.emoji.to_svg"
+pymdownx.emoji.emoji_index = "zensical.extensions.emoji.twemoji"
+pymdownx.highlight.anchor_linenums = true
+pymdownx.highlight.line_spans = "__span"
+pymdownx.highlight.pygments_lang_class = true
+pymdownx.inlinehilite = {}
+pymdownx.keys = {}
+pymdownx.mark = {}
+pymdownx.smartsymbols = {}
+pymdownx.snippets.base_path = ["docs-site/.generated"]
+pymdownx.snippets.check_paths = true
+pymdownx.superfences = {}
+pymdownx.tabbed.alternate_style = true
+pymdownx.tasklist.custom_checkbox = true
+pymdownx.tilde = {}
+
+[project.plugins.mkdocstrings.handlers.python]
+paths = ["."]
+inventories = [
+  "https://docs.python.org/3/objects.inv",
+  "https://numpy.org/doc/stable/objects.inv",
+]
+
+[project.plugins.mkdocstrings.handlers.python.options]
+docstring_style = "google"
+docstring_options.ignore_init_summary = true
+docstring_options.returns_named_value = false
+docstring_options.warn_missing_types = false
+docstring_options.warn_unknown_params = false
+docstring_section_style = "table"
+extensions = ["docs-site/scripts/griffe_rst.py"]
+filters = ["!^_"]
+heading_level = 1
+inherited_members = false
+members_order = "source"
+merge_init_into_class = true
+parameter_headings = false
+separate_signature = true
+line_length = 80
+show_bases = true
+show_root_full_path = false
+show_root_heading = true
+show_root_members_full_path = false
+show_signature_annotations = true
+show_source = true
+show_symbol_type_heading = true
+show_symbol_type_toc = true
+signature_crossrefs = true
+summary = true
+unwrap_annotated = true
+
+# Click a figure to see it at full size
+[project.plugins.glightbox]
+skip_classes = ["mg-hero__logo", "twemoji"]
+
+# The API sidebar is generated by gen.py into docs-site/content/api/SUMMARY.md
+[project.plugins.literate-nav]
+nav_file = "SUMMARY.md"

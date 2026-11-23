@@ -1,0 +1,7 @@
+# Written by scripts/gen.py before each build
+/.generated/
+/content/api/
+/content/changelog.md
+/content/assets/benchmarks/
+/content/tutorials/notebooks/*.md
+/content/tutorials/notebooks/*_files/
