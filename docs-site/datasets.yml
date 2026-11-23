@@ -300,6 +300,12 @@
   args: '"MNIST", "train"'
 - name: WordNet18
   class: WordNet18
+- name: tgbl-wiki (TGB, link property prediction)
+  class: TGBLinkPropPredDataset
+  args: '"tgbl-wiki"'
+- name: tgbn-trade (TGB, node property prediction)
+  class: TGBNodePropPredDataset
+  args: '"tgbn-trade"'
 - name: JODIE MOOC (temporal)
   class: JODIEDataset
   args: '"mooc"'

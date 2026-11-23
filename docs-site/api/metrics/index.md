@@ -10,6 +10,8 @@ scalar `mx.array` from `compute`.
 <!-- api mlx_graphs.metrics -->
 roc_auc_score
 average_precision_score
+tgb_mrr_hits
+tgb_ndcg
 <!-- /api -->
 
 ## Link prediction metrics
@@ -29,4 +31,5 @@ LinkPredCoverage
 LinkPredDiversity
 LinkPredPersonalization
 LinkPredAveragePopularity
+TGBEvaluator
 <!-- /api -->

@@ -39,8 +39,16 @@ WordNet18RR
 FakeDataset
 FakeHeteroDataset
 JODIEDataset
+TGBLinkPropPredDataset
+TGBNodePropPredDataset
 LRGBDataset
 GNNBenchmarkDataset
+<!-- /api -->
+
+Negative samples of the TGB link property prediction datasets:
+
+<!-- api mlx_graphs.datasets -->
+TGBNegativeEdgeSampler
 <!-- /api -->
 
 ## Utilities

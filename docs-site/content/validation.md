@@ -132,6 +132,21 @@ TGN link prediction on JODIE Wikipedia, `examples/tgn_jodie.py` against PyG's `e
 
 Without torch-scatter, PyG's fallback `scatter_argmax` gives empty groups the index `dim_size - 1`, so its `LastAggregator` copies an unrelated message to the nodes that have none instead of zeros. mlx-graphs follows the torch-scatter semantics, so the comparison also runs PyG with that function patched. Results: [results.json](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/tgn_comparison/results.json). The [TGN tutorial](tutorials/notebooks/temporal_graph_networks.md) compares the two in more detail.
 
+### Temporal Graph Benchmark
+
+The TGB datasets are checked against the official `py-tgb` package (`tests/datasets/test_tgb.py`): for `tgbl-wiki`, `tgbl-review`, `tgbn-trade` and `tgbn-genre`, the events (`src`, `dst`, `t`, `msg`, `w`), the split masks, the negative samples of every validation and test event and the node label streams are identical to py-tgb's. The large datasets (`tgbl-coin`, `tgbl-comment`, `tgbl-flight`, `tgbn-reddit`, `tgbn-token`) are checked on the first 200,000 events of their raw files (`benchmarks/tgn_comparison/check_tgb_slices.py`), without their negative samples. `TGBEvaluator` returns the same MRR, Hits@10 and NDCG@10 as py-tgb's evaluators, ties included.
+
+TGN with the TGB protocol (`examples/tgn_tgbl.py` / `tgn_tgbn.py` against py-tgb's PyG TGN examples, `benchmarks/tgn_comparison/compare_tgb.py`), same hyperparameters, 10 epochs, seeds 1 to 5 (mean ± sample std; time per epoch on a shared M-series machine, PyG on the CPU with 4 threads):
+
+| Run | Val | Test | Train s/epoch | Val s/epoch |
+|---------------------|---------------|---------------|-----------|-----------|
+| `tgbl-wiki` MRR, mlx-graphs | 0.312 ± 0.039 | 0.281 ± 0.042 | 6.5 | 2.0 |
+| `tgbl-wiki` MRR, PyG | 0.275 ± 0.062 | 0.253 ± 0.062 | 15.6 | 10.7 |
+| `tgbn-trade` NDCG@10, mlx-graphs | 0.394 ± 0.002 | 0.374 ± 0.003 | 7.2 | 1.0 |
+| `tgbn-trade` NDCG@10, PyG | 0.388 ± 0.009 | 0.368 ± 0.010 | 9.8 | 2.1 |
+
+The differences are within seed noise (Welch's t-test: p = 0.30 and 0.43 for the `tgbl-wiki` validation and test MRR, p = 0.24 and 0.27 for `tgbn-trade`). On `tgbl-wiki` both are still improving at epoch 10, the best epoch is 9 or 10 in every run, and the MRR at a fixed early epoch varies a lot with the seed (validation 0.25 to 0.35 in mlx-graphs, 0.18 to 0.34 in PyG). PyG scores the events of a mini-batch together; on the same seed this gives the same MRR as the edge-by-edge loop of the TGB example (val 0.0513, test 0.0559 after one epoch), whose validation pass takes 275 s instead of 7 s. Results: [results_tgb.json](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/tgn_comparison/results_tgb.json).
+
 ### GPS on Peptides-func
 
 `GPSConv` (`examples/graph_gps_peptides.py`) against a PyG twin of the same model: 4 GPS layers (GINE and 4-head attention), the same data with random-walk encodings, Adam (lr 1e-3, L2 1e-5), 10 epochs, seeds 0 and 1. Average precision over the 10 tasks:
