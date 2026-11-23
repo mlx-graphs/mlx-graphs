@@ -25,6 +25,7 @@ def gcn_norm(
     num_nodes: int,
     edge_weights: Optional[mx.array] = None,
     add_self_loops: bool = True,
+    fill_value: float = 1.0,
 ) -> Tuple[mx.array, mx.array]:
     r"""Symmetric GCN normalization of a graph.
 
@@ -35,8 +36,9 @@ def gcn_norm(
     Degrees are the (weighted) in-degrees, computed after the self-loops are
     added. Nodes with a degree of 0 get a normalization of 0.
 
-    With ``add_self_loops``, a self-loop of weight 1 is added to every node
-    that does not have one. Existing self-loops keep their weight, as in PyG.
+    With ``add_self_loops``, a self-loop of weight ``fill_value`` (1 by
+    default, 2 for PyG's ``improved=True``) is added to every node that does
+    not have one. Existing self-loops keep their weight, as in PyG.
     The returned ``edge_index`` always has ``num_edges + num_nodes`` columns in
     that case: the loop appended to a node that already has one has weight 0.
 
@@ -46,6 +48,7 @@ def gcn_norm(
         edge_weights: Optional scalar weight per edge, of shape `[num_edges]`
             or `[num_edges, 1]`. Default: ``None`` (all ones)
         add_self_loops: Whether to add self-loops before normalizing
+        fill_value: Weight of the added self-loops. Default: ``1.0``
 
     Returns:
         The edge index (with self-loops if requested) and one normalized weight
@@ -63,6 +66,8 @@ def gcn_norm(
         is_loop = (row == col).astype(mx.int32)
         num_loops = mx.zeros((num_nodes,), dtype=mx.int32).at[row].add(is_loop)
         loop_weights = (num_loops == 0).astype(weights.dtype)
+        if fill_value != 1.0:
+            loop_weights = loop_weights * fill_value
 
         deg = deg + loop_weights
         weights = mx.concatenate([weights, loop_weights])
@@ -187,15 +192,16 @@ def cached_gcn_norm(
     num_nodes: int,
     edge_weights: Optional[mx.array] = None,
     add_self_loops: bool = True,
+    fill_value: float = 1.0,
 ) -> Tuple[mx.array, mx.array]:
     """:func:`gcn_norm`, cached per ``edge_index`` array when the graph has no
     edge weights."""
     if edge_weights is not None:
-        return gcn_norm(edge_index, num_nodes, edge_weights, add_self_loops)
+        return gcn_norm(edge_index, num_nodes, edge_weights, add_self_loops, fill_value)
     return _norm_cache.get(
         edge_index,
-        ("gcn", num_nodes, add_self_loops),
-        lambda: gcn_norm(edge_index, num_nodes, None, add_self_loops),
+        ("gcn", num_nodes, add_self_loops, fill_value),
+        lambda: gcn_norm(edge_index, num_nodes, None, add_self_loops, fill_value),
     )
 
 
