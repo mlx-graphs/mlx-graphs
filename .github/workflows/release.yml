@@ -5,7 +5,7 @@ name: Release Python Package
 # can force the size of the version bump.
 on:
   schedule:
-    - cron: '0 23 * * *'
+    - cron: '0 0 * * *'
   workflow_dispatch:
     inputs:
       bump:
