@@ -44,8 +44,17 @@ Datasets
 	FakeDataset
 	FakeHeteroDataset
 	JODIEDataset
+	TGBLinkPropPredDataset
+	TGBNodePropPredDataset
 	LRGBDataset
 	GNNBenchmarkDataset
+
+
+.. autosummary::
+	:toctree: _autosummary
+	:template: custom-class-template.rst
+
+	TGBNegativeEdgeSampler
 
 
 Utilities
