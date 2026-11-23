@@ -1193,6 +1193,7 @@ def main() -> None:
     if "api" in parts:
         entries = generate_api()
         generate_redirects(entries)
+        generate_datasets_table()
     if "notebooks" in parts:
         generate_notebooks()
     if "changelog" in parts:
@@ -1204,6 +1205,57 @@ def main() -> None:
         check_lists()
 
 
+def generate_datasets_table() -> None:
+    """The "Available datasets" table, from docs-site/datasets.yml.
+
+    Each row links the class that loads the dataset and shows the call, after
+    checking that the class is exported by mlx_graphs.datasets and accepts the
+    arguments (static analysis of its __init__). The dataset classes that no
+    row uses are listed below the table.
+    """
+    import ast
+
+    rows = yaml.safe_load((SITE / "datasets.yml").read_text())
+    pkg = load_package()
+    exported = set(public_exports(pkg, "mlx_graphs.datasets"))
+    problems, used = [], set()
+    lines = [
+        "| Dataset | Load with | Graphs | Nodes | Edges | Avg degree | Features | Labels |",
+        "|---|---|--:|--:|--:|--:|---|---|",
+    ]
+    for row in rows:
+        cls, args = row["class"], row.get("args", "")
+        if cls not in exported:
+            problems.append(f"datasets.yml: {row['name']}: {cls} is not exported by mlx_graphs.datasets")
+            continue
+        used.add(cls)
+        obj = get_object(pkg, f"mlx_graphs.datasets.{cls}")
+        init = next((c.members["__init__"] for c in [obj, *obj.mro()] if "__init__" in c.members), None)
+        params = [p for p in (init.parameters if init else []) if p.name != "self"]
+        call = ast.parse(f"f({args})", mode="eval").body
+        names = {p.name for p in params}
+        if len(call.args) > len([p for p in params if p.kind is None or "positional" in str(p.kind)]):
+            problems.append(f"datasets.yml: {row['name']}: too many arguments for {cls}")
+        for kw in call.keywords:
+            if kw.arg not in names:
+                problems.append(f"datasets.yml: {row['name']}: {cls} has no argument {kw.arg!r}")
+        stats = [str(row.get(k, "–")).replace("~", "\\~") for k in ("graphs", "nodes", "edges", "avg_degree")]
+        lines.append(
+            f"| [{row['name']}][mlx_graphs.datasets.{cls}] | `{cls}({args})` | "
+            + " | ".join(stats)
+            + f" | {row.get('features', '–')} | {row.get('labels', '–')} |"
+        )
+    if problems:
+        raise SystemExit("\n".join(problems))
+    others = sorted(exported - used, key=str.lower)
+    other_line = "Other dataset classes: " + ", ".join(
+        f"[`{name}`][mlx_graphs.datasets.{name}]" for name in others
+    ) + "."
+    write(GENERATED / "datasets_table.md", "\n".join(lines) + "\n")
+    write(GENERATED / "datasets_other.md", other_line + "\n")
+    print(f"datasets: {len(rows)} rows, {len(used)} classes in the table, {len(others)} others listed")
+
+
 def check_lists() -> None:
     """Hand-written lists that must follow the code."""
     problems = []
@@ -1211,12 +1263,11 @@ def check_lists() -> None:
     for script in sorted((ROOT / "examples").glob("*.py")):
         if f"examples/{script.name})" not in examples:
             problems.append(f"tutorials/examples.md does not list examples/{script.name}")
-    datasets_page = (CONTENT / "getting-started" / "datasets.md").read_text()
-    pkg = load_package()
-    base = {"BaseDataset", "Dataset", "HeteroDataset"}
-    for name in public_exports(pkg, "mlx_graphs.datasets"):
-        if name not in base and f"[mlx_graphs.datasets.{name}]" not in datasets_page:
-            problems.append(f"getting-started/datasets.md does not list mlx_graphs.datasets.{name}")
+    # the datasets page: every dataset class is in its table or its list
+    datasets_text = (GENERATED / "datasets_table.md").read_text() + (GENERATED / "datasets_other.md").read_text()
+    for name in public_exports(load_package(), "mlx_graphs.datasets"):
+        if f"[mlx_graphs.datasets.{name}]" not in datasets_text:
+            problems.append(f"getting-started/datasets.md does not link mlx_graphs.datasets.{name}")
     if problems:
         raise SystemExit("\n".join(problems))
     print("lists: examples and datasets pages match examples/ and mlx_graphs.datasets")

@@ -1,0 +1,305 @@
+# The "Available datasets" table of getting-started/datasets.md. gen.py builds
+# the table from this file (the statistics come from
+# examples/compute_dataset_stats.py) and checks that every class exists and
+# accepts the arguments. A new dataset needs one entry.
+
+- name: Karate Club
+  class: KarateClubDataset
+  graphs: "1"
+  nodes: "34"
+  edges: "156"
+  avg_degree: "9.18"
+  features: node
+  labels: node
+- name: Cora
+  class: PlanetoidDataset
+  args: '"cora"'
+  graphs: "1"
+  nodes: "2,708"
+  edges: "10,556"
+  avg_degree: "7.80"
+  features: node
+  labels: node
+- name: CiteSeer
+  class: PlanetoidDataset
+  args: '"citeseer"'
+  graphs: "1"
+  nodes: "3,312"
+  edges: "9,104"
+  avg_degree: "5.50"
+  features: node
+  labels: node
+- name: PubMed
+  class: PlanetoidDataset
+  args: '"pubmed"'
+  graphs: "1"
+  nodes: "19,717"
+  edges: "88,651"
+  avg_degree: "8.99"
+  features: node
+  labels: node
+- name: Amazon Computers
+  class: AmazonDataset
+  args: '"computers"'
+  graphs: "1"
+  nodes: "13,752"
+  edges: "491,722"
+  avg_degree: "71.51"
+  features: node
+  labels: node
+- name: Amazon Photo
+  class: AmazonDataset
+  args: '"photo"'
+  graphs: "1"
+  nodes: "7,650"
+  edges: "238,162"
+  avg_degree: "62.26"
+  features: node
+  labels: node
+- name: Coauthor CS
+  class: CoauthorDataset
+  args: '"cs"'
+  graphs: "1"
+  nodes: "18,333"
+  edges: "163,788"
+  avg_degree: "17.87"
+  features: node
+  labels: node
+- name: Coauthor Physics
+  class: CoauthorDataset
+  args: '"physics"'
+  graphs: "1"
+  nodes: "34,493"
+  edges: "495,924"
+  avg_degree: "28.76"
+  features: node
+  labels: node
+- name: QM7b
+  class: QM7bDataset
+  graphs: "7,211"
+  nodes: "~15"
+  edges: "~130"
+  avg_degree: "~8.67"
+  features: node, edge
+  labels: graph
+- name: Elliptic Bitcoin
+  class: EllipticBitcoinDataset
+  graphs: "1"
+  nodes: "203,769"
+  edges: "234,355"
+  avg_degree: "2.30"
+  features: node
+  labels: node
+- name: MovieLens 100K
+  class: MovieLens100K
+  graphs: "1"
+  nodes: "1,682"
+  edges: "100,000"
+  avg_degree: "118.90"
+  features: node
+  labels: edge
+- name: Cora Full
+  class: CoraFull
+  graphs: "1"
+  nodes: "19,793"
+  edges: "126,842"
+  avg_degree: "12.82"
+  features: node
+  labels: node
+- name: Cora ML (full)
+  class: CitationFull
+  args: '"cora_ml"'
+  graphs: "1"
+  nodes: "2,995"
+  edges: "16,316"
+  avg_degree: "10.90"
+  features: node
+  labels: node
+- name: CiteSeer (full)
+  class: CitationFull
+  args: '"citeseer"'
+  graphs: "1"
+  nodes: "4,230"
+  edges: "10,674"
+  avg_degree: "5.05"
+  features: node
+  labels: node
+- name: DBLP (full)
+  class: CitationFull
+  args: '"dblp"'
+  graphs: "1"
+  nodes: "17,716"
+  edges: "105,734"
+  avg_degree: "11.94"
+  features: node
+  labels: node
+- name: PubMed (full)
+  class: CitationFull
+  args: '"pubmed"'
+  graphs: "1"
+  nodes: "19,717"
+  edges: "88,648"
+  avg_degree: "8.99"
+  features: node
+  labels: node
+- name: Roman-empire
+  class: HeterophilousGraphDataset
+  args: '"roman_empire"'
+  graphs: "1"
+  nodes: "22,662"
+  edges: "65,854"
+  avg_degree: "5.81"
+  features: node
+  labels: node
+- name: Amazon-ratings
+  class: HeterophilousGraphDataset
+  args: '"amazon_ratings"'
+  graphs: "1"
+  nodes: "24,492"
+  edges: "186,100"
+  avg_degree: "15.20"
+  features: node
+  labels: node
+- name: Minesweeper
+  class: HeterophilousGraphDataset
+  args: '"minesweeper"'
+  graphs: "1"
+  nodes: "10,000"
+  edges: "78,804"
+  avg_degree: "15.76"
+  features: node
+  labels: node
+- name: Tolokers
+  class: HeterophilousGraphDataset
+  args: '"tolokers"'
+  graphs: "1"
+  nodes: "11,758"
+  edges: "1,038,000"
+  avg_degree: "176.56"
+  features: node
+  labels: node
+- name: Questions
+  class: HeterophilousGraphDataset
+  args: '"questions"'
+  graphs: "1"
+  nodes: "48,921"
+  edges: "307,080"
+  avg_degree: "12.55"
+  features: node
+  labels: node
+- name: Cornell
+  class: WebKB
+  args: '"cornell"'
+  graphs: "1"
+  nodes: "183"
+  edges: "298"
+  avg_degree: "3.26"
+  features: node
+  labels: node
+- name: Texas
+  class: WebKB
+  args: '"texas"'
+  graphs: "1"
+  nodes: "183"
+  edges: "325"
+  avg_degree: "3.55"
+  features: node
+  labels: node
+- name: Wisconsin
+  class: WebKB
+  args: '"wisconsin"'
+  graphs: "1"
+  nodes: "251"
+  edges: "515"
+  avg_degree: "4.10"
+  features: node
+  labels: node
+- name: Chameleon
+  class: WikipediaNetwork
+  args: '"chameleon"'
+  graphs: "1"
+  nodes: "2,277"
+  edges: "36,101"
+  avg_degree: "31.71"
+  features: node
+  labels: node
+- name: Squirrel
+  class: WikipediaNetwork
+  args: '"squirrel"'
+  graphs: "1"
+  nodes: "5,201"
+  edges: "217,073"
+  avg_degree: "83.47"
+  features: node
+  labels: node
+- name: Actor
+  class: Actor
+  graphs: "1"
+  nodes: "7,600"
+  edges: "30,019"
+  avg_degree: "7.90"
+  features: node
+  labels: node
+- name: WikiCS
+  class: WikiCS
+  graphs: "1"
+  nodes: "11,701"
+  edges: "431,726"
+  avg_degree: "73.79"
+  features: node
+  labels: node
+- name: FB15k-237 (train)
+  class: FB15k_237
+  args: 'split="train"'
+  graphs: "1"
+  nodes: "14,541"
+  edges: "272,115"
+  avg_degree: "37.43"
+  features: none
+  labels: edge (type)
+- name: WordNet18RR
+  class: WordNet18RR
+  graphs: "1"
+  nodes: "40,943"
+  edges: "93,003"
+  avg_degree: "4.54"
+  features: none
+  labels: edge (type)
+- name: JODIE Wikipedia (temporal)
+  class: JODIEDataset
+  args: '"wikipedia"'
+  graphs: "1"
+  nodes: "9,227"
+  edges: "157,474"
+  avg_degree: "34.13"
+  features: edge
+  labels: edge
+
+# Collections and heterogeneous graphs: one example each, no statistics
+# (see the class page for the others)
+- name: MUTAG (TU datasets)
+  class: TUDataset
+  args: '"MUTAG"'
+- name: ogbn-arxiv (OGB)
+  class: OGBDataset
+  args: '"ogbn-arxiv"'
+- name: ogbn-mag (OGB, heterogeneous)
+  class: OGBMAG
+- name: IMDB (heterogeneous)
+  class: IMDB
+- name: DBLP (heterogeneous)
+  class: DBLP
+- name: Peptides-func (LRGB)
+  class: LRGBDataset
+  args: '"peptides-func"'
+- name: PATTERN (GNN benchmark)
+  class: GNNBenchmarkDataset
+  args: '"PATTERN"'
+- name: MNIST superpixels
+  class: SuperPixelDataset
+  args: '"MNIST", "train"'
+- name: WordNet18
+  class: WordNet18
+- name: JODIE MOOC (temporal)
+  class: JODIEDataset
+  args: '"mooc"'
