@@ -90,3 +90,35 @@ def gru_state(prefix: str, gru, suffix: str = "_l0") -> dict:
         )
         out[f"{prefix}.bhn"] = b_hh[2 * hidden :]
     return out
+
+
+def torch_grads(
+    module,
+    renames: Sequence[Tuple[str, str]] = (),
+    drop: Sequence[str] = (),
+) -> dict:
+    """The gradients of the parameters of a torch module (after
+    ``backward()``), with the names converted as in :func:`torch_state`."""
+    out = {}
+    for key, param in module.named_parameters():
+        if param.grad is None or any(re.search(p, key) for p in drop):
+            continue
+        for pattern, repl in renames:
+            key = re.sub(pattern, repl, key)
+        out[key] = param.grad.detach().cpu().numpy()
+    return out
+
+
+def assert_grads_close(mlx_grads, torch_grads: dict, rtol: float = 2e-2):
+    """Checks the gradients of an mlx module (a tree, e.g. from
+    ``nn.value_and_grad``) against :func:`torch_grads`, parameter by
+    parameter, in relative norm."""
+    flat = dict(tree_flatten(mlx_grads))
+    assert torch_grads, "no torch gradients"
+    for key, expected in torch_grads.items():
+        assert key in flat, f"missing gradient {key}"
+        got = np.array(flat[key])
+        assert got.shape == expected.shape, (key, got.shape, expected.shape)
+        diff = np.linalg.norm(got - expected)
+        scale = max(np.linalg.norm(expected), 1e-6)
+        assert diff <= rtol * scale, f"{key}: relative error {diff / scale:.2e}"
