@@ -22,6 +22,10 @@ edit_uri = "edit/main/docs-site/content/"
 strict = false
 # rebuild when gen.py rewrites the included snippets
 watch = ["docs-site/.generated"]
+# the API sidebar (read by literate-nav), not a page
+exclude_docs = """
+SUMMARY.md
+"""
 not_in_nav = """
 /index.md
 """
@@ -85,6 +89,7 @@ link = "https://pypi.org/project/mlx-graphs/"
 name = "mlx-graphs on PyPI"
 
 [project.theme]
+custom_dir = "docs-site/overrides"
 language = "en"
 logo = "assets/images/icon.svg"
 favicon = "assets/images/favicon.svg"
@@ -200,6 +205,11 @@ show_symbol_type_toc = true
 signature_crossrefs = true
 summary = true
 unwrap_annotated = true
+
+# Social cards (og:image) for every page
+[project.plugins.social]
+cards_layout_options.background_color = "#176a85"
+cards_layout_options.color = "#ffffff"
 
 # Click a figure to see it at full size
 [project.plugins.glightbox]

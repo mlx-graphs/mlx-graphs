@@ -1,0 +1,33 @@
+{#-
+  Edit / view buttons. Same as the theme's partials/actions.html, except that
+  a page can set `edit_url` in its front matter: the pages written by
+  docs-site/scripts/gen.py point to their real source (the notebook, the
+  docstring's module, the API template, CHANGELOG.rst) instead of the
+  generated Markdown file, which is not in the repository.
+-#}
+{% set edit_url = page.meta.edit_url or page.edit_url %}
+{% if "content.action.copy" in features and page.markdown_url %}
+  <button type="button" title="{{ lang.t('action.copy') }}" aria-label="{{ lang.t('action.copy') }}" class="md-content__button md-icon" data-md-copy-url="{{ page.markdown_url | url }}">
+    {% set icon = config.theme.icon.copy or "material/content-copy" %}
+    {% include ".icons/" ~ icon ~ ".svg" %}
+  </button>
+{% endif %}
+{% if edit_url %}
+  {% if "content.action.edit" in features %}
+    <a href="{{ edit_url }}" title="{{ lang.t('action.edit') }}" class="md-content__button md-icon" rel="edit">
+      {% set icon = config.theme.icon.edit or "material/file-edit-outline" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </a>
+  {% endif %}
+  {% if "content.action.view" in features %}
+    {% if "/blob/" in edit_url %}
+      {% set part = "/blob/" %}
+    {% else %}
+      {% set part = "/edit/" %}
+    {% endif %}
+    <a href="{{ edit_url | replace(part, '/raw/') }}" title="{{ lang.t('action.view') }}" class="md-content__button md-icon">
+      {% set icon = config.theme.icon.view or "material/file-eye-outline" %}
+      {% include ".icons/" ~ icon ~ ".svg" %}
+    </a>
+  {% endif %}
+{% endif %}

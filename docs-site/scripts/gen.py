@@ -296,15 +296,22 @@ def render_page(page: Page, entries: dict[str, Entry], added: list[Entry]) -> st
         section = m.group(1)
         return str(sum(1 for e in entries.values() if e.page.parts[0] == section))
 
-    return re.sub(r"<!--\s*count\s+(\w+)\s*-->", count, text)
+    text = re.sub(r"<!--\s*count\s+(\w+)\s*-->", count, text)
+    # the edit button opens the template, not this generated page
+    edit = f"edit_url: {GITHUB}/edit/main/docs-site/api/{page.src.as_posix()}"
+    if text.startswith("---\n"):
+        return text.replace("---\n", f"---\n{edit}\n", 1)
+    return f"---\n{edit}\n---\n\n{text}"
 
 
 def object_page(entry: Entry) -> str:
     kind = entry.template or kind_of(entry.obj)
     options = dict(OPTIONS.get(kind, {}))
+    source = entry.obj.relative_package_filepath.as_posix()
     lines = [
         "---",
         f"title: {entry.name}",
+        f"edit_url: {GITHUB}/edit/main/{source}",
         "---",
         "",
         f"::: {entry.id}",
@@ -313,7 +320,6 @@ def object_page(entry: Entry) -> str:
         lines.append("    options:")
         for key, value in options.items():
             lines.append(f"      {key}: {json.dumps(value)}")
-    source = entry.obj.relative_package_filepath.as_posix()
     lines += [
         "",
         f'<small class="mg-source">`from {entry.module} import {entry.name}` &middot; '
