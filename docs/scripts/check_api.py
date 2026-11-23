@@ -25,7 +25,14 @@ from pathlib import Path
 import griffe
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
-from gen import _BLOCK, ROOT, TEMPLATES, _heading, get_object, load_package  # noqa: E402
+from gen import (  # noqa: E402
+    _BLOCK,
+    ROOT,
+    TEMPLATES,
+    _heading,
+    get_object,
+    load_package,
+)
 
 # subpackages whose exports are implementation details, not API
 SKIP = {"mlx_graphs.nn.kernels"}
@@ -88,7 +95,9 @@ def main() -> int:
                 # every enclosing module votes for this block
                 parts = obj.path.split(".")[:-1]
                 for i in range(1, len(parts) + 1):
-                    by_module.setdefault(".".join(parts[:i]), Counter())[(rel, group)] += 1
+                    by_module.setdefault(".".join(parts[:i]), Counter())[
+                        (rel, group)
+                    ] += 1
 
     missing = []
     seen = set()
@@ -113,13 +122,20 @@ def main() -> int:
             )
 
     if stale:
-        print(f"API blocks list {len(stale)} name(s) that do not exist:", *stale, sep="\n")
+        print(
+            f"API blocks list {len(stale)} name(s) that do not exist:", *stale, sep="\n"
+        )
     if missing:
         print(f"{len(missing)} public name(s) are in no API block:", *missing, sep="\n")
     if stale or missing:
-        print("\nSee docs/README.md, 'Adding a class or function to the API reference'.")
+        print(
+            "\nSee docs/README.md, 'Adding a class or function to the API reference'."
+        )
         return 1
-    print(f"API reference: all {len(listed)} listed names exist and every public name is listed")
+    print(
+        f"API reference: all {len(listed)} listed names exist"
+        " and every public name is listed"
+    )
     return 0
 
 

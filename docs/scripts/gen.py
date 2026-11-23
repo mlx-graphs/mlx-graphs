@@ -46,7 +46,7 @@ NB_DIR = CONTENT / "tutorials" / "notebooks"
 GITHUB = "https://github.com/mlx-graphs/mlx-graphs"
 
 sys.path.insert(0, str(HERE))
-from griffe_rst import convert_inline, rst_to_markdown  # noqa: E402
+from griffe_rst import convert_inline  # noqa: E402
 
 # Order of the API sections in the sidebar, and of the sub-pages of a section.
 # A section is a directory of docs/api/ with an index.md; its other pages
@@ -201,7 +201,11 @@ def parse_templates(pkg: griffe.Module) -> tuple[list[Page], dict[str, Entry]]:
                 )
                 try:
                     entry.obj = get_object(pkg, entry.id)
-                except (KeyError, griffe.AliasResolutionError, griffe.CyclicAliasError) as e:
+                except (
+                    KeyError,
+                    griffe.AliasResolutionError,
+                    griffe.CyclicAliasError,
+                ) as e:
                     raise SystemExit(f"{src}: cannot find {entry.id} ({e!r})")
                 if entry.id in entries:
                     raise SystemExit(f"{src}: {entry.id} is listed twice")
@@ -231,7 +235,9 @@ def public_exports(pkg: griffe.Module, module: str) -> list[str]:
 
 def add_undocumented(pkg, pages, entries) -> list[Entry]:
     """Public names of AUTO_PACKAGES that no template lists."""
-    documented = {e.obj.path for e in entries.values()} | {e.name for e in entries.values()}
+    documented = {e.obj.path for e in entries.values()} | {
+        e.name for e in entries.values()
+    }
     by_section: dict[str, Page] = {
         str(p.src.parent): p for p in pages if p.src.name == "index.md"
     }
@@ -259,10 +265,16 @@ def add_undocumented(pkg, pages, entries) -> list[Entry]:
 
 def table(entries: list[Entry], page_dir: Path) -> str:
     kinds = {kind_of(e.obj) for e in entries}
-    head = {"class": "Class", "function": "Function"}[kinds.pop()] if len(kinds) == 1 else "Name"
+    head = (
+        {"class": "Class", "function": "Function"}[kinds.pop()]
+        if len(kinds) == 1
+        else "Name"
+    )
     lines = [f"| {head} | Description |", "|---|---|"]
     for e in entries:
-        link = Path(*([".."] * len(page_dir.parts))) / e.page if page_dir.parts else e.page
+        link = (
+            Path(*([".."] * len(page_dir.parts))) / e.page if page_dir.parts else e.page
+        )
         call = "()" if kind_of(e.obj) == "function" else ""
         lines.append(f"| [`{e.name}{call}`]({link.as_posix()}) | {summary_of(e.obj)} |")
     return "\n".join(lines) + "\n"
@@ -316,7 +328,8 @@ def object_page(entry: Entry) -> str:
     lines = [
         "---",
         # the module too when another section has an object of the same name
-        f"title: {entry.name}" + (f" ({entry.module})" if entry.name in DUPLICATE_NAMES else ""),
+        f"title: {entry.name}"
+        + (f" ({entry.module})" if entry.name in DUPLICATE_NAMES else ""),
         f"edit_url: {GITHUB}/edit/main/{source}",
         "---",
         "",
@@ -329,7 +342,8 @@ def object_page(entry: Entry) -> str:
     lines += [
         "",
         f'<small class="mg-source">`from {entry.module} import {entry.name}` &middot; '
-        f"[:fontawesome-brands-github: `{source}`]({GITHUB}/blob/main/{source}#L{entry.obj.lineno})</small>",
+        f"[:fontawesome-brands-github: `{source}`]"
+        f"({GITHUB}/blob/main/{source}#L{entry.obj.lineno})</small>",
         "",
     ]
     return "\n".join(lines)
@@ -366,7 +380,9 @@ def nav(pages: list[Page]) -> str:
         lines.append(f"- [{index.title}]({section}/index.md)")
         objects(index, "    ")
         rest = sorted(
-            p.src.stem for p in pages if p.src.parent.as_posix() == section and p.src.stem != "index"
+            p.src.stem
+            for p in pages
+            if p.src.parent.as_posix() == section and p.src.stem != "index"
         )
         for sub in subpages + [s for s in rest if s not in subpages]:
             page = by_src[f"{section}/{sub}.md"]
@@ -391,7 +407,9 @@ def api_index(pages: list[Page], entries: dict[str, Entry]) -> dict:
                 if name.startswith("_") and name != "__call__":
                     continue
                 try:
-                    documented = bool(member.docstring and member.docstring.value.strip())
+                    documented = bool(
+                        member.docstring and member.docstring.value.strip()
+                    )
                 except (griffe.AliasResolutionError, griffe.CyclicAliasError):
                     documented = False
                 if documented:
@@ -416,10 +434,14 @@ def generate_api(check: bool = False) -> dict[str, Entry]:
         seen[key] = e
 
     GENERATED.mkdir(parents=True, exist_ok=True)
-    write(GENERATED / "api_objects.json", json.dumps(api_index(pages, entries), indent=0))
+    write(
+        GENERATED / "api_objects.json", json.dumps(api_index(pages, entries), indent=0)
+    )
 
     # remove pages of objects that are gone
-    wanted = {API_OUT / p.src for p in pages} | {API_OUT / e.page for e in entries.values()}
+    wanted = {API_OUT / p.src for p in pages} | {
+        API_OUT / e.page for e in entries.values()
+    }
     wanted.add(API_OUT / "SUMMARY.md")
     if API_OUT.exists():
         for old in API_OUT.rglob("*.md"):
@@ -472,10 +494,17 @@ def _gh_alerts(text: str) -> str:
         kind = m.group(1).lower()
         kind = {"caution": "danger"}.get(kind, kind)
         body = re.sub(r"^>\s?", "", m.group(2), flags=re.M)
-        return f"!!! {kind}\n\n" + "\n".join("    " + line for line in body.split("\n")) + "\n"
+        return (
+            f"!!! {kind}\n\n"
+            + "\n".join("    " + line for line in body.split("\n"))
+            + "\n"
+        )
 
     return re.sub(
-        r"^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:>.*(?:\n|$))*)", sub, text, flags=re.M
+        r"^> \[!(NOTE|TIP|IMPORTANT|WARNING|CAUTION)\]\s*\n((?:>.*(?:\n|$))*)",
+        sub,
+        text,
+        flags=re.M,
     )
 
 
@@ -494,7 +523,9 @@ def convert_notebook(path: Path) -> str:
         source = _text(cell.get("source", ""))
         if cell["cell_type"] == "markdown":
             # figures referenced the Sphinx way (notebooks of older branches)
-            source = source.replace("../../_static/tutorials/", "../../assets/tutorials/")
+            source = source.replace(
+                "../../_static/tutorials/", "../../assets/tutorials/"
+            )
             # links to other notebooks and to the Sphinx pages -> these pages
             source = re.sub(r"\]\((\w+)\.ipynb(#[^)]*)?\)", r"](\1.md\2)", source)
             for old, new in SPHINX_LINKS.items():
@@ -517,8 +548,10 @@ def convert_notebook(path: Path) -> str:
                 out.append(title)
                 out.append(
                     f'<div class="mg-nb-links" markdown>\n'
-                    f"[:fontawesome-brands-github: View on GitHub]({GITHUB}/blob/main/{repo_path}){{ .md-button }}\n"
-                    f"[:lucide-download: Download notebook]({path.name}){{ .md-button }}\n"
+                    f"[:fontawesome-brands-github: View on GitHub]"
+                    f"({GITHUB}/blob/main/{repo_path}){{ .md-button }}\n"
+                    f"[:lucide-download: Download notebook]({path.name})"
+                    "{ .md-button }\n"
                     f"</div>"
                 )
                 source = rest
@@ -529,7 +562,9 @@ def convert_notebook(path: Path) -> str:
             continue
         if not source.strip():
             continue
-        out.append(f'<div class="mg-nb-input" markdown>\n\n{_fence(source, lang)}\n\n</div>')
+        out.append(
+            f'<div class="mg-nb-input" markdown>\n\n{_fence(source, lang)}\n\n</div>'
+        )
         outputs = []
         for o in cell.get("outputs", []):
             kind = o["output_type"]
@@ -543,19 +578,37 @@ def convert_notebook(path: Path) -> str:
                 outputs.append(("mg-nb-stderr", _fence(tb)))
             elif kind in ("display_data", "execute_result"):
                 data = o.get("data", {})
-                if "image/png" in data or "image/jpeg" in data or "image/svg+xml" in data:
-                    mime = next(m for m in ("image/svg+xml", "image/png", "image/jpeg") if m in data)
+                if (
+                    "image/png" in data
+                    or "image/jpeg" in data
+                    or "image/svg+xml" in data
+                ):
+                    mime = next(
+                        m
+                        for m in ("image/svg+xml", "image/png", "image/jpeg")
+                        if m in data
+                    )
                     files.mkdir(exist_ok=True)
-                    ext = {"image/png": "png", "image/jpeg": "jpg", "image/svg+xml": "svg"}[mime]
+                    ext = {
+                        "image/png": "png",
+                        "image/jpeg": "jpg",
+                        "image/svg+xml": "svg",
+                    }[mime]
                     target = files / f"output_{n_images}.{ext}"
                     n_images += 1
                     if ext == "svg":
                         target.write_text(_text(data[mime]))
                     else:
                         target.write_bytes(base64.b64decode(_text(data[mime])))
-                    alt = _text(data.get("text/plain", "output")).strip().replace("\n", " ")
+                    alt = (
+                        _text(data.get("text/plain", "output"))
+                        .strip()
+                        .replace("\n", " ")
+                    )
                     alt = re.sub(r"[\[\]<>]", "", alt)[:120] or "output"
-                    outputs.append(("mg-nb-image", f"![{alt}]({name}_files/{target.name})"))
+                    outputs.append(
+                        ("mg-nb-image", f"![{alt}]({name}_files/{target.name})")
+                    )
                 elif "text/html" in data:
                     html = _text(data["text/html"]).strip()
                     html = re.sub(r"<style[^>]*>.*?</style>", "", html, flags=re.S)
@@ -565,12 +618,16 @@ def convert_notebook(path: Path) -> str:
                 elif "text/latex" in data:
                     outputs.append(("", _text(data["text/latex"])))
                 elif "text/plain" in data:
-                    outputs.append(("", _fence(_ANSI.sub("", _text(data["text/plain"])))))
+                    outputs.append(
+                        ("", _fence(_ANSI.sub("", _text(data["text/plain"]))))
+                    )
         for cls, body in outputs:
             if cls == "mg-nb-html":
                 out.append(f'<div class="mg-nb-output {cls}">\n{body}\n</div>')
             else:
-                out.append(f'<div class="mg-nb-output {cls}" markdown>\n\n{body}\n\n</div>')
+                out.append(
+                    f'<div class="mg-nb-output {cls}" markdown>\n\n{body}\n\n</div>'
+                )
     heading = next((re.sub(r"^#\s+", "", s) for s in out if re.match(r"^#\s", s)), name)
     title = re.sub(r"[`*_]", "", heading.strip()) + " · Tutorials"
     front = (
@@ -592,7 +649,9 @@ def tutorial_cards(tutorials: list[dict], page: str) -> str:
     cards = []
     for t in tutorials:
         if t.get("thumbnail"):
-            thumb = f'![]({rel("assets/tutorials/" + t["thumbnail"])}){{ loading=lazy }}'
+            thumb = (
+                f'![]({rel("assets/tutorials/" + t["thumbnail"])}){{ loading=lazy }}'
+            )
         else:
             icon = t.get("icon", "lucide/notebook").replace("/", "-")
             thumb = f":{icon}:"
@@ -601,12 +660,15 @@ def tutorial_cards(tutorials: list[dict], page: str) -> str:
             '<div class="mg-tutorial" markdown>\n\n'
             f'<div class="mg-tutorial__thumb" markdown>{thumb}</div>\n\n'
             f'<div class="mg-tutorial__body" markdown>\n\n'
-            f'[{t["title"]}]({rel("tutorials/notebooks/" + t["notebook"] + ".md")}){{ .mg-tutorial__title }}\n\n'
+            f'[{t["title"]}]({rel("tutorials/notebooks/" + t["notebook"] + ".md")})'
+            "{ .mg-tutorial__title }\n\n"
             f'{t["text"]}\n\n'
             f'<div class="mg-tags">{tags}</div>\n\n'
             "</div>\n\n</div>"
         )
-    return '<div class="mg-tutorials" markdown>\n\n' + "\n\n".join(cards) + "\n\n</div>\n"
+    return (
+        '<div class="mg-tutorials" markdown>\n\n' + "\n\n".join(cards) + "\n\n</div>\n"
+    )
 
 
 def generate_notebooks() -> None:
@@ -618,7 +680,9 @@ def generate_notebooks() -> None:
     missing = {t["notebook"] for t in tutorials} - {nb.stem for nb in notebooks}
     if missing:
         raise SystemExit(f"tutorials.yml lists missing notebooks: {sorted(missing)}")
-    write(GENERATED / "tutorial_cards.md", tutorial_cards(tutorials, "tutorials/index.md"))
+    write(
+        GENERATED / "tutorial_cards.md", tutorial_cards(tutorials, "tutorials/index.md")
+    )
     home = [t for t in tutorials if t.get("home")]
     write(GENERATED / "tutorial_cards_home.md", tutorial_cards(home, "index.md"))
 
@@ -630,7 +694,9 @@ def generate_notebooks() -> None:
 _UNDERLINE = re.compile(r"^([=\-~^\"'`#*+])\1{2,}\s*$")
 
 
-def simple_rst_to_md(text: str, image_dir: str | None = None, image_prefix: str = "") -> str:
+def simple_rst_to_md(
+    text: str, image_dir: str | None = None, image_prefix: str = ""
+) -> str:
     """reST of the changelog / benchmark sections -> Markdown.
 
     Handles headings (levels in order of appearance), bullet lists (re-indented
@@ -644,7 +710,11 @@ def simple_rst_to_md(text: str, image_dir: str | None = None, image_prefix: str 
     while i < len(lines):
         line = lines[i]
         nxt = lines[i + 1] if i + 1 < len(lines) else ""
-        if line.strip() and _UNDERLINE.match(nxt) and len(nxt.strip()) >= len(line.strip()) - 1:
+        if (
+            line.strip()
+            and _UNDERLINE.match(nxt)
+            and len(nxt.strip()) >= len(line.strip()) - 1
+        ):
             char = nxt.strip()[0]
             if char not in levels:
                 levels.append(char)
@@ -655,7 +725,9 @@ def simple_rst_to_md(text: str, image_dir: str | None = None, image_prefix: str 
         if m:
             src, alt, cls = m.group(1), "", ""
             i += 1
-            while i < len(lines) and lines[i].startswith((" ", "\t")) and lines[i].strip():
+            while (
+                i < len(lines) and lines[i].startswith((" ", "\t")) and lines[i].strip()
+            ):
                 om = re.match(r"^\s+:(\w+):\s*(.*)$", lines[i])
                 if om and om.group(1) == "alt":
                     alt = om.group(2)
@@ -663,14 +735,28 @@ def simple_rst_to_md(text: str, image_dir: str | None = None, image_prefix: str 
                     cls = om.group(2)
                 i += 1
             name = src.rsplit("/", 1)[-1]
-            suffix = "#only-light" if "only-light" in cls else "#only-dark" if "only-dark" in cls else ""
+            suffix = (
+                "#only-light"
+                if "only-light" in cls
+                else "#only-dark"
+                if "only-dark" in cls
+                else ""
+            )
             out.append(f"![{alt}]({image_prefix}{name}{suffix})")
             continue
-        if re.match(r"^\.\.\s", line) or (line.startswith("..") and not line.strip(".")):
+        if re.match(r"^\.\.\s", line) or (
+            line.startswith("..") and not line.strip(".")
+        ):
             # comments and other directives: skip with their body
             i += 1
-            while i < len(lines) and (not lines[i].strip() or lines[i].startswith((" ", "\t"))):
-                if not lines[i].strip() and i + 1 < len(lines) and not lines[i + 1].startswith((" ", "\t")):
+            while i < len(lines) and (
+                not lines[i].strip() or lines[i].startswith((" ", "\t"))
+            ):
+                if (
+                    not lines[i].strip()
+                    and i + 1 < len(lines)
+                    and not lines[i + 1].startswith((" ", "\t"))
+                ):
                     break
                 i += 1
             continue
@@ -687,7 +773,9 @@ def git(*args: str) -> str:
 
 
 _STABLE = re.compile(r"^v(\d+)\.(\d+)\.(\d+)$")
-_CONVENTIONAL = re.compile(r"^(?P<type>\w+)(?:\((?P<scope>[^)]*)\))?(?P<bang>!)?:\s*(?P<title>.+)$")
+_CONVENTIONAL = re.compile(
+    r"^(?P<type>\w+)(?:\((?P<scope>[^)]*)\))?(?P<bang>!)?:\s*(?P<title>.+)$"
+)
 _GROUPS = [
     ("breaking", "Breaking changes"),
     ("feat", "Features"),
@@ -700,13 +788,19 @@ _GROUPS = [
 
 def stable_tags() -> list[tuple[str, str]]:
     """``(tag, date)`` of every vX.Y.Z tag, newest first."""
-    out = git("for-each-ref", "refs/tags", "--format=%(refname:short)\t%(creatordate:short)")
+    out = git(
+        "for-each-ref", "refs/tags", "--format=%(refname:short)\t%(creatordate:short)"
+    )
     tags = []
     for line in out.splitlines():
         name, date = line.split("\t")
         if _STABLE.match(name):
             tags.append((name, date))
-    return sorted(tags, key=lambda t: tuple(int(x) for x in _STABLE.match(t[0]).groups()), reverse=True)
+    return sorted(
+        tags,
+        key=lambda t: tuple(int(x) for x in _STABLE.match(t[0]).groups()),
+        reverse=True,
+    )
 
 
 def release_commits(rev_range: str) -> list[str]:
@@ -732,7 +826,13 @@ def release_entry(title: str) -> tuple[str, str]:
     m = _CONVENTIONAL.match(title)
     if m:
         kind, scope, text = m.group("type").lower(), m.group("scope"), m.group("title")
-        group = "breaking" if m.group("bang") else kind if kind in ("feat", "fix", "perf", "docs") else "other"
+        group = (
+            "breaking"
+            if m.group("bang")
+            else kind
+            if kind in ("feat", "fix", "perf", "docs")
+            else "other"
+        )
         if group == "other":  # keep the type: ci, build, refactor, test...
             label = kind + (f"({scope})" if scope else "")
             text = f"**{label}:** {text}"
@@ -757,7 +857,9 @@ def entries_md(titles: list[str]) -> str:
     return "\n\n".join(parts) if parts else "*No pull request.*"
 
 
-def changelog_sections() -> tuple[dict[str, tuple[str, str]], list[tuple[str, str, int]]]:
+def changelog_sections() -> (
+    tuple[dict[str, tuple[str, str]], list[tuple[str, str, int]]]
+):
     """Hand-written notes of CHANGELOG.rst.
 
     Returns ``{version: (name, reST body)}`` for the version sections, and the
@@ -765,7 +867,8 @@ def changelog_sections() -> tuple[dict[str, tuple[str, str]], list[tuple[str, st
     """
     lines = (ROOT / "CHANGELOG.rst").read_text().split("\n")
     heads = [
-        i for i in range(len(lines) - 1)
+        i
+        for i in range(len(lines) - 1)
         if lines[i].strip() and re.match(r"^-{3,}\s*$", lines[i + 1])
     ]
     versions, unreleased = {}, []
@@ -780,10 +883,21 @@ def changelog_sections() -> tuple[dict[str, tuple[str, str]], list[tuple[str, st
             sub = ""
             item_start = None
             for j, line in enumerate(body + ["<end>"]):
-                if j + 1 < len(body) and line.strip() and re.match(r"^~{3,}\s*$", body[j + 1]):
+                if (
+                    j + 1 < len(body)
+                    and line.strip()
+                    and re.match(r"^~{3,}\s*$", body[j + 1])
+                ):
                     sub = line.strip()
-                if item_start is not None and (line.startswith("- ") or line == "<end>" or
-                                               (line.strip() and not line.startswith(" ") and not line.startswith("-"))):
+                if item_start is not None and (
+                    line.startswith("- ")
+                    or line == "<end>"
+                    or (
+                        line.strip()
+                        and not line.startswith(" ")
+                        and not line.startswith("-")
+                    )
+                ):
                     text = "\n".join(body[item_start:j]).rstrip()
                     unreleased.append((sub, text, start + 2 + item_start + 1))
                     item_start = None
@@ -837,7 +951,9 @@ def github_releases() -> dict[str, dict] | None:
     page = 1
     try:
         while True:
-            req = urllib.request.Request(f"{API_RELEASES}?per_page=100&page={page}", headers=headers)
+            req = urllib.request.Request(
+                f"{API_RELEASES}?per_page=100&page={page}", headers=headers
+            )
             with urllib.request.urlopen(req, timeout=20) as r:
                 batch = json.load(r)
             if not batch:
@@ -847,7 +963,10 @@ def github_releases() -> dict[str, dict] | None:
                     releases[rel["tag_name"]] = rel
             page += 1
     except (urllib.error.URLError, OSError, ValueError) as e:
-        print(f"  note: GitHub releases unavailable ({e}); release notes from the git history only")
+        print(
+            f"  note: GitHub releases unavailable ({e});"
+            " release notes from the git history only"
+        )
         return None
     return releases
 
@@ -856,7 +975,9 @@ def url_ok(url: str) -> bool:
     import urllib.request
 
     try:
-        req = urllib.request.Request(url, method="HEAD", headers={"User-Agent": "mlx-graphs-docs"})
+        req = urllib.request.Request(
+            url, method="HEAD", headers={"User-Agent": "mlx-graphs-docs"}
+        )
         with urllib.request.urlopen(req, timeout=15) as r:
             return r.status < 400
     except Exception:  # noqa: BLE001
@@ -871,21 +992,39 @@ def release_body_md(body: str, broken_images: list[str]) -> str:
     # the other headings go under the version's h2: the top level becomes h3
     levels = [len(h) for h in re.findall(r"^(#{1,6})\s", text, re.M)]
     shift = 3 - min(levels) if levels else 0
-    text = re.sub(r"^(#{1,6})\s+", lambda m: "#" * min(6, len(m.group(1)) + shift) + " ", text, flags=re.M)
+    text = re.sub(
+        r"^(#{1,6})\s+",
+        lambda m: "#" * min(6, len(m.group(1)) + shift) + " ",
+        text,
+        flags=re.M,
+    )
     # bare links of pull requests, compare views and users, as GitHub renders them
     text = re.sub(
-        rf"(?<![(<\"\[]){re.escape(GITHUB)}/pull/(\d+)", rf"[#\1]({GITHUB}/pull/\1)", text
+        rf"(?<![(<\"\[]){re.escape(GITHUB)}/pull/(\d+)",
+        rf"[#\1]({GITHUB}/pull/\1)",
+        text,
     )
     text = re.sub(
-        rf"(?<![(<\"\[]){re.escape(GITHUB)}/compare/([\w.\-]+)", rf"[\1]({GITHUB}/compare/\1)", text
+        rf"(?<![(<\"\[]){re.escape(GITHUB)}/compare/([\w.\-]+)",
+        rf"[\1]({GITHUB}/compare/\1)",
+        text,
     )
     text = re.sub(r"(?<![(<\"\[\w/])(https?://[^\s)<>\]]+)", r"<\1>", text)
-    text = re.sub(r"(?<![\w/@`\[])@([A-Za-z0-9](?:[A-Za-z0-9-]{0,38}))\b", r"[@\1](https://github.com/\1)", text)
+    text = re.sub(
+        r"(?<![\w/@`\[])@([A-Za-z0-9](?:[A-Za-z0-9-]{0,38}))\b",
+        r"[@\1](https://github.com/\1)",
+        text,
+    )
     # lists need a blank line before them, and nested items 4 spaces
     lines, out = text.split("\n"), []
     for i, line in enumerate(lines):
         is_item = re.match(r"^\s*([-*+]|\d+\.)\s", line)
-        if is_item and out and out[-1].strip() and not re.match(r"^\s*([-*+]|\d+\.)\s", out[-1]):
+        if (
+            is_item
+            and out
+            and out[-1].strip()
+            and not re.match(r"^\s*([-*+]|\d+\.)\s", out[-1])
+        ):
             if not out[-1].startswith(" "):
                 out.append("")
         indent = len(line) - len(line.lstrip(" "))
@@ -893,7 +1032,9 @@ def release_body_md(body: str, broken_images: list[str]) -> str:
             line = " " * (indent * 2) + line.lstrip(" ")
         out.append(line)
     text = "\n".join(out)
-    for url in re.findall(r"!\[[^\]]*\]\((https?://[^)\s]+)\)|<img[^>]+src=\"(https?://[^\"]+)\"", text):
+    for url in re.findall(
+        r"!\[[^\]]*\]\((https?://[^)\s]+)\)|<img[^>]+src=\"(https?://[^\"]+)\"", text
+    ):
         url = url[0] or url[1]
         if not url_ok(url):
             broken_images.append(url)
@@ -931,7 +1072,9 @@ def generate_changelog() -> None:
         if version in versions and versions[version][1].strip():
             notes = rst_chunk_to_md(versions[version][1], 3)
             if len(notes) > 3000:  # long notes (0.2.0): folded under the release
-                notes = "\n".join("    " + line if line.strip() else "" for line in notes.split("\n"))
+                notes = "\n".join(
+                    "    " + line if line.strip() else "" for line in notes.split("\n")
+                )
                 notes = re.sub(r"^    (#+) (.+)$", r"    **\2**", notes, flags=re.M)
                 notes = f'??? info "Detailed notes (CHANGELOG.rst)"\n\n{notes}'
             parts.append(notes)
@@ -966,15 +1109,20 @@ def generate_changelog() -> None:
     ]
     if releases is None:
         out += [
-            "!!! warning \"Built offline\"",
+            '!!! warning "Built offline"',
             "",
-            "    The GitHub releases could not be fetched when this page was built: every"
-            " version lists the pull requests of the git history instead of its release notes.",
+            "    The GitHub releases could not be fetched when this page was built:"
+            " every version lists the pull requests of the git history instead of"
+            " its release notes.",
             "",
         ]
     latest = tags[0][0] if tags else None
     # squash merges of pull requests only: not the commits of a local branch
-    pending = [t for t in release_commits(f"{latest}..HEAD") if re.search(r"\(#\d+\)$", t)] if latest else []
+    pending = (
+        [t for t in release_commits(f"{latest}..HEAD") if re.search(r"\(#\d+\)$", t)]
+        if latest
+        else []
+    )
     if pending or moved.get(None):
         out += [
             "## Unreleased { #unreleased }",
@@ -1001,19 +1149,31 @@ def generate_changelog() -> None:
         if previous:
             meta.append(f"[Full diff]({GITHUB}/compare/{previous}...{tag})")
         meta.append(f"[PyPI](https://pypi.org/project/mlx-graphs/{version}/)")
-        out += ['<p class="mg-release-meta" markdown>' + " &middot; ".join(meta) + "</p>", ""]
+        out += [
+            '<p class="mg-release-meta" markdown>' + " &middot; ".join(meta) + "</p>",
+            "",
+        ]
         notes = notes_md(tag)
         if notes:
             out += [notes, ""]
         body = (release or {}).get("body") or ""
         if body.strip():
-            out += [f"<!-- source: github-release {tag} -->", release_body_md(body, broken_images), ""]
+            out += [
+                f"<!-- source: github-release {tag} -->",
+                release_body_md(body, broken_images),
+                "",
+            ]
             sources[tag] = "GitHub release"
         else:
             if notes:
                 out += [f"### Pull requests {{ #{anchor}-prs }}", ""]
-            out += [entries_md(release_commits(f"{previous}..{tag}" if previous else tag)), ""]
-            sources[tag] = "git history" + (" (release not published)" if releases is not None else " (offline)")
+            out += [
+                entries_md(release_commits(f"{previous}..{tag}" if previous else tag)),
+                "",
+            ]
+            sources[tag] = "git history" + (
+                " (release not published)" if releases is not None else " (offline)"
+            )
         if notes:
             sources[tag] += " + CHANGELOG.rst"
     md = "\n".join(out)
@@ -1023,10 +1183,16 @@ def generate_changelog() -> None:
     if missing:
         raise SystemExit(f"changelog: no section for {missing}")
     if releases is not None:
-        no_body = [t for t, _ in tags if (releases.get(t) or {}).get("body", "").strip()
-                   and f"<!-- source: github-release {t} -->" not in md]
+        no_body = [
+            t
+            for t, _ in tags
+            if (releases.get(t) or {}).get("body", "").strip()
+            and f"<!-- source: github-release {t} -->" not in md
+        ]
         if no_body:
-            raise SystemExit(f"changelog: the release notes of {no_body} are not on the page")
+            raise SystemExit(
+                f"changelog: the release notes of {no_body} are not on the page"
+            )
     write(CONTENT / "changelog.md", md)
     write(GENERATED / "changelog_sources.json", json.dumps(sources, indent=1))
 
@@ -1038,8 +1204,10 @@ def generate_changelog() -> None:
     )
     from_releases = sum(1 for s in sources.values() if s.startswith("GitHub"))
     print(
-        f"changelog: {len(tags)} releases (latest {latest}): {from_releases} from GitHub releases,"
-        f" {len(tags) - from_releases} from the git history; {len(pending)} unreleased PRs;"
+        f"changelog: {len(tags)} releases (latest {latest}):"
+        f" {from_releases} from GitHub releases,"
+        f" {len(tags) - from_releases} from the git history;"
+        f" {len(pending)} unreleased PRs;"
         f" CHANGELOG.rst notes for {sorted(versions)}"
     )
     for url in broken_images:
@@ -1097,17 +1265,27 @@ def generate_redirects(entries: dict[str, Entry]) -> None:
                 path = ".".join(parts[:cut])
                 entry = by_id.get(path) or by_path.get(path)
                 if entry is None:
-                    same = [e for e in by_name.get(parts[cut - 1], []) if e.page.parts[0] == section]
+                    same = [
+                        e
+                        for e in by_name.get(parts[cut - 1], [])
+                        if e.page.parts[0] == section
+                    ]
                     entry = same[0] if len(same) == 1 else None
                 if entry is not None:
-                    anchor = f"{entry.id}.{'.'.join(parts[cut:])}" if cut < len(parts) else ""
+                    anchor = (
+                        f"{entry.id}.{'.'.join(parts[cut:])}"
+                        if cut < len(parts)
+                        else ""
+                    )
                     return f"api/{entry.page.with_suffix('').as_posix()}", anchor
             return f"api/{section}", ""
         m = re.match(r"^api/([\w/]+)\.html$", old)
         if m:
             page = m.group(1)
             page = page[: -len("/index")] if page.endswith("/index") else page
-            if (TEMPLATES / f"{page}.md").exists() or (TEMPLATES / page / "index.md").exists():
+            if (TEMPLATES / f"{page}.md").exists() or (
+                TEMPLATES / page / "index.md"
+            ).exists():
                 return f"api/{page}", ""
         return None
 
@@ -1132,12 +1310,13 @@ def generate_redirects(entries: dict[str, Entry]) -> None:
             url += f"#{anchor}"
         write(
             CONTENT / old,
-            "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n"
+            '<!doctype html>\n<html lang="en">\n<head>\n<meta charset="utf-8">\n'
             "<title>Redirecting...</title>\n"
             f'<link rel="canonical" href="{url}">\n'
             '<meta name="robots" content="noindex">\n'
             f'<meta http-equiv="refresh" content="0; url={rel}">\n'
-            f"<script>location.replace({json.dumps(rel)} + (location.hash || \"\"))</script>\n"
+            f"<script>location.replace({json.dumps(rel)}"
+            ' + (location.hash || ""))</script>\n'
             "</head>\n<body>\n"
             f'<p>This page has moved to <a href="{rel}">{url}</a>.</p>\n'
             "</body>\n</html>\n",
@@ -1221,26 +1400,46 @@ def generate_datasets_table() -> None:
     exported = set(public_exports(pkg, "mlx_graphs.datasets"))
     problems, used = [], set()
     lines = [
-        "| Dataset | Load with | Graphs | Nodes | Edges | Avg degree | Features | Labels |",
+        "| Dataset | Load with | Graphs | Nodes | Edges | Avg degree"
+        " | Features | Labels |",
         "|---|---|--:|--:|--:|--:|---|---|",
     ]
     for row in rows:
         cls, args = row["class"], row.get("args", "")
         if cls not in exported:
-            problems.append(f"datasets.yml: {row['name']}: {cls} is not exported by mlx_graphs.datasets")
+            problems.append(
+                f"datasets.yml: {row['name']}: {cls}"
+                " is not exported by mlx_graphs.datasets"
+            )
             continue
         used.add(cls)
         obj = get_object(pkg, f"mlx_graphs.datasets.{cls}")
-        init = next((c.members["__init__"] for c in [obj, *obj.mro()] if "__init__" in c.members), None)
+        init = next(
+            (
+                c.members["__init__"]
+                for c in [obj, *obj.mro()]
+                if "__init__" in c.members
+            ),
+            None,
+        )
         params = [p for p in (init.parameters if init else []) if p.name != "self"]
         call = ast.parse(f"f({args})", mode="eval").body
         names = {p.name for p in params}
-        if len(call.args) > len([p for p in params if p.kind is None or "positional" in str(p.kind)]):
-            problems.append(f"datasets.yml: {row['name']}: too many arguments for {cls}")
+        if len(call.args) > len(
+            [p for p in params if p.kind is None or "positional" in str(p.kind)]
+        ):
+            problems.append(
+                f"datasets.yml: {row['name']}: too many arguments for {cls}"
+            )
         for kw in call.keywords:
             if kw.arg not in names:
-                problems.append(f"datasets.yml: {row['name']}: {cls} has no argument {kw.arg!r}")
-        stats = [str(row.get(k, "–")).replace("~", "\\~") for k in ("graphs", "nodes", "edges", "avg_degree")]
+                problems.append(
+                    f"datasets.yml: {row['name']}: {cls} has no argument {kw.arg!r}"
+                )
+        stats = [
+            str(row.get(k, "–")).replace("~", "\\~")
+            for k in ("graphs", "nodes", "edges", "avg_degree")
+        ]
         lines.append(
             f"| [{row['name']}][mlx_graphs.datasets.{cls}] | `{cls}({args})` | "
             + " | ".join(stats)
@@ -1249,12 +1448,17 @@ def generate_datasets_table() -> None:
     if problems:
         raise SystemExit("\n".join(problems))
     others = sorted(exported - used, key=str.lower)
-    other_line = "Other dataset classes: " + ", ".join(
-        f"[`{name}`][mlx_graphs.datasets.{name}]" for name in others
-    ) + "."
+    other_line = (
+        "Other dataset classes: "
+        + ", ".join(f"[`{name}`][mlx_graphs.datasets.{name}]" for name in others)
+        + "."
+    )
     write(GENERATED / "datasets_table.md", "\n".join(lines) + "\n")
     write(GENERATED / "datasets_other.md", other_line + "\n")
-    print(f"datasets: {len(rows)} rows, {len(used)} classes in the table, {len(others)} others listed")
+    print(
+        f"datasets: {len(rows)} rows, {len(used)} classes in the table,"
+        f" {len(others)} others listed"
+    )
 
 
 def check_lists() -> None:
@@ -1263,12 +1467,18 @@ def check_lists() -> None:
     examples = (CONTENT / "tutorials" / "examples.md").read_text()
     for script in sorted((ROOT / "examples").glob("*.py")):
         if f"examples/{script.name})" not in examples:
-            problems.append(f"tutorials/examples.md does not list examples/{script.name}")
+            problems.append(
+                f"tutorials/examples.md does not list examples/{script.name}"
+            )
     # the datasets page: every dataset class is in its table or its list
-    datasets_text = (GENERATED / "datasets_table.md").read_text() + (GENERATED / "datasets_other.md").read_text()
+    datasets_text = (GENERATED / "datasets_table.md").read_text() + (
+        GENERATED / "datasets_other.md"
+    ).read_text()
     for name in public_exports(load_package(), "mlx_graphs.datasets"):
         if f"[mlx_graphs.datasets.{name}]" not in datasets_text:
-            problems.append(f"getting-started/datasets.md does not link mlx_graphs.datasets.{name}")
+            problems.append(
+                f"getting-started/datasets.md does not link mlx_graphs.datasets.{name}"
+            )
     if problems:
         raise SystemExit("\n".join(problems))
     print("lists: examples and datasets pages match examples/ and mlx_graphs.datasets")
@@ -1293,7 +1503,8 @@ def check_nav() -> None:
                 yield from pages(value)
 
     missing = [
-        p for p in pages(config["nav"])
+        p
+        for p in pages(config["nav"])
         if not p.startswith("http") and not (CONTENT / p).exists()
     ]
     if missing:

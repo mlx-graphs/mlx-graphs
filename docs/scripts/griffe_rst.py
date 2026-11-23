@@ -163,7 +163,8 @@ def convert_blocks(text: str) -> str:
                 out.append(f"{pad}!!! {_ADMONITIONS[name]}")
                 out.append("")
                 out.extend(
-                    pad + "    " + c if c.strip() else "" for c in inner_text.split("\n")
+                    pad + "    " + c if c.strip() else ""
+                    for c in inner_text.split("\n")
                 )
             elif name == "list-table":
                 if arg:
@@ -300,7 +301,9 @@ def _role_sub(context: str):
 
 def convert_inline(text: str, context: str) -> str:
     # protect fenced code and display math
-    chunks = re.split(r"(^\s*```.*?^\s*```|^\s*\$\$.*?^\s*\$\$)", text, flags=re.S | re.M)
+    chunks = re.split(
+        r"(^\s*```.*?^\s*```|^\s*\$\$.*?^\s*\$\$)", text, flags=re.S | re.M
+    )
     out = []
     for k, chunk in enumerate(chunks):
         if k % 2 == 1:
@@ -310,7 +313,11 @@ def convert_inline(text: str, context: str) -> str:
         chunk = _ROLE.sub(_role_sub(context), chunk)
         chunk = _LINK.sub(
             # reST lets a long URL wrap: its whitespace is not part of it
-            lambda m: "[" + re.sub(r"\s+", " ", m.group(1)) + "](" + re.sub(r"\s+", "", m.group(2)) + ")",
+            lambda m: "["
+            + re.sub(r"\s+", " ", m.group(1))
+            + "]("
+            + re.sub(r"\s+", "", m.group(2))
+            + ")",
             chunk,
         )
         chunk = _BARE_LINK.sub(lambda m: "<" + m.group(1).strip() + ">", chunk)
@@ -327,7 +334,9 @@ def _escape_citations(text: str) -> str:
     """``[1]`` citation markers would be read as Markdown reference links."""
     parts, pos = [], 0
     for m in _CODE_OR_MATH.finditer(text):
-        parts.append(re.sub(r"(?<![\\\]])\[(\d+)\](?![(\[])", r"\\[\1\\]", text[pos : m.start()]))
+        parts.append(
+            re.sub(r"(?<![\\\]])\[(\d+)\](?![(\[])", r"\\[\1\\]", text[pos : m.start()])
+        )
         parts.append(m.group(0))
         pos = m.end()
     parts.append(re.sub(r"(?<![\\\]])\[(\d+)\](?![(\[])", r"\\[\1\\]", text[pos:]))
