@@ -4,6 +4,21 @@ Changelog
 Unreleased
 ----------
 
+New API
+~~~~~~~
+
+- Hierarchical and dense pooling, checked against PyG (outputs, auxiliary
+  losses and gradients) and by training on PROTEINS in both frameworks
+  (``benchmarks/quality/pooling_quality.py``):
+
+  - dense pooling ``dense_diff_pool``, ``dense_mincut_pool`` and
+    ``DMoNPooling``, with the dense layers ``DenseGCNConv``,
+    ``DenseSAGEConv``, ``DenseGINConv`` and ``DenseGraphConv``;
+  - sparse hierarchical pooling ``EdgePooling`` (with ``unpool``),
+    ``ASAPooling``, ``MemPooling`` and ``PANPooling`` (with ``PANConv``),
+    and the ``GraphUNet`` model;
+  - ``GCNConv(improved=True)`` (self-loops of weight 2).
+
 Documentation
 ~~~~~~~~~~~~~
 
