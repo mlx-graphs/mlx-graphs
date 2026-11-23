@@ -1,4 +1,10 @@
-"""Select the next tested commit or resume the current release."""
+"""Select the commit to release, or resume an unfinished release.
+
+Releases are cut once a day (and on demand): everything merged since the last
+release ships together, from the newest commit of main whose post-merge checks
+passed. Whether that makes a release at all (only ``feat``, ``fix``, ``perf``
+or breaking commits do) is decided afterwards by Python Semantic Release.
+"""
 
 import json
 import os
@@ -64,7 +70,22 @@ def main_releases(history):
     return releases
 
 
-def select_release(completed_run=None):
+def main_checks_run(sha):
+    """The latest run of the post-merge checks on ``sha``, or ``None``."""
+    query = urlencode({"branch": "main", "event": "push", "head_sha": sha})
+    runs = github(f"actions/workflows/{CI_WORKFLOW}/runs?{query}")["workflow_runs"]
+    return max(
+        runs,
+        key=lambda item: (
+            item["run_number"],
+            item["run_attempt"],
+            item["status"] == "completed",
+        ),
+        default=None,
+    )
+
+
+def select_release():
     history = git("rev-list", "--first-parent", "--reverse", "HEAD").splitlines()
     baseline = git("rev-parse", f"{BASE_TAG}^{{commit}}")
     if baseline not in history:
@@ -86,36 +107,24 @@ def select_release(completed_run=None):
             return Release(released_sha, releases[1][0], tag, run_id, artifact_id)
 
     commits = history[history.index(released_sha) + 1 :]
-    for sha in commits:
+    # The newest tested commit includes every change merged before it. Newer
+    # commits whose checks are still running or failed wait for the next run.
+    for sha in reversed(commits):
         if not git("ls-tree", sha, f".github/workflows/{CI_WORKFLOW}"):
-            continue  # main had no post-merge checks before the release rollout.
-        query = urlencode({"branch": "main", "event": "push", "head_sha": sha})
-        runs = github(f"actions/workflows/{CI_WORKFLOW}/runs?{query}")["workflow_runs"]
-        if completed_run and completed_run["head_sha"] == sha:
-            # The completion event can arrive before the list API reflects it.
-            runs.append(completed_run)
-        run = max(
-            runs,
-            key=lambda item: (
-                item["run_number"],
-                item["run_attempt"],
-                item["status"] == "completed",
-            ),
-            default=None,
-        )
+            break  # main had no post-merge checks before the release rollout.
+        run = main_checks_run(sha)
         if run is None or run["status"] != "completed":
-            print(f"Waiting for main checks on {sha}")
-            return None
-        if run["conclusion"] == "success":
+            print(f"Skipping {sha}: main checks have not finished")
+        elif run["conclusion"] != "success":
+            print(f"Skipping {sha}: main checks concluded {run['conclusion']}")
+        else:
             return Release(sha, tag)
-        print(f"Skipping {sha}: main checks concluded {run['conclusion']}")
+    print(f"No tested commit since {tag}")
     return None
 
 
 if __name__ == "__main__":
-    with open(os.environ["GITHUB_EVENT_PATH"], encoding="utf-8") as event:
-        completed_run = json.load(event).get("workflow_run")
-    release = select_release(completed_run)
+    release = select_release()
     if release is not None:
         with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as output:
             for key, value in asdict(release).items():
