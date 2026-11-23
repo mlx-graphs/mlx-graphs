@@ -65,7 +65,7 @@ with [Zensical](https://zensical.org); see [`docs-site/README.md`](docs-site/REA
   its outputs (it is not executed), its figure in
   `docs-site/content/assets/tutorials/`, a card in `docs-site/tutorials.yml`
   and an entry in the `nav` of `zensical.toml`.
-- **Preview** with `pip install -e '.[docs-new]'`, then
+- **Preview** with `pip install -e '.[docs]'`, then
   `python docs-site/scripts/gen.py` and `zensical serve`.
 
 ## Releases

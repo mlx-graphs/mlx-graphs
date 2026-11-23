@@ -6,7 +6,7 @@ root) and this directory. Published at <https://mlx-graphs.github.io/mlx-graphs/
 ## Preview locally
 
 ```shell
-pip install -e '.[docs-new]'
+pip install -e '.[docs]'
 python docs-site/scripts/gen.py      # generated pages (see below)
 zensical serve                       # http://localhost:8000/mlx-graphs/, live reload
 ```

@@ -1,9 +1,12 @@
 # Documentation site of mlx-graphs, built with Zensical (https://zensical.org).
 #
-#   pip install -e '.[docs-new]'
-#   python docs-site/scripts/gen.py      # API pages, notebooks, changelog, benchmarks
-#   zensical serve                       # live preview on http://localhost:8000
-#   zensical build --strict              # static site in site/
+#   pip install -e '.[docs]'
+#   python docs-site/scripts/check_api.py   # every public name is in the API pages
+#   python docs-site/scripts/gen.py         # API pages, notebooks, changelog, benchmarks
+#   zensical serve                          # http://localhost:8000/mlx-graphs/, live reload
+#   zensical build --strict --clean         # static site in site/ (as CI does)
+#
+# See docs-site/README.md.
 #
 # The hand-written pages are in docs-site/content. gen.py writes the generated
 # pages next to them (they are git-ignored, see docs-site/.gitignore).

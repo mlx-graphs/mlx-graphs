@@ -30,10 +30,8 @@ To install the extra dependencies for testing, development, benchmarks and build
 pip install -e '.[test]'        # pytest, scipy, networkx, PyTorch, PyG, pandas, scikit-learn
 pip install -e '.[dev]'         # pre-commit
 pip install -e '.[benchmarks]'  # scipy, matplotlib, ogb, PyTorch, PyG
-pip install -e '.[docs-new]'    # this documentation site (Zensical)
+pip install -e '.[docs]'        # this documentation site (Zensical)
 ```
-
-The `docs` extra installs the Sphinx toolchain of the previous documentation site.
 
 For dev purposes you may want to install the current version of `mlx` via `pip install "mlx @ git+https://github.com/ml-explore/mlx.git"`.
 
@@ -42,8 +40,8 @@ For dev purposes you may want to install the current version of `mlx` via `pip i
 The site is built with [Zensical](https://zensical.org). The API reference is generated from the docstrings by static analysis, so MLX does not need to be importable:
 
 ```shell
-pip install -e '.[docs-new]'
+pip install -e '.[docs]'
 python docs-site/scripts/gen.py   # API pages, notebooks, changelog, benchmark sections
-zensical serve                    # live preview on http://localhost:8000
-zensical build --strict           # static site in site/
+zensical serve                    # live preview on http://localhost:8000/mlx-graphs/
+zensical build --strict --clean   # static site in site/
 ```
