@@ -1132,7 +1132,7 @@ def generate_changelog() -> None:
             "",
         ]
         if moved.get(None):
-            out += [notes_md(None), ""]
+            out += [notes_md(None), "", "### Pull requests { #unreleased-prs }", ""]
         out += [entries_md(pending), ""]
 
     sources, broken_images = {}, []
