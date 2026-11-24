@@ -5,7 +5,12 @@ name: Release Python Package
 # can force the size of the version bump.
 on:
   schedule:
-    - cron: '0 0 * * *'
+    # 00:17 UTC, not 00:00: GitHub delays, and under load drops, the scheduled
+    # runs of the start of each hour, and midnight UTC is the busiest.
+    - cron: '17 0 * * *'
+    # One-off run on 24 November 2026 at 01:13 UTC, to check the scheduled
+    # release end to end. Remove it once it has run.
+    - cron: '13 1 24 11 *'
   workflow_dispatch:
     inputs:
       bump:
