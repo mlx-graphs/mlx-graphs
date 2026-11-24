@@ -168,7 +168,9 @@ def test_dispatch_falls_back(monkeypatch, case):
         if case == "empty":
             row, col = row[:0], col[:0]
         if case == "mixed-index-dtypes":
-            col = col.astype(mx.int32)
+            # explicit dtypes: MLX makes integer arrays int32 by default
+            row, col = row.astype(mx.int64), col.astype(mx.int32)
+            assert row.dtype != col.dtype
         a = mx.arange(12).reshape(2, 2, 3).astype(dtype)
         b = a - 8
         if case == "different-channels":
