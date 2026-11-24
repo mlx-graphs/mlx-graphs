@@ -1,9 +1,12 @@
 {#-
-  Extends the theme's main.html with the icons the favicon setting does not
-  cover: PNG fallback, Apple touch icon and the web app manifest.
+  Extends the theme's main.html with the icons the favicon setting (the .ico)
+  does not cover: the SVG for the browsers that support it (declared with its
+  type, so that Safari skips it for the .ico or the PNG), a PNG, the Apple
+  touch icon and the web app manifest.
 -#}
 {% extends "base.html" %}
 {% block extrahead %}
+  <link rel="icon" type="image/svg+xml" href="{{ 'assets/images/favicon.svg' | url }}">
   <link rel="icon" type="image/png" sizes="32x32" href="{{ 'assets/images/favicon-32.png' | url }}">
   <link rel="apple-touch-icon" sizes="180x180" href="{{ 'assets/images/apple-touch-icon.png' | url }}">
   <link rel="manifest" href="{{ 'assets/site.webmanifest' | url }}">

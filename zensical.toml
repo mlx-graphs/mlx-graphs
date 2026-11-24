@@ -104,7 +104,10 @@ name = "mlx-graphs on PyPI"
 custom_dir = "docs/overrides"
 language = "en"
 logo = "assets/images/favicon.svg"
-favicon = "assets/images/favicon.svg"
+# The theme writes this one as <link rel="icon"> with no type: an .ico every
+# browser can read (Safari cannot use the SVG). The SVG, with its type, and the
+# other icons are in docs/overrides/main.html.
+favicon = "assets/images/favicon.ico"
 features = [
   "announce.dismiss",
   "content.action.edit",
