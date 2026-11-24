@@ -22,10 +22,37 @@ Please use [Discussions](https://github.com/mlx-graphs/mlx-graphs/discussions) t
 GitHub issues are not the appropriate place to debug your specific project, but should be reserved for filing bugs and feature requests.
 To chat and share random questions with the community, we recommend to join our [Discord server](https://discord.gg/K3mWFCxxM7).
 
+## Development setup
+
+Extra dependencies are specified in the `pyproject.toml`. Install those
+needed for testing, development, benchmarks or building the documentation with
+any of:
+```
+pip install -e '.[test]'
+pip install -e '.[dev]'
+pip install -e '.[benchmarks]'
+pip install -e '.[docs]'
+```
+For dev purposes you may want to install the current version of `mlx` via
+`pip install git+https://github.com/ml-explore/mlx.git`.
+
+### Testing
+We encourage to write tests for all components.
+Please run `pytest` to ensure breaking changes are not introduced.
+CI also runs the tests on every PR.
+
+### Pre-commit hooks
+To ensure code quality, install the [pre-commit](https://pre-commit.com) hooks with
+```
+pre-commit install
+```
+and run them via `pre-commit run --all-files`. CI checks code quality too, so
+pull requests that don't meet those requirements won't pass.
+
 ## Pull Requests
 When you submit a pull request, you'll be presented with a template to fill with a description of your contribution and checks on whether you added tests and documentation. Please fill all the parts.
 To open a PR:
-- Fork the repo and follow the [local installation guidelines](https://github.com/mlx-graphs/mlx-graphs?tab=readme-ov-file#contributing).
+- Fork the repo and follow the [development setup](#development-setup).
 - Add your contribution and submit a pull request to the repo.
 - If you've added code that should be tested, add tests.
 - Update the necessary documentation.

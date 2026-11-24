@@ -18,6 +18,7 @@
   <a href="https://mlx-graphs.github.io/mlx-graphs/tutorials/quickstart.html"><b>Quickstart</b></a> ·
   <a href="#benchmarks-vs-pytorch-geometric"><b>Benchmarks</b></a> ·
   <a href="https://github.com/mlx-graphs/mlx-graphs/tree/main/examples"><b>Examples</b></a> ·
+  <a href="#contributors"><b>Contributors</b></a> ·
   <a href="https://discord.gg/K3mWFCxxM7"><b>Discord</b></a>
 </p>
 
@@ -59,6 +60,9 @@ pip install mlx-graphs
 
 Names and signatures follow PyTorch Geometric; see [Coming from PyTorch Geometric](https://mlx-graphs.github.io/mlx-graphs/tutorials/from_pyg.html).
 
+<details>
+<summary><b>Layers, models, datasets, loaders and utilities</b> (click to expand)</summary>
+
 | | |
 |---|---|
 | **Convolutions** | `GCNConv`, `SAGEConv`, `GINConv`, `GINEConv`, `GATConv`, `GATv2Conv`, `TransformerConv`, `GraphConv`, `GeneralConv`, `SGConv`, `SSGConv`, `APPNP`, `ChebConv`, `TAGConv`, `ARMAConv`, `MixHopConv`, `GCN2Conv`, `FAConv`, `AGNNConv`, `LEConv`, `LGConv`, `MFConv`, `ClusterGCNConv`, `GENConv`, `PNAConv`, `CGConv`, `NNConv`, `ResGatedGraphConv`, `GatedGraphConv`, `FiLMConv`, `EdgeConv`, `DynamicEdgeConv`, `DirGNNConv`, `SimpleConv`, `GeneralizedRelationalConv` |
@@ -76,6 +80,8 @@ Names and signatures follow PyTorch Geometric; see [Coming from PyTorch Geometri
 | **Transforms** | `Compose`, `ToUndirected`, `AddSelfLoops`, `NormalizeFeatures`, `RandomNodeSplit`, `RandomLinkSplit`, `GCNNorm`, `SIGN`, `VirtualNode`, `LineGraph`, `TwoHop`, `KNNGraph`, `LocalDegreeProfile`, `FeaturePropagation`, `SVDFeatureReduction`, `ToDense`, ... (32 in all) |
 | **Metrics** | `LinkPredMRR`, `LinkPredHitRatio`, `LinkPredNDCG`, `LinkPredMAP`, `LinkPredPrecision`, `LinkPredRecall`, `LinkPredF1` and more, `roc_auc_score`, `average_precision_score` |
 | **Utilities** | `scatter`, `softmax`, `degree`, `subgraph`, `k_hop_subgraph`, `negative_sampling`, `dropout_edge`, `to_dense_batch`, `to_dense_adj`, `get_laplacian`, `get_ppr`, `homophily`, `assortativity`, `coalesce`, `to_undirected`, graph generators, `from_pyg` / `to_pyg`, `from_networkx` / `to_networkx`, `from_scipy_sparse_matrix`, ... |
+
+</details>
 
 Every layer was checked against PyG with copied weights (outputs and gradients),
 and the models by training them in both frameworks on the same data: see
@@ -98,9 +104,14 @@ Speedups against PyG on MPS (the CPU numbers are in the figures):
 - **Graph classification** (MUTAG, PROTEINS, NCI1, DD, batching included):
   **2.7–11× faster**.
 
+<details>
+<summary><b>Speed figures</b> (click to expand)</summary>
+
 <img alt="Time of one forward and backward pass of GCN, GraphSAGE, GIN, GAT and GATv2, relative to mlx-graphs, for mlx-graphs, PyG on MPS and PyG on CPU, on random graphs of 100 thousand, 500 thousand and 2 million edges" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/layers_speedup_light.png">
 
 <img alt="Time per training epoch of full-batch node classification with GCN, GraphSAGE and GAT on eight datasets, for mlx-graphs, PyG on MPS and PyG on CPU" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/node_classification_light.png">
+
+</details>
 
 ### Same results
 
@@ -109,9 +120,14 @@ mlx-graphs and PyG follows the same curve at every epoch, and the test
 accuracies match within the spread between seeds (mean over node
 classification: 79.2% for mlx-graphs, 79.0% / 78.9% for PyG on MPS / CPU).
 
+<details>
+<summary><b>Loss and accuracy figures</b> (click to expand)</summary>
+
 <img alt="Training loss per epoch of GCN, GraphSAGE and GAT on eight node classification datasets, mlx-graphs, PyG on MPS and PyG on CPU overlaid: the curves coincide" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/node_loss_light.png">
 
 <img alt="Test accuracy of GCN, GraphSAGE and GAT on eight node classification datasets, mean and range over 3 seeds, for mlx-graphs, PyG on MPS and PyG on CPU" src="https://raw.githubusercontent.com/mlx-graphs/mlx-graphs/main/benchmarks/pyg_comparison/results/Apple_M5_Pro/0.1.0-c5f1246/figures/node_accuracy_light.png">
+
+</details>
 
 The same figures for graph classification, peak memory and absolute
 timings are on the [benchmarks page of the docs](https://mlx-graphs.github.io/mlx-graphs/benchmarks.html)
@@ -176,9 +192,11 @@ for epoch in range(200):
 > in our runs it cost GAT about 4 points of accuracy on Cora.
 
 ### Writing a layer
-Building new GNN layers is straightforward by implementing the `MessagePassing` class. This approach ensures that all operations related to message passing are properly handled and processed efficiently on your Mac's GPU. As a result, you can focus exclusively on the GNN logic, without worrying about the underlying message passing mechanics.
+New GNN layers subclass `MessagePassing`, which runs the message passing on your Mac's GPU so you only write the GNN logic.
+See the [Writing your own layers](https://mlx-graphs.github.io/mlx-graphs/tutorials/guides/writing-layers/) guide.
 
-Here is an example of a custom [GraphSAGE](https://proceedings.neurips.cc/paper_files/paper/2017/file/5dd9db5e033da9c6fb5ba83c7a7ebea9-Paper.pdf) convolutional layer that considers edge weights:
+<details>
+<summary><b>Example: a GraphSAGE layer with edge weights</b> (click to expand)</summary>
 
 ```python
 import mlx.core as mx
@@ -208,44 +226,22 @@ Layers that override `message()` with something other than a weighted sum
 of neighbour features (e.g. attention computed per edge) simply drop the
 decorator, and `propagate` gathers per-edge messages and scatters them.
 
+</details>
+
 ## Contributing
-### Why contributing?
 
 We are at an early stage of the development of the lib, which means your contributions can have a large impact!
 Everyone is welcome to contribute, just open an issue 📝 with your idea 💡 and we'll work together on the implementation ✨.
+New layers and datasets are especially welcome.
 
-> [!NOTE]
-> Contributions such as the implementation of new layers and datasets would be very valuable for the library.
+See [CONTRIBUTING.md](https://github.com/mlx-graphs/mlx-graphs/blob/main/CONTRIBUTING.md) for the development setup, tests and pull request guidelines.
 
-### Installing test, dev, benchmaks, docs dependencies
-Extra dependencies are specified in the `pyproject.toml`.
-To install those required for testing, development and building documentation, you can run any of the following
-```
-pip install -e '.[test]'
-pip install -e '.[dev]'
-pip install -e '.[benchmarks]'
-pip install -e '.[docs]'
-```
-For dev purposes you may want to install the current version of `mlx` via `pip install git+https://github.com/ml-explore/mlx.git`
+## Contributors
 
-### Testing
-We encourage to write tests for all components.
-Please run `pytest` to ensure breaking changes are not introduced.
+mlx-graphs is built by its community. Thank you to everyone who has contributed code, reviews, issues and ideas! 🙏
 
-> Note: CI is in place to automatically run tests upon opening a PR.
+<a href="https://github.com/mlx-graphs/mlx-graphs/graphs/contributors">
+  <img alt="Avatars of the mlx-graphs contributors" src="https://contrib.rocks/image?repo=mlx-graphs/mlx-graphs" />
+</a>
 
-### Pre-commit hooks (optional)
-To ensure code quality you can run [pre-commit](https://pre-commit.com) hooks. Simply install them by running
-```
-pre-commit install
-```
-and run via `pre-commit run --all-files`.
-
-> Note: CI is in place to verify code quality, so pull requests that don't meet those requirements won't pass CI tests.
-
-
-## Why running GNNs on my Mac?
-
-Other frameworks like PyG and DGL also benefit from efficient GNN operations parallelized on GPU. However, they are not fully optimized to leverage the Mac's GPU capabilities, often defaulting to CPU execution.
-
-In contrast, `mlx-graphs` is specifically designed to leverage the power of Mac's hardware, delivering optimal performance for Mac users. By taking advantage of Apple Silicon, `mlx-graphs` enables accelerated GPU computation and benefits from unified memory. This approach removes the need for data transfers between devices and allows for the use of the entire memory space available on the Mac's GPU. Consequently, users can manage large graphs directly on the GPU, enhancing performance and efficiency.
+Your avatar shows up here automatically once your first pull request is merged: see [Contributing](#contributing) to get started.
