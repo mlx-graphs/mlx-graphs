@@ -114,16 +114,85 @@ def test_sampled_rows_match_features(kind, tmp_path):
         assert np.array_equal(n_id[local], ei[:, e_id])
 
 
-def test_csc_graph_store(tmp_path):
+@pytest.mark.parametrize("storage", ["memory", "memmap", "memmap_copy"])
+@pytest.mark.parametrize("directed", [False, True])
+def test_csc_graph_store(tmp_path, monkeypatch, storage, directed):
     data = _graph(seed=3)
-    fs = InMemoryFeatureStore.from_data(data)
-    colptr, row, _ = InMemoryGraphStore.from_data(data).csc()
+    colptr, row, perm = InMemoryGraphStore.from_data(data).csc()
+    fs = InMemoryFeatureStore.from_data(data, attrs=["node_features", "node_labels"])
+    fs["edge_attr"] = data.edge_features[mx.array(perm)]
     n = data.num_nodes
-    gs = InMemoryGraphStore()
+    root = str(tmp_path / "graph")
+    on_disk = storage != "memory"
+    gs = MemmapGraphStore(root) if on_disk else InMemoryGraphStore()
     gs.put_edge_index((row, colptr), layout="csc", size=(n, n))
-    batch = next(iter(NeighborLoader((fs, gs), num_neighbors=[-1], batch_size=5)))
-    ref = next(iter(NeighborLoader(data, num_neighbors=[-1], batch_size=5)))
-    assert np.array_equal(np.asarray(batch.n_id), np.asarray(ref.n_id))
-    assert np.array_equal(
-        np.asarray(batch.node_features), np.asarray(ref.node_features)
+    if on_disk:
+        gs = MemmapGraphStore(root)
+    if storage == "memmap_copy":
+        asarray = mx.asarray
+
+        def without_host_sharing(value, *args, **kwargs):
+            if isinstance(value, memoryview) and kwargs.get("copy") is False:
+                raise ValueError("Host buffer sharing is unavailable")
+            return asarray(value, *args, **kwargs)
+
+        monkeypatch.setattr(mx, "asarray", without_host_sharing)
+    kwargs = dict(num_neighbors=[-1, -1], batch_size=5, directed=directed)
+    loader = NeighborLoader((fs, gs), **kwargs)
+    batch = next(iter(loader))
+    ref = next(iter(NeighborLoader(data, **kwargs)))
+    assert loader._loader._edge_perm is None
+    _assert_same(
+        batch,
+        ref,
+        ("n_id", "edge_index", "node_features", "node_labels", "edge_features"),
     )
+    np.testing.assert_array_equal(perm[np.asarray(batch.e_id)], np.asarray(ref.e_id))
+
+
+def test_csc_sampler_shares_disk_mapping(tmp_path):
+    data = _graph(seed=4)
+    colptr, row, _ = InMemoryGraphStore.from_data(data).csc()
+    gs = MemmapGraphStore(str(tmp_path))
+    gs.put_edge_index(
+        (row, colptr), layout="csc", size=(data.num_nodes, data.num_nodes)
+    )
+    mapped_colptr, mapped_row, _ = gs.csc()
+    try:
+        mx.asarray(memoryview(mapped_row), copy=False)
+    except (TypeError, ValueError):
+        pytest.skip("This MLX build does not support zero-copy host buffers")
+
+    fs = InMemoryFeatureStore.from_data(data)
+    loader = NeighborLoader((fs, gs), num_neighbors=[-1], batch_size=5)._loader
+    assert np.shares_memory(np.asarray(loader._colptr), mapped_colptr)
+    assert np.shares_memory(np.asarray(loader._row), mapped_row)
+
+
+def test_csc_sampler_packs_strided_store_arrays(tmp_path, monkeypatch):
+    path = tmp_path / "rows.npy"
+    np.save(path, np.array([1, 0, 2, 0], dtype=np.int64))
+    row = np.load(path, mmap_mode="r")[::2]
+    colptr = np.array([0, 2, 2, 2], dtype=np.int64)
+    graph = InMemoryGraphStore()
+    graph.put_edge_index((row, colptr), layout="csc", size=(3, 3))
+    monkeypatch.setattr(graph, "csc", lambda: (colptr, row, None))
+    features = InMemoryFeatureStore()
+    features["x"] = mx.ones((3, 1))
+
+    loader = NeighborLoader((features, graph), num_neighbors=[-1], input_nodes=[0])
+    assert next(iter(loader)).n_id.tolist() == [0, 1, 2]
+
+
+def test_csc_replacement_preserves_active_loader(tmp_path):
+    graph = MemmapGraphStore(str(tmp_path))
+    graph.put_edge_index(([1, 2], [0, 2, 2, 2]), layout="csc", size=(3, 3))
+    features = InMemoryFeatureStore()
+    features["x"] = mx.ones((3, 1))
+    kwargs = dict(num_neighbors=[-1], input_nodes=mx.array([0]))
+    active = NeighborLoader((features, graph), **kwargs)
+
+    graph.put_edge_index(([2], [0, 1, 1, 1]), layout="csc", size=(3, 3))
+    fresh = NeighborLoader((features, graph), **kwargs)
+    assert next(iter(active)).n_id.tolist() == [0, 1, 2]
+    assert next(iter(fresh)).n_id.tolist() == [0, 2]

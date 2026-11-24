@@ -10,6 +10,7 @@ to the CSC layout used by the neighbor samplers. Paired with a
 
 import json
 import os
+import tempfile
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
 from typing import Any, Literal, Optional, Union
@@ -349,8 +350,15 @@ class MemmapGraphStore(GraphStore):
         )
 
     def _put_edge_index(self, edge_index, attr: EdgeAttr) -> bool:
-        for path, array in zip(self._files(attr.edge_type), edge_index):
-            np.save(path, np.ascontiguousarray(array))
+        paths = self._files(attr.edge_type)
+        with tempfile.TemporaryDirectory(dir=self.root) as staging:
+            staged = [os.path.join(staging, os.path.basename(path)) for path in paths]
+            for path, array in zip(staged, edge_index):
+                np.save(path, np.ascontiguousarray(array))
+            # Active samplers may still reference the old files through a
+            # mapping, so publish new inodes instead of truncating in place.
+            for source, target in zip(staged, paths):
+                os.replace(source, target)
         self._attrs[attr.edge_type] = attr
         self._write_index()
         return True

@@ -12,6 +12,22 @@ from ._utils import index_array, to_index
 from .hetero_neighbor_loader import EdgeType, _HeteroNeighborLoader
 
 
+def _sampler_array(array: np.ndarray) -> mx.array:
+    if (
+        isinstance(array, np.memmap)
+        and array.dtype == np.int64
+        and array.flags.c_contiguous
+    ):
+        try:
+            # The native sampler reads these buffers on the host. Sharing
+            # them lets the OS page in just the adjacency it touches.
+            return mx.asarray(memoryview(array), copy=False)
+        except (TypeError, ValueError):
+            # MLX builds without zero-copy host buffer support can still sample.
+            pass
+    return mx.array(np.ascontiguousarray(array, dtype=np.int64))
+
+
 class _HomogeneousNeighborLoader:
     """Homogeneous implementation behind :class:`NeighborLoader`.
 
@@ -130,14 +146,9 @@ class _HomogeneousNeighborLoader:
                 self._csc_time,
             ) = build_csc(src, dst, self.num_nodes, self._node_time, self._edge_time)
         elif self._stores:
-            colptr, row, perm = self.graph_store.csc()
-            self._colptr = mx.array(np.asarray(colptr, dtype=np.int64))
-            self._row = mx.array(np.asarray(row, dtype=np.int64))
-            self._edge_perm = (
-                np.arange(row.size, dtype=np.int64)
-                if perm is None
-                else np.asarray(perm, dtype=np.int64)
-            )
+            colptr, row, self._edge_perm = self.graph_store.csc()
+            self._colptr = _sampler_array(colptr)
+            self._row = _sampler_array(row)
             mx.eval(self._colptr, self._row)
         else:
             # Pre-compute CSC format once and evaluate for C++ kernel access
@@ -282,10 +293,9 @@ class _HomogeneousNeighborLoader:
 
         # 4. Slice standard attributes using global node IDs (int32 ids)
         n_id = index_array(samples, self.num_nodes)
-        original_edge_ids = index_array(
-            self._edge_perm[np.array(edges, copy=False).astype(np.int64)],
-            max(self._edge_perm.size, 1),
-        )
+        if self._edge_perm is not None:
+            edges = self._edge_perm[np.asarray(edges, dtype=np.int64)]
+        original_edge_ids = index_array(edges, self.num_edges)
         if self._stores:
             return self._gather_from_stores(
                 edge_index, n_id, original_edge_ids, num_seeds, extra
@@ -391,6 +401,9 @@ class NeighborLoader:
       (:class:`~mlx_graphs.data.MemmapFeatureStore`). Store arrays named
       ``x`` / ``y`` / ``edge_attr`` become ``node_features`` /
       ``node_labels`` / ``edge_features`` of the mini-batch.
+      For static, non-disjoint sampling, CSC adjacency stored in a
+      :class:`~mlx_graphs.data.MemmapGraphStore` is shared with the native
+      sampler on MLX builds that support zero-copy host buffers.
 
     **Temporal sampling** (homogeneous graphs): with ``time_attr``, only the
     neighbors whose timestamp is earlier than or equal to the time of their

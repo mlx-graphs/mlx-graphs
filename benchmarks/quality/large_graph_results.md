@@ -106,3 +106,53 @@ PYTHONPATH=<pyg-lib dir> python benchmarks/run_capped.py --gb 22 -- \
     python benchmarks/quality/large_graph_training.py --datasets reddit --seeds 0 --epochs 3 \
     --frameworks mlx pyg
 ```
+
+## Disk-backed GraphSAGE on ogbn-products
+
+[`sage_ogbn_products.py`](../../examples/sage_ogbn_products.py) streams the
+official archive into a `MemmapFeatureStore` and a `MemmapGraphStore` with
+precomputed CSC. The graph has 2,449,029 nodes and 123,718,280 edges after
+adding reciprocal edges. Two-layer GraphSAGE uses hidden size 128, dropout
+0.5, fan-outs `[10, 5]`, and batches of 1,024 training or 4,096 evaluation
+seeds. Evaluation uses sampled neighbors for every node in the official
+validation and test splits and reports test accuracy at the best validation
+epoch.
+
+Run on an Apple M3 Pro with 18 GiB of unified memory, Python 3.13,
+MLX 0.32.4 and mlx-cluster 0.1.3. Dataset preparation took 29.2 s and
+peaked at 0.82 GiB of physical footprint after download. Both training
+runs used the prepared stores, two epochs and seed 0. A monitor enforced
+a 16 GiB cap, and `/usr/bin/time -l` reported peak physical footprint for
+training and evaluation together.
+
+| Metric | Baseline (`597eee7`) | Shared CSC mapping |
+|---|---:|---:|
+| Training loader initialization | 0.292 s | 0.017 s |
+| Mean training time per epoch | 19.89 s | 19.04 s |
+| Full test evaluation time | 130.21 s | 121.69 s |
+| Peak physical footprint | 7.28 GiB | 1.65 GiB |
+| Best validation accuracy | 87.6993% | 87.6968% |
+| Test accuracy | 71.8739% | 71.8927% |
+
+The loaders for the three splits share the same mapped adjacency. Peak
+physical footprint fell by 77%. The shared mapping ran first in the table
+above. An earlier comparison, with baseline `4af1e38` running first,
+measured 7.16 GiB for the baseline and 1.72 GiB for the shared mapping.
+
+With pandas installed, prepare the stores once and run the benchmark.
+
+```sh
+curl -fL -o products.zip https://snap.stanford.edu/ogb/data/nodeproppred/products.zip
+/usr/bin/time -l python examples/sage_ogbn_products.py prepare products.zip .mlx_graphs_data/products
+python benchmarks/run_capped.py --gb 16 --poll 2 -- /usr/bin/time -l python \
+    examples/sage_ogbn_products.py train .mlx_graphs_data/products --epochs 2
+```
+
+Run the same example against the baseline with the same prepared stores.
+
+```sh
+baseline_dir=$(mktemp -d)
+git archive 597eee7 mlx_graphs | tar -xf - -C "$baseline_dir"
+PYTHONPATH="$baseline_dir" python benchmarks/run_capped.py --gb 16 --poll 2 -- \
+    /usr/bin/time -l python examples/sage_ogbn_products.py train .mlx_graphs_data/products --epochs 2
+```
