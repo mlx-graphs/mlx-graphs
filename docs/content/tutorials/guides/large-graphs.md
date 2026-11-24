@@ -55,6 +55,8 @@ for batch in loader:
 
 An existing graph converts with `InMemoryFeatureStore.from_data(data)` / `MemmapFeatureStore.from_data(data, root)` and `InMemoryGraphStore.from_data(data)`. [`MemmapGraphStore`][mlx_graphs.data.MemmapGraphStore] keeps the edges (e.g. already in CSC) in `.npy` files, to reopen a large graph without sorting its edges again. The [stores API page](../../api/data/stores.md) lists all of them.
 
+For static, non-disjoint sampling, `NeighborLoader` can sample directly from a memory-mapped CSC graph on MLX builds that support sharing host buffers. The `ogbn-products` example prepares both stores from the official archive and trains GraphSAGE on the official split. [Runnable example](https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/sage_ogbn_products.py) · [Benchmark results](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/large_graph_results.md#disk-backed-graphsage-on-ogbn-products)
+
 [`benchmarks/quality/feature_store_memory.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/benchmarks/quality/feature_store_memory.py) trains nothing but iterates a `NeighborLoader` over a 6.1 GB features file (250 MB of features per mini-batch): the process peaks under 3 GB of resident memory, the size of a few mini-batches rather than of the file.
 
 ## Temporal sampling
