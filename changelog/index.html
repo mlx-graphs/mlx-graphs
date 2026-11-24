@@ -26,7 +26,7 @@
         
       
       
-      <link rel="icon" href="../assets/images/favicon.svg">
+      <link rel="icon" href="../assets/images/favicon.ico">
       <meta name="generator" content="zensical-0.1.3">
     
     
@@ -73,6 +73,7 @@
 
     
     
+  <link rel="icon" type="image/svg+xml" href="../assets/images/favicon.svg">
   <link rel="icon" type="image/png" sizes="32x32" href="../assets/images/favicon-32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="../assets/images/apple-touch-icon.png">
   <link rel="manifest" href="../assets/site.webmanifest">
@@ -18074,10 +18075,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
+  <a href="#v0-6-0" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Unreleased
+        0.6.0
       </span>
     </span>
   </a>
@@ -18364,10 +18365,10 @@
     <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
       
         <li class="md-nav__item">
-  <a href="#unreleased" class="md-nav__link">
+  <a href="#v0-6-0" class="md-nav__link">
     <span class="md-ellipsis">
       <span class="md-typeset">
-        Unreleased
+        0.6.0
       </span>
     </span>
   </a>
@@ -18651,8 +18652,8 @@
 
 <h1 id="changelog">Changelog<a class="headerlink" href="#changelog" title="Permanent link">&para;</a></h1>
 <p>Every release of mlx-graphs, newest first, with the notes of its <a href="https://github.com/mlx-graphs/mlx-graphs/releases">GitHub release</a> and, for some versions, hand-written notes from <a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/CHANGELOG.rst"><code>CHANGELOG.rst</code></a>. The packages are on <a href="https://pypi.org/project/mlx-graphs/#history">PyPI</a>.</p>
-<h2 id="unreleased">Unreleased<a class="headerlink" href="#unreleased" title="Permanent link">&para;</a></h2>
-<p class="mg-release-meta">Merged after v0.5.3 &middot; <a href="https://github.com/mlx-graphs/mlx-graphs/compare/v0.5.3...main">changes since v0.5.3</a></p>
+<h2 id="v0-6-0">0.6.0<a class="headerlink" href="#v0-6-0" title="Permanent link">&para;</a></h2>
+<p class="mg-release-meta">2026-11-24 &middot; <a href="https://github.com/mlx-graphs/mlx-graphs/compare/v0.5.3...v0.6.0">Full diff</a> &middot; <a href="https://pypi.org/project/mlx-graphs/0.6.0/">PyPI</a></p>
 <h3 id="large-graphs">Large graphs<a class="headerlink" href="#large-graphs" title="Permanent link">&para;</a></h3>
 <ul>
 <li><strong>Datasets</strong>: <code>Reddit</code>, <code>Reddit2</code>, <code>Flickr</code>, <code>Yelp</code>,
@@ -18738,7 +18739,7 @@
 <li><code>from_smiles</code>, <code>to_smiles</code>, <code>from_rdmol</code> and <code>to_rdmol</code> with PyG's
     <code>x_map</code> / <code>e_map</code> featurization (<code>rdkit</code> is an optional dependency).</li>
 </ul>
-<h3 id="unreleased-prs">Pull requests<a class="headerlink" href="#unreleased-prs" title="Permanent link">&para;</a></h3>
+<h3 id="v0-6-0-prs">Pull requests<a class="headerlink" href="#v0-6-0-prs" title="Permanent link">&para;</a></h3>
 <p><strong>Features</strong></p>
 <ul>
 <li>molecular and 3D GNNs (SchNet, DimeNet++, AttentiveFP, QM9, ZINC, MoleculeNet) (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/219">#219</a>)</li>
@@ -18749,10 +18750,12 @@
 </ul>
 <p><strong>Documentation</strong></p>
 <ul>
+<li>give the site an .ico favicon and type its SVG icon, for Safari (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/225">#225</a>)</li>
 <li>rebuild the documentation site on Zensical (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/223">#223</a>)</li>
 </ul>
 <p><strong>Other</strong></p>
 <ul>
+<li><strong>ci:</strong> run the daily release at 00:17 UTC, off the hourly peak (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/226">#226</a>)</li>
 <li><strong>ci:</strong> run the daily release at midnight UTC instead of 23:00 (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/224">#224</a>)</li>
 <li><strong>ci:</strong> release once a day instead of on every merge (<a href="https://github.com/mlx-graphs/mlx-graphs/pull/221">#221</a>)</li>
 </ul>
