@@ -10,6 +10,10 @@ from mlx_graphs.nn.kernels.csr_softmax_spmm import (
     csr_softmax_spmm,
     supports_metal_csr_softmax_spmm,
 )
+from mlx_graphs.nn.kernels.transformer_edge_scores import (
+    _reference_scores as _reference_edge_scores,
+)
+from mlx_graphs.nn.kernels.transformer_edge_scores import transformer_edge_scores
 from mlx_graphs.utils import ScatterAggregations, get_src_dst_features, scatter
 
 # Fused SpMM kernels live in mlx-cluster. They are optional: without them (or
@@ -46,15 +50,9 @@ if HAS_FUSED_KERNELS:
         pass
 
 # Per-edge attention scores without gathering [num_edges, heads, channels]
-# arrays need an mlx-cluster with edge_scores; older ones fall back.
-HAS_EDGE_SCORES = False
-if HAS_FUSED_KERNELS:
-    try:
-        from mlx_cluster import edge_scores as _edge_scores
-
-        HAS_EDGE_SCORES = True
-    except ImportError:
-        pass
+# arrays: an in-tree Metal kernel (mlx_graphs.nn.kernels), so unlike SpMM they
+# do not depend on mlx-cluster. Kept for code that checked for the kernel.
+HAS_EDGE_SCORES = True
 
 # Global switch, mainly for benchmarks and tests (same model, both paths).
 _fused_enabled: bool = True
@@ -90,10 +88,10 @@ def edge_scores(
 ) -> mx.array:
     """Dot product per edge and per head: ``scale * (a[row] * b[col]).sum(-1)``.
 
-    With a recent ``mlx_cluster`` and fused message passing enabled, this runs
-    a kernel that never builds the gathered ``a[row]`` and ``b[col]`` arrays
-    (``[num_edges, heads, channels]`` each), forward or backward. Otherwise it
-    computes the expression above.
+    With fused message passing enabled (the default), on the Metal GPU with
+    float32 features, this runs a kernel that never builds the gathered
+    ``a[row]`` and ``b[col]`` arrays (``[num_edges, heads, channels]`` each),
+    forward or backward. Otherwise it computes the expression above.
 
     Args:
         row: ``[num_edges]`` index into ``a`` (e.g. destination nodes).
@@ -105,9 +103,10 @@ def edge_scores(
     Returns:
         ``[num_edges, heads]`` (or ``[num_edges]``) scores.
     """
-    if HAS_EDGE_SCORES and is_fused_message_passing_enabled():
-        return _edge_scores(row, col, a, b, scale)
-    return scale * (a[row] * b[col]).sum(axis=-1)
+    # Unlike the SpMM kernels, this one needs no mlx-cluster, only the switch.
+    if _fused_enabled:
+        return transformer_edge_scores(row, col, a, b, scale)
+    return _reference_edge_scores(row, col, a, b, scale)
 
 
 @contextmanager

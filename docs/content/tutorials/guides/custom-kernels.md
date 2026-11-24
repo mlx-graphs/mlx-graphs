@@ -2,7 +2,7 @@
 
 This guide is for you if you wrote a layer and one of its operations on edges is slow. It shows how to write that operation as a Metal kernel with [`mx.fast.metal_kernel`](https://ml-explore.github.io/mlx/build/html/dev/custom_metal_kernels.html), give it gradients with [`mx.custom_function`](https://ml-explore.github.io/mlx/build/html/python/_autosummary/mlx.core.custom_function.html), and plug it into a [`MessagePassing`][mlx_graphs.nn.MessagePassing] layer with a fallback. The worked example is a real fused graph operation; all the code on this page comes from [`docs/snippets/edge_dot_kernel.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/docs/snippets/edge_dot_kernel.py), which runs its checks and its benchmark with `python docs/snippets/edge_dot_kernel.py`. The test suite runs the same checks (`tests/docs/test_edge_dot_kernel.py`).
 
-The API used here is the one of MLX 0.32. mlx-graphs ships two such kernels, which are longer versions of the same recipe: [`gatv2_edge_scores.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/mlx_graphs/nn/kernels/gatv2_edge_scores.py) (GATv2's attention logits) and [`csr_softmax_spmm.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/mlx_graphs/nn/kernels/csr_softmax_spmm.py) (softmax over each node's edges fused with the weighted sum).
+The API used here is the one of MLX 0.32. mlx-graphs ships three such kernels, which are longer versions of the same recipe: [`gatv2_edge_scores.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/mlx_graphs/nn/kernels/gatv2_edge_scores.py) (GATv2's attention logits), [`transformer_edge_scores.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/mlx_graphs/nn/kernels/transformer_edge_scores.py) (TransformerConv's query-key dot products) and [`csr_softmax_spmm.py`](https://github.com/mlx-graphs/mlx-graphs/blob/main/mlx_graphs/nn/kernels/csr_softmax_spmm.py) (softmax over each node's edges fused with the weighted sum).
 
 ## When a custom kernel is worth it
 
@@ -15,7 +15,7 @@ A message passing layer written with MLX operations gathers the features of both
 Two cases are already covered without a kernel of your own:
 
 - **The message is a weighted sum of neighbor features** (`edge_weight * x_j`, mean, sum): decorate the layer with [`@fused_message_passing`][mlx_graphs.nn.fused_message_passing], which aggregates with one sparse-dense matrix product and never builds the message array. See [Writing your own layers](writing-layers.md#speed).
-- **The attention of GAT, GATv2 and TransformerConv**: the built-in layers already use the two kernels above.
+- **The attention of GAT, GATv2 and TransformerConv**: the built-in layers already use the kernels above.
 
 Write a kernel when the expensive part is something else, typically **a per-edge quantity computed from the features of both ends** (a score, a distance, a gate) that the layer needs before its weighted sum. The kernel computes it directly from the node features, so the `[num_edges, features]` intermediates never exist.
 

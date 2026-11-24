@@ -8,7 +8,7 @@ from torch_geometric.nn import TransformerConv as PyGTransformerConv
 
 from mlx_graphs.nn import fused_message_passing_mode
 from mlx_graphs.nn.conv.transformer_conv import TransformerConv
-from mlx_graphs.nn.message_passing import HAS_EDGE_SCORES
+from mlx_graphs.nn.message_passing import HAS_FUSED_KERNELS
 
 # MLX's GPU matmul is only accurate to ~1e-3 relative on some machines, while a
 # wrong formula gives O(1) errors with these O(1) inputs.
@@ -257,8 +257,8 @@ def test_transformer_conv_gradients(kwargs):
 )
 @pytest.mark.parametrize("bipartite", [False, True])
 def test_transformer_conv_fused_matches_gather_scatter(kwargs, bipartite):
-    """The fused path (edge_scores + SpMM) gives the outputs and gradients of
-    gather-scatter, which is what the layer computes without mlx_cluster."""
+    """The fused path (edge score kernel + SpMM) gives the outputs and
+    gradients of gather-scatter."""
     rng = np.random.default_rng(6)
     num_src, num_dst = (15, 9) if bipartite else (12, 12)
     edge_index = mx.array(_random_graph(rng, num_src, num_dst))
@@ -292,7 +292,7 @@ def test_transformer_conv_fused_matches_gather_scatter(kwargs, bipartite):
         )
 
 
-@pytest.mark.skipif(not HAS_EDGE_SCORES, reason="needs mlx_cluster.edge_scores")
+@pytest.mark.skipif(not HAS_FUSED_KERNELS, reason="needs mlx_cluster SpMM")
 def test_transformer_conv_uses_fused_kernels(monkeypatch):
     """Without edge features, neither the scores nor the messages are
     computed per edge in Python."""

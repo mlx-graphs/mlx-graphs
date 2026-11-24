@@ -23,6 +23,22 @@ On an Apple Silicon Mac, run the 100k-edge layer comparison from the repo root.
 uv run --python 3.13 python -m benchmarks.kernels.gatv2_scores
 ```
 
+It compares three score paths through complete GATv2 layers: the gather
+reference, the in-tree Metal kernel (whose backward pass adds into the
+gradients with atomics) and `mlx_cluster.gatv2_scores` (whose backward pass
+sums each node's edges on the CSR, without atomics, with chunking for hub
+nodes). The mlx-cluster path needs an mlx-cluster with `gatv2_scores` and is
+skipped otherwise; `--paths reference metal` skips it too.
+
+`--datasets` runs on real graphs instead of Coauthor Physics: node
+classification on each, and with the layer task, a layer on each graph's edges
+(random 128-dimensional features, so the dense layers cost the same on every
+graph and the score paths make the difference). For example:
+
+```bash
+python -m benchmarks.kernels.gatv2_scores --tasks layer node --datasets ogbn-arxiv amazon-computers
+```
+
 The full comparison adds a 2M-edge layer run, Coauthor Physics node
 classification, and DD graph classification.
 
@@ -41,3 +57,21 @@ tasks report time per epoch and test accuracy at the best validation epoch
 for seeds 0, 1, and 2. Both report peak MLX memory. The JSON includes per-seed
 metrics and system information. Training datasets download on first use.
 Use `--seeds 0` for a shorter training comparison.
+
+## TransformerConv edge scores
+
+`transformer_edge_scores` computes TransformerConv's attention logits,
+`scale * <q[dst], k[src]>` per edge and head, without gathering the queries
+and keys per edge. The benchmark runs complete TransformerConv layers with
+three score paths: the gather reference, the in-tree Metal kernel, and
+`mlx_cluster.edge_scores` (the previous path). Aggregation is fused SpMM in
+all three.
+
+```bash
+uv run --python 3.13 python -m benchmarks.kernels.transformer_scores
+```
+
+Add `--large` for a 2M-edge layer, `--tasks layer node` for Coauthor Physics
+node classification (seeds 0, 1 and 2), and `--paths reference metal` to skip
+mlx-cluster. Each run has its own process, and the script checks that the
+requested score path ran.
