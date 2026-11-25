@@ -18185,7 +18185,7 @@
 
 
 <h1 id="examples">Examples<a class="headerlink" href="#examples" title="Permanent link">&para;</a></h1>
-<p>Runnable scripts in the <a href="https://github.com/mlx-graphs/mlx-graphs/tree/main/examples">examples/</a> folder of the repository. Each one trains a model end to end and takes its options on the command line (<code>python examples/&lt;script&gt;.py --help</code>). Datasets are downloaded on first use.</p>
+<p>Runnable scripts in the <a href="https://github.com/mlx-graphs/mlx-graphs/tree/main/examples">examples/</a> folder of the repository. Each one trains a model end to end and takes its options on the command line (<code>python examples/&lt;script&gt;.py --help</code>). Most datasets are downloaded on first use.</p>
 <table>
 <thead>
 <tr>
@@ -18197,6 +18197,10 @@
 <tr>
 <td><a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/node_classification.py">node_classification.py</a></td>
 <td>Full-batch node classification with the ready-made <code>GCN</code>, <code>GraphSAGE</code> and <code>GAT</code> models, on Planetoid, Amazon and Coauthor datasets.</td>
+</tr>
+<tr>
+<td><a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/sage_ogbn_products.py">sage_ogbn_products.py</a></td>
+<td>GraphSAGE on the official <code>ogbn-products</code> split, with a preparation step that streams the downloaded archive into memory-mapped feature and graph stores.</td>
 </tr>
 <tr>
 <td><a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/gcn.py">gcn.py</a>, <a href="https://github.com/mlx-graphs/mlx-graphs/blob/main/examples/gat.py">gat.py</a></td>
