@@ -57,21 +57,3 @@ tasks report time per epoch and test accuracy at the best validation epoch
 for seeds 0, 1, and 2. Both report peak MLX memory. The JSON includes per-seed
 metrics and system information. Training datasets download on first use.
 Use `--seeds 0` for a shorter training comparison.
-
-## TransformerConv edge scores
-
-`transformer_edge_scores` computes TransformerConv's attention logits,
-`scale * <q[dst], k[src]>` per edge and head, without gathering the queries
-and keys per edge. The benchmark runs complete TransformerConv layers with
-three score paths: the gather reference, the in-tree Metal kernel, and
-`mlx_cluster.edge_scores` (the previous path). Aggregation is fused SpMM in
-all three.
-
-```bash
-uv run --python 3.13 python -m benchmarks.kernels.transformer_scores
-```
-
-Add `--large` for a 2M-edge layer, `--tasks layer node` for Coauthor Physics
-node classification (seeds 0, 1 and 2), and `--paths reference metal` to skip
-mlx-cluster. Each run has its own process, and the script checks that the
-requested score path ran.

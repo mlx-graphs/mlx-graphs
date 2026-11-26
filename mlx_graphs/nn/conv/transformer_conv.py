@@ -192,9 +192,9 @@ class TransformerConv(MessagePassing):
         num_dst = query.shape[0]
         scale = 1.0 / math.sqrt(C)
 
-        # Attention logits q_i . k_j / sqrt(C), one per (edge, head). On the
-        # GPU this never gathers [num_edges, heads, C] queries and keys (see
-        # edge_scores and mlx_graphs.nn.kernels.transformer_edge_scores).
+        # Attention logits q_i . k_j / sqrt(C), one per (edge, head). With a
+        # recent mlx_cluster this never gathers [num_edges, heads, C] queries
+        # and keys (see edge_scores).
         alpha = edge_scores(dst_idx, src_idx, query, key, scale)
         if edge_features is not None:
             # keys are k_j + e_ij; the edge term is per edge already

@@ -100,16 +100,6 @@ Added
 - ``from_smiles``, ``to_smiles``, ``from_rdmol`` and ``to_rdmol`` with PyG's
   ``x_map`` / ``e_map`` featurization (``rdkit`` is an optional dependency).
 
-Performance
-~~~~~~~~~~~
-
-- ``TransformerConv`` computes its attention scores with an in-tree Metal
-  kernel (``mlx_graphs/nn/kernels/transformer_edge_scores.py``) instead of
-  ``mlx_cluster.edge_scores``. Neither pass builds ``[num_edges, heads,
-  channels]`` arrays, the backward pass is one launch for all heads, and the
-  scores no longer need a recent ``mlx-cluster``. Compare the paths with
-  ``python -m benchmarks.kernels.transformer_scores``.
-
 0.5.2
 -----
 

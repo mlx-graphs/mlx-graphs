@@ -51,7 +51,7 @@ def workloads(tasks, large, datasets=None):
     if "node" in tasks:
         for name in datasets or ("coauthor-physics",):
             yield (
-                f"{name} training",
+                name,
                 dict(
                     task="node",
                     dataset=name,
