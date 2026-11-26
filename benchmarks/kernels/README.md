@@ -28,7 +28,11 @@ reference, the in-tree Metal kernel (whose backward pass adds into the
 gradients with atomics) and `mlx_cluster.gatv2_scores` (whose backward pass
 sums each node's edges on the CSR, without atomics, with chunking for hub
 nodes). The mlx-cluster path needs an mlx-cluster with `gatv2_scores` and is
-skipped otherwise; `--paths reference metal` skips it too.
+skipped otherwise; `--paths reference metal` skips it too. `--paths` also runs
+the paths in the order given, so rotating it across runs evens out order
+effects. Add `auto` to `--paths` to time GATv2Conv's default choice (mlx-cluster
+for graphs with 1M+ edges, the in-tree kernel otherwise); its summary line says
+which kernel it chose.
 
 `--datasets` runs on real graphs instead of Coauthor Physics: node
 classification on each, and with the layer task, a layer on each graph's edges

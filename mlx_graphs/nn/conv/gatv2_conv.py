@@ -1,12 +1,96 @@
-from typing import Optional, Tuple, Union
+from contextlib import contextmanager
+from typing import Literal, Optional, Tuple, Union, get_args
 
 import mlx.core as mx
 import mlx.nn as nn
 
+import mlx_graphs.nn.message_passing as _message_passing
 from mlx_graphs.nn.conv._norm import SelfLoopFillValue, attention_self_loops
 from mlx_graphs.nn.kernels.gatv2_edge_scores import _reference_scores, gatv2_edge_scores
 from mlx_graphs.nn.linear import Linear, glorot
-from mlx_graphs.nn.message_passing import MessagePassing, fused_message_passing
+from mlx_graphs.nn.message_passing import (
+    _AUTO_CSR_MIN_EDGES,
+    HAS_FUSED_KERNELS,
+    MessagePassing,
+    _csr_cache,
+    fused_message_passing,
+)
+
+GATv2ScoreKernel = Literal["auto", "metal", "mlx_cluster"]
+
+# mlx_cluster.gatv2_scores computes the attention logits with a backward pass
+# that sums each node's edges on the CSR (no atomics); older mlx-cluster
+# versions don't have it.
+HAS_GATV2_SCORES = False
+if HAS_FUSED_KERNELS:
+    try:
+        from mlx_cluster import gatv2_scores as _mlx_cluster_gatv2_scores
+
+        HAS_GATV2_SCORES = True
+    except ImportError:
+        pass
+
+# In "auto" mode, graphs with at least this many edges use
+# mlx_cluster.gatv2_scores. It is the size at which fused message passing
+# (format="auto") converts a graph to CSR on first use, so the CSR that
+# gatv2_scores needs costs no extra sort. Below it, the CSR is often never
+# built (e.g. with add_self_loops=True, which makes a new edge_index per call).
+_MLX_CLUSTER_MIN_EDGES = _AUTO_CSR_MIN_EDGES
+
+_score_kernel: GATv2ScoreKernel = "auto"
+
+
+def set_gatv2_score_kernel(kernel: GATv2ScoreKernel) -> None:
+    """Chooses the kernel that computes the attention scores of
+    :class:`GATv2Conv` on the fused message-passing path.
+
+    - ``"auto"`` (default): ``mlx_cluster.gatv2_scores`` on the Metal GPU for
+      graphs with at least 1M edges, the in-tree Metal kernel otherwise.
+    - ``"metal"``: always the in-tree Metal kernel.
+    - ``"mlx_cluster"``: ``mlx_cluster.gatv2_scores`` whenever it can run,
+      whatever the graph size. It needs the graph in CSR form, so on graphs
+      whose CSR is not already cached this adds a sort of the edges per call.
+
+    In every mode, layers with edge features use the in-tree kernel (which
+    supports them), and with fused message passing disabled every layer
+    uses gather-scatter.
+
+    Args:
+        kernel: ``"auto"``, ``"metal"`` or ``"mlx_cluster"``.
+    """
+    global _score_kernel
+    if kernel not in get_args(GATv2ScoreKernel):
+        raise ValueError(
+            f"kernel must be 'auto', 'metal' or 'mlx_cluster', got {kernel!r}"
+        )
+    if kernel == "mlx_cluster" and not HAS_GATV2_SCORES:
+        raise ValueError(
+            "kernel='mlx_cluster' needs an mlx-cluster with gatv2_scores "
+            "(macOS only); install a recent mlx-cluster."
+        )
+    _score_kernel = kernel
+
+
+@contextmanager
+def gatv2_score_kernel_mode(kernel: GATv2ScoreKernel):
+    """Context manager version of :func:`set_gatv2_score_kernel`.
+
+    .. code-block:: python
+
+        with gatv2_score_kernel_mode("metal"):
+            out = model(edge_index, x)  # in-tree kernel, whatever the size
+    """
+    global _score_kernel
+    previous = _score_kernel
+    set_gatv2_score_kernel(kernel)
+    try:
+        yield
+    finally:
+        _score_kernel = previous
+
+
+def _on_metal() -> bool:
+    return mx.default_device().type == mx.gpu and mx.metal.is_available()
 
 
 @fused_message_passing
@@ -40,6 +124,13 @@ class GATv2Conv(MessagePassing):
             ``edge_features`` are given: a constant, or the reduction
             (``"mean"``, ``"add"``, ``"max"``, ``"min"`` or ``"mul"``) of the
             features of the incoming edges of each node. Default: ``"mean"``
+
+    The attention scores are computed by one of two kernels on the fused
+    message-passing path. On the Metal GPU, graphs with at least 1M edges
+    (and no edge features) use ``mlx_cluster.gatv2_scores``, whose backward
+    pass is faster on large graphs; smaller graphs use the in-tree Metal
+    kernel. Both give the same results. :func:`set_gatv2_score_kernel`
+    overrides the choice.
 
     Example:
 
@@ -152,15 +243,39 @@ class GATv2Conv(MessagePassing):
             if edge_features is not None
             else None
         )
-        # Tie the Metal score path to the existing fused message-passing mode.
-        score = (
-            gatv2_edge_scores
-            if self._can_fuse(edge_index, src_feats, None, None)
-            else _reference_scores
-        )
-        alpha = score(
-            src_feats, dst_feats, self.att, edge_index, self.negative_slope, edge_feats
-        )
+        # Tie the Metal score paths to the existing fused message-passing mode.
+        if self._can_fuse(edge_index, src_feats, None, None):
+            csr = self._mlx_cluster_csr(
+                edge_index, dst_feats.shape[0], src_feats.shape[0], edge_feats
+            )
+            if csr is not None:
+                alpha = _mlx_cluster_gatv2_scores(
+                    edge_index[1],
+                    edge_index[0],
+                    dst_feats,
+                    src_feats,
+                    self.att,
+                    self.negative_slope,
+                    csr=csr,
+                )
+            else:
+                alpha = gatv2_edge_scores(
+                    src_feats,
+                    dst_feats,
+                    self.att,
+                    edge_index,
+                    self.negative_slope,
+                    edge_feats,
+                )
+        else:
+            alpha = _reference_scores(
+                src_feats,
+                dst_feats,
+                self.att,
+                edge_index,
+                self.negative_slope,
+                edge_feats,
+            )
         if self._add_self_loops:
             # the input self-loops are replaced by the added ones
             alpha = mx.where(removed_loops[:, None], -float("inf"), alpha)
@@ -182,6 +297,28 @@ class GATv2Conv(MessagePassing):
             node_features = node_features + self.bias
 
         return node_features
+
+    def _mlx_cluster_csr(
+        self,
+        edge_index: mx.array,
+        num_dst: int,
+        num_src: int,
+        edge_feats: Optional[mx.array],
+    ):
+        """The CSR for ``mlx_cluster.gatv2_scores``, or ``None`` for the
+        in-tree kernel (see :func:`set_gatv2_score_kernel`)."""
+        if _score_kernel == "metal" or not HAS_GATV2_SCORES or edge_feats is not None:
+            return None
+        if _score_kernel == "auto" and (
+            edge_index.shape[1] < _MLX_CLUSTER_MIN_EDGES or not _on_metal()
+        ):
+            return None
+        fmt = _message_passing._fused_format_override or self._fused_format
+        if fmt == "coo":
+            return None
+        # The same edge_index and sizes as this call's aggregation, which
+        # then finds this CSR in the cache. None while tracing (mx.compile).
+        return _csr_cache.get(edge_index, num_dst, num_src)
 
     def _compute_edge_features(self, edge_features: mx.array):
         assert all(layer in self for layer in ["edge_lin_proj", "edge_att"]), """Using

@@ -14,7 +14,9 @@ from benchmarks.common import peak_footprint_gb, run_worker, system_info
 from benchmarks.versions import library_info
 from benchmarks.workloads import run_graph, run_layer, run_node
 
-PATHS = ("reference", "metal", "mlx-cluster")
+PATHS = ("reference", "metal", "mlx-cluster", "auto")
+# "auto" (GATv2Conv's default choice between the two kernels) is opt-in
+DEFAULT_PATHS = ("reference", "metal", "mlx-cluster")
 
 
 DATASETS = (
@@ -90,32 +92,26 @@ def measure(score_path, config):
         raise RuntimeError("The GATv2 benchmark requires the Metal GPU")
     if not is_fused_message_passing_enabled():
         raise RuntimeError("The GATv2 benchmark requires mlx-cluster fused SpMM")
-    # Swap only the scores: SpMM and the rest of the layer stay the same.
-    cluster_calls = 0
+    # Pick the score kernel with GATv2Conv's own switch: SpMM and the rest of
+    # the layer stay the same. "auto" is the layer's default (mlx-cluster on
+    # graphs with 1M+ edges, the in-tree kernel otherwise).
+    gatv2_conv.set_gatv2_score_kernel(
+        {"reference": "metal", "metal": "metal", "mlx-cluster": "mlx_cluster"}.get(
+            score_path, "auto"
+        )
+    )
     if score_path == "reference":
         gatv2_conv.gatv2_edge_scores = _reference_scores
-    elif score_path == "mlx-cluster":
-        from mlx_cluster import gatv2_scores
+    cluster_calls = 0
+    if gatv2_conv.HAS_GATV2_SCORES:
+        mlx_cluster_scores = gatv2_conv._mlx_cluster_gatv2_scores
 
-        from mlx_graphs.nn.message_passing import _csr_cache
-
-        def cluster_scores(
-            src_feats, dst_feats, att, edge_index, slope, edge_feats=None
-        ):
+        def counted_mlx_cluster_scores(*args, **kwargs):
             nonlocal cluster_calls
-            if edge_feats is not None:
-                return _reference_scores(
-                    src_feats, dst_feats, att, edge_index, slope, edge_feats
-                )
             cluster_calls += 1
-            # The CSR that fused aggregation uses too ("auto" converts it after
-            # a few uses, i.e. during warm-up): converted once per graph.
-            csr = _csr_cache.get(edge_index, dst_feats.shape[0], src_feats.shape[0])
-            return gatv2_scores(
-                edge_index[1], edge_index[0], dst_feats, src_feats, att, slope, csr=csr
-            )
+            return mlx_cluster_scores(*args, **kwargs)
 
-        gatv2_conv.gatv2_edge_scores = cluster_scores
+        gatv2_conv._mlx_cluster_gatv2_scores = counted_mlx_cluster_scores
 
     args = argparse.Namespace(
         framework="mlx-graphs", layer="gatv2", model="gatv2", warmup=5, **config
@@ -126,9 +122,13 @@ def measure(score_path, config):
     result = {"layer": run_layer, "node": run_node, "graph": run_graph}[args.task](args)
     cache_info = _metal_scores.cache_info()
     metal_calls = cache_info.hits + cache_info.misses
-    if (metal_calls > 0) != (score_path == "metal") or (cluster_calls > 0) != (
-        score_path == "mlx-cluster"
-    ):
+    ran = (metal_calls > 0, cluster_calls > 0)
+    expected = {
+        "reference": (False, False),
+        "metal": (True, False),
+        "mlx-cluster": (False, True),
+    }
+    if score_path in expected and ran != expected[score_path]:
         raise RuntimeError(f"GATv2 {score_path} score path did not run as selected")
     record = {
         **vars(args),
@@ -136,6 +136,11 @@ def measure(score_path, config):
         "score_path": score_path,
         "metal_score_calls": metal_calls,
         "mlx_cluster_score_calls": cluster_calls,
+        "kernel_ran": "mlx-cluster"
+        if cluster_calls
+        else "metal"
+        if metal_calls
+        else "",
         "peak_mlx_gb": mx.get_peak_memory() / 1e9,
         "peak_footprint_gib": peak_footprint_gb(),
     }
@@ -157,6 +162,8 @@ def summarize(label, results, is_layer):
             line += f", forward {rows[0]['forward_ms']:.2f} ms"
         else:
             line += f", test accuracy {fmean(row['test_acc'] for row in rows):.2%}"
+        if path == "auto":
+            line += f", chose {rows[0]['kernel_ran']}"
         memory = median(row["peak_mlx_gb"] for row in rows)
         print(f"{line}, peak MLX memory {memory:.3f} GB", flush=True)
 
@@ -175,7 +182,11 @@ def main():
         "and with the layer task, a layer run on each graph's edges",
     )
     parser.add_argument(
-        "--paths", nargs="+", choices=PATHS, default=list(PATHS), help="score paths"
+        "--paths",
+        nargs="+",
+        choices=PATHS,
+        default=list(DEFAULT_PATHS),
+        help="score paths, in the order they run (add auto for GATv2Conv's default)",
     )
     parser.add_argument(
         "--seeds", nargs="+", type=int, default=[0, 1, 2], help="training seeds"
