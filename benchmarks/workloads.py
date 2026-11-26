@@ -162,9 +162,17 @@ def torch_device(framework: str):
 
 
 def run_layer(args) -> dict:
-    edge_index = random_graph(args.num_nodes, args.num_edges)
+    dataset = getattr(args, "dataset", None)
+    if dataset is None:
+        edge_index = random_graph(args.num_nodes, args.num_edges)
+        num_nodes = args.num_nodes
+    else:
+        # A real graph's structure (hubs, locality) with random features of
+        # size dim, so the layer cost does not depend on the dataset's features.
+        data = load_node_dataset(dataset, seed=0)
+        edge_index, num_nodes = data["edge_index"], data["y"].shape[0]
     x = np.random.default_rng(1).standard_normal(
-        (args.num_nodes, args.dim), dtype=np.float32
+        (num_nodes, args.dim), dtype=np.float32
     )
 
     if args.framework == "mlx-graphs":
@@ -204,6 +212,8 @@ def run_layer(args) -> dict:
     fwd = time_fn(forward, args.repeats, args.warmup)
     both = time_fn(forward_backward, args.repeats, args.warmup)
     return {
+        "num_nodes": num_nodes,
+        "num_edges": int(edge_index.shape[1]),
         "forward_ms": fwd["ms"],
         "forward_backward_ms": both["ms"],
         "forward_backward_ms_q1": both["ms_q1"],

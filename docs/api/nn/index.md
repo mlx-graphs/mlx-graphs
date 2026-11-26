@@ -362,11 +362,38 @@ with gnn.fused_message_passing_mode(False):
     reference = model(edge_index, x)
 ```
 
+### GATv2 attention scores
+
+On the fused path, `GATv2Conv` computes its attention scores with one of two
+kernels, which give the same results. On the Metal GPU, graphs with **at least
+1M edges** use `mlx_cluster.gatv2_scores`, whose backward pass sums each node's
+edges on the CSR instead of adding them with atomics: it was 1.4–1.7× faster
+per layer on an M1 and 1.06–1.21× on an M3 Pro on such graphs. Smaller graphs
+use the in-tree Metal kernel, as do layers with edge features. 1M edges is also
+where `format="auto"` converts a graph to CSR on first use, so the CSR that
+`gatv2_scores` needs costs no extra sort. It requires an `mlx-cluster` with
+`gatv2_scores`; with an older one, every graph uses the in-tree kernel.
+
+```python
+# Force a kernel for every GATv2Conv ("auto" is the default)
+gnn.set_gatv2_score_kernel("mlx_cluster")  # or "metal"
+
+# Or only for a block of code
+with gnn.gatv2_score_kernel_mode("metal"):
+    out = model(edge_index, x)
+```
+
+`"mlx_cluster"` uses it on graphs of any size; on graphs whose CSR isn't
+already cached (e.g. smaller graphs with `add_self_loops=True`, which builds a
+new `edge_index` on every call), that adds a sort of the edges per call.
+
 <!-- api mlx_graphs.nn -->
 fused_message_passing
 set_fused_message_passing
 fused_message_passing_mode
 is_fused_message_passing_enabled
+set_gatv2_score_kernel
+gatv2_score_kernel_mode
 clear_csr_cache
 gcn_norm
 clear_norm_cache

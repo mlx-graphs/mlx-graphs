@@ -34,6 +34,19 @@ Large graphs
   graph_store), ...)`` gathers only the rows of the sampled nodes, so node
   features larger than the memory can be used for training.
 
+Performance
+~~~~~~~~~~~
+
+- ``GATv2Conv`` computes its attention scores with ``mlx_cluster.gatv2_scores``
+  on the Metal GPU for graphs with at least 1M edges (needs an mlx-cluster
+  with ``gatv2_scores``), and with the in-tree Metal kernel otherwise. The
+  mlx-cluster kernel's backward pass sums each node's edges on the CSR
+  instead of using atomics: 1.4-1.7x faster per layer on an M1 and
+  1.06-1.21x on an M3 Pro on such graphs, with the same results.
+  ``set_gatv2_score_kernel`` / ``gatv2_score_kernel_mode`` force either
+  kernel. ``benchmarks/kernels/gatv2_scores.py`` compares the kernels, on
+  real graphs too (``--datasets``).
+
 Features
 ~~~~~~~~
 

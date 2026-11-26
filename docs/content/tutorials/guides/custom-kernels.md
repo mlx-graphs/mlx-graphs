@@ -15,7 +15,7 @@ A message passing layer written with MLX operations gathers the features of both
 Two cases are already covered without a kernel of your own:
 
 - **The message is a weighted sum of neighbor features** (`edge_weight * x_j`, mean, sum): decorate the layer with [`@fused_message_passing`][mlx_graphs.nn.fused_message_passing], which aggregates with one sparse-dense matrix product and never builds the message array. See [Writing your own layers](writing-layers.md#speed).
-- **The attention of GAT, GATv2 and TransformerConv**: the built-in layers already use the two kernels above.
+- **The attention of GAT, GATv2 and TransformerConv**: the built-in layers already use the two kernels above. GATv2 switches to `mlx_cluster.gatv2_scores` on graphs with at least 1M edges (see [GATv2 attention scores](../../api/nn/index.md#gatv2-attention-scores)).
 
 Write a kernel when the expensive part is something else, typically **a per-edge quantity computed from the features of both ends** (a score, a distance, a gate) that the layer needs before its weighted sum. The kernel computes it directly from the node features, so the `[num_edges, features]` intermediates never exist.
 

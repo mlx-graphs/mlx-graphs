@@ -1,4 +1,6 @@
-"""Compare MLX GATv2's reference and Metal edge-score paths."""
+"""Compare GATv2's edge-score paths: the gather reference, mlx-graphs' in-tree
+Metal kernel (atomic backward pass) and mlx-cluster's ``gatv2_scores`` (CSR
+backward pass, no atomics)."""
 
 import argparse
 import json
@@ -12,8 +14,24 @@ from benchmarks.common import peak_footprint_gb, run_worker, system_info
 from benchmarks.versions import library_info
 from benchmarks.workloads import run_graph, run_layer, run_node
 
+PATHS = ("reference", "metal", "mlx-cluster", "auto")
+# "auto" (GATv2Conv's default choice between the two kernels) is opt-in
+DEFAULT_PATHS = ("reference", "metal", "mlx-cluster")
 
-def workloads(tasks, large):
+
+DATASETS = (
+    "cora",
+    "citeseer",
+    "pubmed",
+    "amazon-computers",
+    "amazon-photo",
+    "coauthor-cs",
+    "coauthor-physics",
+    "ogbn-arxiv",
+)
+
+
+def workloads(tasks, large, datasets=None):
     if "layer" in tasks:
         graphs = [(10_000, 100_000)]
         if large:
@@ -25,19 +43,26 @@ def workloads(tasks, large):
                     task="layer", num_nodes=nodes, num_edges=edges, dim=128, repeats=12
                 ),
             )
+        # the same layer on real graphs: their edges, random 128-d features
+        for name in datasets or ():
+            yield (
+                f"{name} layer",
+                dict(task="layer", dataset=name, dim=128, repeats=12),
+            )
     training = dict(hidden=64, dropout=0.5, lr=0.01)
     if "node" in tasks:
-        yield (
-            "Coauthor Physics",
-            dict(
-                task="node",
-                dataset="coauthor-physics",
-                num_layers=2,
-                epochs=100,
-                eval_every=10,
-                **training,
-            ),
-        )
+        for name in datasets or ("coauthor-physics",):
+            yield (
+                name,
+                dict(
+                    task="node",
+                    dataset=name,
+                    num_layers=2,
+                    epochs=100,
+                    eval_every=10,
+                    **training,
+                ),
+            )
     if "graph" in tasks:
         yield (
             "DD",
@@ -67,9 +92,26 @@ def measure(score_path, config):
         raise RuntimeError("The GATv2 benchmark requires the Metal GPU")
     if not is_fused_message_passing_enabled():
         raise RuntimeError("The GATv2 benchmark requires mlx-cluster fused SpMM")
+    # Pick the score kernel with GATv2Conv's own switch: SpMM and the rest of
+    # the layer stay the same. "auto" is the layer's default (mlx-cluster on
+    # graphs with 1M+ edges, the in-tree kernel otherwise).
+    gatv2_conv.set_gatv2_score_kernel(
+        {"reference": "metal", "metal": "metal", "mlx-cluster": "mlx_cluster"}.get(
+            score_path, "auto"
+        )
+    )
     if score_path == "reference":
-        # Keep SpMM and the rest of the layer in the comparison.
         gatv2_conv.gatv2_edge_scores = _reference_scores
+    cluster_calls = 0
+    if gatv2_conv.HAS_GATV2_SCORES:
+        mlx_cluster_scores = gatv2_conv._mlx_cluster_gatv2_scores
+
+        def counted_mlx_cluster_scores(*args, **kwargs):
+            nonlocal cluster_calls
+            cluster_calls += 1
+            return mlx_cluster_scores(*args, **kwargs)
+
+        gatv2_conv._mlx_cluster_gatv2_scores = counted_mlx_cluster_scores
 
     args = argparse.Namespace(
         framework="mlx-graphs", layer="gatv2", model="gatv2", warmup=5, **config
@@ -80,32 +122,50 @@ def measure(score_path, config):
     result = {"layer": run_layer, "node": run_node, "graph": run_graph}[args.task](args)
     cache_info = _metal_scores.cache_info()
     metal_calls = cache_info.hits + cache_info.misses
-    if (metal_calls > 0) != (score_path == "metal"):
+    ran = (metal_calls > 0, cluster_calls > 0)
+    expected = {
+        "reference": (False, False),
+        "metal": (True, False),
+        "mlx-cluster": (False, True),
+    }
+    if score_path in expected and ran != expected[score_path]:
         raise RuntimeError(f"GATv2 {score_path} score path did not run as selected")
     record = {
         **vars(args),
         **result,
         "score_path": score_path,
         "metal_score_calls": metal_calls,
+        "mlx_cluster_score_calls": cluster_calls,
+        "kernel_ran": "mlx-cluster"
+        if cluster_calls
+        else "metal"
+        if metal_calls
+        else "",
         "peak_mlx_gb": mx.get_peak_memory() / 1e9,
         "peak_footprint_gib": peak_footprint_gb(),
     }
     print(json.dumps(record))
 
 
-def summarize(label, reference, metal, is_layer):
+def summarize(label, results, is_layer):
     key = "forward_backward_ms" if is_layer else "epoch_ms"
     timing = "forward + backward" if is_layer else "training epoch"
-    before, after = (median(row[key] for row in rows) for rows in (reference, metal))
-    print(f"{label} {timing}: {before:.2f} → {after:.2f} ms ({before / after:.2f}×)")
-    if is_layer:
-        a, b = reference[0]["forward_ms"], metal[0]["forward_ms"]
-        print(f"  Forward: {a:.2f} → {b:.2f} ms")
-    else:
-        a, b = (fmean(row["test_acc"] for row in rows) for rows in (reference, metal))
-        print(f"  Mean test accuracy: {a:.2%} → {b:.2%}")
-    a, b = (median(row["peak_mlx_gb"] for row in rows) for rows in (reference, metal))
-    print(f"  Peak MLX memory: {a:.3f} → {b:.3f} GB", flush=True)
+    base = median(row[key] for row in results["reference"])
+    size = results["reference"][0]
+    if is_layer and size.get("dataset"):
+        label += f" ({size['num_nodes']:,} nodes, {size['num_edges']:,} edges)"
+    print(f"{label} {timing}:")
+    for path, rows in results.items():
+        value = median(row[key] for row in rows)
+        line = f"  {path:>11}: {value:8.2f} ms ({base / value:.2f}× vs reference)"
+        if is_layer:
+            line += f", forward {rows[0]['forward_ms']:.2f} ms"
+        else:
+            line += f", test accuracy {fmean(row['test_acc'] for row in rows):.2%}"
+        if path == "auto":
+            line += f", chose {rows[0]['kernel_ran']}"
+        memory = median(row["peak_mlx_gb"] for row in rows)
+        print(f"{line}, peak MLX memory {memory:.3f} GB", flush=True)
 
 
 def main():
@@ -115,6 +175,20 @@ def main():
     )
     parser.add_argument("--large", action="store_true", help="add a 2M-edge layer run")
     parser.add_argument(
+        "--datasets",
+        nargs="+",
+        choices=DATASETS,
+        help="real graphs: node training on each (default: coauthor-physics), "
+        "and with the layer task, a layer run on each graph's edges",
+    )
+    parser.add_argument(
+        "--paths",
+        nargs="+",
+        choices=PATHS,
+        default=list(DEFAULT_PATHS),
+        help="score paths, in the order they run (add auto for GATv2Conv's default)",
+    )
+    parser.add_argument(
         "--seeds", nargs="+", type=int, default=[0, 1, 2], help="training seeds"
     )
     parser.add_argument("--memory-gb", type=float, default=16.0)
@@ -123,6 +197,14 @@ def main():
     args = parser.parse_args()
     if args.large and "layer" not in args.tasks:
         parser.error("--large requires the layer task")
+    if "reference" not in args.paths:
+        parser.error("--paths must include reference, the baseline")
+    if "mlx-cluster" in args.paths:
+        try:
+            from mlx_cluster import gatv2_scores  # noqa: F401
+        except ImportError:
+            print("mlx-cluster has no gatv2_scores: skipping the mlx-cluster path")
+            args.paths = [path for path in args.paths if path != "mlx-cluster"]
     if not all(isfinite(n) and n > 0 for n in (args.memory_gb, args.timeout_s)):
         parser.error("memory cap and timeout must be positive and finite")
     if args.out and args.out.exists():
@@ -132,12 +214,14 @@ def main():
     print(f"{system['chip']}, MLX {system['mlx']}, mlx-cluster {system['mlx-cluster']}")
     records = []
     failed = False
-    for label, config in workloads(args.tasks, args.large):
+    for label, config in workloads(args.tasks, args.large, args.datasets):
         is_layer = config["task"] == "layer"
         seeds = [0] if is_layer else args.seeds
-        paths = {"reference": [], "metal": []}
+        paths = {path: [] for path in args.paths}
         for index, seed in enumerate(seeds):
-            order = tuple(paths) if index % 2 == 0 else tuple(reversed(paths))
+            # rotate the order so no path always runs first
+            shift = index % len(args.paths)
+            order = args.paths[shift:] + args.paths[:shift]
             for path in order:
                 print(f"Running {label}, seed {seed}, {path}", flush=True)
                 options = {**config, "seed": seed}
@@ -162,7 +246,7 @@ def main():
                 else:
                     paths[path].append(result)
         if all(len(rows) == len(seeds) for rows in paths.values()):
-            summarize(label, paths["reference"], paths["metal"], is_layer)
+            summarize(label, paths, is_layer)
 
     if args.out:
         args.out.parent.mkdir(parents=True, exist_ok=True)

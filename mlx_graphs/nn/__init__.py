@@ -1,4 +1,5 @@
 from .conv import *  # noqa
+from .conv.gatv2_conv import gatv2_score_kernel_mode, set_gatv2_score_kernel  # noqa
 from .linear import HeteroDictLinear, Linear  # noqa
 from .graph_network_block import GraphNetworkBlock  # noqa
 from .message_passing import (  # noqa
