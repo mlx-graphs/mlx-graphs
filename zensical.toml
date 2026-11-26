@@ -68,6 +68,7 @@ nav = [
       { "Intrusion detection" = "tutorials/notebooks/cybersecurity.md" },
       { "Graph RAG (G-reasoner)" = "tutorials/notebooks/graph_rag_g_reasoner.md" },
       { "Molecules (QM9)" = "tutorials/notebooks/qm9_tutorial.md" },
+      { "Explainability" = "tutorials/notebooks/explainability.md" },
     ] },
     { "Example scripts" = "tutorials/examples.md" },
   ] },

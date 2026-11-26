@@ -76,3 +76,9 @@
   text: Predict quantum-chemical properties of small molecules with a GNN.
   thumbnail: qm9_tutorial.svg
   tags: [chemistry, graph-level]
+
+- notebook: explainability
+  title: Explaining GNN predictions
+  text: Find the edges and features behind a prediction with GNNExplainer, Saliency and Integrated Gradients, on BA-Shapes and Cora.
+  thumbnail: explainability.svg
+  tags: [explainability, node-level]
