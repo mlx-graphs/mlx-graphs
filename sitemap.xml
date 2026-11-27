@@ -241,6 +241,54 @@
         <loc>https://mlx-graphs.github.io/mlx-graphs/api/datasets/save_graphs/</loc>
       </url>
       <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/Explainer/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/ExplainerAlgorithm/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/ExplainerConfig/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/Explanation/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/GNNExplainer/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/IntegratedGradients/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/ModelConfig/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/Saliency/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/ThresholdConfig/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/ba_shapes/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/characterization_score/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/fidelity/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/groundtruth_auc/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/visualize_feature_importance/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/api/explain/visualize_graph/</loc>
+      </url>
+      <url>
         <loc>https://mlx-graphs.github.io/mlx-graphs/api/loaders/</loc>
       </url>
       <url>
@@ -1418,6 +1466,9 @@
       </url>
       <url>
         <loc>https://mlx-graphs.github.io/mlx-graphs/tutorials/notebooks/cybersecurity/</loc>
+      </url>
+      <url>
+        <loc>https://mlx-graphs.github.io/mlx-graphs/tutorials/notebooks/explainability/</loc>
       </url>
       <url>
         <loc>https://mlx-graphs.github.io/mlx-graphs/tutorials/notebooks/graph_classification/</loc>
