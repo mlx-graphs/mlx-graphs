@@ -72,6 +72,7 @@ API_SECTIONS = {
     ],
     "algorithms": [],
     "metrics": [],
+    "explain": [],
 }
 
 # Packages whose exported names must all be documented: a public name that is
@@ -88,6 +89,10 @@ AUTO_PACKAGES = {
     "mlx_graphs.utils": "utils",
     "mlx_graphs.algorithms": "algorithms",
     "mlx_graphs.metrics": "metrics",
+    "mlx_graphs.explain": "explain",
+    "mlx_graphs.explain.algorithm": "explain",
+    "mlx_graphs.explain.metric": "explain",
+    "mlx_graphs.explain.datasets": "explain",
 }
 
 # mkdocstrings options per kind of page (as the Sphinx templates did)
@@ -650,7 +655,7 @@ def tutorial_cards(tutorials: list[dict], page: str) -> str:
     for t in tutorials:
         if t.get("thumbnail"):
             thumb = (
-                f'![]({rel("assets/tutorials/" + t["thumbnail"])}){{ loading=lazy }}'
+                f"![]({rel('assets/tutorials/' + t['thumbnail'])}){{ loading=lazy }}"
             )
         else:
             icon = t.get("icon", "lucide/notebook").replace("/", "-")
@@ -660,9 +665,9 @@ def tutorial_cards(tutorials: list[dict], page: str) -> str:
             '<div class="mg-tutorial" markdown>\n\n'
             f'<div class="mg-tutorial__thumb" markdown>{thumb}</div>\n\n'
             f'<div class="mg-tutorial__body" markdown>\n\n'
-            f'[{t["title"]}]({rel("tutorials/notebooks/" + t["notebook"] + ".md")})'
+            f"[{t['title']}]({rel('tutorials/notebooks/' + t['notebook'] + '.md')})"
             "{ .mg-tutorial__title }\n\n"
-            f'{t["text"]}\n\n'
+            f"{t['text']}\n\n"
             f'<div class="mg-tags">{tags}</div>\n\n'
             "</div>\n\n</div>"
         )

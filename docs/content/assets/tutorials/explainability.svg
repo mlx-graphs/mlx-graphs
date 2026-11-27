@@ -1,0 +1,175 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 468" width="960" height="468" role="img" aria-labelledby="t d">
+  <title id="t">Explaining the predictions of a GCN on BA-Shapes and Cora with mlx_graphs.explain</title>
+  <desc id="d">ba_shapes builds a Barabasi-Albert graph of 300 base nodes with 80 house motifs attached; edge_groundtruth marks the house edges as the true explanation. A GCN of 3 GCNConv layers, which takes edge_weights, and a Linear head classifies every node as base, middle, bottom or top. An Explainer runs Saliency, IntegratedGradients or GNNExplainer on one node and returns an Explanation whose edge mask highlights the edges into the explained roof node. Explanations are evaluated with groundtruth_auc, fidelity and the characterization score, thresholded and drawn with visualize_graph. On Cora, a node mask of type attributes gives one score per word, plotted with visualize_feature_importance.</desc>
+  <style>
+    text { font-family: -apple-system, "Helvetica Neue", Arial, sans-serif; fill: #1f1f1e; }
+    .hdr { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; fill: #6b6a64; }
+    .title { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 12px; font-weight: 600; }
+    .stitle { font-size: 12px; font-weight: 600; }
+    .sub { font-size: 11.5px; fill: #52514e; }
+    .msub { font-family: ui-monospace, "SF Mono", Menlo, Consolas, "DejaVu Sans Mono", monospace; font-size: 11.5px; fill: #52514e; }
+    .small { font-size: 11px; fill: #6b6a64; }
+    .tiny { font-size: 9px; fill: #52514e; }
+    .leg { font-size: 11.5px; fill: #52514e; }
+  </style>
+  <defs>
+    <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#6b6a64"/></marker>
+    <marker id="ahk" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="4" markerHeight="4" markerUnits="strokeWidth" orient="auto-start-reverse"><path d="M0,0.5 L10,5 L0,9.5 z" fill="#1f1f1e"/></marker>
+  </defs>
+  <rect x="0.75" y="0.75" width="958.5" height="466.5" rx="14" fill="#fcfcfb" stroke="#dcdbd4" stroke-width="1.5"/>
+
+  <!-- column panels -->
+  <rect x="24" y="52" width="180" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="40">DATA</text>
+  <rect x="228" y="52" width="202" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="230" y="40">MODEL</text>
+  <rect x="454" y="52" width="248" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="456" y="40">EXPLAIN ONE NODE</text>
+  <rect x="726" y="52" width="210" height="270" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="728" y="40">EVALUATE · DRAW</text>
+
+  <!-- data column: BA-Shapes with a house motif -->
+  <rect x="34" y="62" width="160" height="186" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="77">ba_shapes()</text>
+  <text class="sub" x="42" y="92">300 base nodes</text>
+  <text class="sub" x="42" y="106.5">80 house motifs</text>
+  <!-- base graph -->
+  <g stroke="#a9a89f" stroke-width="1.2">
+    <path d="M50,192 L64,160"/><path d="M64,160 L92,182"/><path d="M50,192 L92,182"/><path d="M80,214 L92,182"/><path d="M80,214 L50,192"/>
+  </g>
+  <!-- house: square of middle/bottom nodes, roof on top, attached to a base node -->
+  <g stroke="#1f1f1e" stroke-width="1.5">
+    <path d="M92,182 L118,162"/>
+    <path d="M118,162 L152,162"/><path d="M118,162 L118,202"/><path d="M152,162 L152,202"/><path d="M118,202 L152,202"/>
+    <path d="M118,162 L135,134"/><path d="M152,162 L135,134"/>
+  </g>
+  <g stroke-width="1.5">
+    <circle cx="50" cy="192" r="6" fill="#ffffff" stroke="#a9a89f"/>
+    <circle cx="64" cy="160" r="6" fill="#ffffff" stroke="#a9a89f"/>
+    <circle cx="80" cy="214" r="6" fill="#ffffff" stroke="#a9a89f"/>
+    <circle cx="92" cy="182" r="6" fill="#ffffff" stroke="#a9a89f"/>
+    <circle cx="118" cy="162" r="6" fill="#ffffff" stroke="#1f1f1e"/>
+    <circle cx="152" cy="162" r="6" fill="#ffffff" stroke="#1f1f1e"/>
+    <circle cx="118" cy="202" r="6" fill="#e4e3dd" stroke="#1f1f1e"/>
+    <circle cx="152" cy="202" r="6" fill="#e4e3dd" stroke="#1f1f1e"/>
+    <circle cx="135" cy="134" r="6" fill="#fdeee7" stroke="#eb6834"/>
+  </g>
+  <text class="tiny" x="144" y="132">top</text>
+  <text class="tiny" x="159" y="165">middle</text>
+  <text class="tiny" x="159" y="205">bottom</text>
+  <text class="tiny" x="40" y="226">base</text>
+  <text class="small" x="42" y="240">4 classes, from structure only</text>
+
+  <rect x="34" y="258" width="160" height="54" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="276">edge_groundtruth</text>
+  <text class="sub" x="42" y="291.5">1 on house edges</text>
+  <text class="sub" x="42" y="306">the true explanation</text>
+
+  <!-- model column -->
+  <rect x="238" y="62" width="182" height="250" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="title" x="248" y="80">GCN</text>
+  <text class="small" x="410" y="80" text-anchor="end">the explained model</text>
+  <rect x="248" y="92" width="162" height="40" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="256" y="109">node_features</text>
+  <text class="sub" x="256" y="124">700 × 10, all ones</text>
+  <path d="M329,132 L329,150" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+  <rect x="248" y="151" width="162" height="62" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="256" y="170">3 × GCNConv</text>
+  <text class="sub" x="256" y="185">ReLU · hidden 20</text>
+  <text class="msub" x="256" y="200">takes edge_weights</text>
+  <path d="M329,213 L329,231" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+  <rect x="248" y="232" width="162" height="40" rx="6" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="title" x="256" y="249">Linear</text>
+  <text class="sub" x="256" y="264">20 → 4 classes</text>
+  <text class="small" x="248" y="290">cross-entropy · Adam</text>
+  <text class="small" x="248" y="303">full batch, 80 / 20 split</text>
+  <path d="M194,155 L216,155 L216,112 L247,112" fill="none" stroke="#6b6a64" stroke-width="1.5" stroke-linejoin="round" marker-end="url(#ah)"/>
+
+  <!-- explain column -->
+  <rect x="464" y="62" width="228" height="250" rx="6" fill="#ffffff" stroke="#c9c8c0" stroke-width="1.5"/>
+  <text class="title" x="474" y="80">Explainer</text>
+  <text class="msub" x="682" y="80" text-anchor="end">index=304</text>
+  <rect x="474" y="90" width="208" height="26" rx="5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="482" y="107">Saliency</text>
+  <text class="small" x="674" y="107" text-anchor="end">gradients</text>
+  <rect x="474" y="122" width="208" height="26" rx="5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="482" y="139">IntegratedGradients</text>
+  <text class="small" x="674" y="139" text-anchor="end">path</text>
+  <rect x="474" y="154" width="208" height="26" rx="5" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="title" x="482" y="171">GNNExplainer</text>
+  <text class="small" x="674" y="171" text-anchor="end">learns a mask</text>
+  <path d="M578,180 L578,196" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+  <rect x="474" y="197" width="208" height="105" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="482" y="213">Explanation</text>
+  <text class="msub" x="674" y="213" text-anchor="end">edge_mask</text>
+  <!-- the explanation: edges into the roof node are the darkest -->
+  <path d="M494,272 L522,254" fill="none" stroke="#c9c8c0" stroke-width="1"/>
+  <path d="M522,290 L558,290" fill="none" stroke="#a9a89f" stroke-width="1"/>
+  <path d="M522,254 L522,290" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M558,254 L558,290" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M522,254 L558,254" fill="none" stroke="#6b6a64" stroke-width="1.5"/>
+  <path d="M525,249 L537,235" fill="none" stroke="#1f1f1e" stroke-width="2.5" marker-end="url(#ahk)"/>
+  <path d="M555,249 L543,235" fill="none" stroke="#1f1f1e" stroke-width="2.5" marker-end="url(#ahk)"/>
+  <g stroke-width="1.5">
+    <circle cx="494" cy="272" r="5" fill="#ffffff" stroke="#c9c8c0"/>
+    <circle cx="522" cy="254" r="5" fill="#ffffff" stroke="#1f1f1e"/>
+    <circle cx="558" cy="254" r="5" fill="#ffffff" stroke="#1f1f1e"/>
+    <circle cx="522" cy="290" r="5" fill="#e4e3dd" stroke="#1f1f1e"/>
+    <circle cx="558" cy="290" r="5" fill="#e4e3dd" stroke="#1f1f1e"/>
+    <circle cx="540" cy="229" r="5.5" fill="#fdeee7" stroke="#d62728" stroke-width="2.5"/>
+  </g>
+  <text class="small" x="582" y="246">darker edge:</text>
+  <text class="small" x="582" y="259">more important</text>
+  <text class="small" x="582" y="280">red: the node</text>
+  <text class="small" x="582" y="293">being explained</text>
+  <path d="M420,187 L463,187" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- evaluate column -->
+  <rect x="736" y="62" width="190" height="58" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="744" y="80">groundtruth_auc</text>
+  <text class="sub" x="744" y="96">house edges ranked first?</text>
+  <text class="sub" x="744" y="110.5">ROC AUC, 1 is perfect</text>
+  <rect x="736" y="130" width="190" height="76" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="744" y="148">fidelity</text>
+  <text class="sub" x="744" y="164">fid+ ↑  remove it: changes?</text>
+  <text class="sub" x="744" y="179">fid− ↓  keep only it: same?</text>
+  <text class="msub" x="744" y="196">characterization</text>
+  <rect x="736" y="216" width="190" height="96" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="744" y="234">threshold</text>
+  <text class="msub" x="744" y="250">hard · topk · topk_hard</text>
+  <text class="title" x="744" y="274">visualize_graph</text>
+  <text class="small" x="744" y="290">networkx or graphviz</text>
+  <text class="small" x="744" y="303">inline or saved to a file</text>
+  <path d="M692,168 L735,168" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+  <path d="M692,264 L735,264" fill="none" stroke="#6b6a64" stroke-width="1.5" marker-end="url(#ah)"/>
+
+  <!-- band: the Cora section -->
+  <rect x="24" y="356" width="912" height="66" rx="10" fill="#f2f1ed"/>
+  <text class="hdr" x="26" y="344">ALSO IN THIS TUTORIAL · FEATURE IMPORTANCE ON CORA</text>
+  <rect x="34" y="366" width="290" height="46" rx="6" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="title" x="42" y="385">PlanetoidDataset("cora")</text>
+  <text class="sub" x="42" y="402">2,708 papers · 1,433 words · 7 topics</text>
+  <rect x="336" y="366" width="290" height="46" rx="6" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="title" x="344" y="385">node_mask_type="attributes"</text>
+  <text class="sub" x="344" y="402">one score per word, learned by GNNExplainer</text>
+  <rect x="638" y="366" width="288" height="46" rx="6" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="title" x="646" y="385">visualize_feature_importance</text>
+  <text class="sub" x="646" y="402">top-k words, bar chart</text>
+  <g fill="#4c72b0">
+    <rect x="862" y="392" width="52" height="4" rx="1"/>
+    <rect x="862" y="398" width="38" height="4" rx="1"/>
+    <rect x="862" y="404" width="26" height="4" rx="1"/>
+  </g>
+
+  <!-- legend -->
+  <rect x="235" y="437" width="10" height="10" rx="2.5" fill="#e7f6f0" stroke="#1baf7a" stroke-width="1.5"/>
+  <text class="leg" x="251" y="446">data</text>
+  <rect x="300" y="437" width="10" height="10" rx="2.5" fill="#efedfb" stroke="#6250d6" stroke-width="1.5"/>
+  <text class="leg" x="316" y="446">trainable weights</text>
+  <rect x="426" y="437" width="10" height="10" rx="2.5" fill="#fdf3da" stroke="#eda100" stroke-width="1.5"/>
+  <text class="leg" x="442" y="446">learned mask</text>
+  <rect x="535" y="437" width="10" height="10" rx="2.5" fill="#ffffff" stroke="#a9a89f" stroke-width="1.5"/>
+  <text class="leg" x="551" y="446">no weights</text>
+  <circle cx="636" cy="442" r="5" fill="#ffffff" stroke="#d62728" stroke-width="2"/>
+  <text class="leg" x="647" y="446">explained node</text>
+</svg>

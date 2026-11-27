@@ -76,4 +76,12 @@ The names follow PyTorch Geometric: `mlx_graphs.nn` is `torch_geometric.nn`,
 
     <span class="mg-count"><!-- count metrics --> objects</span>
 
+-   :lucide-search: **[Explainability](explain/index.md)**
+
+    ---
+
+    `Explainer`, GNNExplainer, Saliency, Integrated Gradients and fidelity metrics.
+
+    <span class="mg-count"><!-- count explain --> objects</span>
+
 </div>
